@@ -1,5 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 160">
-  <path fill="#4A76B8" d="M68.6 128h-32V32h36l26.4 56L125.4 32h36v96h-32V64.8L106.6 112h-14.4L68.6 64.8V128zM218.6 130.4c-28.8 0-49.6-20.8-49.6-50.4s20.8-50.4 49.6-50.4c28.8 0 49.6 20.8 49.6 50.4s-20.8 50.4-49.6 50.4zm0-24.8c13.6 0 21.6-10.4 21.6-25.6s-8-25.6-21.6-25.6-21.6 10.4-21.6 25.6 8 25.6 21.6 25.6zm106.4 24.8h-48V32h32v73.6h16V130.4z"/>
-  <path fill="#F49600" d="M366.6 130.4c-18.4 0-32-8-38.4-20l24.8-12c3.2 6.4 6.4 9.6 12.8 9.6 8 0 12.8-4.8 12.8-12s-4.8-12-12.8-12h-12.8v-24h13.6c7.2 0 11.2-4 11.2-10.4s-4-10.4-11.2-10.4c-5.6 0-9.6 2.4-12 8l-23.2-10.4c6.4-14.4 20-20.8 36-20.8 21.6 0 38.4 11.2 38.4 31.2 0 10.4-4.8 18.4-12.8 23.2 9.6 4 16.8 12.8 16.8 24.8 0 20.8-17.6 35.2-43.2 35.2z"/>
-  <path fill="#4A76B8" d="M380 135l15 15-10 10-25-25 10-10z" style="display:none"/> <!-- Correction for Q tail if needed, but path above is simplified MQL5 -->
+<svg width="160" height="50" viewBox="0 0 160 50" xmlns="http://www.w3.org/2000/svg">
+  <g fill="none" stroke="#0072BC" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <!-- M -->
+    <path d="M15 40 V10 L30 25 L45 10 V40" />
+    <!-- Q -->
+    <circle cx="70" cy="25" r="12" />
+    <line x1="77" y1="32" x2="85" y2="40" />
+    <!-- L -->
+    <path d="M100 10 V40 H118" />
+  </g>
+  <g fill="none" stroke="#FF9900" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <!-- 5 -->
+    <path d="M150 12 H132 V24 C132 24 150 24 150 32 C150 40 132 40 132 40" />
+  </g>
 </svg>
