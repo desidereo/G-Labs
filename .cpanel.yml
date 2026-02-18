@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/elexzpxz/g-labs.software
+    - /bin/cp -R * $DEPLOYPATH
