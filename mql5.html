@@ -8,51 +8,66 @@
 <link href="favicon.svg" rel="icon" type="image/svg+xml"/>
 
     <style>
-        :root { --primary: #00b300; --dark: #222; --light: #f9f9f9; }
-        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #333; }
+        :root {
+            --primary: #2962ff;
+            --dark: #131722;
+            --light: #f0f3fa;
+            --text: #333;
+        }
+        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #fff; color: var(--text); }
         .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
         
         header { padding: 20px 0; border-bottom: 1px solid #eee; }
-        .nav { display: flex; justify-content: space-between; align-items: center; }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; }
         .logo { font-weight: 800; font-size: 1.5rem; color: var(--dark); text-decoration: none; }
-        .back-link { color: #666; text-decoration: none; font-size: 0.9rem; }
+        .logo span { color: var(--primary); }
+        
+        .main-nav { display: flex; gap: 20px; }
+        .main-nav a { text-decoration: none; color: #666; font-weight: 600; font-size: 0.95rem; transition: color 0.3s; }
+        .main-nav a:hover, .main-nav a.active { color: var(--primary); }
 
-        .hero { padding: 60px 0; text-align: center; background: #f4f4f4; margin-bottom: 50px; }
+        .hero { padding: 60px 0 40px; text-align: center; }
         h1 { font-size: 2.5rem; color: var(--dark); margin-bottom: 10px; }
-        
-        .product-highlight { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; margin-bottom: 80px; }
-        .product-img { height: 400px; display: flex; align-items: center; justify-content: center; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        
-        .badge { display: inline-block; background: #e0f7fa; color: #006064; padding: 5px 12px; border-radius: 4px; font-size: 0.8rem; font-weight: 700; margin-bottom: 15px; }
-        
-        .price { font-size: 2.5rem; font-weight: 700; color: var(--dark); margin: 20px 0; }
-        
-        .btn { display: inline-block; padding: 15px 40px; background: var(--primary); color: #fff; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 1.1rem; transition: background 0.3s; }
-        .btn:hover { background: #009900; }
-        
-        ul { list-style: none; padding: 0; margin-bottom: 30px; }
-        li { margin-bottom: 12px; padding-left: 25px; position: relative; font-size: 1.05rem; }
-        li:before { content: "✅"; position: absolute; left: 0; font-size: 0.9rem; }
+        .subtitle { font-size: 1.1rem; color: #666; margin-bottom: 40px; }
 
-        /* New Grid Styles */
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; margin-bottom: 80px; }
-        .product-card { border: 1px solid #eee; border-radius: 8px; overflow: hidden; transition: transform 0.3s; background: #fff; display: flex; flex-direction: column; }
-        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .product-card-content { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
-        .product-card h3 { margin: 0 0 10px; font-size: 1.2rem; color: var(--dark); }
-        .product-card p { color: #666; font-size: 0.9rem; margin-bottom: 15px; flex-grow: 1; line-height: 1.5; }
+        .product-highlight { display: grid; grid-template-columns: 1fr 1.5fr; gap: 40px; background: #f9f9f9; padding: 40px; border-radius: 12px; margin-bottom: 60px; align-items: center; }
+        .product-img { text-align: center; }
+        .badge { background: #FFD700; color: #000; padding: 5px 12px; border-radius: 4px; font-weight: bold; font-size: 0.8rem; display: inline-block; margin-bottom: 15px; }
+        .product-info h2 { margin: 0 0 15px; font-size: 2rem; }
+        .product-info ul { list-style: none; padding: 0; margin: 20px 0; }
+        .product-info ul li { margin-bottom: 10px; padding-left: 20px; position: relative; }
+        .product-info ul li::before { content: "✓"; color: var(--primary); position: absolute; left: 0; font-weight: bold; }
+        .price { font-size: 2rem; font-weight: 800; color: var(--dark); margin: 20px 0; }
+        .btn { display: inline-block; padding: 12px 30px; background: var(--primary); color: #fff; text-decoration: none; border-radius: 6px; font-weight: 600; transition: background 0.3s; }
+        .btn:hover { background: #1e4bd1; }
 
-        @media(max-width: 768px) { .product-highlight { grid-template-columns: 1fr; } }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
+        .product-card { border: 1px solid #eee; border-radius: 10px; overflow: hidden; transition: transform 0.3s; background: #fff; }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .product-card-content { padding: 20px; }
+        .product-card h3 { margin: 0 0 10px; font-size: 1.2rem; }
+        .product-card p { font-size: 0.9rem; color: #666; line-height: 1.5; margin-bottom: 15px; }
+
+        @media(max-width: 768px) {
+            .nav-container { flex-direction: column; gap: 15px; }
+            .main-nav { flex-wrap: wrap; justify-content: center; }
+            .product-highlight { grid-template-columns: 1fr; } 
+        }
     </style>
-
 </head>
 <body>
-<header>
-<div class="container nav">
-<a class="logo" href="index.html">G-LABS</a>
-<a class="back-link" href="index.html">← Back to Home</a>
-</div>
-</header>
+    <header>
+        <div class="container nav-container">
+            <a href="index.html" class="logo">G-LABS <span>SOFTWARE</span></a>
+            <nav class="main-nav">
+                <a href="index.html">Home</a>
+                <a href="tradingview.html">TradingView</a>
+                <a href="mql5.html" class="active">MetaTrader 4/5</a>
+                <a href="custom_development.html">Custom Dev</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+        </div>
+    </header>
 <section class="hero">
 <div class="container">
 <h1>MetaTrader 4/5 Algorithms</h1>

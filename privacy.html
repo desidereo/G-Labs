@@ -7,12 +7,45 @@
     <meta name="robots" content="noindex, follow">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <style>
-        body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 20px; color: #333; background: #fff; }
-        .container { padding: 40px; }
-        h1 { color: #2962ff; }
+        :root {
+            --primary: #2962ff;
+            --dark: #131722;
+            --light: #f0f3fa;
+            --text: #333;
+        }
+        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #fff; color: var(--text); line-height: 1.6; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+        
+        header { padding: 20px 0; border-bottom: 1px solid #eee; margin-bottom: 40px; }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-weight: 800; font-size: 1.5rem; color: var(--dark); text-decoration: none; }
+        .logo span { color: var(--primary); }
+        
+        .main-nav { display: flex; gap: 20px; }
+        .main-nav a { text-decoration: none; color: #666; font-weight: 600; font-size: 0.95rem; transition: color 0.3s; }
+        .main-nav a:hover, .main-nav a.active { color: var(--primary); }
+
+        h1 { color: var(--primary); }
+
+        @media(max-width: 768px) {
+            .nav-container { flex-direction: column; gap: 15px; }
+            .main-nav { flex-wrap: wrap; justify-content: center; }
+        }
     </style>
 </head>
 <body>
+    <header>
+        <div class="container nav-container">
+            <a href="index.html" class="logo">G-LABS <span>SOFTWARE</span></a>
+            <nav class="main-nav">
+                <a href="index.html">Home</a>
+                <a href="tradingview.html">TradingView</a>
+                <a href="mql5.html">MetaTrader 4/5</a>
+                <a href="custom_development.html">Custom Dev</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+        </div>
+    </header>
     <div class="container">
         <h1>Privacy Policy</h1>
         <p>G-Labs is a trading style of Apex Pro Group Ltd.</p>

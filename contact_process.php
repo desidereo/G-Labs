@@ -5,6 +5,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = filter_var(trim($_POST["email"]), FILTER_SANITIZE_EMAIL);
     $subject = strip_tags(trim($_POST["subject"]));
     $message = trim($_POST["message"]);
+    $platform = isset($_POST["platform"]) ? strip_tags(trim($_POST["platform"])) : "";
 
     // Basic validation
     if (empty($name) || empty($message) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -18,7 +19,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     // Build the email content
     $email_content = "Name: $name\n";
-    $email_content .= "Email: $email\n\n";
+    $email_content .= "Email: $email\n";
+    if (!empty($platform)) {
+        $email_content .= "Platform: $platform\n";
+    }
+    $email_content .= "\n";
     $email_content .= "Message:\n$message\n";
 
     // Build the email headers

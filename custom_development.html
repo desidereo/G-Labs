@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us | G-Labs</title>
-    <meta name="description" content="Contact G-Labs support and sales. Get in touch for institutional trading tools and algorithmic software inquiries.">
+    <title>Custom Development | G-Labs</title>
+    <meta name="description" content="Hire G-Labs for custom MQL4/MQL5 and Pine Script development. Professional algorithmic trading solutions starting from $300 USD.">
     <meta name="robots" content="index, follow">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <style>
@@ -15,7 +15,7 @@
             --text: #333;
         }
         body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #fff; color: var(--text); }
-        .container { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
         
         header { padding: 20px 0; border-bottom: 1px solid #eee; }
         .nav-container { display: flex; justify-content: space-between; align-items: center; }
@@ -25,27 +25,32 @@
         .main-nav { display: flex; gap: 20px; }
         .main-nav a { text-decoration: none; color: #666; font-weight: 600; font-size: 0.95rem; transition: color 0.3s; }
         .main-nav a:hover, .main-nav a.active { color: var(--primary); }
-        
-        .hero { padding: 60px 0 40px; text-align: center; }
-        h1 { font-size: 2.5rem; color: var(--dark); margin-bottom: 10px; }
-        .subtitle { font-size: 1.1rem; color: #666; margin-bottom: 40px; }
 
-        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 60px; }
-        .contact-card { background: #f9f9f9; padding: 30px; border-radius: 12px; text-align: center; }
-        .icon { font-size: 2.5rem; margin-bottom: 15px; }
+        .hero { padding: 80px 0 60px; text-align: center; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); margin-bottom: 60px; }
+        h1 { font-size: 3rem; color: var(--dark); margin-bottom: 15px; }
+        .subtitle { font-size: 1.25rem; color: #555; max-width: 700px; margin: 0 auto 30px; line-height: 1.6; }
         
-        form { background: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); border: 1px solid #eee; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 80px; }
+        .feature-card { padding: 30px; background: #fff; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: center; border: 1px solid #eee; }
+        .feature-icon { font-size: 2.5rem; margin-bottom: 20px; color: var(--primary); }
+        .feature-card h3 { margin-bottom: 15px; color: var(--dark); }
+        
+        .pricing-section { text-align: center; margin-bottom: 80px; padding: 60px 0; background: #fff; }
+        .price-tag { font-size: 3.5rem; font-weight: 800; color: var(--primary); margin: 20px 0; }
+        .price-sub { font-size: 1.1rem; color: #666; }
+        
+        .contact-form-section { max-width: 700px; margin: 0 auto 80px; padding: 40px; background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #eee; }
         .form-group { margin-bottom: 20px; text-align: left; }
         label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--dark); }
         input, textarea, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; box-sizing: border-box; }
         textarea { height: 150px; resize: vertical; }
-        button { background: var(--primary); color: #fff; border: none; padding: 15px 30px; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; width: 100%; transition: background 0.3s; }
+        button { background: var(--primary); color: #fff; border: none; padding: 15px 30px; border-radius: 6px; font-size: 1.1rem; font-weight: 600; cursor: pointer; width: 100%; transition: background 0.3s; }
         button:hover { background: #1e4bd1; }
 
         @media(max-width: 768px) {
             .nav-container { flex-direction: column; gap: 15px; }
             .main-nav { flex-wrap: wrap; justify-content: center; }
-            .contact-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 2.2rem; }
         }
     </style>
 </head>
@@ -57,61 +62,81 @@
                 <a href="index.html">Home</a>
                 <a href="tradingview.html">TradingView</a>
                 <a href="mql5.html">MetaTrader 4/5</a>
-                <a href="custom_development.html">Custom Dev</a>
-                <a href="contact.html" class="active">Contact</a>
+                <a href="custom_development.html" class="active">Custom Dev</a>
+                <a href="contact.html">Contact</a>
             </nav>
         </div>
     </header>
 
-    <div class="container">
-        <section class="hero">
-            <h1>Get in Touch</h1>
-            <p class="subtitle">Have questions about our algorithms or need support? We're here to help.</p>
-        </section>
+    <section class="hero">
+        <div class="container">
+            <h1>Turn Your Strategy into an Automated System</h1>
+            <p class="subtitle">Stop staring at charts all day. Hire our professional team to code your manual trading strategy into a high-performance Robot (EA) or Indicator.</p>
+        </div>
+    </section>
 
-        <div class="contact-grid">
-            <div class="contact-card">
-                <div class="icon">📧</div>
-                <h3>Email Support</h3>
-                <p>For general inquiries and technical support</p>
-                <a href="mailto:info@g-labs.software" style="color: var(--primary); font-weight: 600; text-decoration: none;">info@g-labs.software</a>
+    <div class="container">
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">💻</div>
+                <h3>Professional Code</h3>
+                <p>Clean, optimized MQL4/5 and Pine Script code that runs fast and bug-free. We build institutional-grade software.</p>
             </div>
-            <div class="contact-card">
-                <div class="icon">🏢</div>
-                <h3>Headquarters</h3>
-                <p>Apex Pro Group Ltd<br>Harwich, Essex<br>United Kingdom</p>
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>Strict Confidentiality</h3>
+                <p>Your strategy is your intellectual property. We sign a Non-Disclosure Agreement (NDA) upon request to ensure your edge stays yours.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Backtesting Ready</h3>
+                <p>We build systems designed for rigorous testing, so you can verify your edge with historical data before risking real capital.</p>
             </div>
         </div>
 
-        <div style="max-width: 600px; margin: 0 auto;">
+        <div class="pricing-section">
+            <h2>Transparent Pricing</h2>
+            <p>Quality development doesn't have to break the bank. We offer competitive rates for professional work.</p>
+            <div class="price-tag">$300 <span style="font-size: 1.5rem; color: #666; font-weight: normal;">USD</span></div>
+            <p class="price-sub">Starting price for standard indicators and simple EAs.<br>Complex systems quoted upon review.</p>
+        </div>
+
+        <div class="contact-form-section" id="quote-form">
+            <h2 style="text-align: center; margin-bottom: 30px; color: var(--dark);">Request a Free Quote</h2>
             <form action="contact_process.php" method="POST">
+                <input type="hidden" name="subject" value="Custom Development Quote Request">
+                
                 <div class="form-group">
                     <label for="name">Full Name</label>
                     <input type="text" id="name" name="name" required placeholder="John Doe">
                 </div>
+                
                 <div class="form-group">
                     <label for="email">Email Address</label>
                     <input type="email" id="email" name="email" required placeholder="john@example.com">
                 </div>
+
                 <div class="form-group">
-                    <label for="subject">Subject</label>
-                    <select id="subject" name="subject">
-                        <option value="support">Technical Support</option>
-                        <option value="sales">Sales Inquiry</option>
-                        <option value="partnership">Partnership Opportunity</option>
-                        <option value="other">Other</option>
+                    <label for="platform">Platform</label>
+                    <select id="platform" name="platform">
+                        <option value="MT4">MetaTrader 4 (MQL4)</option>
+                        <option value="MT5">MetaTrader 5 (MQL5)</option>
+                        <option value="TradingView">TradingView (Pine Script)</option>
+                        <option value="Other">Other / Not Sure</option>
                     </select>
                 </div>
+                
                 <div class="form-group">
-                    <label for="message">Message</label>
-                    <textarea id="message" name="message" required placeholder="How can we help you?"></textarea>
+                    <label for="message">Project Description</label>
+                    <textarea id="message" name="message" required placeholder="Describe your strategy rules, entry/exit criteria, and any specific requirements..."></textarea>
                 </div>
-                <button type="submit">Send Message</button>
+                
+                <button type="submit">Get My Quote</button>
             </form>
         </div>
     </div>
 
-    <footer style="background: var(--light); padding: 40px 0; text-align: center; font-size: 0.9rem; color: #666; margin-top: 80px;">
+    <footer style="background: #f0f3fa; padding: 40px 0; text-align: center; font-size: 0.9rem; color: #666;">
         <div class="container">
             <p>&copy; 2026 G-Labs Software. All Rights Reserved.</p>
             <p>G-Labs is a trading name of Apex Pro Group Ltd.</p>
