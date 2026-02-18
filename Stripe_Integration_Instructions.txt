@@ -1,0 +1,54 @@
+# Stripe Integration Instructions
+
+To start selling your G-Labs TradingView indicators, you need to replace the "Buy Now" buttons on your website with actual Stripe Payment Links.
+
+## Step 1: Create Products in Stripe
+1. Log in to your Stripe Dashboard: https://dashboard.stripe.com/
+2. Go to **Products** -> **Add Product**.
+3. Create a product for each item on your website (e.g., "BTMM State Engine", "BTMM Scanner", etc.).
+   - Set the **Price** (e.g., $149).
+   - Upload a product image if you have one.
+   - Save the product.
+
+## Step 2: Create Payment Links
+1. After saving a product, look for the **"Create payment link"** button on the product page.
+2. Configure the link:
+   - Ensure "Collect customers addresses" is unchecked (unless you need it).
+   - Ensure "Allow promotion codes" is checked if you plan to run sales.
+3. Click **Create Link**.
+4. **Copy the URL** (it will look like `https://buy.stripe.com/...`).
+
+## Step 3: Add Links to Your Website
+1. Open the file `Websites/G_Labs/tradingview.html`.
+2. Find the button code for each product. It looks like this:
+   ```html
+   <button class="btn-stripe" onclick="stripeCheckout('btmm-state-engine')">
+       Buy Now
+   </button>
+   ```
+3. Replace the `onclick` part with a simple link redirection using your copied Stripe URL.
+   
+   **Change it to this:**
+   ```html
+   <a href="https://buy.stripe.com/YOUR_LINK_HERE" class="btn-stripe" target="_blank">
+       Buy Now
+   </a>
+   ```
+   *(Note: I changed `<button>` to `<a>` because it's a direct link).*
+
+## Checklist of Products to Create
+- [ ] BTMM State Engine ($149)
+- [ ] BTMM Multi-Pair Scanner ($99)
+- [ ] Trend Continuation Pro ($79)
+- [ ] Institutional Zones ($89)
+- [ ] Volatility Master ($69)
+- [ ] Divergence Hunter ($79)
+- [ ] Session Manager ($49)
+- [ ] Scalper's Toolkit ($99)
+- [ ] Currency Strength Meter ($59)
+- [ ] Harmonic Pattern Pro ($129)
+- [ ] Risk Manager Assistant ($89)
+- [ ] News Event Trader ($69)
+- [ ] **Ultimate Bundle** ($599) - *High Priority!*
+
+Once you have these links, send them to me or edit the HTML file directly!

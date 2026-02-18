@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TradingView Indicators | G-Labs</title>
+<meta content="Professional TradingView indicators for technical analysis. BTMM State Engine, Market Structure, and Sentiment Analysis tools." name="description"/>
+<meta content="TradingView Indicators, Technical Analysis, BTMM, Forex Indicators, Crypto Trading Tools" name="keywords"/>
+<meta content="TradingView Indicators | G-Labs" property="og:title"/>
+<meta content="Professional-grade charting tools and indicators. Compatible with any device via the TradingView Cloud." property="og:description"/>
+<link href="favicon.svg" rel="icon" type="image/svg+xml"/>
+<style>
+        :root { --primary: #2962ff; --dark: #131722; --light: #f0f3fa; --success: #00c853; }
+        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #333; background: #fff; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        
+        header { padding: 20px 0; border-bottom: 1px solid #eee; background: #fff; position: sticky; top: 0; z-index: 100; }
+        .nav { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-weight: 800; font-size: 1.5rem; color: var(--dark); text-decoration: none; }
+        .back-link { color: #666; text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; }
+        
+        .hero { padding: 60px 0 40px; text-align: center; background: linear-gradient(180deg, #fff 0%, #f8f9fd 100%); }
+        h1 { font-size: 2.5rem; color: var(--dark); margin-bottom: 10px; }
+        .subtitle { color: #666; max-width: 600px; margin: 0 auto; line-height: 1.6; }
+        
+        /* Grid Layout for 13 Products */
+        .product-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); 
+            gap: 30px; 
+            padding: 40px 0 80px;
+        }
+        
+        .product-card { 
+            background: #fff; 
+            border: 1px solid #eee; 
+            border-radius: 12px; 
+            overflow: hidden; 
+            transition: transform 0.2s, box-shadow 0.2s; 
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .product-card:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+            border-color: var(--primary);
+        }
+        
+        .card-img { 
+            height: 200px; 
+            background: #f5f5f5; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: #999;
+            font-size: 3rem;
+            position: relative;
+        }
+
+        .badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--success);
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        .card-content { 
+            padding: 25px; 
+            flex-grow: 1; 
+            display: flex; 
+            flex-direction: column; 
+        }
+        
+        .card-title { 
+            margin: 0 0 10px; 
+            font-size: 1.25rem; 
+            color: var(--dark); 
+        }
+        
+        .card-desc { 
+            color: #666; 
+            font-size: 0.9rem; 
+            line-height: 1.5; 
+            margin-bottom: 20px; 
+            flex-grow: 1; 
+        }
+        
+        .features-list {
+            margin: 0 0 20px;
+            padding: 0;
+            list-style: none;
+            font-size: 0.85rem;
+            color: #555;
+        }
+        
+        .features-list li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .features-list li::before {
+            content: "•";
+            color: var(--primary);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .price-tag {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        .price-tag span {
+            font-size: 0.9rem;
+            color: #999;
+            font-weight: normal;
+            text-decoration: line-through;
+            margin-right: 5px;
+        }
+
+        .btn-stripe { 
+            background: #635bff; /* Stripe Blurple */
+            color: #fff; 
+            text-decoration: none; 
+            padding: 10px 20px; 
+            border-radius: 6px; 
+            font-weight: 600; 
+            font-size: 0.9rem;
+            transition: background 0.2s;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-stripe:hover { background: #4b45c6; }
+
+        @media(max-width: 768px) { 
+            .product-grid { grid-template-columns: 1fr; } 
+        }
+    </style>
+</head>
+<body>
+<header>
+<div class="container nav">
+<a class="logo" href="index.html">G-LABS</a>
+<a class="back-link" href="index.html">
+<svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>
+                Back to Home
+            </a>
+</div>
+</header>
+<div class="container">
+<section class="hero">
+<h1>TradingView Collection</h1>
+<p class="subtitle">Professional-grade charting tools and indicators. Compatible with any device via the TradingView Cloud.</p>
+</section>
+<div class="product-grid">
+    <!-- Connix Cross-Market Data Suite -->
+    <div class="product-card">
+        <div class="card-img">
+            <svg fill="none" height="64" stroke="currentColor" stroke-width="1.5" viewbox="0 0 24 24" width="64"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <div class="card-content">
+            <h2 class="card-title">Connix Cross-Market Data Suite</h2>
+            <p class="card-desc">The Connix Cross-Market Data Suite expands the capabilities of our logic engine to handle diverse datasets simultaneo...</p>
+            <div class="price-row">
+                <div class="price-tag">$19.99</div>
+                <button class="btn-stripe" onclick="alert('Stripe Link Not Configured')">Buy Now</button>
+            </div>
+        </div>
+    </div>
+    <!-- Connix Analytical Module (Single Asset) -->
+    <div class="product-card">
+        <div class="card-img">
+            <svg fill="none" height="64" stroke="currentColor" stroke-width="1.5" viewbox="0 0 24 24" width="64"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <div class="card-content">
+            <h2 class="card-title">Connix Analytical Module (Single Asset)</h2>
+            <p class="card-desc">The Connix Analytical Module (Single Asset) offers the same powerful logic as our full suite but is streamlined for a...</p>
+            <div class="price-row">
+                <div class="price-tag">$9.99</div>
+                <button class="btn-stripe" onclick="alert('Stripe Link Not Configured')">Buy Now</button>
+            </div>
+        </div>
+    </div>
+    <!-- Connix Quantitative Analysis Suite -->
+    <div class="product-card">
+        <div class="card-img">
+            <svg fill="none" height="64" stroke="currentColor" stroke-width="1.5" viewbox="0 0 24 24" width="64"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <div class="card-content">
+            <h2 class="card-title">Connix Quantitative Analysis Suite</h2>
+            <p class="card-desc">The Connix Quantitative Analysis Suite is our flagship logic engine. It moves beyond simple charting to provide a com...</p>
+            <div class="price-row">
+                <div class="price-tag">$19.99</div>
+                <button class="btn-stripe" onclick="alert('Stripe Link Not Configured')">Buy Now</button>
+            </div>
+        </div>
+    </div>
+    <!-- Algorithmic Market Structure Scanner -->
+    <div class="product-card">
+        <div class="card-img">
+            <svg fill="none" height="64" stroke="currentColor" stroke-width="1.5" viewbox="0 0 24 24" width="64"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <div class="card-content">
+            <h2 class="card-title">Algorithmic Market Structure Scanner</h2>
+            <p class="card-desc">The Algorithmic Market Structure Scanner is designed to streamline the research process by automating the search for ...</p>
+            <div class="price-row">
+                <div class="price-tag">$9.99</div>
+                <button class="btn-stripe" onclick="alert('Stripe Link Not Configured')">Buy Now</button>
+            </div>
+        </div>
+    </div>
+    <!-- Algorithmic Market Structure System -->
+    <div class="product-card">
+        <div class="card-img">
+            <svg fill="none" height="64" stroke="currentColor" stroke-width="1.5" viewbox="0 0 24 24" width="64"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <div class="card-content">
+            <h2 class="card-title">Algorithmic Market Structure System</h2>
+            <p class="card-desc">Understanding market structure is critical for any financial analyst. The Algorithmic Market Structure System is desi...</p>
+            <div class="price-row">
+                <div class="price-tag">$19.99</div>
+                <button class="btn-stripe" onclick="alert('Stripe Link Not Configured')">Buy Now</button>
+            </div>
+        </div>
+    </div>
+    <!-- Institutional Cycle Explorer -->
+    <div class="product-card">
+        <div class="card-img">
+            <svg fill="none" height="64" stroke="currentColor" stroke-width="1.5" viewbox="0 0 24 24" width="64"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <div class="card-content">
+            <h2 class="card-title">Institutional Cycle Explorer</h2>
+            <p class="card-desc">The Institutional Cycle Explorer is a sophisticated data visualization suite designed for serious market analysts. By...</p>
+            <div class="price-row">
+                <div class="price-tag">$19.99</div>
+                <button class="btn-stripe" onclick="alert('Stripe Link Not Configured')">Buy Now</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+<footer style="background: #f0f3fa; padding: 40px 0; text-align: center; font-size: 0.9rem; color: #666; margin-top: 60px;">
+<div class="container">
+<p>© 2026 G-Labs Software. All Rights Reserved.</p>
+<p>G-Labs is a trading name of Apex Pro Group Ltd.</p>
+<p style="margin-top: 15px;">
+<a href="privacy.html" style="color: #666; text-decoration: none; margin-right: 15px;">Privacy Policy</a>
+<a href="terms.html" style="color: #666; text-decoration: none;">Terms of Service</a>
+</p>
+</div>
+</footer>
+<script>
+        function stripeCheckout(productId) {
+            // Placeholder for Stripe Logic
+            // In a real implementation, you would redirect to a Stripe Payment Link URL
+            // e.g., window.location.href = 'https://buy.stripe.com/...'
+            
+            const message = `Stripe Integration Required!\n\nYou clicked to buy: ${productId}\n\nTo make this work:\n1. Create a Payment Link in your Stripe Dashboard.\n2. Paste the URL into the onclick event for this button in the HTML code.`;
+            alert(message);
+        }
+    </script>
+</body>
+</html>
