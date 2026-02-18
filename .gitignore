@@ -16,3 +16,10 @@ mql5_seller.html
 extract_products.py
 generate_mql5_page.py
 __pycache__/
+
+# Local Data and Scripts (Do not commit)
+Legacy_Backup/
+chrome_debug_profile/
+*.csv
+*.txt
+*.py
