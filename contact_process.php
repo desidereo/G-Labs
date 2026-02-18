@@ -1,11 +1,37 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // 1. Honeypot Check (Anti-Spam)
+    // If the hidden 'website_url' field is filled, it's a bot.
+    if (!empty($_POST["website_url"])) {
+        // Log the attempt or just exit silently
+        die("System error. Please try again later."); 
+    }
+
     // Collect and sanitize input
     $name = strip_tags(trim($_POST["name"]));
     $email = filter_var(trim($_POST["email"]), FILTER_SANITIZE_EMAIL);
     $subject = strip_tags(trim($_POST["subject"]));
     $message = trim($_POST["message"]);
     $platform = isset($_POST["platform"]) ? strip_tags(trim($_POST["platform"])) : "";
+
+    // 2. Spam Keyword Filter
+    $spam_keywords = [
+        'seo service', 'web design', 'rank your website', 
+        'improve your ranking', 'marketing proposal', 
+        'viagra', 'casino', 'lottery', 'cryptocurrency investment scheme',
+        'passive income from home', 'make money online'
+    ];
+    
+    foreach ($spam_keywords as $keyword) {
+        if (stripos($message, $keyword) !== false) {
+            die("System error. Please try again later.");
+        }
+    }
+
+    // 3. Link Count Check (More than 3 links is usually spam)
+    if (substr_count($message, 'http') > 3 || substr_count($message, 'www.') > 3) {
+         die("System error. Please try again later.");
+    }
 
     // Basic validation
     if (empty($name) || empty($message) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
