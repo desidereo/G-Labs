@@ -47,7 +47,7 @@
         h1 { font-size: 3rem; margin-bottom: 10px; color: var(--dark); }
         .subtitle { font-size: 1.2rem; color: #666; max-width: 600px; margin: 0 auto 50px; }
 
-        .platform-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 100px; }
+        .platform-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px; margin-bottom: 100px; }
         .card { border: 1px solid #eee; border-radius: 12px; padding: 40px; text-align: center; transition: all 0.3s; cursor: pointer; background: #fff; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
         .card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); border-color: var(--primary); }
         .icon { font-size: 3rem; margin-bottom: 20px; }
@@ -101,6 +101,14 @@
                 <h2>MetaTrader 4/5</h2>
                 <p>Desktop algorithms for Prop Firm traders. Low latency, high precision.</p>
                 <a href="mql5.html" class="btn outline">View Products</a>
+            </div>
+            <div class="card" onclick="window.location.href='custom_development.html'">
+                <div class="icon" style="margin-bottom: 25px;">
+                    <img src="assets/images/code.svg" alt="Custom Development" style="width: 64px; height: 64px; display: block; margin: 0 auto;">
+                </div>
+                <h2>Custom Dev</h2>
+                <p>Hire our professional team to code your manual strategy into a Robot (EA) or Indicator.</p>
+                <a href="custom_development.html" class="btn outline">Get a Quote</a>
             </div>
         </div>
     </div>
