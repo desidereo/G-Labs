@@ -56,6 +56,15 @@
         .btn { display: inline-block; padding: 12px 30px; background: var(--primary); color: #fff; text-decoration: none; border-radius: 6px; font-weight: 600; }
         .btn.outline { background: transparent; border: 2px solid var(--dark); color: var(--dark); }
         
+        /* Contact Form Styles */
+        form { background: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); border: 1px solid #eee; }
+        .form-group { margin-bottom: 20px; text-align: left; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--dark); }
+        input, textarea, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; box-sizing: border-box; }
+        textarea { height: 150px; resize: vertical; }
+        button { background: var(--primary); color: #fff; border: none; padding: 15px 30px; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; width: 100%; transition: background 0.3s; }
+        button:hover { background: #1e4bd1; }
+
         footer { background: var(--light); padding: 40px 0; text-align: center; font-size: 0.9rem; color: #666; }
 
         @media(max-width: 768px) {
@@ -140,6 +149,39 @@
                     <h3 style="margin-bottom: 10px; color: var(--dark);">Company</h3>
                     <p style="color: #666;">Trading Name of<br>Apex Pro Group Ltd</p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="padding: 80px 0; background: #fff; border-top: 1px solid #eee;">
+        <div class="container">
+            <div style="max-width: 600px; margin: 0 auto; text-align: center;">
+                <h2 style="color: var(--dark); font-size: 2.2rem; margin-bottom: 15px;">Get in Touch</h2>
+                <p style="color: #666; margin-bottom: 40px;">Have a question? Send us a message and we'll get back to you shortly.</p>
+                
+                <form action="contact_process.php" method="POST" style="text-align: left;">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" required placeholder="John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required placeholder="john@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <select id="subject" name="subject">
+                            <option value="support">Technical Support</option>
+                            <option value="sales">Sales Inquiry</option>
+                            <option value="general">General Question</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" required placeholder="How can we help you?"></textarea>
+                    </div>
+                    <button type="submit">Send Message</button>
+                </form>
             </div>
         </div>
     </section>
