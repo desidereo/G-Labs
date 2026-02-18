@@ -1,21 +1,18 @@
-# Ignore Python scripts and caches
-*.py
+# System files
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Logs
+*.log
+
+# Temp files
+*.tmp
+*.bak
+*.swp
+
+# Development files
+mql5_seller.html
+extract_products.py
+generate_mql5_page.py
 __pycache__/
-*.pyc
-
-# Ignore Data files
-*.csv
-*.xlsx
-*.xml
-*.txt
-*.json
-
-# Ignore Chrome profile
-chrome_debug_profile/
-
-# Ignore Backup
-Legacy_Backup/
-
-# Allow specific text files if needed (like documentation)
-!MIGRATION_GUIDE.md
-!Stripe_Integration_Instructions.txt

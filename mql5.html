@@ -1,17 +1,14 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>MetaTrader 4/5 Tools | G-Labs</title>
 <meta content="MetaTrader 4 and 5 (MT4/MT5) indicators and expert advisors for prop firm traders. BTMM State Engine, Multi-Pair Scanners, and more." name="description"/>
-<meta content="MT5 Indicators, MetaTrader 5, BTMM, Market Maker Method, Forex Scanner, Prop Firm Challenge" name="keywords"/>
-<meta content="MetaTrader 4/5 Tools | G-Labs" property="og:title"/>
-<meta content="Institutional grade algorithms for MetaTrader 5. Zero latency, Prop Firm ready." property="og:description"/>
 <link href="favicon.svg" rel="icon" type="image/svg+xml"/>
-<style>
-        :root { --primary: #00b300; --dark: #222; --light: #f9f9f9; } /* Green for MT5/Finance */
+
+    <style>
+        :root { --primary: #00b300; --dark: #222; --light: #f9f9f9; }
         body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #333; }
         .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
         
@@ -24,12 +21,11 @@
         h1 { font-size: 2.5rem; color: var(--dark); margin-bottom: 10px; }
         
         .product-highlight { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; margin-bottom: 80px; }
-        .product-img { background: #ddd; height: 400px; display: flex; align-items: center; justify-content: center; border-radius: 8px; color: #888; font-size: 1.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .product-img { height: 400px; display: flex; align-items: center; justify-content: center; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
         
         .badge { display: inline-block; background: #e0f7fa; color: #006064; padding: 5px 12px; border-radius: 4px; font-size: 0.8rem; font-weight: 700; margin-bottom: 15px; }
         
         .price { font-size: 2.5rem; font-weight: 700; color: var(--dark); margin: 20px 0; }
-        .price span { font-size: 1rem; color: #999; font-weight: 400; text-decoration: line-through; margin-right: 10px; }
         
         .btn { display: inline-block; padding: 15px 40px; background: var(--primary); color: #fff; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 1.1rem; transition: background 0.3s; }
         .btn:hover { background: #009900; }
@@ -38,8 +34,17 @@
         li { margin-bottom: 12px; padding-left: 25px; position: relative; font-size: 1.05rem; }
         li:before { content: "✅"; position: absolute; left: 0; font-size: 0.9rem; }
 
+        /* New Grid Styles */
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; margin-bottom: 80px; }
+        .product-card { border: 1px solid #eee; border-radius: 8px; overflow: hidden; transition: transform 0.3s; background: #fff; display: flex; flex-direction: column; }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .product-card-content { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+        .product-card h3 { margin: 0 0 10px; font-size: 1.2rem; color: var(--dark); }
+        .product-card p { color: #666; font-size: 0.9rem; margin-bottom: 15px; flex-grow: 1; line-height: 1.5; }
+
         @media(max-width: 768px) { .product-highlight { grid-template-columns: 1fr; } }
     </style>
+
 </head>
 <body>
 <header>
@@ -56,42 +61,126 @@
 </div>
 </section>
 <div class="container">
-<!-- Main Product 1 -->
-<div class="product-highlight">
-<div class="product-img">[MT5 State Engine Screenshot]</div>
-<div class="product-content">
-<span class="badge">BEST SELLER</span>
-<h2>BTMM State Engine (MT5)</h2>
-<p>The only indicator that tracks the Market Maker's Cycle in Real-Time. Designed specifically for passing Prop Firm challenges (FTMO, MFF) with strict drawdown rules.</p>
-<ul>
-<li><b>No Repainting:</b> Confirmed states stay confirmed.</li>
-<li><b>Cycle Identifier:</b> See Accumulation, Manipulation, Distribution.</li>
-<li><b>Liquidity Voids:</b> Target the "unfilled" orders.</li>
-<li><b>Multi-Timeframe:</b> H1, H4, D1 on one chart.</li>
-</ul>
-<div class="price"><span>$299</span> $149 USD</div>
-<p style="color: #666; font-size: 0.9rem; margin-top: -15px; margin-bottom: 25px;">Lifetime License via MQL5 Market</p>
-<a class="btn" href="https://www.mql5.com/en/users/gcash01/seller" target="_blank">View on MQL5 Market</a>
-</div>
-</div>
-<!-- Main Product 2 -->
-<div class="product-highlight">
-<div class="product-img">[MT5 Scanner Screenshot]</div>
-<div class="product-content">
-<span class="badge" style="background: #fff3e0; color: #e65100;">NEW RELEASE</span>
-<h2>BTMM Multi-Pair Scanner (MT5)</h2>
-<p>Monitor the entire market from a single dashboard. Works in perfect tandem with the State Engine to find the setups, while the State Engine helps you trade them.</p>
-<ul>
-<li><b>6-Pair Monitoring:</b> Track Cycle Levels &amp; Trends simultaneously.</li>
-<li><b>Pattern Alerts:</b> Get notified for Type 1, 2, &amp; 3 entries.</li>
-<li><b>Advanced Filtering:</b> Built-in Vector Candle &amp; TDI checks.</li>
-<li><b>Prop Firm Ready:</b> Never miss a setup across multiple pairs.</li>
-</ul>
-<div class="price"><span>$199</span> $99 USD</div>
-<p style="color: #666; font-size: 0.9rem; margin-top: -15px; margin-bottom: 25px;">Lifetime License via MQL5 Market</p>
-<a class="btn" href="https://www.mql5.com/en/users/gcash01/seller" target="_blank">View on MQL5 Market</a>
-</div>
-</div>
+
+    <!-- Main Highlight -->
+    <div class="product-highlight">
+        <div class="product-img" style="background: white; border: 1px solid #eee;">
+            <img src="https://c.mql5.com/31/1796/btmm-state-engine-pro-logo-200x200-8583.png" alt="Btmm state engine pro" style="max-width: 80%; max-height: 80%;">
+        </div>
+        <div class="product-content">
+            <span class="badge">BEST SELLER</span>
+            <h2>Btmm state engine pro</h2>
+            <p>BTMM State Engine Pro — the   all-in-one Banks   & Institutions Market Maker indicator for Meta Trad...</p>
+            <ul>
+                <li><b>Institutional Grade:</b> Professional tools for retail traders.</li>
+                <li><b>Prop Firm Ready:</b> Designed for strict drawdown rules.</li>
+                <li><b>MetaTrader 5:</b> Native performance and speed.</li>
+            </ul>
+            <div class="price">$149.00 <span style="font-size: 0.8rem; color: #999; font-weight: normal;">USD</span></div>
+            <p style="color: #666; font-size: 0.9rem; margin-top: -15px; margin-bottom: 25px;">Lifetime License via MQL5 Market</p>
+            <a class="btn" href="https://www.mql5.com/en/market/product/164997?source=Site&#x2B;Profile&#x2B;Seller" target="_blank">View on MQL5 Market</a>
+        </div>
+    </div>
+    
+
+<h2 style="margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 10px;">More Products</h2>
+<div class="product-grid">
+    <div class="product-card">
+        <div style="height: 200px; display: flex; align-items: center; justify-content: center; background: #f9f9f9; border-bottom: 1px solid #eee;">
+            <img src="https://c.mql5.com/31/1722/advanced-market-maker-dashboard-by-g-labs-mt5-logo-200x200-6112.png" alt="Advanced Market Maker Dashboard by G Labs mt5" style="max-width: 150px; max-height: 150px;">
+        </div>
+        <div class="product-card-content">
+            <h3>Advanced Market Maker Dashboard by G Labs mt5</h3>
+            <p>G -Labs Advanced Market Maker Dashboard MT 5 | BTMM   Cycle Engine + Multi-Pair Scanner Professional...</p>
+            <div class="price" style="font-size: 1.1rem; color: #00b300; margin-bottom: 10px;">$39.00</div>
+            <a href="https://www.mql5.com/en/market/product/160951?source=Site&#x2B;Profile&#x2B;Seller" class="btn" target="_blank" style="padding: 10px 20px; font-size: 0.9rem;">View Details</a>
+        </div>
+    </div>
+    
+    <div class="product-card">
+        <div style="height: 200px; display: flex; align-items: center; justify-content: center; background: #f9f9f9; border-bottom: 1px solid #eee;">
+            <img src="https://c.mql5.com/31/1722/market-maker-dashboard-by-g-labs-logo-200x200-7861.png" alt="Market Maker Dashboard by G labs" style="max-width: 150px; max-height: 150px;">
+        </div>
+        <div class="product-card-content">
+            <h3>Market Maker Dashboard by G labs</h3>
+            <p>G-Labs Market Maker Dashboard   MT4 | BTMM   Scanner with Peak Formation, ADR   Cycles and Asian Ran...</p>
+            <div class="price" style="font-size: 1.1rem; color: #00b300; margin-bottom: 10px;">$49.00</div>
+            <a href="https://www.mql5.com/en/market/product/58535?source=Site&#x2B;Profile&#x2B;Seller" class="btn" target="_blank" style="padding: 10px 20px; font-size: 0.9rem;">View Details</a>
+        </div>
+    </div>
+    
+    <div class="product-card">
+        <div style="height: 200px; display: flex; align-items: center; justify-content: center; background: #f9f9f9; border-bottom: 1px solid #eee;">
+            <img src="https://c.mql5.com/31/1722/g-cash-ic-breaker-order-blocks-logo-200x200-3769.png" alt="G Cash IC Breaker order blocks" style="max-width: 150px; max-height: 150px;">
+        </div>
+        <div class="product-card-content">
+            <h3>G Cash IC Breaker order blocks</h3>
+            <p>G-Ca $H IC Breaker MT4   | Order Block and Breaker Block   Indicator Automatic order block and   bre...</p>
+            <div class="price" style="font-size: 1.1rem; color: #00b300; margin-bottom: 10px;">$39.00</div>
+            <a href="https://www.mql5.com/en/market/product/60291?source=Site&#x2B;Profile&#x2B;Seller" class="btn" target="_blank" style="padding: 10px 20px; font-size: 0.9rem;">View Details</a>
+        </div>
+    </div>
+    
+    <div class="product-card">
+        <div style="height: 200px; display: flex; align-items: center; justify-content: center; background: #f9f9f9; border-bottom: 1px solid #eee;">
+            <img src="https://c.mql5.com/31/1722/g-labs-trade-manager-logo-200x200-6690.png" alt="G Labs Trade Manager" style="max-width: 150px; max-height: 150px;">
+        </div>
+        <div class="product-card-content">
+            <h3>G Labs Trade Manager</h3>
+            <p>G -Labs Trade Manager MT4   | Risk Calculator, Trade Panel and Position Manager Professional trade m...</p>
+            <div class="price" style="font-size: 1.1rem; color: #00b300; margin-bottom: 10px;">$49.00</div>
+            <a href="https://www.mql5.com/en/market/product/73601?source=Site&#x2B;Profile&#x2B;Seller" class="btn" target="_blank" style="padding: 10px 20px; font-size: 0.9rem;">View Details</a>
+        </div>
+    </div>
+    
+    <div class="product-card">
+        <div style="height: 200px; display: flex; align-items: center; justify-content: center; background: #f9f9f9; border-bottom: 1px solid #eee;">
+            <img src="https://c.mql5.com/31/1722/market-maker-dashboard-by-g-labs-mt5-logo-200x200-3327.png" alt="Market Maker Dashboard by G Labs mt5" style="max-width: 150px; max-height: 150px;">
+        </div>
+        <div class="product-card-content">
+            <h3>Market Maker Dashboard by G Labs mt5</h3>
+            <p>G-Labs Market   Maker Dashboard MT5 | BT MM Scanner with Peak Formation, AD R Cycles and Asian Range...</p>
+            <div class="price" style="font-size: 1.1rem; color: #00b300; margin-bottom: 10px;">$49.00</div>
+            <a href="https://www.mql5.com/en/market/product/126448?source=Site&#x2B;Profile&#x2B;Seller" class="btn" target="_blank" style="padding: 10px 20px; font-size: 0.9rem;">View Details</a>
+        </div>
+    </div>
+    
+    <div class="product-card">
+        <div style="height: 200px; display: flex; align-items: center; justify-content: center; background: #f9f9f9; border-bottom: 1px solid #eee;">
+            <img src="https://c.mql5.com/31/1724/connix-mt5-logo-200x200-7110.png" alt="Connix MT5" style="max-width: 150px; max-height: 150px;">
+        </div>
+        <div class="product-card-content">
+            <h3>Connix MT5</h3>
+            <p>Connix Smart Trading MT5   | Smart Money Concepts Scanner + ICT   Dashboard Professional multi-curre...</p>
+            <div class="price" style="font-size: 1.1rem; color: #00b300; margin-bottom: 10px;">$39.00</div>
+            <a href="https://www.mql5.com/en/market/product/161045?source=Site&#x2B;Profile&#x2B;Seller" class="btn" target="_blank" style="padding: 10px 20px; font-size: 0.9rem;">View Details</a>
+        </div>
+    </div>
+    
+    <div class="product-card">
+        <div style="height: 200px; display: flex; align-items: center; justify-content: center; background: #f9f9f9; border-bottom: 1px solid #eee;">
+            <img src="https://c.mql5.com/31/1727/magic-lines-mt5-logo-200x200-2681.png" alt="Magic lines mt5" style="max-width: 150px; max-height: 150px;">
+        </div>
+        <div class="product-card-content">
+            <h3>Magic lines mt5</h3>
+            <p>M agicLines MT 5   | Multi-Currency Cycle, V WAP and   Trend Dashboard   with   Trade   Signals Mult...</p>
+            <div class="price" style="font-size: 1.1rem; color: #00b300; margin-bottom: 10px;">$39.00</div>
+            <a href="https://www.mql5.com/en/market/product/161073?source=Site&#x2B;Profile&#x2B;Seller" class="btn" target="_blank" style="padding: 10px 20px; font-size: 0.9rem;">View Details</a>
+        </div>
+    </div>
+    
+    <div class="product-card">
+        <div style="height: 200px; display: flex; align-items: center; justify-content: center; background: #f9f9f9; border-bottom: 1px solid #eee;">
+            <img src="https://c.mql5.com/31/1809/smart-market-structure-toolkit-logo-200x200-8645.png" alt="Smart Market Structure Toolkit" style="max-width: 150px; max-height: 150px;">
+        </div>
+        <div class="product-card-content">
+            <h3>Smart Market Structure Toolkit</h3>
+            <p>Smart Market Structure Toolkit is a MetaTrader 5 chart indicator focused on market structure and Sma...</p>
+            <div class="price" style="font-size: 1.1rem; color: #00b300; margin-bottom: 10px;">$39.00</div>
+            <a href="https://www.mql5.com/en/market/product/165678?source=Site&#x2B;Profile&#x2B;Seller" class="btn" target="_blank" style="padding: 10px 20px; font-size: 0.9rem;">View Details</a>
+        </div>
+    </div>
+    </div>
 </div>
 <footer style="background: #f0f3fa; padding: 40px 0; text-align: center; font-size: 0.9rem; color: #666; margin-top: 60px;">
 <div class="container">
@@ -100,11 +189,11 @@
 
 <div style="margin: 20px 0; display: flex; justify-content: center; gap: 20px; align-items: center;">
     <a href="https://www.tradingview.com/u/G-Labs/#published-scripts" target="_blank" style="text-decoration: none; display: flex; align-items: center; gap: 8px; color: #333; font-weight: 600; background: #fff; padding: 8px 15px; border-radius: 5px; border: 1px solid #eee;">
-        <img src="https://s3-symbol-logo.tradingview.com/tradingview.svg" alt="TradingView" style="width: 24px; height: 24px;">
+        <img src="assets/images/tradingview.svg" alt="TradingView" style="width: 24px; height: 24px;">
         TradingView
     </a>
     <a href="https://www.mql5.com/en/users/gcash01/seller" target="_blank" style="text-decoration: none; display: flex; align-items: center; gap: 8px; color: #333; font-weight: 600; background: #fff; padding: 8px 15px; border-radius: 5px; border: 1px solid #eee;">
-        <img src="https://www.mql5.com/c/img/mql5_logo_color.svg" alt="MQL5" style="width: 24px; height: 24px;">
+        <img src="assets/images/mql5.svg" alt="MQL5" style="width: 24px; height: 24px;">
         MQL5
     </a>
 </div>
