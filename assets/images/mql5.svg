@@ -1,10 +1,6 @@
-<svg width="200" height="80" viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
-  <!-- Official MQL5 Blue Background Badge Style -->
-  <rect width="200" height="80" rx="12" ry="12" fill="#0072BC"/>
-  
-  <!-- "MQL" text in White -->
-  <text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="bold" font-size="50" fill="#FFFFFF" letter-spacing="-2">MQL</text>
-  
-  <!-- "5" text in Orange/Yellow -->
-  <text x="135" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="bold" font-size="50" fill="#FF9900">5</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="367" height="225" viewBox="0 0 367 225">
+  <rect width="367" height="225" fill="#0072BC"/>
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="80">
+    <tspan fill="#FFFFFF">MQL</tspan><tspan fill="#FF9900">5</tspan>
+  </text>
 </svg>
