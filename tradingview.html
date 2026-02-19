@@ -4,11 +4,80 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>TradingView Indicators | G-Labs</title>
-<meta content="Professional TradingView indicators for technical analysis. BTMM State Engine, Market Structure, and Sentiment Analysis tools." name="description"/>
-<meta content="TradingView Indicators, Technical Analysis, BTMM, Forex Indicators, Crypto Trading Tools" name="keywords"/>
-<meta content="TradingView Indicators | G-Labs" property="og:title"/>
-<meta content="Professional-grade charting tools and indicators. Compatible with any device via the TradingView Cloud." property="og:description"/>
+<title>TradingView Indicators & Algorithms | G-Labs</title>
+<meta content="Professional TradingView indicators for technical analysis. BTMM State Engine, Market Structure, Magic Lines, Connix Smart Money Concepts, and Sentiment Analysis tools." name="description"/>
+<meta content="TradingView Indicators, Technical Analysis, BTMM, Forex Indicators, Crypto Trading Tools, Market Maker Method, Smart Money Concepts, SMC Indicator, Magic Lines, Connix Trading" name="keywords"/>
+<link rel="canonical" href="https://www.g-labs.software/tradingview.html">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.g-labs.software/tradingview.html">
+<meta property="og:title" content="TradingView Indicators & Algorithms | G-Labs">
+<meta property="og:description" content="Professional-grade charting tools and indicators. Compatible with any device via the TradingView Cloud.">
+<meta property="og:image" content="https://www.g-labs.software/assets/images/btmm-state-engine-pro-lifetime.png">
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://www.g-labs.software/tradingview.html">
+<meta property="twitter:title" content="TradingView Indicators & Algorithms | G-Labs">
+<meta property="twitter:description" content="Professional-grade charting tools and indicators. Compatible with any device via the TradingView Cloud.">
+<meta property="twitter:image" content="https://www.g-labs.software/assets/images/btmm-state-engine-pro-lifetime.png">
+
+<!-- Schema.org ItemList -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "item": {
+        "@type": "Product",
+        "name": "BTMM State Engine Pro Multi Asset + Deluxe Package",
+        "image": "https://www.g-labs.software/assets/images/btmm-state-engine-pro-lifetime.png",
+        "description": "The ultimate lifetime trading arsenal. BTMM State Engine Pro (Single Asset) and Multi-Asset Scanner for complete mastery of the Market Maker Cycle.",
+        "offers": {
+          "@type": "Offer",
+          "price": "150.00",
+          "priceCurrency": "GBP"
+        }
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "item": {
+        "@type": "Product",
+        "name": "Magic Lines Single Asset",
+        "image": "https://www.g-labs.software/assets/images/magic-lines-single.png",
+        "description": "Comprehensive trading system to visualize market structure and identify high-probability entries.",
+        "offers": {
+          "@type": "Offer",
+          "price": "9.99",
+          "priceCurrency": "GBP"
+        }
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "item": {
+        "@type": "Product",
+        "name": "Connix Smart Trading Single Asset",
+        "image": "https://www.g-labs.software/assets/images/connix-smart-trading-single.png",
+        "description": "Sophisticated Smart Money Concepts (SMC) toolkit designed for precision trading. Order Blocks, FVG, BOS.",
+        "offers": {
+          "@type": "Offer",
+          "price": "9.99",
+          "priceCurrency": "GBP"
+        }
+      }
+    }
+  ]
+}
+</script>
+
 <link href="favicon.svg" rel="icon" type="image/svg+xml"/>
 <style>
         :root {
@@ -309,6 +378,31 @@
             const message = `Stripe Integration Required!\n\nYou clicked to buy: ${productId}\n\nTo make this work:\n1. Create a Payment Link in your Stripe Dashboard.\n2. Paste the URL into the onclick event for this button in the HTML code.`;
             alert(message);
         }
+
+        // Product GIF Hover Effect
+        document.addEventListener('DOMContentLoaded', () => {
+            const productImages = document.querySelectorAll('.product-card .card-img img');
+            
+            productImages.forEach(img => {
+                img.addEventListener('mouseenter', function() {
+                    const gifSrc = this.getAttribute('data-gif');
+                    if (gifSrc) {
+                        // Preload the GIF
+                        const preload = new Image();
+                        preload.src = gifSrc;
+                        
+                        this.dataset.static = this.src;
+                        this.src = gifSrc;
+                    }
+                });
+                
+                img.addEventListener('mouseleave', function() {
+                    if (this.dataset.static) {
+                        this.src = this.dataset.static;
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html>
