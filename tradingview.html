@@ -219,7 +219,7 @@
     <!-- BTMM State Engine Pro Multi Asset + Deluxe Package -->
     <div class="product-card">
         <div class="card-img" style="padding: 0;">
-            <img src="assets/images/btmm-state-engine-pro-lifetime.png" alt="BTMM State Engine Pro Multi Asset + Deluxe Package" style="width: 100%; height: 100%; object-fit: cover;" data-gif="assets/gifs/btmm-state-engine-pro.gif">
+            <img src="assets/images/btmm-state-engine-pro-lifetime.png" alt="BTMM State Engine Pro Multi Asset + Deluxe Package" style="width: 100%; height: 100%; object-fit: cover;" data-video="assets/videos/btmm-state-engine-pro.mp4">
         </div>
         <div class="card-content">
             <h2 class="card-title">BTMM State Engine Pro Multi Asset + Deluxe Package</h2>
@@ -251,7 +251,7 @@
     <!-- Magic Lines Single Asset -->
     <div class="product-card">
         <div class="card-img" style="padding: 0;">
-            <img src="assets/images/magic-lines-single.png" alt="Magic Lines Single Asset" style="width: 100%; height: 100%; object-fit: cover;" data-gif="assets/gifs/magic-lines-single.gif">
+            <img src="assets/images/magic-lines-single.png" alt="Magic Lines Single Asset" style="width: 100%; height: 100%; object-fit: cover;" data-video="assets/videos/magic-lines-single.mp4">
         </div>
         <div class="card-content">
             <h2 class="card-title">Magic Lines Single Asset</h2>
@@ -277,7 +277,7 @@
     <!-- Magic Lines Deluxe Package -->
     <div class="product-card">
         <div class="card-img" style="padding: 0;">
-            <img src="assets/images/magic-lines-deluxe.png" alt="Magic Lines Deluxe Package" style="width: 100%; height: 100%; object-fit: cover;" data-gif="assets/gifs/magic-lines-deluxe.gif">
+            <img src="assets/images/magic-lines-deluxe.png" alt="Magic Lines Deluxe Package" style="width: 100%; height: 100%; object-fit: cover;" data-video="assets/videos/magic-lines-deluxe.mp4">
         </div>
         <div class="card-content">
             <h2 class="card-title">Magic Lines Deluxe Package</h2>
@@ -310,7 +310,7 @@
     <!-- Connix Smart Trading Single Asset -->
     <div class="product-card">
         <div class="card-img" style="padding: 0;">
-            <img src="assets/images/connix-smart-trading-single.png" alt="Connix Smart Trading Single Asset" style="width: 100%; height: 100%; object-fit: cover;" data-gif="assets/gifs/connix-smart-trading-single.gif">
+            <img src="assets/images/connix-smart-trading-single.png" alt="Connix Smart Trading Single Asset" style="width: 100%; height: 100%; object-fit: cover;" data-video="assets/videos/connix-smart-trading-single.mp4">
         </div>
         <div class="card-content">
             <h2 class="card-title">Connix Smart Trading Single Asset</h2>
@@ -342,7 +342,7 @@
     <!-- Connix Deluxe Package -->
     <div class="product-card">
         <div class="card-img" style="padding: 0;">
-            <img src="assets/images/connix-deluxe-package.png" alt="Connix Deluxe Package" style="width: 100%; height: 100%; object-fit: cover;" data-gif="assets/gifs/connix-deluxe.gif">
+            <img src="assets/images/connix-deluxe-package.png" alt="Connix Deluxe Package" style="width: 100%; height: 100%; object-fit: cover;" data-video="assets/videos/connix-deluxe.mp4">
         </div>
         <div class="card-content">
             <h2 class="card-title">Connix Deluxe Package</h2>
@@ -374,7 +374,7 @@
     <!-- Market Maker Single Asset -->
     <div class="product-card">
         <div class="card-img" style="padding: 0;">
-            <img src="assets/images/market-maker-single-asset.png" alt="Market Maker Single Asset" style="width: 100%; height: 100%; object-fit: cover;" data-gif="assets/gifs/market-maker-single.gif">
+            <img src="assets/images/market-maker-single-asset.png" alt="Market Maker Single Asset" style="width: 100%; height: 100%; object-fit: cover;" data-video="assets/videos/market-maker-single.mp4">
         </div>
         <div class="card-content">
             <h2 class="card-title">Market Maker Single Asset</h2>
@@ -406,7 +406,7 @@
     <!-- Market Maker Deluxe Package -->
     <div class="product-card">
         <div class="card-img" style="padding: 0;">
-            <img src="assets/images/deluxe-market-maker-package-new.png" alt="Market Maker Deluxe Package" style="width: 100%; height: 100%; object-fit: cover;" data-gif="assets/gifs/market-maker-deluxe.gif">
+            <img src="assets/images/deluxe-market-maker-package-new.png" alt="Market Maker Deluxe Package" style="width: 100%; height: 100%; object-fit: cover;" data-video="assets/videos/market-maker-deluxe.mp4">
         </div>
         <div class="card-content">
             <h2 class="card-title">Market Maker Deluxe Package</h2>
@@ -520,61 +520,78 @@
 </div>
 </footer>
 <script>
-        // Product GIF Hover Effect
+        // Product Video Hover Effect
         document.addEventListener('DOMContentLoaded', () => {
-            const productImages = document.querySelectorAll('.product-card .card-img img');
+            // Select all images that have a data-video attribute
+            const productImages = document.querySelectorAll('img[data-video]');
             
             productImages.forEach(img => {
-                img.addEventListener('mouseenter', function() {
-                    const gifSrc = this.getAttribute('data-gif');
-                    if (gifSrc) {
-                        // Preload the GIF
-                        const preload = new Image();
-                        preload.src = gifSrc;
-                        
-                        this.dataset.static = this.src;
-                        this.src = gifSrc;
-                    }
-                });
-                
-                img.addEventListener('mouseleave', function() {
-                    if (this.dataset.static) {
-                        this.src = this.dataset.static;
-                    }
-                });
-            });
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const productImages = document.querySelectorAll('.product-card img[data-gif]');
+                const videoSrc = img.getAttribute('data-video');
+                if (!videoSrc) return;
 
-            productImages.forEach(img => {
-                const originalSrc = img.src;
-                const gifSrc = img.getAttribute('data-gif');
-
-                // Preload GIF to avoid lag
-                if (gifSrc) {
-                    const preloadLink = document.createElement('link');
-                    preloadLink.rel = 'preload';
-                    preloadLink.as = 'image';
-                    preloadLink.href = gifSrc;
-                    document.head.appendChild(preloadLink);
+                const container = img.parentElement;
+                // Ensure container is positioned relatively so absolute video works
+                if (getComputedStyle(container).position === 'static') {
+                    container.style.position = 'relative';
                 }
 
-                img.addEventListener('mouseenter', function() {
-                    if(gifSrc && gifSrc !== 'assets/gifs/placeholder.gif') {
-                        this.src = gifSrc;
+                let videoElement = null;
+
+                container.addEventListener('mouseenter', () => {
+                    // Create video element on first hover if it doesn't exist
+                    if (!videoElement) {
+                        videoElement = document.createElement('video');
+                        videoElement.src = videoSrc;
+                        videoElement.muted = true;
+                        videoElement.loop = true;
+                        videoElement.playsInline = true; // Important for mobile
+                        
+                        // Match styling to cover the container
+                        videoElement.style.position = 'absolute';
+                        videoElement.style.top = '0';
+                        videoElement.style.left = '0';
+                        videoElement.style.width = '100%';
+                        videoElement.style.height = '100%';
+                        videoElement.style.objectFit = 'cover';
+                        videoElement.style.zIndex = '2'; // Above the image
+                        videoElement.style.opacity = '0'; // Start hidden
+                        videoElement.style.transition = 'opacity 0.3s ease';
+
+                        container.appendChild(videoElement);
+                        
+                        // Small delay to ensure transition works
+                        setTimeout(() => {
+                            videoElement.style.opacity = '1';
+                        }, 50);
+                    } else {
+                        videoElement.style.display = 'block';
+                        // Trigger reflow
+                        void videoElement.offsetWidth;
+                        videoElement.style.opacity = '1';
+                    }
+
+                    // Play the video
+                    const playPromise = videoElement.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(error => {
+                            console.log('Autoplay prevented:', error);
+                        });
                     }
                 });
 
-                img.addEventListener('mouseleave', function() {
-                    if(gifSrc && gifSrc !== 'assets/gifs/placeholder.gif') {
-                        this.src = originalSrc;
+                container.addEventListener('mouseleave', () => {
+                    if (videoElement) {
+                        videoElement.style.opacity = '0';
+                        setTimeout(() => {
+                            videoElement.pause();
+                            videoElement.style.display = 'none';
+                            videoElement.currentTime = 0; // Reset video
+                        }, 300); // Match transition duration
                     }
                 });
             });
         });
     </script>
+
 </body>
 </html>
