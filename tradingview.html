@@ -131,8 +131,46 @@
         .price-tag { font-size: 1.25rem; font-weight: 700; color: var(--dark); }
         .price-tag span { font-size: 0.9rem; color: #999; font-weight: normal; text-decoration: line-through; margin-right: 5px; }
 
-        .btn-stripe { background: #635bff; color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-weight: 600; font-size: 0.9rem; transition: background 0.2s; border: none; cursor: pointer; }
-        .btn-stripe:hover { background: #4b45e6; }
+        .btn-stripe {
+            background: #635bff;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-stripe:hover {
+            background: #4a40d4;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(84, 105, 212, 0.2);
+        }
+
+        .btn-demo {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(41, 98, 255, 0.1);
+            color: #2962ff;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            border: 1px solid rgba(41, 98, 255, 0.2);
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .btn-demo:hover {
+            background: rgba(41, 98, 255, 0.2);
+            transform: translateY(-1px);
+        }
 
         @media(max-width: 768px) {
             .nav-container { flex-direction: column; gap: 15px; }
@@ -159,6 +197,9 @@
     </header>
 <div class="container">
 <section class="hero">
+<div style="display: inline-block; background: #e3f2fd; color: #1565c0; padding: 6px 12px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; margin-bottom: 15px;">
+    <span style="margin-right: 5px;">🏆</span> 11+ Years of Excellence in Trading Software
+</div>
 <h1>TradingView Collection</h1>
 <p class="subtitle">Professional-grade charting tools and indicators. Compatible with any device via the TradingView Cloud.</p>
 </section>
@@ -166,7 +207,7 @@
     <!-- BTMM State Engine Pro Multi Asset + Deluxe Package -->
     <div class="product-card">
         <div class="card-img" style="padding: 0;">
-            <img src="assets/images/btmm-state-engine-pro-lifetime.png" alt="BTMM State Engine Pro Multi Asset + Deluxe Package" style="width: 100%; height: 100%; object-fit: cover;">
+            <img src="assets/images/btmm-state-engine-pro-lifetime.png" alt="BTMM State Engine Pro Multi Asset + Deluxe Package" style="width: 100%; height: 100%; object-fit: cover;" data-gif="assets/gifs/placeholder.gif">
         </div>
         <div class="card-content">
             <h2 class="card-title">BTMM State Engine Pro Multi Asset + Deluxe Package</h2>
@@ -180,8 +221,14 @@
             <div class="price-row">
                 <div class="price-tag">£150 <span style="font-size: 0.8rem; color: #666; font-weight: normal; text-decoration: none;">(Lifetime)</span></div>
                 <div style="display: flex; flex-direction: column; align-items: flex-end;">
-                    <button class="btn-stripe" onclick="checkout('btmm_lifetime')">Buy Now</button>
-                    <span style="font-size: 0.7rem; color: #666; margin-top: 5px; display: flex; align-items: center; gap: 4px;">
+                    <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                        <a href="https://www.youtube.com/@g-labs" target="_blank" class="btn-demo">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="margin-right: 6px;"><path d="M8 5v14l11-7z"/></svg>
+                            Watch Demo
+                        </a>
+                        <button class="btn-stripe" onclick="checkout('btmm_lifetime')">Buy Now</button>
+                    </div>
+                    <span style="font-size: 0.7rem; color: #666; display: flex; align-items: center; gap: 4px;">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12" fill="#2962ff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
                         Secure via Stripe
                     </span>
@@ -192,7 +239,7 @@
     <!-- Magic Lines Single Asset -->
     <div class="product-card">
         <div class="card-img" style="padding: 0;">
-            <img src="assets/images/magic-lines-single.png" alt="Magic Lines Single Asset" style="width: 100%; height: 100%; object-fit: cover;">
+            <img src="assets/images/magic-lines-single.png" alt="Magic Lines Single Asset" style="width: 100%; height: 100%; object-fit: cover;" data-gif="assets/gifs/placeholder.gif">
         </div>
         <div class="card-content">
             <h2 class="card-title">Magic Lines Single Asset</h2>
@@ -200,8 +247,14 @@
             <div class="price-row">
                 <div class="price-tag">£9.99 / month</div>
                 <div style="display: flex; flex-direction: column; align-items: flex-end;">
-                    <button class="btn-stripe" onclick="checkout('magic_lines_single')">Buy Now</button>
-                    <span style="font-size: 0.7rem; color: #666; margin-top: 5px; display: flex; align-items: center; gap: 4px;">
+                    <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                        <a href="https://www.youtube.com/@g-labs" target="_blank" class="btn-demo">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="margin-right: 6px;"><path d="M8 5v14l11-7z"/></svg>
+                            Watch Demo
+                        </a>
+                        <button class="btn-stripe" onclick="checkout('magic_lines_single')">Buy Now</button>
+                    </div>
+                    <span style="font-size: 0.7rem; color: #666; display: flex; align-items: center; gap: 4px;">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12" fill="#2962ff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
                         Secure via Stripe
                     </span>
@@ -212,7 +265,7 @@
     <!-- Magic Lines Deluxe Package -->
     <div class="product-card">
         <div class="card-img" style="padding: 0;">
-            <img src="assets/images/magic-lines-deluxe.png" alt="Magic Lines Deluxe Package" style="width: 100%; height: 100%; object-fit: cover;">
+            <img src="assets/images/magic-lines-deluxe.png" alt="Magic Lines Deluxe Package" style="width: 100%; height: 100%; object-fit: cover;" data-gif="assets/gifs/placeholder.gif">
         </div>
         <div class="card-content">
             <h2 class="card-title">Magic Lines Deluxe Package</h2>
@@ -226,8 +279,14 @@
             <div class="price-row">
                 <div class="price-tag">£19.99 / month</div>
                 <div style="display: flex; flex-direction: column; align-items: flex-end;">
-                    <button class="btn-stripe" onclick="checkout('magic_lines_deluxe')">Buy Now</button>
-                    <span style="font-size: 0.7rem; color: #666; margin-top: 5px; display: flex; align-items: center; gap: 4px;">
+                    <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                        <a href="https://www.youtube.com/@g-labs" target="_blank" class="btn-demo">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="margin-right: 6px;"><path d="M8 5v14l11-7z"/></svg>
+                            Watch Demo
+                        </a>
+                        <button class="btn-stripe" onclick="checkout('magic_lines_deluxe')">Buy Now</button>
+                    </div>
+                    <span style="font-size: 0.7rem; color: #666; display: flex; align-items: center; gap: 4px;">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12" fill="#2962ff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
                         Secure via Stripe
                     </span>
@@ -239,7 +298,7 @@
     <!-- Connix Smart Trading Single Asset -->
     <div class="product-card">
         <div class="card-img" style="padding: 0;">
-            <img src="assets/images/connix-smart-trading-single.png" alt="Connix Smart Trading Single Asset" style="width: 100%; height: 100%; object-fit: cover;">
+            <img src="assets/images/connix-smart-trading-single.png" alt="Connix Smart Trading Single Asset" style="width: 100%; height: 100%; object-fit: cover;" data-gif="assets/gifs/placeholder.gif">
         </div>
         <div class="card-content">
             <h2 class="card-title">Connix Smart Trading Single Asset</h2>
@@ -253,8 +312,14 @@
             <div class="price-row">
                 <div class="price-tag">£9.99 / month</div>
                 <div style="display: flex; flex-direction: column; align-items: flex-end;">
-                    <button class="btn-stripe" onclick="checkout('connix_single')">Buy Now</button>
-                    <span style="font-size: 0.7rem; color: #666; margin-top: 5px; display: flex; align-items: center; gap: 4px;">
+                    <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                        <a href="https://www.youtube.com/@g-labs" target="_blank" class="btn-demo">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="margin-right: 6px;"><path d="M8 5v14l11-7z"/></svg>
+                            Watch Demo
+                        </a>
+                        <button class="btn-stripe" onclick="checkout('connix_single')">Buy Now</button>
+                    </div>
+                    <span style="font-size: 0.7rem; color: #666; display: flex; align-items: center; gap: 4px;">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12" fill="#2962ff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
                         Secure via Stripe
                     </span>
@@ -265,7 +330,7 @@
     <!-- Connix Deluxe Package -->
     <div class="product-card">
         <div class="card-img" style="padding: 0;">
-            <img src="assets/images/connix-deluxe-package.png" alt="Connix Deluxe Package" style="width: 100%; height: 100%; object-fit: cover;">
+            <img src="assets/images/connix-deluxe-package.png" alt="Connix Deluxe Package" style="width: 100%; height: 100%; object-fit: cover;" data-gif="assets/gifs/placeholder.gif">
         </div>
         <div class="card-content">
             <h2 class="card-title">Connix Deluxe Package</h2>
@@ -279,8 +344,14 @@
             <div class="price-row">
                 <div class="price-tag">£19.99 / month</div>
                 <div style="display: flex; flex-direction: column; align-items: flex-end;">
-                    <button class="btn-stripe" onclick="checkout('connix_deluxe')">Buy Now</button>
-                    <span style="font-size: 0.7rem; color: #666; margin-top: 5px; display: flex; align-items: center; gap: 4px;">
+                    <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                        <a href="https://www.youtube.com/@g-labs" target="_blank" class="btn-demo">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="margin-right: 6px;"><path d="M8 5v14l11-7z"/></svg>
+                            Watch Demo
+                        </a>
+                        <button class="btn-stripe" onclick="checkout('connix_deluxe')">Buy Now</button>
+                    </div>
+                    <span style="font-size: 0.7rem; color: #666; display: flex; align-items: center; gap: 4px;">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12" fill="#2962ff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
                         Secure via Stripe
                     </span>
@@ -291,7 +362,7 @@
     <!-- Market Maker Single Asset -->
     <div class="product-card">
         <div class="card-img" style="padding: 0;">
-            <img src="assets/images/market-maker-single-asset.png" alt="Market Maker Single Asset" style="width: 100%; height: 100%; object-fit: cover;">
+            <img src="assets/images/market-maker-single-asset.png" alt="Market Maker Single Asset" style="width: 100%; height: 100%; object-fit: cover;" data-gif="assets/gifs/placeholder.gif">
         </div>
         <div class="card-content">
             <h2 class="card-title">Market Maker Single Asset</h2>
@@ -305,8 +376,14 @@
             <div class="price-row">
                 <div class="price-tag">£9.99 / month</div>
                 <div style="display: flex; flex-direction: column; align-items: flex-end;">
-                    <button class="btn-stripe" onclick="checkout('market_maker_single')">Buy Now</button>
-                    <span style="font-size: 0.7rem; color: #666; margin-top: 5px; display: flex; align-items: center; gap: 4px;">
+                    <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                        <a href="https://www.youtube.com/@g-labs" target="_blank" class="btn-demo">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="margin-right: 6px;"><path d="M8 5v14l11-7z"/></svg>
+                            Watch Demo
+                        </a>
+                        <button class="btn-stripe" onclick="checkout('market_maker_single')">Buy Now</button>
+                    </div>
+                    <span style="font-size: 0.7rem; color: #666; display: flex; align-items: center; gap: 4px;">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12" fill="#2962ff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
                         Secure via Stripe
                     </span>
@@ -317,7 +394,7 @@
     <!-- Market Maker Deluxe Package -->
     <div class="product-card">
         <div class="card-img" style="padding: 0;">
-            <img src="assets/images/deluxe-market-maker-package-new.png" alt="Market Maker Deluxe Package" style="width: 100%; height: 100%; object-fit: cover;">
+            <img src="assets/images/deluxe-market-maker-package-new.png" alt="Market Maker Deluxe Package" style="width: 100%; height: 100%; object-fit: cover;" data-gif="assets/gifs/placeholder.gif">
         </div>
         <div class="card-content">
             <h2 class="card-title">Market Maker Deluxe Package</h2>
@@ -331,8 +408,14 @@
             <div class="price-row">
                 <div class="price-tag">£19.99 / month</div>
                 <div style="display: flex; flex-direction: column; align-items: flex-end;">
-                    <button class="btn-stripe" onclick="checkout('market_maker_deluxe')">Buy Now</button>
-                    <span style="font-size: 0.7rem; color: #666; margin-top: 5px; display: flex; align-items: center; gap: 4px;">
+                    <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                        <a href="https://www.youtube.com/@g-labs" target="_blank" class="btn-demo">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="margin-right: 6px;"><path d="M8 5v14l11-7z"/></svg>
+                            Watch Demo
+                        </a>
+                        <button class="btn-stripe" onclick="checkout('market_maker_deluxe')">Buy Now</button>
+                    </div>
+                    <span style="font-size: 0.7rem; color: #666; display: flex; align-items: center; gap: 4px;">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12" fill="#2962ff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
                         Secure via Stripe
                     </span>
