@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Order Payment | G-Labs</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HC5C84CZPP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-HC5C84CZPP');
+    </script>
+    <meta name="robots" content="noindex, nofollow"> <!-- Don't index payment page -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    
+    <!-- Stripe Payment Configuration -->
+    <script src="payment_config.js"></script>
+
+    <style>
+        :root {
+            --primary: #2962ff;
+            --dark: #131722;
+            --light: #f0f3fa;
+            --text: #333;
+        }
+        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #fff; color: var(--text); }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+        
+        header { padding: 20px 0; border-bottom: 1px solid #eee; }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-weight: 800; font-size: 1.5rem; color: var(--dark); text-decoration: none; }
+        .logo span { color: var(--primary); }
+        
+        .main-nav { display: flex; gap: 20px; }
+        .main-nav a { text-decoration: none; color: #666; font-weight: 600; font-size: 0.95rem; transition: color 0.3s; }
+        .main-nav a:hover, .main-nav a.active { color: var(--primary); }
+
+        .hero { padding: 80px 0 60px; text-align: center; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); margin-bottom: 60px; }
+        h1 { font-size: 2.5rem; color: var(--dark); margin-bottom: 15px; }
+        .subtitle { font-size: 1.1rem; color: #555; max-width: 600px; margin: 0 auto 30px; line-height: 1.6; }
+        
+        .payment-card { 
+            max-width: 500px; 
+            margin: 0 auto 80px; 
+            padding: 40px; 
+            background: #fff; 
+            border-radius: 12px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+            border: 1px solid #eee; 
+            text-align: center;
+        }
+
+        .btn-pay { 
+            background: #635bff; 
+            color: #fff; 
+            text-decoration: none; 
+            padding: 15px 40px; 
+            border-radius: 6px; 
+            font-weight: 600; 
+            font-size: 1.1rem; 
+            transition: background 0.2s; 
+            border: none; 
+            cursor: pointer; 
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .btn-pay:hover { background: #4b45e6; }
+
+        @media(max-width: 768px) {
+            .nav-container { flex-direction: column; gap: 15px; }
+            .main-nav { flex-wrap: wrap; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container nav-container">
+            <a href="index.html" class="logo" style="display: flex; align-items: center; gap: 10px;">
+                <img src="favicon.svg" alt="G-Labs Logo" style="height: 32px; width: 32px;">
+                <div>G-LABS <span>SOFTWARE</span></div>
+            </a>
+            <nav class="main-nav">
+                <a href="index.html">Home</a>
+                <a href="tradingview.html">TradingView</a>
+                <a href="mql5.html">MetaTrader 4/5</a>
+                <a href="custom_development.html">Custom Dev</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Custom Order Payment</h1>
+            <p class="subtitle">Secure payment gateway for custom development services and special orders.</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="payment-card">
+            <div style="font-size: 3rem; margin-bottom: 20px;">💳</div>
+            <h2 style="margin-bottom: 15px; color: var(--dark);">Pay Invoice / Custom Amount</h2>
+            <p style="color: #666; margin-bottom: 30px; line-height: 1.6;">
+                Please click the button below to proceed to our secure Stripe checkout. 
+                <br>You will be able to enter the agreed amount or select your invoice item.
+            </p>
+            
+            <button class="btn-pay" onclick="checkout('custom_order_pay')">Proceed to Payment</button>
+            
+            <div style="margin-top: 20px; font-size: 0.85rem; color: #888; display: flex; justify-content: center; align-items: center; gap: 6px;">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="#635bff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                Secure Payment via Stripe
+            </div>
+        </div>
+    </div>
+
+    <footer style="background: #f0f3fa; padding: 40px 0; text-align: center; font-size: 0.9rem; color: #666; margin-top: 60px;">
+        <div class="container">
+            <p>© 2026 G-Labs Software. All Rights Reserved.</p>
+            <p>G-Labs is a trading name of Apex Pro Group Ltd.</p>
+            
+            <div style="margin: 20px 0; text-align: center;">
+                <span style="font-size: 0.85rem; color: #888; display: block; margin-bottom: 6px;">Payments powered by</span>
+                <span style="font-weight: 700; font-size: 1.2rem; color: #635bff;">Stripe</span>
+            </div>
+
+            <div style="margin: 20px 0; display: flex; justify-content: center; gap: 20px; align-items: center; flex-wrap: wrap;">
+                <a href="https://t.me/glabssoftwarewelcome1" target="_blank" style="text-decoration: none; display: flex; align-items: center; gap: 8px; color: #333; font-weight: 600; background: #fff; padding: 8px 15px; border-radius: 5px; border: 1px solid #eee;">
+                    <img src="assets/images/telegram.svg" alt="Telegram" style="width: 24px; height: 24px;">
+                    Telegram
+                </a>
+                <a href="https://www.youtube.com/@g-labs" target="_blank" style="text-decoration: none; display: flex; align-items: center; gap: 8px; color: #333; font-weight: 600; background: #fff; padding: 8px 15px; border-radius: 5px; border: 1px solid #eee;">
+                    <img src="assets/images/youtube.svg" alt="YouTube" style="width: 24px; height: 24px;">
+                    YouTube
+                </a>
+                <a href="https://www.tradingview.com/u/G-Labs/#published-scripts" target="_blank" style="text-decoration: none; display: flex; align-items: center; gap: 8px; color: #333; font-weight: 600; background: #fff; padding: 8px 15px; border-radius: 5px; border: 1px solid #eee;">
+                    <img src="assets/images/tradingview.svg" alt="TradingView" style="width: 24px; height: 24px;">
+                    TradingView
+                </a>
+                <a href="https://www.mql5.com/en/users/gcash01/seller" target="_blank" style="text-decoration: none; display: flex; align-items: center; gap: 8px; color: #333; font-weight: 600; background: #fff; padding: 8px 15px; border-radius: 5px; border: 1px solid #eee;">
+                    <img src="assets/images/mql5.svg" alt="MQL5" style="width: auto; height: 24px;">
+                    MQL5
+                </a>
+            </div>
+
+            <p style="margin-top: 15px;">
+                <a href="contact.html" style="color: #666; text-decoration: none; margin-right: 15px;">Contact Us</a>
+                <a href="privacy.html" style="color: #666; text-decoration: none; margin-right: 15px;">Privacy Policy</a>
+                <a href="terms.html" style="color: #666; text-decoration: none;">Terms of Service</a>
+            </p>
+            <p style="margin-top: 10px; color: #666;">Support: info@g-labs.software</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -89,6 +89,9 @@
 </script>
 
 <link href="favicon.svg" rel="icon" type="image/svg+xml"/>
+<!-- Stripe Payment Configuration -->
+<script src="payment_config.js"></script>
+
 <style>
         :root {
             --primary: #2962ff;
@@ -177,7 +180,7 @@
             <div class="price-row">
                 <div class="price-tag">£150 <span style="font-size: 0.8rem; color: #666; font-weight: normal; text-decoration: none;">(Lifetime)</span></div>
                 <div style="display: flex; flex-direction: column; align-items: flex-end;">
-                    <button class="btn-stripe" onclick="alert('Stripe Link Not Configured')">Buy Now</button>
+                    <button class="btn-stripe" onclick="checkout('btmm_lifetime')">Buy Now</button>
                     <span style="font-size: 0.7rem; color: #666; margin-top: 5px; display: flex; align-items: center; gap: 4px;">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12" fill="#2962ff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
                         Secure via Stripe
@@ -197,7 +200,7 @@
             <div class="price-row">
                 <div class="price-tag">£9.99 / month</div>
                 <div style="display: flex; flex-direction: column; align-items: flex-end;">
-                    <button class="btn-stripe" onclick="alert('Stripe Link Not Configured')">Buy Now</button>
+                    <button class="btn-stripe" onclick="checkout('magic_lines_single')">Buy Now</button>
                     <span style="font-size: 0.7rem; color: #666; margin-top: 5px; display: flex; align-items: center; gap: 4px;">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12" fill="#2962ff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
                         Secure via Stripe
@@ -223,7 +226,7 @@
             <div class="price-row">
                 <div class="price-tag">£19.99 / month</div>
                 <div style="display: flex; flex-direction: column; align-items: flex-end;">
-                    <button class="btn-stripe" onclick="alert('Stripe Link Not Configured')">Buy Now</button>
+                    <button class="btn-stripe" onclick="checkout('magic_lines_deluxe')">Buy Now</button>
                     <span style="font-size: 0.7rem; color: #666; margin-top: 5px; display: flex; align-items: center; gap: 4px;">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12" fill="#2962ff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
                         Secure via Stripe
@@ -250,7 +253,7 @@
             <div class="price-row">
                 <div class="price-tag">£9.99 / month</div>
                 <div style="display: flex; flex-direction: column; align-items: flex-end;">
-                    <button class="btn-stripe" onclick="alert('Stripe Link Not Configured')">Buy Now</button>
+                    <button class="btn-stripe" onclick="checkout('connix_single')">Buy Now</button>
                     <span style="font-size: 0.7rem; color: #666; margin-top: 5px; display: flex; align-items: center; gap: 4px;">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12" fill="#2962ff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
                         Secure via Stripe
@@ -276,7 +279,7 @@
             <div class="price-row">
                 <div class="price-tag">£19.99 / month</div>
                 <div style="display: flex; flex-direction: column; align-items: flex-end;">
-                    <button class="btn-stripe" onclick="alert('Stripe Link Not Configured')">Buy Now</button>
+                    <button class="btn-stripe" onclick="checkout('connix_deluxe')">Buy Now</button>
                     <span style="font-size: 0.7rem; color: #666; margin-top: 5px; display: flex; align-items: center; gap: 4px;">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12" fill="#2962ff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
                         Secure via Stripe
@@ -302,7 +305,7 @@
             <div class="price-row">
                 <div class="price-tag">£9.99 / month</div>
                 <div style="display: flex; flex-direction: column; align-items: flex-end;">
-                    <button class="btn-stripe" onclick="alert('Stripe Link Not Configured')">Buy Now</button>
+                    <button class="btn-stripe" onclick="checkout('market_maker_single')">Buy Now</button>
                     <span style="font-size: 0.7rem; color: #666; margin-top: 5px; display: flex; align-items: center; gap: 4px;">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12" fill="#2962ff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
                         Secure via Stripe
@@ -328,7 +331,7 @@
             <div class="price-row">
                 <div class="price-tag">£19.99 / month</div>
                 <div style="display: flex; flex-direction: column; align-items: flex-end;">
-                    <button class="btn-stripe" onclick="alert('Stripe Link Not Configured')">Buy Now</button>
+                    <button class="btn-stripe" onclick="checkout('market_maker_deluxe')">Buy Now</button>
                     <span style="font-size: 0.7rem; color: #666; margin-top: 5px; display: flex; align-items: center; gap: 4px;">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12" fill="#2962ff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
                         Secure via Stripe
@@ -380,15 +383,6 @@
 </div>
 </footer>
 <script>
-        function stripeCheckout(productId) {
-            // Placeholder for Stripe Logic
-            // In a real implementation, you would redirect to a Stripe Payment Link URL
-            // e.g., window.location.href = 'https://buy.stripe.com/...'
-            
-            const message = `Stripe Integration Required!\n\nYou clicked to buy: ${productId}\n\nTo make this work:\n1. Create a Payment Link in your Stripe Dashboard.\n2. Paste the URL into the onclick event for this button in the HTML code.`;
-            alert(message);
-        }
-
         // Product GIF Hover Effect
         document.addEventListener('DOMContentLoaded', () => {
             const productImages = document.querySelectorAll('.product-card .card-img img');
