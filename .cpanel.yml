@@ -3,3 +3,5 @@ deployment:
   tasks:
     - export DEPLOYPATH=/home/elexzpxz/g-labs.software
     - /bin/cp -R * $DEPLOYPATH
+    # Copy guides directory explicitly if * misses it (though it shouldn't)
+    - /bin/cp -R guides $DEPLOYPATH 2>/dev/null || :
