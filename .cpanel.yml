@@ -2,4 +2,4 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/elexzpxz/g-labs.software
-    - echo "Repo path matches deploy path - skipping copy"
+    - /bin/cp -R * $DEPLOYPATH
