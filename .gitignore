@@ -3,13 +3,21 @@ Thumbs.db
 Desktop.ini
 .DS_Store
 
-# Logs
+# Logs and CPanel files
 *.log
+error_log
+.cpanel/
+.cpanel/datastore/
+.cpanel/logs/
+.cpanel/repositories/
+.cpanel/git-deploy.log
 
 # Temp files
 *.tmp
 *.bak
 *.swp
+*.old
+*.cache
 
 # Development files
 mql5_seller.html
