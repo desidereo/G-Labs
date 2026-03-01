@@ -670,7 +670,7 @@
       <h4 style="color:var(--blue);">BTMM State Engine Pro [G-Labs]</h4>
       <p style="font-size:12px; color:var(--text-light); margin-bottom:10px;">The main indicator &mdash; applied to any single chart.</p>
       <ul>
-        <li>Room-bound staircase level counting (L1&rarr;L3+)</li>
+        <li>Room-bound staircase level counting (L1&rarr;L2+)</li>
         <li>Two-stage Peak Formation (pending &rarr; confirmed)</li>
         <li>Retroactive room recolouring on PF confirmation</li>
         <li>Stale room detection &amp; cycle reset</li>
@@ -793,15 +793,23 @@
   <h3>Level Counting: The Room-Bound Staircase</h3>
   <p>Each day's Asian Range creates a "room". If today's room clears above yesterday's &mdash; that's a <strong>Level Up</strong>. Rooms stack like a staircase:</p>
 
+  <div class="callout info">
+    <div class="callout-icon">&#x1F4CF;</div>
+    <div class="callout-body">
+      <strong>Close-Based Level Breaks</strong>
+      Level breaks use candle <strong>close</strong> prices, not wicks. A room only "clears" the previous room when closes confirm the move &mdash; this prevents false triggers from wick spikes and stop hunts. Core BTMM principle: the close is what matters, not the spike.
+    </div>
+  </div>
+
   <div class="diagram-box">
     <h4>Bullish Staircase &rarr; Peak Formation</h4>
     <svg width="500" height="200" viewBox="0 0 500 200" style="display:block; margin:0 auto;">
       <rect x="10" y="150" width="90" height="40" rx="6" fill="rgba(108,117,125,0.3)" stroke="#6C757D" stroke-width="2" stroke-dasharray="6"/>
       <text x="55" y="175" text-anchor="middle" fill="#6C757D" font-size="13" font-weight="700">L1</text>
-      <rect x="120" y="110" width="90" height="40" rx="6" fill="rgba(30,144,255,0.25)" stroke="#1E90FF" stroke-width="2" stroke-dasharray="6"/>
-      <text x="165" y="135" text-anchor="middle" fill="#1E90FF" font-size="13" font-weight="700">L2 &#x25B2;</text>
+      <rect x="120" y="110" width="90" height="40" rx="6" fill="rgba(255,215,0,0.25)" stroke="#FFD700" stroke-width="2" stroke-dasharray="6"/>
+      <text x="165" y="135" text-anchor="middle" fill="#FFD700" font-size="13" font-weight="700">L2 &#x26A0;</text>
       <rect x="230" y="70" width="90" height="40" rx="6" fill="rgba(255,215,0,0.25)" stroke="#FFD700" stroke-width="2" stroke-dasharray="6"/>
-      <text x="275" y="95" text-anchor="middle" fill="#FFD700" font-size="13" font-weight="700">L3 &#x26A0;</text>
+      <text x="275" y="95" text-anchor="middle" fill="#FFD700" font-size="13" font-weight="700">L3 &#x25B2;</text>
       <rect x="340" y="120" width="90" height="40" rx="6" fill="rgba(220,53,69,0.25)" stroke="#DC3545" stroke-width="2" stroke-dasharray="6"/>
       <text x="385" y="145" text-anchor="middle" fill="#DC3545" font-size="13" font-weight="700">PFH</text>
       <line x1="100" y1="170" x2="120" y2="130" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-dasharray="4"/>
@@ -812,7 +820,7 @@
     </svg>
   </div>
 
-  <p><strong>L1</strong> = First room (neutral direction). <strong>L2</strong> = Continuation (trend forming). <strong>L3+</strong> = Peak Zone (reversal imminent). When the staircase reverses &mdash; that's a <strong>Peak Formation</strong> (PFH for a top, PFL for a bottom).</p>
+  <p><strong>L1</strong> = First room (neutral direction). <strong>L2+</strong> = Peak Zone (reversal imminent). When the staircase reverses at L2 or higher &mdash; that's a <strong>Peak Formation</strong> (PFH for a top, PFL for a bottom).</p>
 </div>
 
 <!-- ============================================================= -->
@@ -823,7 +831,7 @@
   <h2>Rooms, Stale Detection &amp; Peak Formations</h2>
 
   <h3>How Rooms Work</h3>
-  <p>Each Asian Range is compared to the previous one. There are three possible outcomes:</p>
+  <p>Each Asian Range is compared to the previous one. Rooms connect <strong>edge-to-edge</strong> with no overlap &mdash; the previous room's right edge ends exactly where the next room's left edge begins, creating a clean staircase visual. There are three possible outcomes:</p>
 
   <table>
     <tr><th>Outcome</th><th>Condition</th><th>Effect</th></tr>
@@ -845,21 +853,21 @@
   </table>
 
   <h3>Stale Detection</h3>
-  <p>If a room accumulates too many overlapping Asian Ranges without breaking out, price is consolidating &mdash; the cycle has stalled. When the box count reaches the <code>Stale Threshold</code> (default: 5), the room turns <strong style="color:var(--gray);">gray</strong> and the dashboard shows <strong>STALE</strong>. Signals are suppressed until a new breakout occurs.</p>
+  <p>If a room accumulates too many overlapping Asian Ranges without breaking out, price is consolidating &mdash; the cycle has stalled. When the box count reaches the <code>Stale Threshold</code> (default: 5), the room goes stale. Unlike a full reset, stale <strong>preserves the current level and direction</strong>. A new room opens at the same level with <strong style="color:var(--gray);">grey</strong> colouring, and the label shows <strong>"Lx STALE"</strong> (e.g. "L3 STALE"). Because the direction is preserved, the next opposite break correctly triggers PFH/PFL.</p>
 
   <div class="callout warn">
     <div class="callout-icon">&#x26A0;</div>
     <div class="callout-body">
       <strong>Stale = No Trade</strong>
-      When a room is STALE, the indicator stops firing entry signals. Wait for a clean break into a new level before trading. The Room Boxes counter in the dashboard warns you as it approaches the threshold.
+      When a room is STALE, the indicator stops firing entry signals. The direction is remembered, not reset &mdash; so when a breakout finally occurs, the engine picks up exactly where it left off. The Room Boxes counter in the dashboard warns you as it approaches the threshold.
     </div>
   </div>
 
   <h3>Two-Stage Peak Formation</h3>
-  <p>At L3 or higher, a direction reversal triggers a <strong>two-stage confirmation</strong>:</p>
+  <p>At L2 or higher, a direction reversal triggers a <strong>two-stage confirmation</strong>:</p>
 
   <div class="flow">
-    <div class="flow-node" style="background:rgba(255,215,0,0.15); color:var(--gold); border:1px solid rgba(255,215,0,0.3);">L3+ Reached</div>
+    <div class="flow-node" style="background:rgba(255,215,0,0.15); color:var(--gold); border:1px solid rgba(255,215,0,0.3);">L2+ Reached</div>
     <div class="flow-arrow">&rarr;</div>
     <div class="flow-node" style="background:rgba(255,140,0,0.15); color:var(--orange); border:1px solid rgba(255,140,0,0.3);">PFH? / PFL?<br><small>Pending</small></div>
     <div class="flow-arrow">&rarr;</div>
@@ -868,9 +876,17 @@
     <div class="flow-node" style="background:rgba(40,167,69,0.15); color:var(--green); border:1px solid rgba(40,167,69,0.3);">PFH / PFL<br><small>Confirmed!</small></div>
   </div>
 
-  <p>On confirmation, all rooms in the old cycle are <strong>retroactively recoloured</strong> &mdash; blue rooms turn red (PFH) or vice versa &mdash; giving you a clear visual history of where the cycle peaked.</p>
+  <p>PF labels use a simplified format: pending peaks show as <strong>PFH?</strong> / <strong>PFL?</strong>, and confirmed peaks as <strong>PFH &#x2713;</strong> / <strong>PFL &#x2713;</strong> &mdash; no level numbers in the labels.</p>
 
-  <p>For reversals below L3, the PF is confirmed immediately (no pending stage needed).</p>
+  <p>Confirmation uses <strong>close-based prices</strong>: a PFL? is confirmed when the next room's lowest close exceeds the peak room's highest close, and a PFH? is confirmed when the next room's highest close falls below the peak room's lowest close. On confirmation, all rooms in the old cycle are <strong>retroactively recoloured</strong> &mdash; blue rooms turn red (PFH) or vice versa &mdash; giving you a clear visual history of where the cycle peaked.</p>
+
+  <div class="callout info">
+    <div class="callout-icon">&#x1F504;</div>
+    <div class="callout-body">
+      <strong>Peak Resets</strong>
+      After an initial peak (PFH/PFL), even L1 reversals create new peak references. The indicator tracks <code>lastPFHHigh</code> and <code>lastPFLLow</code> to stay alert during shallow pullbacks. Peak resets don't need L2+ &mdash; they only require an existing confirmed peak.
+    </div>
+  </div>
 </div>
 
 <!-- ============================================================= -->
@@ -1048,7 +1064,7 @@
     <tr><td><strong>Level</strong></td><td>L1, L2, L3+, or L# STALE</td><td>Blue=UP, Red=DOWN, Gray=Neutral/Stale</td></tr>
     <tr><td><strong>Direction</strong></td><td>UP, DOWN, or &mdash;</td><td>Blue=UP, Red=DOWN</td></tr>
     <tr><td><strong>Phase</strong></td><td>Init, Trend, Peak Zone, Reversal, STALE</td><td>Blue=Trend, Gold=Peak, Red=Reversal, Gray=Stale</td></tr>
-    <tr><td><strong>Peak Form</strong></td><td>PFH, PFL, PFH?, PFL?, or &mdash;</td><td>Red=PFH, Blue=PFL</td></tr>
+    <tr><td><strong>Peak Form</strong></td><td>PFH &#x2713;, PFL &#x2713;, PFH?, PFL?, or &mdash;</td><td>Red=PFH, Blue=PFL</td></tr>
     <tr><td><strong>Room Boxes</strong></td><td>count / max</td><td>Orange when near threshold</td></tr>
     <tr><td><strong>Kill Zone</strong></td><td>LONDON, NEW YORK, CLOSED</td><td>Green=Active, Red=Closed</td></tr>
     <tr><td><strong>ADR</strong></td><td>Range / ATR (ADR%)</td><td>White&lt;60%, Blue 60-80%, Orange 80-100%, Red &gt;100%</td></tr>
@@ -1066,7 +1082,7 @@
   <p>The scanner runs the full BTMM state engine on up to <strong>16 currency pairs simultaneously</strong>, displaying everything in a single dashboard table. No need to flip between charts &mdash; see the entire market at a glance.</p>
 
   <h3>How It Works</h3>
-  <p>The scanner uses TradingView's <code>request.security()</code> function to fetch data for each pair and run the BTMM state logic remotely. Bank 1 (pairs 1-8) is always active. Bank 2 (pairs 9-16) can be toggled on when needed.</p>
+  <p>The scanner uses TradingView's <code>request.security()</code> function to fetch data for each pair and run the BTMM state logic remotely. Bank 1 (pairs 1-8) is always active. Bank 2 (pairs 9-16) can be toggled on when needed. The scanner function is memory-optimised &mdash; it returns compact tuples with no internal arrays, keeping it stable in replay mode and on lower timeframes.</p>
 
   <div class="callout warn">
     <div class="callout-icon">&#x26A0;</div>
@@ -1191,7 +1207,7 @@
     <div class="config-card">
       <div class="config-name">Show Level Labels on Rooms</div>
       <div class="config-default">Default: ON</div>
-      <p class="config-desc">Shows "L1", "L2", "L3 &#x26A0;" labels above each room rectangle. Disable for a cleaner chart.</p>
+      <p class="config-desc">Shows level labels above each room rectangle at <code>size.normal</code> for maximum visibility. Labels have coloured semi-transparent backgrounds &mdash; blue for UP rooms, red for DOWN, grey for neutral/stale. PFH/PFL labels get distinct coloured backgrounds to stand out.</p>
     </div>
   </div>
 
@@ -1277,7 +1293,7 @@
   </div>
 
   <h3>Stale Threshold</h3>
-  <p>The scanner has its own <code>Stale Threshold</code> setting (default: 5), which works identically to the indicator's room stale detection. Stale pairs show an "!" suffix on their level and an orange background.</p>
+  <p>The scanner has its own <code>Stale Threshold</code> setting (default: 5), which works identically to the indicator's room stale detection. Stale preserves the current level and direction &mdash; it opens a new room at the same level with grey colouring. Stale pairs show an "!" suffix on their level and an orange background in the scanner table.</p>
 </div>
 
 <!-- ============================================================= -->
@@ -1293,8 +1309,38 @@
   <h3>Psychological Levels</h3>
   <p>When enabled, dotted gray lines appear at round-number price levels (every 50 pips for standard pairs, adjusted for JPY). These are institutional order-cluster zones.</p>
 
+  <h3>Zone Modes (ZN)</h3>
+  <p>The indicator includes optional zone overlays that visualise accumulation and distribution areas within each room. Select a mode via the <code>Zone Mode</code> setting:</p>
+
+  <table>
+    <tr><th>Mode</th><th>Name</th><th>Description</th></tr>
+    <tr>
+      <td><strong style="color:var(--cyan);">ZN0</strong></td>
+      <td>Off (default)</td>
+      <td>Zones disabled &mdash; no extra rectangles drawn.</td>
+    </tr>
+    <tr>
+      <td><strong style="color:var(--cyan);">ZN1</strong></td>
+      <td>AR Union</td>
+      <td>A dashed rectangle showing the union of all Asian Range boxes within the current room. Highlights the full accumulation zone.</td>
+    </tr>
+    <tr>
+      <td><strong style="color:var(--cyan);">ZN2</strong></td>
+      <td>Candle Extremes</td>
+      <td>A dotted rectangle covering all candle wicks (high to low) across the room's full timespan. Shows the complete distribution range.</td>
+    </tr>
+  </table>
+
+  <div class="callout tip">
+    <div class="callout-icon">&#x2705;</div>
+    <div class="callout-body">
+      <strong>Zones help you see the bigger picture</strong>
+      ZN1 (AR Union) reveals where market makers accumulated orders across multiple sessions. ZN2 (Candle Extremes) shows the full price range they engineered. Both help identify key support/resistance for the current cycle.
+    </div>
+  </div>
+
   <h3>Average Daily Range (ADR)</h3>
-  <p>The ADR system tracks how much of the day's average range has been consumed:</p>
+  <p>ADR is calculated from <strong>Daily timeframe data</strong> (not the chart timeframe), ensuring accurate values regardless of which timeframe you're viewing. The dashboard shows today's range in pips, the ADR in pips, and the ADR% used. The colour coding tells you at a glance how much room is left:</p>
 
   <table>
     <tr><th>ADR%</th><th>Meaning</th><th>Colour</th><th>Action</th></tr>
@@ -1373,7 +1419,7 @@
   <h3>Indicator Alert List</h3>
   <table>
     <tr><th>Alert</th><th>Fires When</th></tr>
-    <tr><td>PF Pending</td><td>L3+ reversal detected &mdash; PFH? or PFL? set</td></tr>
+    <tr><td>PF Pending</td><td>L2+ reversal detected &mdash; PFH? or PFL? set</td></tr>
     <tr><td>PF Confirmed</td><td>Pending PF confirmed by next clear break</td></tr>
     <tr><td>Room Stale</td><td>Room accumulates max overlapping boxes</td></tr>
     <tr><td>London / NY KZ Start</td><td>Kill zone session begins</td></tr>
@@ -1405,7 +1451,7 @@
     <div class="step" style="color:rgba(255,255,255,0.85);">
       <div class="step-body">
         <h4 style="color:white;">Check the Scanner</h4>
-        <p style="color:rgba(255,255,255,0.7);">Open the scanner and identify pairs at L1 (fresh reversal) or L2 (established trend). These are your primary watchlist. Avoid L3+ pairs unless you're looking for PF reversals.</p>
+        <p style="color:rgba(255,255,255,0.7);">Open the scanner and identify pairs at L1 (fresh reversal) or early L2 (established trend). These are your primary watchlist. Pairs at L2+ are already in the peak zone &mdash; only trade these if you're looking for PF reversals.</p>
       </div>
     </div>
     <div class="step" style="color:rgba(255,255,255,0.85);">
@@ -1503,6 +1549,14 @@
       Practice on a paper trading account for at least one week before going live. Track your signals, note which types work best for each pair, and build confidence in reading the dashboard.
     </div>
   </div>
+
+  <div class="callout info">
+    <div class="callout-icon">&#x23EA;</div>
+    <div class="callout-body">
+      <strong>Bar Replay Compatible</strong>
+      Both the indicator and scanner work in TradingView's <strong>bar replay mode</strong>. Use replay to practice identifying level breaks and peak formations in real time &mdash; the dashboard updates correctly on each replayed bar. This is the fastest way to build pattern recognition without waiting for live sessions.
+    </div>
+  </div>
 </div>
 
 <!-- ============================================================= -->
@@ -1564,10 +1618,10 @@
         <ul>
           <li><span style="color:#6C757D;">L1</span> &mdash; First room, neutral direction</li>
           <li><span style="color:#1E90FF;">L2 UP / DOWN</span> &mdash; Trend established</li>
-          <li><span style="color:#FFD700;">L3+ &#x26A0;</span> &mdash; Peak Zone, reversal imminent</li>
+          <li><span style="color:#FFD700;">L2+ &#x26A0;</span> &mdash; Peak Zone, reversal imminent</li>
           <li><span style="color:#6C757D;">STALE</span> &mdash; Too many overlaps, no breakout</li>
           <li><span style="color:#FF8C00;">PFH? / PFL?</span> &mdash; Peak Formation pending</li>
-          <li><span style="color:#DC3545;">PFH</span> / <span style="color:#1E90FF;">PFL</span> &mdash; Peak confirmed</li>
+          <li><span style="color:#DC3545;">PFH &#x2713;</span> / <span style="color:#1E90FF;">PFL &#x2713;</span> &mdash; Peak confirmed</li>
         </ul>
       </div>
       <div>

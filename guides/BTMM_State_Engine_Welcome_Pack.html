@@ -614,7 +614,7 @@
   <div class="hero-badge">Version 2.0 — MetaTrader 5 &amp; MetaTrader 4</div>
   <h1>BTMM STATE ENGINE PRO</h1>
   <div class="subtitle">The Professional Market Maker Cycle Tracker</div>
-  <div class="version">Powered by the Beat The Market Maker Methodology — Automated by G-Labs</div>
+  <div class="version">Powered by the Beat The Market Maker Methodology — Automated by G-Labs<br>Available on MetaTrader 4 &amp; MetaTrader 5</div>
 
   <div class="hero-features">
     <div class="hero-feature">
@@ -907,7 +907,7 @@
 
   <div class="callout info">
     <strong>What This Indicator Automates</strong>
-    The BTMM State Engine Pro tracks the entire cycle — Asian Range boxes, level counting, room boundaries, Peak Formation detection, and EMA crossover entries — across 28 pairs simultaneously. It turns weeks of manual chart analysis into a real-time, alert-driven system.
+    The BTMM State Engine Pro tracks the entire cycle — Asian Range boxes, level counting, room boundaries, Peak Formation detection, and EMA crossover entries — across multiple pairs simultaneously. Available on MT4 and MT5, it turns weeks of manual chart analysis into a real-time, alert-driven system.
   </div>
 </section>
 
@@ -964,13 +964,30 @@
               <div style="font-size:11px; color:var(--cyan); font-weight:600;">AR BOX 4</div>
               <div style="font-size:10px; color:rgba(255,255,255,0.4);">Day 4</div>
             </div>
-            <div style="font-size:12px; color:var(--gold); font-weight:600;">⚠ Level 3+ = Watch for reversal</div>
+            <div style="font-size:12px; color:var(--gold); font-weight:600;">⚠ Level 2+ = Watch for reversal</div>
           </div>
         </div>
       </div>
     </div>
 
     <p>The rule is simple: <strong style="color:white;">if the next Asian Range overlaps the current room, it stays at the same level. If it breaks cleanly above or below, a new level begins and a new room opens.</strong></p>
+
+    <div style="border:1px solid rgba(255,215,0,0.3); border-radius:10px; padding:18px; margin:20px 0; background:rgba(255,215,0,0.05);">
+      <div style="font-weight:700; color:var(--gold); margin-bottom:8px;">Close-Based Level Breaks — Why the Close Matters</div>
+      <div style="font-size:13px; color:rgba(255,255,255,0.7);">
+        Level breaks are determined by candle <strong style="color:white;">close</strong> prices, not wicks. This is a core BTMM principle: <strong style="color:white;">the close is what matters, not the wick.</strong>
+      </div>
+      <div style="display:flex; gap:15px; margin-top:15px; flex-wrap:wrap;">
+        <div style="flex:1; min-width:180px; border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:12px;">
+          <div style="font-weight:700; color:#FF6B7A; margin-bottom:5px; font-size:12px;">Wicks Lie</div>
+          <div style="font-size:12px; color:rgba(255,255,255,0.6);">Wick spikes are the market maker's tool for stop hunting. A wick through a level is often a <strong style="color:white;">trap</strong>, not a genuine break. Using wicks for level breaks would trigger false signals constantly.</div>
+        </div>
+        <div style="flex:1; min-width:180px; border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:12px;">
+          <div style="font-weight:700; color:#5CDB5C; margin-bottom:5px; font-size:12px;">Closes Confirm</div>
+          <div style="font-size:12px; color:rgba(255,255,255,0.6);">When price <strong style="color:white;">closes</strong> beyond a room boundary, the market maker has committed. The level break is genuine. This prevents false triggers from wick spikes and stop hunts.</div>
+        </div>
+      </div>
+    </div>
 
     <h3 style="color:var(--gold);">The Complete 3-Level Cycle + Reset</h3>
     <p>A typical market maker swing runs <strong style="color:white;">3 levels in one direction</strong>, then reverses. Here's what the full cycle looks like — this is exactly what the indicator tracks automatically:</p>
@@ -1052,12 +1069,16 @@
         <div style="font-size:12px; color:rgba(255,255,255,0.6);">Direction confirmed. Price has moved cleanly to a new range. <strong style="color:white;">Trade with the trend</strong> here.</div>
       </div>
       <div style="flex:1; min-width:180px; border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:15px;">
-        <div style="font-weight:700; color:var(--gold); margin-bottom:5px;">Level 3+ — Peak Zone</div>
-        <div style="font-size:12px; color:rgba(255,255,255,0.6);">Market maker is close to full. <strong style="color:var(--gold);">Watch for Peak Formation.</strong> The reversal is coming.</div>
+        <div style="font-weight:700; color:var(--gold); margin-bottom:5px;">Level 2+ — Peak Formation Zone</div>
+        <div style="font-size:12px; color:rgba(255,255,255,0.6);">From L2 onward, the market maker may be fully loaded. <strong style="color:var(--gold);">Any reversal here can trigger PFH/PFL.</strong></div>
       </div>
       <div style="flex:1; min-width:180px; border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:15px;">
         <div style="font-weight:700; color:var(--red); margin-bottom:5px;">Reset — New Cycle</div>
-        <div style="font-size:12px; color:rgba(255,255,255,0.6);">PFH/PFL confirmed. Rooms repaint. The opposite staircase begins from L1 in the new direction.</div>
+        <div style="font-size:12px; color:rgba(255,255,255,0.6);">PFH/PFL confirmed. Rooms repaint. The opposite staircase begins from L1 in the new direction. After an initial peak, even an L1 reversal creates a <strong style="color:white;">peak reset</strong> — a new peak reference without needing L2+.</div>
+      </div>
+      <div style="flex:1; min-width:180px; border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:15px;">
+        <div style="font-weight:700; color:var(--gray); margin-bottom:5px;">Stale — Forced Reset</div>
+        <div style="font-size:12px; color:rgba(255,255,255,0.6);">Too many overlapping Asian Range boxes in one room with no breakout. The cycle resets but <strong style="color:white;">preserves direction</strong>. The market is ranging — wait for a fresh breakout.</div>
       </div>
     </div>
 
@@ -1226,7 +1247,7 @@
 
     <div class="callout success">
       <strong>One Chart Does Both</strong>
-      The indicator runs on an M15 chart but internally calculates level structure using daily Asian Range cycles — giving you the equivalent of H1 level counting and M15 entry precision in a single window. No need to flip between timeframes.
+      The indicator runs on an M15 chart (on MT4/MT5) but all core level detection — Asian Range levels, rooms, and peaks — always uses <strong style="color:white;">H1 data</strong> regardless of chart timeframe. Entry signals come from M15. This gives you institutional-grade level counting and precision entries in a single window, with no need to flip between timeframes.
     </div>
 
     <h3>Why M15?</h3>
@@ -1346,7 +1367,7 @@
 
   <div class="callout success">
     <strong>Auto-Detection</strong>
-    The indicator automatically calculates the correct Asian session hours from your broker's GMT offset. No manual configuration needed — just attach and it works.
+    On MetaTrader, the indicator automatically calculates the correct Asian session hours from your broker's GMT offset — just attach and it works.
   </div>
 </section>
 
@@ -1355,7 +1376,7 @@
 <div class="page dark">
   <div>
     <h2><span class="part-num" style="color:var(--cyan);">Part 4</span>Level Counting — The Engine</h2>
-    <p>This is the heart of the indicator. Every new Asian session box is compared to the current room's bounds:</p>
+    <p>This is the heart of the indicator. Every new Asian session box is compared to the current room's bounds. Core level detection (Asian Range levels, rooms, peaks) always uses <strong style="color:white;">H1 data</strong> regardless of chart timeframe, while entry signals are generated from M15.</p>
 
     <div style="margin:30px 0;">
       <div class="flow">
@@ -1381,6 +1402,7 @@
     </div>
 
     <h3 style="color:var(--gold);">The Staircase</h3>
+    <p style="font-size:13px; color:rgba(255,255,255,0.7);">Rooms visually connect like stairs — the right edge of each room ends where the left edge of the next room begins, with no overlap between them.</p>
     <div style="display:flex; align-items:flex-end; gap:20px; padding:20px 0;">
       <div style="text-align:center;">
         <div style="border:2px solid var(--gray); border-radius:8px; padding:15px 25px; color:var(--gray); font-weight:700;">L1</div>
@@ -1393,7 +1415,7 @@
       </div>
       <div style="font-size:24px; color:rgba(255,255,255,0.2);">→</div>
       <div style="text-align:center;">
-        <div style="border:2px solid var(--gold); border-radius:8px; padding:15px 25px; color:var(--gold); font-weight:700; background:rgba(255,215,0,0.1);">L3+</div>
+        <div style="border:2px solid var(--gold); border-radius:8px; padding:15px 25px; color:var(--gold); font-weight:700; background:rgba(255,215,0,0.1);">L2+</div>
         <div style="font-size:11px; color:var(--gold); margin-top:5px;">⚠ PEAK ZONE</div>
       </div>
       <div style="font-size:24px; color:rgba(255,255,255,0.2);">→</div>
@@ -1420,7 +1442,7 @@
 <div class="page">
 <section>
   <h2><span class="part-num">Part 5</span>Peak Formations — The Reversal Signal</h2>
-  <p>At Level 3+, the market maker has accumulated enough. The cycle reverses. Peak Formations are the exact moment this happens.</p>
+  <p>At Level 2+, the market maker may have accumulated enough. The cycle reverses. Peak Formations are the exact moment this happens.</p>
 
   <div class="diagram-box">
     <div class="diagram-title">Two-Stage Confirmation — No False Alarms</div>
@@ -1428,7 +1450,7 @@
       <div style="flex:1; text-align:center;">
         <div style="font-size:12px; color:rgba(255,255,255,0.4); margin-bottom:10px;">STAGE 1 — PENDING</div>
         <div style="border:2px dashed rgba(255,215,0,0.4); border-radius:10px; padding:20px;">
-          <div style="font-size:20px; font-weight:800; color:var(--gold);">L3 PFH?</div>
+          <div style="font-size:20px; font-weight:800; color:var(--gold);">PFH?</div>
           <div style="font-size:12px; color:rgba(255,255,255,0.5); margin-top:8px;">Swing extreme detected<br>Watch closely — potential reversal</div>
         </div>
       </div>
@@ -1436,7 +1458,7 @@
       <div style="flex:1; text-align:center;">
         <div style="font-size:12px; color:rgba(255,255,255,0.4); margin-bottom:10px;">STAGE 2 — CONFIRMED</div>
         <div style="border:2px solid var(--red); border-radius:10px; padding:20px; background:rgba(220,53,69,0.1);">
-          <div style="font-size:20px; font-weight:800; color:#FF6B7A;">L3 PFH ✓</div>
+          <div style="font-size:20px; font-weight:800; color:#FF6B7A;">PFH ✓</div>
           <div style="font-size:12px; color:rgba(255,255,255,0.5); margin-top:8px;">Confirmed by next box<br><strong style="color:white;">Act now — rooms repaint RED</strong></div>
         </div>
       </div>
@@ -1446,6 +1468,11 @@
   <div class="callout warning">
     <strong>Retroactive Recolouring</strong>
     When PFH confirms, all rooms in the current cycle instantly repaint <strong style="color:#DC3545;">Crimson</strong> — revealing the entire UP run was bearish distribution. PFL confirms → rooms repaint <strong style="color:#1E90FF;">Blue</strong>.
+  </div>
+
+  <div class="callout success">
+    <strong>Peak Resets</strong>
+    After an initial peak (PFH or PFL), if the market reverses even at L1 in the opposite direction, that creates a <strong style="color:white;">peak reset</strong> — a new peak reference point is established without requiring L2+. This means once the first peak fires, subsequent reversals are tracked more sensitively.
   </div>
 </section>
 
@@ -1460,7 +1487,7 @@
       <div><div class="signal-badge buy">T1</div></div>
       <div class="signal-info">
         <h4>Type 1 — Stop Hunt Reversal</h4>
-        <p>Market maker sweeps stops below/above AR, then reverses. The classic BTMM setup.</p>
+        <p>Price broke the Asian Range extreme (stop hunt), then the 5/13 EMA cross fires in the opposite direction. The classic BTMM setup — <strong style="color:var(--gold);">strongest signal type</strong> because the market maker has just filled their orders against trapped retail traders.</p>
         <div class="star-rating">★★★★☆</div>
       </div>
     </div>
@@ -1468,8 +1495,8 @@
     <div class="signal-card">
       <div><div class="signal-badge buy">T2</div></div>
       <div class="signal-info">
-        <h4>Type 2 — Internal Range Break</h4>
-        <p>Clean break from within the range. No stop hunt — price breaks structure internally.</p>
+        <h4>Type 2 — Basic Crossover</h4>
+        <p>Standard 5/13 EMA crossover without a preceding stop hunt. Price breaks from within the Asian Range on pure momentum. Reliable but lacks the stop-hunt confirmation of T1.</p>
         <div class="star-rating">★★★☆☆</div>
       </div>
     </div>
@@ -1478,7 +1505,7 @@
       <div><div class="signal-badge star">ID50</div></div>
       <div class="signal-info">
         <h4>ID50 — Institutional Decision Point</h4>
-        <p>Crossover at the 50 EMA — the key institutional reference. Exceptional risk-to-reward.</p>
+        <p>EMA cross fires near the <strong style="color:var(--cyan);">50 EMA</strong> (the Identity/Water level) — the key institutional decision point. High probability because this is where the market maker's average position sits. Exceptional risk-to-reward.</p>
         <div class="star-rating">★★★★☆</div>
       </div>
     </div>
@@ -1487,7 +1514,7 @@
       <div><div class="signal-badge star">SAFETY</div></div>
       <div class="signal-info">
         <h4>Safety — Premium Pullback</h4>
-        <p>AR broken, price pulls back to 50 EMA, crossover catches the retest. <strong style="color:var(--gold);">The highest-quality signal.</strong></p>
+        <p>AR already broken, price pulls back to the 50 EMA, then the EMA crossover catches the re-entry. A safe re-entry after the initial break has proven direction. <strong style="color:var(--gold);">The highest-quality signal.</strong></p>
         <div class="star-rating">★★★★★</div>
       </div>
     </div>
@@ -1610,6 +1637,26 @@
       </div>
     </div>
 
+    <h3>Reading the Scanner Dashboard — Column Reference</h3>
+    <p>Every column tells you something specific about the cycle state for that pair. Here's exactly what each one means:</p>
+
+    <table>
+      <thead><tr><th>Column</th><th>What It Shows</th><th>How to Read It</th></tr></thead>
+      <tbody>
+        <tr><td><strong>PAIR / SYM</strong></td><td>Symbol name</td><td>Click to switch the main chart to this pair.</td></tr>
+        <tr><td><strong>LVL</strong></td><td>Current cycle level</td><td><strong>L1</strong> = starting level, <strong>L2</strong> = trend confirmed, <strong>L3+</strong> = deep in cycle, peak zone.</td></tr>
+        <tr><td><strong>PEAK</strong></td><td>Peak Formation status</td><td><strong>PFH?/PFL?</strong> = pending (watch closely), <strong>PFH ✓/PFL ✓</strong> = confirmed (act now), <strong>—</strong> = no peak detected.</td></tr>
+        <tr><td><strong>DIR</strong></td><td>Cycle direction</td><td><span style="color:var(--blue);">▲</span> = bullish, <span style="color:var(--red);">▼</span> = bearish, <strong>—</strong> = neutral (L1 with no direction yet).</td></tr>
+        <tr><td><strong>SIGNAL / SIG</strong></td><td>Current entry signal</td><td>Shows the active signal type (BUY T1, SELL Safety, etc.) if a crossover is firing. Blank when no signal.</td></tr>
+        <tr><td><strong>KZ</strong></td><td>Kill Zone status</td><td><span style="color:var(--gold); font-weight:700;">Active</span> = London or NY session is open. <strong>Wait</strong> = outside Kill Zone hours.</td></tr>
+        <tr><td><strong>L3!</strong></td><td>EMA shift warning</td><td>Flags when price is at Level 3+ — the EMAs may be lagging due to the extended move. Extra caution warranted.</td></tr>
+        <tr><td><strong>PHASE</strong></td><td>Cycle phase</td><td><strong>Init</strong> = first level, <strong>Trend</strong> = directional, <strong>Peak</strong> = reversal forming, <strong>Rev</strong> = post-peak reversal, <strong>STALE</strong> = range-bound reset.</td></tr>
+        <tr><td><strong>ADR</strong></td><td>Average Daily Range</td><td>The pair's normal daily pip range (e.g. 120 pips for EURUSD). Used as the TP reference.</td></tr>
+        <tr><td><strong>RNG</strong></td><td>Today's range</td><td>How many pips price has moved so far today. Compare against ADR to gauge remaining potential.</td></tr>
+        <tr><td><strong>ADR%</strong></td><td>Range exhaustion</td><td>Today's range as a percentage of ADR. <strong>&lt;60%</strong> = fresh, <strong>60–80%</strong> = normal, <span style="color:var(--orange);">80–99%</span> = caution, <span style="color:var(--red);">100%+</span> = exhausted.</td></tr>
+      </tbody>
+    </table>
+
     <h3>Resizing, Repositioning &amp; Customising the Dashboard</h3>
     <p>The scanner dashboard is designed to fit any screen size and layout preference. Everything can be adjusted — here's how.</p>
 
@@ -1717,7 +1764,7 @@
         <div class="zn-ar" style="top:30%; bottom:30%; left:10%;background:rgba(0,206,209,0.2);border-color:var(--cyan);"></div>
         <div class="zn-ar" style="top:18%; bottom:32%; left:55%;background:rgba(0,206,209,0.2);border-color:var(--cyan);"></div>
       </div>
-      <p>+ Dotted box covering EVERY candle wick within the room timespan.</p>
+      <p>+ Dotted box covering true candle extremes across the <strong>full visual width</strong> of the room — including London and NY sessions between Asian boxes, not just candles within the Asian session itself.</p>
     </div>
   </div>
 </section>
@@ -1771,14 +1818,14 @@
   <h2><span class="part-num">Part 11</span>Colour Coding — The Visual Language</h2>
 
   <div class="colour-grid">
-    <div class="colour-swatch"><div class="swatch" style="background:#1E90FF;"></div><div class="swatch-label"><strong>Blue</strong> — UP / Bullish / PFL</div></div>
-    <div class="colour-swatch"><div class="swatch" style="background:#DC3545;"></div><div class="swatch-label"><strong>Red</strong> — DOWN / Bearish / PFH</div></div>
+    <div class="colour-swatch"><div class="swatch" style="background:#1E90FF;"></div><div class="swatch-label"><strong>Blue</strong> — Bullish / UP / PFL</div></div>
+    <div class="colour-swatch"><div class="swatch" style="background:#DC3545;"></div><div class="swatch-label"><strong>Red</strong> — Bearish / DOWN / PFH</div></div>
     <div class="colour-swatch"><div class="swatch" style="background:#6C757D;"></div><div class="swatch-label"><strong>Grey</strong> — Neutral / Stale</div></div>
+    <div class="colour-swatch"><div class="swatch" style="background:#FFD700;"></div><div class="swatch-label"><strong>Gold</strong> — Peak Zone warning / KZ active</div></div>
+    <div class="colour-swatch"><div class="swatch" style="background:#228B22;"></div><div class="swatch-label"><strong>Green</strong> — Buy signals / London KZ</div></div>
+    <div class="colour-swatch"><div class="swatch" style="background:#FF8C00;"></div><div class="swatch-label"><strong>Orange</strong> — NY KZ / Warning</div></div>
     <div class="colour-swatch"><div class="swatch" style="background:#00CED1;"></div><div class="swatch-label"><strong>Cyan</strong> — Asian Range box</div></div>
-    <div class="colour-swatch"><div class="swatch" style="background:#FFD700;"></div><div class="swatch-label"><strong>Gold</strong> — Killzone / Entry</div></div>
-    <div class="colour-swatch"><div class="swatch" style="background:#228B22;"></div><div class="swatch-label"><strong>Green</strong> — London KZ strip</div></div>
-    <div class="colour-swatch"><div class="swatch" style="background:#FF8C00;"></div><div class="swatch-label"><strong>Orange</strong> — NY KZ / ADR warning</div></div>
-    <div class="colour-swatch"><div class="swatch" style="background:#00FF00;"></div><div class="swatch-label"><strong>Lime</strong> — Buy signal / TP line</div></div>
+    <div class="colour-swatch"><div class="swatch" style="background:#00FF00;"></div><div class="swatch-label"><strong>Lime</strong> — Buy signal arrow / TP line</div></div>
     <div class="colour-swatch"><div class="swatch" style="background:white; border:1px solid #DDD;"></div><div class="swatch-label"><strong>White</strong> — Mayo EMA / AR midline</div></div>
   </div>
 </section>
@@ -1832,7 +1879,7 @@
       <thead><tr><th>Rule</th><th>Why</th></tr></thead>
       <tbody>
         <tr><td><strong>Trade during Killzones</strong></td><td>80%+ of profitable moves happen during London/NY</td></tr>
-        <tr><td><strong>Respect the level count</strong></td><td>L1-2 = trend trades, L3+ = reversal trades</td></tr>
+        <tr><td><strong>Respect the level count</strong></td><td>L1 = trend trades, L2+ = reversal watch (PFH/PFL zone)</td></tr>
         <tr><td><strong>Wait for confirmation</strong></td><td>PFH? is pending — PFH✓ is confirmed</td></tr>
         <tr><td><strong>Check ADR before entry</strong></td><td>If 80%+ used, the daily move may be done</td></tr>
         <tr><td><strong>Align with cycle direction</strong></td><td>Never trade against the market maker</td></tr>
@@ -1845,22 +1892,29 @@
 <!-- ========== PART 13: YOUR FIRST SESSION ========== -->
 <div class="page">
 <section>
-  <h2><span class="part-num">Part 13</span>Your First Session — Step by Step</h2>
-  <p>You've installed the indicator. Here's exactly what to do the first time you sit down.</p>
+  <h2><span class="part-num">Part 13</span>How to Trade BTMM with the Software — Step by Step</h2>
+  <p>Whether you're on <strong>MT4 or MT5</strong> — the workflow is the same. Follow these nine steps from setup to trade management.</p>
 
   <div class="steps">
-    <div class="step"><div class="step-content"><h4>Open an M15 chart</h4><p>The indicator <strong>only works on M15</strong>. Attach it to any pair — EURUSD is a good starting point. Click <strong>OK</strong> on the Inputs dialog (defaults are fine for now).</p></div></div>
-    <div class="step"><div class="step-content"><h4>Let it load</h4><p>The indicator needs a few seconds to calculate history across all 28 pairs. You'll see the scanner populate row by row. Grey text means data is still loading — wait until all rows show colour.</p></div></div>
-    <div class="step"><div class="step-content"><h4>Read the status bar</h4><p>At the bottom-left of your chart, you'll see something like <code>L2(UP) Trend | W Y Z | ADR: 85/120</code>. This tells you the current level, direction, cycle phase, which layers are active, and how much daily range has been used.</p></div></div>
-    <div class="step"><div class="step-content"><h4>Scan for opportunities</h4><p>Look at the scanner panel. Focus on pairs showing <strong>L2 or L3</strong> with a directional arrow. If it's inside a Killzone (KZ column shows <span style="color:var(--gold);font-weight:700;">ON</span>), that pair is in play.</p></div></div>
-    <div class="step"><div class="step-content"><h4>Click a symbol</h4><p>Click any symbol name in the scanner to instantly switch the main chart to that pair. The chart, Asian Range boxes, rooms, and entry signals all update automatically.</p></div></div>
-    <div class="step"><div class="step-content"><h4>Wait for a signal</h4><p>When a crossover signal fires (T1, T2, Safety, or ID50), it appears in the scanner's SIG column and draws entry/SL/TP lines directly on the chart. An alert pops up and pushes to your phone.</p></div></div>
-    <div class="step"><div class="step-content"><h4>Evaluate and trade</h4><p>Check: Is the signal aligned with the cycle direction? Is ADR below 80%? Is a Peak Formation confirmed? If all three are yes — this is a high-quality setup.</p></div></div>
+    <div class="step"><div class="step-content"><h4>Open your chart</h4><p>Open an <strong>M15</strong> chart on MT4 or MT5. EURUSD is a good starting point.</p></div></div>
+    <div class="step"><div class="step-content"><h4>Apply the State Engine indicator</h4><p>Attach the indicator to the chart by dragging it from the Navigator. Accept the default settings and click OK.</p></div></div>
+    <div class="step"><div class="step-content"><h4>Wait for the Asian session to end</h4><p>The Asian Range box draws automatically during the Asian session (00:00–08:00 GMT). Wait for the box to complete — this is the accumulation phase. Once it closes, the day's reference levels (AR High, AR Low, ID50) are locked in.</p></div></div>
+    <div class="step"><div class="step-content"><h4>Check the dashboard</h4><p>Read the status bar and scanner panel: <strong>Level</strong> (L1/L2/L3), <strong>Direction</strong> (▲/▼), <strong>Phase</strong> (Init/Trend/Peak/Rev), and <strong>Kill Zone status</strong> (Active/Wait). This tells you where the cycle is and whether to look for trades.</p></div></div>
+    <div class="step"><div class="step-content"><h4>Wait for a Kill Zone + EMA crossover</h4><p>During the <strong>London Kill Zone</strong> (08:00–11:00 GMT) or <strong>NY Kill Zone</strong> (13:00–16:00 GMT), watch for a <strong>5/13 EMA crossover</strong> signal. 80%+ of profitable moves happen during these windows.</p></div></div>
+    <div class="step"><div class="step-content"><h4>Verify confirmation filters</h4><p>Before entering, confirm: <strong>Vector candle</strong> present (above-average range candle), <strong>TDI/RSI</strong> aligned with the signal direction, and <strong>cycle direction</strong> matches the trade. All three filters must agree.</p></div></div>
+    <div class="step"><div class="step-content"><h4>Enter the trade</h4><p>Enter at the signal with <strong>SL</strong> placed below/above the Asian Range + buffer (drawn automatically), and <strong>TP</strong> = Asian Range height. The indicator draws SL/TP projection lines directly on the chart.</p></div></div>
+    <div class="step"><div class="step-content"><h4>Watch for Peak Formations at L2+</h4><p>At Level 2 and above, the market maker may be fully loaded. Watch for <strong>PFH?/PFL?</strong> (pending peak) in the dashboard. These signal that the big reversal is forming — the cycle may be about to flip.</p></div></div>
+    <div class="step"><div class="step-content"><h4>Trade the Peak reversal</h4><p>When <strong>PFH ✓</strong> or <strong>PFL ✓</strong> confirms, the cycle flips. Rooms repaint. The opposite staircase begins. <strong>Trade in the NEW direction</strong> — this is the highest-conviction setup in BTMM.</p></div></div>
   </div>
 
   <div class="callout info">
     <strong>Session Times</strong>
     The best trading windows are the <strong>London Killzone</strong> (08:00–11:00 GMT) and the <strong>New York Killzone</strong> (13:00–16:00 GMT). The indicator highlights these automatically and can alert you when they open.
+  </div>
+
+  <div class="callout warning">
+    <strong>ADR Check</strong>
+    Always check ADR% before entering. If the daily range is already 80%+ exhausted, the day's move may be done — tighten stops or skip the trade entirely.
   </div>
 </section>
 
@@ -2065,7 +2119,7 @@
         <ul>
           <li><strong>L1</strong> = Start (grey/direction colour)</li>
           <li><strong>L2</strong> = Trend confirmed (blue/red)</li>
-          <li><strong>L3+</strong> = PEAK ZONE — watch for reversal</li>
+          <li><strong>L2+</strong> = Reversal triggers PFH/PFL</li>
           <li><strong>STALE</strong> = Too many boxes — forced reset</li>
           <li><strong>!ADR</strong> = Large gap warning (&gt;1.5x ATR)</li>
         </ul>
@@ -2078,10 +2132,12 @@
         </ul>
         <h4 style="margin-top:15px;">Colours</h4>
         <ul>
-          <li><strong style="color:#60A5FA;">Blue</strong> = UP / Bullish / PFL</li>
-          <li><strong style="color:#FF6B7A;">Red</strong> = DOWN / Bearish / PFH</li>
+          <li><strong style="color:#60A5FA;">Blue</strong> = Bullish / UP / PFL</li>
+          <li><strong style="color:#FF6B7A;">Red</strong> = Bearish / DOWN / PFH</li>
           <li><strong style="color:#888;">Grey</strong> = Neutral / Stale</li>
-          <li><strong style="color:#FFD700;">Gold</strong> = Killzone active</li>
+          <li><strong style="color:#FFD700;">Gold</strong> = Peak Zone / KZ active</li>
+          <li><strong style="color:#5CDB5C;">Green</strong> = Buy signals / London KZ</li>
+          <li><strong style="color:#FF8C00;">Orange</strong> = NY KZ / Warning</li>
         </ul>
       </div>
       <div class="cheat-col">
@@ -2166,7 +2222,7 @@
         <div style="font-size:32px; margin-bottom:10px;">🛠️</div>
         <div style="font-weight:700; color:white; font-size:15px; margin-bottom:6px;">Custom Development</div>
         <a href="https://g-labs.software/custom_development.html" style="color:var(--blue); text-decoration:none; font-size:14px;">Request a Quote</a>
-        <div style="font-size:11px; color:rgba(255,255,255,0.4); margin-top:8px;">Need a custom EA, indicator, or strategy coded? MQL4, MQL5, Pine Script.</div>
+        <div style="font-size:11px; color:rgba(255,255,255,0.4); margin-top:8px;">Need a custom EA, indicator, or strategy coded? MQL4, MQL5.</div>
       </div>
     </div>
 
@@ -2182,7 +2238,7 @@
 <div class="page dark" style="display:flex; flex-direction:column; justify-content:flex-end;">
 <div class="footer">
   <p><strong style="color:white;">BTMM State Engine Pro v2.0</strong></p>
-  <p style="margin-top:5px;">The Professional Market Maker Cycle Tracker</p>
+  <p style="margin-top:5px;">The Professional Market Maker Cycle Tracker — MT4 · MT5</p>
   <p style="margin-top:15px;">
     <a href="https://g-labs.software">g-labs.software</a> &nbsp;|&nbsp;
     <a href="mailto:info@g-labs.software">info@g-labs.software</a> &nbsp;|&nbsp;
