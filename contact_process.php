@@ -33,6 +33,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
          die("System error. Please try again later.");
     }
 
+    // 4. Security Question Check (What is 5 + 7?)
+    if (!isset($_POST['security_check']) || intval($_POST['security_check']) !== 12) {
+        echo "<script>alert('Security check failed. Please answer the math question correctly.'); window.history.back();</script>";
+        exit;
+    }
+
     // Basic validation
     if (empty($name) || empty($message) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         echo "<script>alert('Please complete the form correctly and try again.'); window.history.back();</script>";
