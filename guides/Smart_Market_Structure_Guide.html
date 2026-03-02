@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SMC Pro v2.0 - Complete User Guide</title>
+<style>
+  :root {
+    --bg: #0d0d12;
+    --card: #16161e;
+    --border: #2a2a35;
+    --accent: #26a69a;
+    --bear: #ef5350;
+    --gold: #ffc107;
+    --text: #e0e0e0;
+    --muted: #888;
+    --heading: #fff;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    line-height: 1.7;
+    padding: 0;
+  }
+  .hero {
+    background: linear-gradient(135deg, #0a1628 0%, #0d2818 50%, #1a0a28 100%);
+    padding: 80px 40px;
+    text-align: center;
+    border-bottom: 2px solid var(--accent);
+  }
+  .hero h1 {
+    font-size: 3em;
+    color: var(--accent);
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+  }
+  .hero .sub {
+    font-size: 1.3em;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+  .hero p { color: var(--muted); max-width: 700px; margin: 0 auto; font-size: 1.05em; }
+  .container { max-width: 960px; margin: 0 auto; padding: 40px 30px; }
+  .toc {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 50px;
+  }
+  .toc h2 { color: var(--accent); margin-bottom: 15px; font-size: 1.5em; }
+  .toc ol { padding-left: 25px; }
+  .toc li { margin: 6px 0; }
+  .toc a { color: var(--gold); text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+
+  section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 35px;
+    margin-bottom: 30px;
+  }
+  h2 {
+    color: var(--accent);
+    font-size: 1.6em;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  h3 {
+    color: var(--gold);
+    font-size: 1.15em;
+    margin: 20px 0 10px;
+  }
+  p { margin-bottom: 12px; }
+  ul, ol { padding-left: 25px; margin-bottom: 15px; }
+  li { margin: 5px 0; }
+  strong { color: var(--heading); }
+  .bull { color: var(--accent); font-weight: bold; }
+  .bear { color: var(--bear); font-weight: bold; }
+  .gold { color: var(--gold); font-weight: bold; }
+  .tip {
+    background: #1a2a1a;
+    border-left: 4px solid var(--accent);
+    padding: 15px 20px;
+    border-radius: 0 8px 8px 0;
+    margin: 15px 0;
+  }
+  .warn {
+    background: #2a1a1a;
+    border-left: 4px solid var(--bear);
+    padding: 15px 20px;
+    border-radius: 0 8px 8px 0;
+    margin: 15px 0;
+  }
+  .key {
+    background: #1a1a2a;
+    border-left: 4px solid var(--gold);
+    padding: 15px 20px;
+    border-radius: 0 8px 8px 0;
+    margin: 15px 0;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+  }
+  th, td {
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    text-align: left;
+  }
+  th { background: #1a1a25; color: var(--accent); }
+  code {
+    background: #1e1e2e;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'Consolas', monospace;
+    color: var(--gold);
+  }
+  .score-table td:first-child { font-weight: bold; color: var(--gold); }
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.85em;
+    font-weight: bold;
+  }
+  .badge-bull { background: #0a3a2a; color: var(--accent); }
+  .badge-bear { background: #3a0a0a; color: var(--bear); }
+  .badge-gold { background: #3a3a0a; color: var(--gold); }
+  footer {
+    text-align: center;
+    padding: 40px;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+  }
+  @media (max-width: 768px) {
+    .hero h1 { font-size: 2em; }
+    .container { padding: 20px 15px; }
+    section { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>SMC Pro v2.0</h1>
+  <div class="sub">The Ultimate Smart Money Concepts &amp; ICT Trading Toolkit</div>
+  <p>A comprehensive institutional trading indicator featuring Internal &amp; External Market Structure, Liquidity Sweeps, FVG/IFVG, Order Blocks, OTE Fibonacci, ICT Time Models, Multi-Timeframe Analysis, Confluence Scoring, and an AI Trade Scanner.</p>
+</div>
+
+<div class="container">
+
+<!-- TABLE OF CONTENTS -->
+<div class="toc">
+  <h2>Table of Contents</h2>
+  <ol>
+    <li><a href="#install">Installation &amp; Setup</a></li>
+    <li><a href="#dashboard">Dashboard &amp; Controls</a></li>
+    <li><a href="#structure">Market Structure (BOS / CHoCH)</a></li>
+    <li><a href="#zones">PD Arrays: FVG, IFVG, OB, Breaker, Rejection</a></li>
+    <li><a href="#liquidity">Liquidity: EQH/EQL &amp; Sweeps</a></li>
+    <li><a href="#pd">Premium / Discount &amp; OTE Fibonacci</a></li>
+    <li><a href="#time">ICT Time Concepts</a></li>
+    <li><a href="#levels">Key Levels</a></li>
+    <li><a href="#mtf">Multi-Timeframe Analysis</a></li>
+    <li><a href="#volume">Volume Profile</a></li>
+    <li><a href="#confluence">Confluence Scoring System</a></li>
+    <li><a href="#ai">AI Trade Scanner</a></li>
+    <li><a href="#alerts">Alerts &amp; Notifications</a></li>
+    <li><a href="#model">The Complete Trading Model</a></li>
+    <li><a href="#risk">Risk Management &amp; Position Sizing</a></li>
+    <li><a href="#tips">Pro Tips &amp; Best Practices</a></li>
+    <li><a href="#faq">FAQ &amp; Troubleshooting</a></li>
+  </ol>
+</div>
+
+<!-- 1. INSTALLATION -->
+<section id="install">
+  <h2>1. Installation &amp; Setup</h2>
+
+  <h3>Quick Install</h3>
+  <ol>
+    <li>Copy <code>SmartMarketStructure.mq5</code> to your MT5 <code>MQL5/Indicators/</code> folder (or a subfolder).</li>
+    <li>In MetaTrader 5, open the Navigator panel (Ctrl+N).</li>
+    <li>Right-click on Indicators &rarr; Refresh.</li>
+    <li>Drag the indicator onto any chart.</li>
+  </ol>
+
+  <h3>Recommended Settings</h3>
+  <table>
+    <tr><th>Setting</th><th>Scalping (M1-M5)</th><th>Intraday (M15-H1)</th><th>Swing (H4-D1)</th></tr>
+    <tr><td>External Swing Size</td><td>5</td><td>8</td><td>10-15</td></tr>
+    <tr><td>Internal Swing Size</td><td>2</td><td>3</td><td>5</td></tr>
+    <tr><td>Max History</td><td>500</td><td>800</td><td>1000+</td></tr>
+    <tr><td>Max Zones</td><td>10</td><td>20</td><td>30</td></tr>
+  </table>
+
+  <h3>GMT Offset</h3>
+  <p>Set <code>GMT Offset</code> to match your broker's server time offset from EST/New York. This is critical for Silver Bullet, Macros, CBDR, and NY Midnight Open to work correctly.</p>
+  <div class="tip">
+    <strong>How to find your broker's GMT offset:</strong> Check your broker's website, or look at the server time shown in MT5's Market Watch. If your broker's server shows 17:00 when it's 12:00 noon in New York, the offset is +5 from EST (so your broker is on UTC+0 / GMT). Set the input to -5 for EST.
+  </div>
+</section>
+
+<!-- 2. DASHBOARD -->
+<section id="dashboard">
+  <h2>2. Dashboard &amp; Controls</h2>
+  <p>The dashboard panel shows real-time information and gives you full control over every feature with toggle buttons.</p>
+
+  <h3>Information Display</h3>
+  <ul>
+    <li><strong>Ext/Int Trend:</strong> Current external (HTF) and internal (LTF) market structure trend.</li>
+    <li><strong>Session:</strong> Current active trading session (Asia, London, NY, Silver Bullet, Off-Hours).</li>
+    <li><strong>Time:</strong> Both local and server time displayed.</li>
+    <li><strong>Confluence Meter:</strong> Real-time setup quality score from 0-10 with visual bar.</li>
+  </ul>
+
+  <h3>Toggle Buttons</h3>
+  <p>Every feature can be toggled on/off in real-time. <span class="bull">Green/colored = ON</span>, <span style="color:#888">Gray = OFF</span>. Click any button to toggle.</p>
+
+  <table>
+    <tr><th>Button</th><th>Feature</th><th>Description</th></tr>
+    <tr><td>Struct</td><td>External Structure</td><td>BOS/CHoCH lines + HH/HL/LH/LL labels</td></tr>
+    <tr><td>Int.S</td><td>Internal Structure</td><td>Minor swing structure for precision entries</td></tr>
+    <tr><td>FVG</td><td>Fair Value Gaps</td><td>Imbalance zones between 3 candles</td></tr>
+    <tr><td>IFVG</td><td>Inverted FVGs</td><td>Filled FVGs that become S/R</td></tr>
+    <tr><td>OB</td><td>Order Blocks</td><td>Last opposing candle before impulse</td></tr>
+    <tr><td>Breaker</td><td>Breaker Blocks</td><td>Failed swing points turned S/R</td></tr>
+    <tr><td>Mitig</td><td>Mitigated Zones</td><td>Shows zones that have been tested (dashed)</td></tr>
+    <tr><td>Reject</td><td>Rejection Blocks</td><td>Wick-based rejection zones</td></tr>
+    <tr><td>P/D</td><td>Premium/Discount</td><td>Range split + OTE fibonacci</td></tr>
+    <tr><td>EQH/L</td><td>Equal Highs/Lows</td><td>Liquidity pools (stop clusters)</td></tr>
+    <tr><td>Sweeps</td><td>Liquidity Sweeps</td><td>Stop hunt detection with reversal</td></tr>
+    <tr><td>Labels</td><td>Swing Labels</td><td>HH/HL/LH/LL text labels</td></tr>
+    <tr><td>Sessions</td><td>Session Boxes</td><td>Asia/London/NY session ranges</td></tr>
+    <tr><td>SB</td><td>Silver Bullet</td><td>10-11 AM, 2-3 PM EST windows</td></tr>
+    <tr><td>Macros</td><td>ICT Macros</td><td>9:50, 10:50, etc. reversal windows</td></tr>
+    <tr><td>CBDR</td><td>Central Bank Range</td><td>Asian range + SD projections</td></tr>
+    <tr><td>Prev HL</td><td>Previous Levels</td><td>Prev Day/Week High/Low/Close</td></tr>
+    <tr><td>M/W Open</td><td>Monthly/Weekly Open</td><td>Institutional reference levels</td></tr>
+    <tr><td>NY Open</td><td>NY Midnight Open</td><td>True Day Open (00:00 EST)</td></tr>
+    <tr><td>Vol</td><td>Volume Profile</td><td>Daily volume distribution + POC</td></tr>
+    <tr><td>MTF</td><td>Multi-Timeframe</td><td>HTF zones on current chart</td></tr>
+    <tr><td>ATR</td><td>ATR Projections</td><td>Daily expected range</td></tr>
+    <tr><td>+Alert</td><td>Manual Alert</td><td>Places a draggable price alert line</td></tr>
+  </table>
+
+  <h3>Special Buttons</h3>
+  <ul>
+    <li><span class="gold">AI Scan</span> &mdash; Runs the AI Trade Scanner (see Section 12).</li>
+    <li><span style="color:#6495ED">User Guide</span> &mdash; Opens the in-chart help window.</li>
+  </ul>
+</section>
+
+<!-- 3. MARKET STRUCTURE -->
+<section id="structure">
+  <h2>3. Market Structure (BOS / CHoCH)</h2>
+
+  <h3>Two Levels of Structure</h3>
+  <p>SMC Pro uses <strong>two independent levels</strong> of swing detection, which is how institutional traders actually analyze markets:</p>
+
+  <table>
+    <tr><th>Level</th><th>Purpose</th><th>Color</th><th>Setting</th></tr>
+    <tr><td><strong>External (HTF)</strong></td><td>Major trend direction. The "big picture."</td><td class="bull">Teal/Coral</td><td>External Swing Bars (default: 8)</td></tr>
+    <tr><td><strong>Internal (LTF)</strong></td><td>Entry timing. Precision within the HTF move.</td><td style="color:#0bb">Cyan/Pink</td><td>Internal Swing Bars (default: 3)</td></tr>
+  </table>
+
+  <h3>BOS vs CHoCH</h3>
+  <p>This is one of the most critical distinctions in Smart Money trading:</p>
+
+  <table>
+    <tr><th>Type</th><th>Line Style</th><th>Meaning</th></tr>
+    <tr><td><span class="bull">BOS</span> (Break of Structure)</td><td>Solid line</td><td>Continuation. Price breaks a swing point <em>in the direction of the current trend</em>. Confirms trend is intact.</td></tr>
+    <tr><td><span class="bear">CHoCH</span> (Change of Character)</td><td>Dashed line</td><td>Potential reversal. Price breaks a swing point <em>against the current trend</em>. First sign trend may be shifting.</td></tr>
+  </table>
+
+  <h3>Swing Labels</h3>
+  <ul>
+    <li><strong>HH</strong> (Higher High) + <strong>HL</strong> (Higher Low) = <span class="bull">Bullish sequence</span></li>
+    <li><strong>LH</strong> (Lower High) + <strong>LL</strong> (Lower Low) = <span class="bear">Bearish sequence</span></li>
+  </ul>
+
+  <h3>Live Structure Detection</h3>
+  <p>The indicator performs <strong>real-time</strong> structure checks. If the current price breaks the most recent swing high/low against the established trend, a "Live CHoCH" line appears immediately &mdash; you don't have to wait for a confirmed fractal.</p>
+
+  <div class="tip">
+    <strong>Pro Tip:</strong> Use External Structure to determine your trade direction (only trade with the HTF trend), then use Internal Structure CHoCH as your actual entry trigger.
+  </div>
+</section>
+
+<!-- 4. PD ARRAYS -->
+<section id="zones">
+  <h2>4. PD Arrays: FVG, IFVG, OB, Breaker</h2>
+
+  <h3>Fair Value Gaps (FVG)</h3>
+  <p>An FVG is a 3-candle pattern where the wick of candle 1 doesn't overlap with the wick of candle 3, creating an <strong>imbalance</strong>. Price has a natural tendency to return and fill these gaps.</p>
+  <ul>
+    <li><span class="bull">Bullish FVG:</span> Gap where candle 1's high &lt; candle 3's low. Price should return down to fill it.</li>
+    <li><span class="bear">Bearish FVG:</span> Gap where candle 1's low &gt; candle 3's high. Price should return up to fill it.</li>
+    <li><strong>CE</strong> (Consequent Encroachment): The 50% midpoint of the FVG. Often the exact reaction point.</li>
+  </ul>
+  <div class="key">
+    <strong>Fresh FVGs</strong> are shown with filled rectangles. <strong>Mitigated FVGs</strong> (already tested) are shown with dashed outlines when the "Mitig" toggle is on.
+  </div>
+
+  <h3>Inverted FVGs (IFVG)</h3>
+  <p>When an FVG gets <strong>completely filled</strong> (price trades through the entire gap), it "inverts" and becomes a support/resistance zone in the opposite direction.</p>
+  <ul>
+    <li>A filled <span class="bull">Bullish FVG</span> becomes a <span class="bear">Bearish IFVG</span> (resistance).</li>
+    <li>A filled <span class="bear">Bearish FVG</span> becomes a <span class="bull">Bullish IFVG</span> (support).</li>
+  </ul>
+
+  <h3>Order Blocks (OB)</h3>
+  <p>The <strong>last opposing candle</strong> before an impulse move. This is where institutions placed their orders.</p>
+  <ul>
+    <li><span class="bull">Bullish OB:</span> Last bearish candle before a bullish BOS. Expect price to bounce here.</li>
+    <li><span class="bear">Bearish OB:</span> Last bullish candle before a bearish BOS. Expect price to reject here.</li>
+  </ul>
+  <p>A midline is drawn through each fresh OB at the 50% level &mdash; this is often the precise reaction point.</p>
+
+  <h3>View Modes</h3>
+  <table>
+    <tr><th>Mode</th><th>Description</th></tr>
+    <tr><td>All</td><td>Show all order blocks (default)</td></tr>
+    <tr><td>Nearest</td><td>Only show the closest OB above and below current price</td></tr>
+    <tr><td>Bullish Only</td><td>Only show bullish OBs</td></tr>
+    <tr><td>Bearish Only</td><td>Only show bearish OBs</td></tr>
+  </table>
+
+  <h3>Breaker Blocks</h3>
+  <p>When a swing point <strong>fails</strong> (gets broken through), the level becomes a Breaker Block. It flips from resistance to support (or vice versa). These are drawn with <span class="gold">gold-colored</span> zones.</p>
+
+  <h3>Zone States</h3>
+  <table>
+    <tr><th>State</th><th>Appearance</th><th>Meaning</th></tr>
+    <tr><td>Fresh</td><td>Filled rectangle + midline</td><td>Untested. High probability reaction zone.</td></tr>
+    <tr><td>Mitigated</td><td>Dashed outline, no fill</td><td>Already tested. Lower probability but can still react.</td></tr>
+    <tr><td>Invalidated</td><td>Gray dashed (or hidden)</td><td>Price closed through it. No longer valid.</td></tr>
+  </table>
+</section>
+
+<!-- 5. LIQUIDITY -->
+<section id="liquidity">
+  <h2>5. Liquidity: EQH/EQL &amp; Sweeps</h2>
+
+  <h3>Equal Highs &amp; Equal Lows (EQH/EQL)</h3>
+  <p>When two swing highs (or lows) form at nearly the same price, it creates a <strong>liquidity pool</strong>. Retail traders place stop losses above equal highs and below equal lows. Institutions target these levels.</p>
+  <ul>
+    <li><strong>EQH $$</strong> = Double/Triple top area. Stop losses sitting above. Price will likely sweep this level before reversing.</li>
+    <li><strong>EQL $$</strong> = Double/Triple bottom area. Stop losses sitting below. Price will likely sweep this level before reversing.</li>
+  </ul>
+
+  <h3>Liquidity Sweeps (Stop Hunts)</h3>
+  <p>This is one of the <strong>highest-probability signals</strong> in ICT trading. A sweep occurs when:</p>
+  <ol>
+    <li>Price moves <strong>beyond</strong> a swing high/low (taking out stops).</li>
+    <li>Price then <strong>reverses and closes</strong> back inside the range.</li>
+    <li>The reversal candle has significant size (measured against ATR).</li>
+  </ol>
+  <p>Sweeps are marked with a bold <span class="gold">"x"</span> symbol and a dotted line to the swept level.</p>
+
+  <div class="warn">
+    <strong>Critical:</strong> A liquidity sweep followed by a CHoCH on internal structure is one of the most reliable entry setups in the entire ICT methodology. When the AI Scanner detects a recent sweep, it adds +2 to the confluence score.
+  </div>
+</section>
+
+<!-- 6. PREMIUM / DISCOUNT -->
+<section id="pd">
+  <h2>6. Premium / Discount &amp; OTE Fibonacci</h2>
+
+  <h3>The Dealing Range</h3>
+  <p>The indicator automatically identifies the current <strong>dealing range</strong> using the most recent external swing high and swing low. The range expands live as price makes new highs/lows.</p>
+
+  <table>
+    <tr><th>Zone</th><th>Range</th><th>Color</th><th>Action</th></tr>
+    <tr><td><span class="bear">Premium</span></td><td>Above 50% (EQ)</td><td>Red tint</td><td>Look for SELLS only</td></tr>
+    <tr><td><span class="bull">Discount</span></td><td>Below 50% (EQ)</td><td>Green tint</td><td>Look for BUYS only</td></tr>
+    <tr><td>Equilibrium (EQ)</td><td>Exactly 50%</td><td>White dotted line</td><td>Avoid entries at 50%</td></tr>
+  </table>
+
+  <h3>OTE Fibonacci (Optimal Trade Entry)</h3>
+  <p>The <span class="gold">golden highlighted zone</span> between the 61.8% and 78.6% Fibonacci retracement levels. This is the "sweet spot" for institutional entries.</p>
+
+  <table>
+    <tr><th>Level</th><th>Significance</th></tr>
+    <tr><td>0.618 (61.8%)</td><td>Start of OTE zone. First potential reaction.</td></tr>
+    <tr><td>0.705 (70.5%)</td><td>The "sweet spot". Highest probability reaction level.</td></tr>
+    <tr><td>0.786 (78.6%)</td><td>End of OTE zone. If price goes past here, the move may be invalidated.</td></tr>
+  </table>
+
+  <div class="tip">
+    <strong>How OTE Works:</strong> In a <span class="bull">bullish</span> trend, wait for price to retrace into the OTE zone of the dealing range (discount side). This is where smart money refills orders. In a <span class="bear">bearish</span> trend, wait for price to retrace up into the OTE zone (premium side).
+  </div>
+
+  <h3>Additional Fibonacci Levels</h3>
+  <p>The 25% and 75% levels are also drawn to help gauge price position within the range. These are shown as subtle gray dotted lines.</p>
+</section>
+
+<!-- 7. ICT TIME CONCEPTS -->
+<section id="time">
+  <h2>7. ICT Time Concepts</h2>
+  <p>ICT trading is as much about <strong>when</strong> as it is about <strong>where</strong>. These time-based tools are critical for filtering setups.</p>
+
+  <h3>NY Midnight Open (True Day Open)</h3>
+  <p>The price at 00:00 EST (New York midnight) is the <strong>True Day Open</strong>. ICT considers this the real start of the trading day, not the broker's daily candle open. Shown as a <span style="color:#6495ED">blue horizontal line</span>.</p>
+  <ul>
+    <li>Price above NY Open = bullish bias for the day</li>
+    <li>Price below NY Open = bearish bias for the day</li>
+    <li>Price returns to NY Open = potential entry point</li>
+  </ul>
+
+  <h3>Silver Bullet Windows</h3>
+  <p>ICT's Silver Bullet model identifies specific 1-hour windows where FVG entries have the highest probability:</p>
+  <table>
+    <tr><th>Window</th><th>Time (EST)</th><th>Notes</th></tr>
+    <tr><td>AM Silver Bullet</td><td>10:00 - 11:00 AM</td><td>After NY open manipulation. Best for continuation.</td></tr>
+    <tr><td>PM Silver Bullet</td><td>2:00 - 3:00 PM</td><td>Afternoon reversal window. Often the day's final move.</td></tr>
+  </table>
+  <p>Shown as <span class="gold">gold-bordered rectangles</span> on the chart.</p>
+
+  <h3>ICT Macros</h3>
+  <p>Short 20-minute windows where significant price movements and reversals tend to cluster:</p>
+  <ul>
+    <li><strong>9:50 - 10:10 EST</strong> &mdash; Pre-Silver Bullet reversal</li>
+    <li><strong>10:50 - 11:10 EST</strong> &mdash; End of AM session reversal</li>
+    <li><strong>13:10 - 13:40 EST</strong> &mdash; Post-lunch reversal</li>
+    <li><strong>14:50 - 15:10 EST</strong> &mdash; Pre-PM Silver Bullet</li>
+    <li><strong>15:15 - 15:45 EST</strong> &mdash; End of day positioning</li>
+  </ul>
+
+  <h3>CBDR (Central Bank Dealer Range)</h3>
+  <p>The range established during the Asian session (approximately 2:00 PM - 8:00 PM EST). This range sets up the framework for the next day's moves.</p>
+  <ul>
+    <li><strong>CBDR Box:</strong> Yellow-bordered rectangle showing the range</li>
+    <li><strong>&plusmn;1 SD:</strong> First standard deviation projection. Price reaches this ~68% of the time.</li>
+    <li><strong>&plusmn;2.5 SD:</strong> Extended projection. Major move target.</li>
+  </ul>
+  <div class="key">
+    <strong>CBDR Strategy:</strong> Measure the Asian range. During London/NY, expect price to move 1-2.5x the CBDR range in one direction. Use the SD projections as profit targets.
+  </div>
+
+  <h3>Session Killzones</h3>
+  <p>Colored boxes showing the high/low range of each major trading session:</p>
+  <ul>
+    <li><span style="color:#4F7F7F">Asia</span> &mdash; Accumulation phase. Range forms the CBDR.</li>
+    <li><span style="color:#006400">London</span> &mdash; Manipulation phase. Often creates false moves (Judas Swings).</li>
+    <li><span style="color:#8B0000">New York</span> &mdash; Distribution phase. The real move of the day.</li>
+  </ul>
+</section>
+
+<!-- 8. KEY LEVELS -->
+<section id="levels">
+  <h2>8. Key Levels</h2>
+
+  <h3>Previous Day/Week Levels</h3>
+  <table>
+    <tr><th>Level</th><th>Abbreviation</th><th>Significance</th></tr>
+    <tr><td>Previous Day High</td><td>PDH</td><td>Major liquidity target. Stops above yesterday's high.</td></tr>
+    <tr><td>Previous Day Low</td><td>PDL</td><td>Major liquidity target. Stops below yesterday's low.</td></tr>
+    <tr><td>Previous Day Close</td><td>PDC</td><td>Institutional reference. Gap fills target this.</td></tr>
+    <tr><td>Previous Week High</td><td>PWH</td><td>Weekly liquidity target (higher timeframe).</td></tr>
+    <tr><td>Previous Week Low</td><td>PWL</td><td>Weekly liquidity target (higher timeframe).</td></tr>
+  </table>
+
+  <h3>Monthly &amp; Weekly Opens</h3>
+  <ul>
+    <li><strong>Monthly Open (M.Open):</strong> The opening price of the current month. Acts as a major S/R level and directional bias tool. <span style="color:#9370DB">Purple line.</span></li>
+    <li><strong>Weekly Open (W.Open):</strong> The opening price of the current week. Key intraday reference. <span style="color:#DAA520">Gold line.</span></li>
+  </ul>
+
+  <div class="tip">
+    <strong>Level Hierarchy:</strong> Monthly Open &gt; Weekly Open &gt; Previous Week High/Low &gt; Previous Day High/Low &gt; NY Midnight Open. Higher-timeframe levels are stronger and more likely to produce reactions.
+  </div>
+</section>
+
+<!-- 9. MTF -->
+<section id="mtf">
+  <h2>9. Multi-Timeframe Analysis</h2>
+  <p>The MTF feature draws <strong>Higher Timeframe zones</strong> directly on your current chart. This is critical because HTF zones are significantly stronger than LTF zones.</p>
+
+  <h3>How It Works</h3>
+  <ol>
+    <li>Set <code>HTF Period for MTF Analysis</code> to your desired higher timeframe (e.g., H4 while on M15).</li>
+    <li>Toggle "MTF" button on the dashboard.</li>
+    <li>HTF Order Blocks and FVGs appear on your chart with <strong>thicker borders</strong>.</li>
+  </ol>
+
+  <h3>Recommended MTF Pairings</h3>
+  <table>
+    <tr><th>Trading TF</th><th>HTF for MTF</th><th>Use Case</th></tr>
+    <tr><td>M1-M5</td><td>M15-H1</td><td>Scalping with intraday context</td></tr>
+    <tr><td>M15-H1</td><td>H4-D1</td><td>Intraday with swing context</td></tr>
+    <tr><td>H4-D1</td><td>W1-MN1</td><td>Swing with macro context</td></tr>
+  </table>
+
+  <div class="key">
+    <strong>The Power of Confluence:</strong> When an HTF Order Block overlaps with an LTF FVG in the OTE zone during a Silver Bullet window &mdash; that's a textbook A+ setup. The AI Scanner detects these confluences automatically.
+  </div>
+</section>
+
+<!-- 10. VOLUME -->
+<section id="volume">
+  <h2>10. Volume Profile</h2>
+  <p>A simplified daily volume profile showing where the most trading activity has occurred.</p>
+
+  <h3>Key Elements</h3>
+  <ul>
+    <li><strong>POC (Point of Control):</strong> The <span class="gold">gold bar/line</span>. Price level with the highest volume. Acts as a magnet and strong S/R.</li>
+    <li><strong>Delta Markers:</strong> <span class="bull">Green</span> = net buying, <span class="bear">Red</span> = net selling at each price level.</li>
+    <li><strong>Day Delta:</strong> Total net buying/selling volume for the day. Shows overall order flow bias.</li>
+  </ul>
+
+  <h3>Volume Profile Strategy</h3>
+  <ul>
+    <li><span class="bull">Bullish bias:</span> Price above POC + Positive day delta</li>
+    <li><span class="bear">Bearish bias:</span> Price below POC + Negative day delta</li>
+    <li>High volume areas = consolidation zones (expect ranging)</li>
+    <li>Low volume areas = fast price movement (expect breakouts)</li>
+  </ul>
+</section>
+
+<!-- 11. CONFLUENCE -->
+<section id="confluence">
+  <h2>11. Confluence Scoring System</h2>
+  <p>The indicator calculates a real-time <strong>confluence score from 0 to 10</strong> that rates the current setup quality. This is displayed on the dashboard and in the AI Scanner.</p>
+
+  <h3>Scoring Breakdown</h3>
+  <table class="score-table">
+    <tr><th>Factor</th><th>Points</th><th>Description</th></tr>
+    <tr><td>Trend Alignment</td><td>+2</td><td>External structure confirms direction</td></tr>
+    <tr><td>Premium/Discount</td><td>+2</td><td>Price is in the correct zone (discount for buys, premium for sells)</td></tr>
+    <tr><td>In Order Block</td><td>+2</td><td>Current price is touching an unmitigated OB</td></tr>
+    <tr><td>In FVG</td><td>+1</td><td>Current price is inside an unmitigated FVG</td></tr>
+    <tr><td>Killzone Time</td><td>+1</td><td>Currently in London or NY session</td></tr>
+    <tr><td>Silver Bullet</td><td>+1</td><td>Currently in a Silver Bullet window</td></tr>
+    <tr><td>Liquidity Sweep</td><td>+2</td><td>Recent sweep detected in your trade direction</td></tr>
+  </table>
+
+  <h3>Score Interpretation</h3>
+  <table>
+    <tr><th>Score</th><th>Rating</th><th>Color</th><th>Action</th></tr>
+    <tr><td>0-3</td><td>Low</td><td class="bear">Red</td><td>No trade. Wait for better conditions.</td></tr>
+    <tr><td>4-6</td><td>Medium</td><td class="gold">Gold</td><td>Possible trade with strict risk management.</td></tr>
+    <tr><td>7-10</td><td>High</td><td class="bull">Green</td><td>High probability setup. Execute with confidence.</td></tr>
+  </table>
+
+  <div class="warn">
+    <strong>Rule of Thumb:</strong> Never take a trade with a confluence score below 5. The best setups score 7+. Patience is the edge.
+  </div>
+</section>
+
+<!-- 12. AI SCANNER -->
+<section id="ai">
+  <h2>12. AI Trade Scanner</h2>
+  <p>Click the <span class="gold">"AI Scan"</span> button to run a comprehensive multi-factor analysis of the current market.</p>
+
+  <h3>What It Analyzes</h3>
+  <ol>
+    <li>External market structure trend direction</li>
+    <li>Current position in Premium/Discount range</li>
+    <li>Proximity to OTE fibonacci zone</li>
+    <li>Nearest unmitigated Point of Interest (OB/FVG/Breaker)</li>
+    <li>Recent liquidity sweep events</li>
+    <li>Current trading session/time window</li>
+    <li>Overall confluence score</li>
+  </ol>
+
+  <h3>Signals</h3>
+  <table>
+    <tr><th>Signal</th><th>Meaning</th><th>Panel Color</th></tr>
+    <tr><td><span class="bull">BUY</span></td><td>Active buy setup. Confluence &ge; 5. Entry/SL/TP shown.</td><td>Green</td></tr>
+    <tr><td><span class="bear">SELL</span></td><td>Active sell setup. Confluence &ge; 5. Entry/SL/TP shown.</td><td>Red</td></tr>
+    <tr><td><span class="gold">WAIT</span></td><td>Direction identified but conditions not met. Levels shown as targets.</td><td>Gray</td></tr>
+    <tr><td>NONE</td><td>No clear trend or setup. Stay flat.</td><td>Dark gray</td></tr>
+  </table>
+
+  <h3>Position Size Calculator</h3>
+  <p>The AI panel automatically calculates the optimal lot size based on:</p>
+  <ul>
+    <li>Your account balance</li>
+    <li>Your risk percentage (set in inputs, default 1%)</li>
+    <li>The distance from entry to stop loss</li>
+    <li>The symbol's tick value and tick size</li>
+  </ul>
+  <p>It also shows the dollar risk and potential dollar reward.</p>
+
+  <h3>Backtest</h3>
+  <p>Click <strong>"Backtest"</strong> in the AI panel to test the OTE strategy on the last 50 swing cycles. It shows:</p>
+  <ul>
+    <li>Total trades found</li>
+    <li>Wins, Losses, and Open (unresolved) trades</li>
+    <li>Win Rate percentage</li>
+  </ul>
+</section>
+
+<!-- 13. ALERTS -->
+<section id="alerts">
+  <h2>13. Alerts &amp; Notifications</h2>
+
+  <h3>Automatic Alerts</h3>
+  <table>
+    <tr><th>Event</th><th>Input Setting</th><th>Description</th></tr>
+    <tr><td>BOS</td><td>Alert on BOS</td><td>Fires when a Break of Structure is confirmed</td></tr>
+    <tr><td>CHoCH</td><td>Alert on CHoCH</td><td>Fires when a Change of Character occurs (potential reversal)</td></tr>
+    <tr><td>Liquidity Sweep</td><td>Alert on Sweep</td><td>Fires when a stop hunt is detected with reversal</td></tr>
+    <tr><td>OB Touch</td><td>Alert on OB Touch</td><td>Fires when price enters an unmitigated order block</td></tr>
+  </table>
+
+  <h3>Alert Delivery</h3>
+  <ul>
+    <li><strong>Popup:</strong> MT5 alert dialog box</li>
+    <li><strong>Push Notification:</strong> Sent to your MT5 mobile app</li>
+    <li><strong>Sound:</strong> Plays an alert sound</li>
+  </ul>
+
+  <h3>Manual Alerts</h3>
+  <p>Click <strong>"+Alert"</strong> on the dashboard to place a <span style="color:yellow">yellow horizontal line</span> at the current price. Drag it to your desired level. When price crosses the line:</p>
+  <ul>
+    <li>An alert fires (popup and/or push)</li>
+    <li>The line turns gray and changes to dotted (triggered state)</li>
+  </ul>
+</section>
+
+<!-- 14. THE MODEL -->
+<section id="model">
+  <h2>14. The Complete Trading Model</h2>
+  <p>This is the step-by-step process for finding and executing A+ setups using SMC Pro v2.0:</p>
+
+  <h3>Step 1: Determine Bias (HTF Analysis)</h3>
+  <ol>
+    <li>Look at External Structure. Is it making HH/HL (bullish) or LH/LL (bearish)?</li>
+    <li>Check the Monthly and Weekly Opens. Is price above or below?</li>
+    <li>Note the previous day/week high/low as liquidity targets.</li>
+  </ol>
+
+  <h3>Step 2: Identify the Dealing Range</h3>
+  <ol>
+    <li>Enable P/D zones. Note the Premium/Discount boundary (EQ).</li>
+    <li>For <span class="bull">buys</span>: Wait for price to pull back into the <span class="bull">Discount zone</span>.</li>
+    <li>For <span class="bear">sells</span>: Wait for price to rally into the <span class="bear">Premium zone</span>.</li>
+  </ol>
+
+  <h3>Step 3: Find the Entry Zone</h3>
+  <ol>
+    <li>Look for a <strong>confluent POI</strong> in the correct zone: OB + FVG overlap, or OB in OTE zone.</li>
+    <li>The ideal entry has an unmitigated OB inside the OTE (61.8-78.6%) zone with an FVG nearby.</li>
+    <li>Check if an MTF (HTF) zone aligns with your entry zone for extra confirmation.</li>
+  </ol>
+
+  <h3>Step 4: Wait for Entry Trigger</h3>
+  <ol>
+    <li>Drop to lower timeframe (or use Internal Structure).</li>
+    <li>Wait for a <strong>CHoCH on internal structure</strong> in your trade direction.</li>
+    <li>Ideally, enter during a <strong>Silver Bullet window</strong> or <strong>Killzone</strong>.</li>
+    <li>A <strong>liquidity sweep</strong> before your entry is the strongest confirmation.</li>
+  </ol>
+
+  <h3>Step 5: Manage the Trade</h3>
+  <ol>
+    <li><strong>Stop Loss:</strong> Below/above the POI zone (order block low/high).</li>
+    <li><strong>Take Profit:</strong> Target the opposing liquidity &mdash; EQH, EQL, PDH, PDL, or the other end of the dealing range.</li>
+    <li><strong>Minimum R:R:</strong> 1:3 or better. Never risk more than the AI-calculated lot size.</li>
+  </ol>
+
+  <div class="key">
+    <strong>The A+ Setup Checklist:</strong>
+    <br>&check; External trend confirmed (BOS direction)
+    <br>&check; Price in correct P/D zone (Discount for buys / Premium for sells)
+    <br>&check; Unmitigated OB or FVG in OTE zone
+    <br>&check; Internal structure CHoCH in trade direction
+    <br>&check; Inside a Killzone or Silver Bullet window
+    <br>&check; Recent liquidity sweep (bonus)
+    <br>&check; Confluence score &ge; 7
+    <br>&check; R:R &ge; 1:3
+  </div>
+</section>
+
+<!-- 15. RISK MANAGEMENT -->
+<section id="risk">
+  <h2>15. Risk Management &amp; Position Sizing</h2>
+
+  <h3>The 1% Rule</h3>
+  <p>Never risk more than <strong>1-2% of your account balance</strong> on a single trade. The AI Scanner automatically calculates the correct lot size based on your risk input.</p>
+
+  <h3>How Position Sizing Works</h3>
+  <p>The formula used by the AI Scanner:</p>
+  <ul>
+    <li><strong>Risk Amount ($)</strong> = Account Balance &times; Risk Percentage</li>
+    <li><strong>Pip Risk</strong> = Distance from Entry to Stop Loss</li>
+    <li><strong>Lot Size</strong> = Risk Amount / (Pip Risk / Tick Size &times; Tick Value)</li>
+  </ul>
+  <p>The result is automatically capped between the broker's minimum and maximum lot sizes.</p>
+
+  <h3>R:R Guidelines</h3>
+  <table>
+    <tr><th>Confluence Score</th><th>Minimum R:R</th><th>Notes</th></tr>
+    <tr><td>7-10</td><td>1:2</td><td>High probability. Slightly lower R:R acceptable.</td></tr>
+    <tr><td>5-6</td><td>1:3</td><td>Standard. Need good reward to compensate.</td></tr>
+    <tr><td>0-4</td><td>Do not trade</td><td>Wait for better conditions.</td></tr>
+  </table>
+
+  <div class="warn">
+    <strong>Golden Rule:</strong> No single trade should ever make or break your account. The best traders in the world have a 55-65% win rate. Your edge comes from <strong>consistent position sizing</strong> and <strong>favorable R:R</strong>, not from winning every trade.
+  </div>
+</section>
+
+<!-- 16. PRO TIPS -->
+<section id="tips">
+  <h2>16. Pro Tips &amp; Best Practices</h2>
+
+  <h3>Chart Setup</h3>
+  <ul>
+    <li>Enable "Dark Theme" for the best visual experience.</li>
+    <li>Use a <strong>clean chart</strong> &mdash; disable MT5's built-in grid and volumes.</li>
+    <li>Start with only External Structure, FVG, OB, and P/D enabled. Add features gradually.</li>
+  </ul>
+
+  <h3>Feature Combinations</h3>
+  <table>
+    <tr><th>Style</th><th>Enable</th><th>Disable</th></tr>
+    <tr><td>Minimalist</td><td>Struct, FVG, OB, P/D</td><td>Everything else</td></tr>
+    <tr><td>ICT Model</td><td>Struct, FVG, OB, P/D, OTE, SB, NY Open, Sweeps</td><td>Vol, IFVG, Macros</td></tr>
+    <tr><td>Full Analysis</td><td>Everything</td><td>Nothing</td></tr>
+    <tr><td>Scalping</td><td>Int.S, FVG, OB, Sweeps, Sessions, SB</td><td>Ext.S, P/D, MTF, Vol</td></tr>
+  </table>
+
+  <h3>Common Mistakes to Avoid</h3>
+  <ol>
+    <li><strong>Trading against the HTF trend.</strong> Always align with external structure.</li>
+    <li><strong>Entering at 50% (Equilibrium).</strong> Never enter at the EQ line. Wait for Discount/Premium.</li>
+    <li><strong>Trading mitigated zones.</strong> Fresh zones are significantly more reliable.</li>
+    <li><strong>Ignoring time.</strong> A perfect price setup during off-hours is still a bad trade.</li>
+    <li><strong>Over-leveraging.</strong> Stick to the 1% rule no matter what.</li>
+    <li><strong>Not waiting for confirmation.</strong> Price at a zone is not an entry. A CHoCH at a zone is.</li>
+  </ol>
+
+  <h3>Keyboard Shortcuts</h3>
+  <ul>
+    <li>All toggles are accessible via the dashboard buttons (no keyboard shortcuts in MT5 indicators).</li>
+    <li>Use MT5's built-in <code>Ctrl+I</code> to manage indicator inputs.</li>
+    <li>Use <code>Ctrl+B</code> to see all chart objects created by the indicator.</li>
+  </ul>
+</section>
+
+<!-- 17. FAQ -->
+<section id="faq">
+  <h2>17. FAQ &amp; Troubleshooting</h2>
+
+  <h3>Q: The indicator is slow / chart is lagging</h3>
+  <p>Reduce "Max History Bars" to 500 or less. Disable features you don't need (especially Volume Profile and MTF). Close the AI panel when not in use.</p>
+
+  <h3>Q: Silver Bullet / Macros / CBDR times look wrong</h3>
+  <p>Check your "GMT Offset" input. It should reflect the difference between EST (New York time) and your broker's server time. Most brokers use UTC+2 or UTC+3, which means the offset should be -5 (EST) relative to that.</p>
+
+  <h3>Q: Zones appear but quickly disappear</h3>
+  <p>If "Hide Invalidated" is ON, zones that price has closed through will be removed. Turn it OFF or enable "Mitig" to see mitigated/invalidated zones.</p>
+
+  <h3>Q: No BOS/CHoCH lines showing</h3>
+  <p>Increase "Max History Bars" or reduce "External Swing Bars" size. You need enough data for the indicator to detect swings and structure breaks.</p>
+
+  <h3>Q: AI Scanner says "WAIT" all the time</h3>
+  <p>This is normal and actually a good sign &mdash; it means the indicator is properly filtering setups. A+ setups don't occur on every chart at every moment. Try different timeframes or symbols.</p>
+
+  <h3>Q: Can I use this on multiple timeframes simultaneously?</h3>
+  <p>Yes. Add the indicator to multiple charts. Each instance is independent. Use the MTF feature to see higher timeframe zones on your trading timeframe.</p>
+
+  <h3>Q: How do I update the indicator?</h3>
+  <p>Replace the .mq5 file in your Indicators folder, then right-click on Indicators in Navigator and click "Refresh". Re-apply the indicator to your charts.</p>
+</section>
+
+</div>
+
+<footer>
+  <p><strong>SMC Pro v2.0</strong> &mdash; Smart Market Structure Pro</p>
+  <p>Built by G-Labs &bull; &copy; 2024-2026</p>
+  <p style="margin-top:10px; font-size:0.9em;">
+    <strong>Disclaimer:</strong> This indicator is an analysis tool, not financial advice. Trading involves substantial risk of loss. Past performance does not guarantee future results. Always use proper risk management.
+  </p>
+</footer>
+
+</body>
+</html>
