@@ -330,12 +330,15 @@
     <span class="badge green">4 Risk Modes</span>
     <span class="badge teal">Stealth SL/TP</span>
     <span class="badge blue">OCO Breakout</span>
-    <span class="badge amber">Stats Dashboard</span>
+    <span class="badge amber">Stats + Equity Curve</span>
     <span class="badge green">News Calendar</span>
     <span class="badge teal">Currency Strength</span>
     <span class="badge red">Grid Orders</span>
     <span class="badge blue">7 Tabs</span>
     <span class="badge amber">15+ Hotkeys</span>
+    <span class="badge green">CSV Export</span>
+    <span class="badge teal">Close at Time</span>
+    <span class="badge blue">Daily P/L Tracker</span>
   </div>
 </div>
 
@@ -394,6 +397,8 @@
   <h3>Header Bar</h3>
   <ul>
     <li><strong>Title</strong> &mdash; "G-Labs v4" in amber. Drag this area to move the panel.</li>
+    <li><strong>Daily P/L %</strong> &mdash; Shows today's combined realized + floating profit as a percentage of starting balance, color-coded green (profit) or red (loss). Updates live every tick.</li>
+    <li><strong>Symbol Changer</strong> &mdash; Click to open a symbol picker grid for quick chart switching.</li>
     <li><strong>CS</strong> &mdash; Toggle the Currency Strength Meter heatmap.</li>
     <li><strong>?</strong> &mdash; Open the built-in Help window (paginated).</li>
     <li><strong>&minus;</strong> &mdash; Minimize/restore the panel.</li>
@@ -413,7 +418,7 @@
     <tr><td><strong>Countdown</strong></td><td>Time remaining until current candle closes (M:SS)</td></tr>
     <tr><td><strong>P:</strong></td><td>Number of open positions managed by this EA</td></tr>
     <tr><td><strong>Session</strong></td><td>Active market session: TKY, LDN, NY (or overlap)</td></tr>
-    <tr><td><strong>Time</strong></td><td>Local clock time</td></tr>
+    <tr><td><strong>Time</strong></td><td>Server clock time (HH:MM:SS)</td></tr>
   </table>
 </section>
 
@@ -587,6 +592,9 @@
   <h3>View Modes</h3>
   <p>Toggle between <strong>OPEN</strong> (live positions) and <strong>HIST</strong> (trade history).</p>
 
+  <h3>Symbol Filter</h3>
+  <p>Click the filter button (shows <strong>All</strong> or the current symbol name) to toggle between viewing positions for <em>all symbols</em> or only the <em>current chart symbol</em>. This is especially useful when trading multiple pairs simultaneously &mdash; quickly focus on just the positions relevant to the chart you're looking at. The filter setting is persisted between sessions.</p>
+
   <h3>Quick Action Buttons</h3>
   <div class="feature-grid">
     <div class="feature-card"><h4>Close All</h4><p>Close all open positions instantly.</p></div>
@@ -672,6 +680,15 @@
 
   <h3>Grid Orders</h3>
   <p>Configure <strong>Distance</strong> (pips), <strong>Count</strong>, and <strong>Multiplier</strong> (lot scaling). Then click <strong>Grid Buy</strong> or <strong>Grid Sell</strong> to place a ladder of limit orders.</p>
+
+  <h3>Close at Time</h3>
+  <p>Automatically close all open positions at a specific server time. Ideal for end-of-day or pre-news flat strategies.</p>
+  <ul>
+    <li><strong>ON/OFF</strong> &mdash; Toggle the timer. When active, the button turns green and a countdown shows remaining time.</li>
+    <li><strong>Hour / Minute</strong> &mdash; Adjust using the +/&minus; spinners. Minutes increment in 5-minute steps.</li>
+    <li><strong>Countdown</strong> &mdash; Shows remaining time (e.g. "in 2h 15m") until the close trigger.</li>
+  </ul>
+  <p>When the set time arrives, all positions are closed, a toast notification is shown, and a sound alert plays. The timer automatically disables after triggering. The time setting persists between sessions.</p>
 </section>
 
 <!-- ============ 10. NEWS ============ -->
@@ -740,6 +757,19 @@
 
   <h3>Streaks</h3>
   <p>Maximum consecutive wins and maximum consecutive losses.</p>
+
+  <h3>Equity Curve</h3>
+  <p>A visual mini equity curve rendered directly in the panel using colored bars. Each bar represents a closed trade, plotted as cumulative P/L. Green bars indicate cumulative profit, red bars indicate cumulative loss. A zero line is shown when the curve crosses from profit to loss territory. Start and end values are labeled. This provides an at-a-glance view of your trading trajectory without leaving the panel.</p>
+
+  <h3>CSV Export</h3>
+  <p>Click the <strong>Export CSV</strong> button in the top-right corner of the Stats tab to export the last 90 days of trade history to a CSV file. The file is saved to the MT5 <code>Files/</code> directory and includes:</p>
+  <ul>
+    <li>Ticket, Time, Symbol, Type, Volume</li>
+    <li>Entry Price, Exit Price, SL, TP</li>
+    <li>Profit, Swap, Commission, Net P/L</li>
+    <li>Duration (seconds), Magic Number</li>
+  </ul>
+  <p>Perfect for importing into Excel, Google Sheets, or journaling tools like Edgewonk and TraderVue.</p>
 
   <h3>Account Summary</h3>
   <p>Balance, Equity, Free Margin, and Margin Level % at the bottom of the tab.</p>

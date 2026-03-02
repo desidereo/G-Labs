@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>G-Labs Magic Lines v4 — Complete User Guide</title>
+<title>G-Labs Magic Lines v5 — Complete User Guide</title>
 <style>
 :root {
   --bg-primary: #0a0e17;
@@ -12,7 +12,6 @@
   --bg-card-alt: #1e293b;
   --bg-highlight: #0f2a4a;
   --border: #1e3a5f;
-  --border-glow: #1e90ff33;
   --text-primary: #e2e8f0;
   --text-secondary: #94a3b8;
   --text-muted: #64748b;
@@ -70,7 +69,7 @@ nav.toc-bar a{
   text-decoration:none;font-size:13px;font-weight:600;letter-spacing:0.3px;
   transition:color .2s;border-bottom:2px solid transparent;
 }
-nav.toc-bar a:hover,nav.toc-bar a.active{color:var(--accent-gold);border-bottom-color:var(--accent-gold);}
+nav.toc-bar a:hover{color:var(--accent-gold);border-bottom-color:var(--accent-gold);}
 
 .container{max-width:1100px;margin:0 auto;padding:0 24px;}
 
@@ -163,25 +162,16 @@ h4{font-size:1rem;font-weight:700;margin:20px 0 8px;color:var(--text-primary);}
 
 .columns{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;}
 
-.color-swatch{
-  display:inline-flex;align-items:center;gap:8px;margin:4px 8px 4px 0;
-}
+.color-swatch{display:inline-flex;align-items:center;gap:8px;margin:4px 8px 4px 0;}
 .color-swatch .dot{width:14px;height:14px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);}
 
-.scanner-preview{
-  background:var(--bg-card);border:1px solid var(--border);border-radius:12px;
-  overflow:hidden;margin:24px 0;
-}
+.scanner-preview{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin:24px 0;}
 .scanner-header{
   background:linear-gradient(135deg,#0d2137,#0f2a4a);
   padding:10px 16px;display:flex;align-items:center;justify-content:space-between;
   border-bottom:1px solid var(--border);
 }
 .scanner-header .title{font-weight:700;color:var(--accent-gold);font-size:0.85rem;letter-spacing:1px;}
-.scanner-header .controls{display:flex;gap:6px;}
-.scanner-header .controls span{
-  width:14px;height:14px;border-radius:3px;display:inline-block;
-}
 .scanner-body{padding:0;overflow-x:auto;}
 .scanner-table{width:100%;border-collapse:collapse;font-size:0.82rem;font-family:'Consolas','Courier New',monospace;}
 .scanner-table th{
@@ -190,33 +180,9 @@ h4{font-size:1rem;font-weight:700;margin:20px 0 8px;color:var(--text-primary);}
   border-bottom:1px solid var(--border);white-space:nowrap;
 }
 .scanner-table td{
-  padding:7px 12px;text-align:center;border-bottom:1px solid rgba(30,58,95,0.3);
-  white-space:nowrap;
+  padding:7px 12px;text-align:center;border-bottom:1px solid rgba(30,58,95,0.3);white-space:nowrap;
 }
 .scanner-table tr:hover td{background:rgba(30,144,255,0.04);}
-
-.improvement-card{
-  background:var(--bg-card);border:1px solid var(--border);border-radius:12px;
-  padding:24px;margin-bottom:16px;position:relative;overflow:hidden;
-}
-.improvement-card::before{
-  content:'';position:absolute;top:0;left:0;width:4px;height:100%;
-}
-.improvement-card.perf::before{background:var(--accent-red);}
-.improvement-card.visual::before{background:var(--accent-blue);}
-.improvement-card.feature::before{background:var(--accent-green);}
-.improvement-card.ux::before{background:var(--accent-gold);}
-.improvement-card .imp-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
-.improvement-card .imp-tag{
-  font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;
-  padding:3px 10px;border-radius:6px;
-}
-.improvement-card .imp-tag.perf{background:rgba(220,53,69,0.15);color:var(--accent-red);}
-.improvement-card .imp-tag.visual{background:rgba(30,144,255,0.15);color:var(--accent-blue);}
-.improvement-card .imp-tag.feature{background:rgba(40,167,69,0.15);color:var(--accent-green);}
-.improvement-card .imp-tag.ux{background:rgba(255,215,0,0.15);color:var(--accent-gold);}
-.improvement-card h4{margin:0;font-size:1rem;}
-.improvement-card p{color:var(--text-secondary);font-size:0.92rem;margin-top:8px;}
 
 code{
   background:rgba(30,144,255,0.1);color:var(--accent-cyan);
@@ -229,7 +195,6 @@ code{
   padding:40px 0;text-align:center;color:var(--text-muted);font-size:0.85rem;
 }
 .footer a{color:var(--accent-blue);text-decoration:none;}
-
 .kbd{
   display:inline-block;padding:2px 8px;border-radius:4px;
   background:var(--bg-card-alt);border:1px solid var(--border);
@@ -246,767 +211,415 @@ code{
 </head>
 <body>
 
-<!-- HERO -->
 <header class="hero">
   <div class="container">
     <div class="hero-badge">G-LABS SOFTWARE</div>
-    <h1>Magic Lines <span>v4</span></h1>
-    <p>Complete User Guide — Setup, Configuration, Trade Entries, Alerts, Scanner Dashboard &amp; Performance Optimization</p>
-    <p style="margin-top:12px;"><span class="version">MetaTrader 5 Indicator</span> &bull; Version 4.0</p>
+    <h1>Magic Lines <span>v5</span></h1>
+    <p>Complete User Guide &mdash; Cycle Detection, Entry System, Magic Line Targets, Scanner, Helper &amp; Alerts</p>
+    <p style="margin-top:12px;"><span class="version">MetaTrader 5 Indicator</span> &bull; Version 5.2</p>
   </div>
 </header>
 
-<!-- STICKY NAV -->
 <nav class="toc-bar" id="toc">
   <div class="container" style="padding:0;">
     <a href="#overview">Overview</a>
-    <a href="#features">Features</a>
     <a href="#setup">Setup</a>
-    <a href="#trade-entries">Trade Entries</a>
+    <a href="#cycle">Cycle Detection</a>
+    <a href="#entries">Entry System</a>
     <a href="#magic-lines">Magic Lines</a>
+    <a href="#reentry">Re-Entry</a>
     <a href="#scanner">Scanner</a>
+    <a href="#helper">Helper</a>
+    <a href="#buttons">Buttons</a>
     <a href="#alerts">Alerts</a>
-    <a href="#helper">Helper Window</a>
-    <a href="#performance">Performance</a>
-    <a href="#improvements">Improvements</a>
     <a href="#faq">FAQ</a>
   </div>
 </nav>
 
-<!-- OVERVIEW -->
+<!-- ========== OVERVIEW ========== -->
 <section id="overview">
-<div class="container">
-  <h2><span class="icon blue">📊</span> Indicator Overview</h2>
-  <p class="section-subtitle">What Magic Lines v4 does and how all the components work together</p>
+  <div class="container">
+    <h2><span class="icon blue">&#x1F4CA;</span> Indicator Overview</h2>
+    <p class="section-subtitle">Magic Lines v5 is a complete BTMM (Beat The Market Maker) trading system for MetaTrader 5, rebuilt from scratch with clean code and enhanced features.</p>
 
-  <p>Magic Lines v4 is a comprehensive multi-tool indicator for MetaTrader 5 that combines <strong>trend detection</strong>, <strong>cycle analysis</strong>, <strong>key price levels</strong>, and a <strong>multi-pair scanner dashboard</strong> into a single overlay. It draws directly on the main chart window and uses a canvas-based dashboard panel for the scanner.</p>
-
-  <div class="card-grid">
-    <div class="card">
-      <div class="card-header"><div class="dot" style="background:var(--accent-gold)"></div><h4>Heiken Ashi Candles</h4></div>
-      <p>Smoothed candlesticks with 6 color states that filter noise and reveal the true trend. Colors range from dark red (strong bearish) through orange (transition) to bright blue (strong bullish).</p>
-    </div>
-    <div class="card">
-      <div class="card-header"><div class="dot" style="background:var(--accent-cyan)"></div><h4>VWAP Line</h4></div>
-      <p>Volume Weighted Average Price displayed as a bold yellow line. Acts as a dynamic support/resistance. Session-based reset options available (Session, Week, Month, Quarter, Year).</p>
-    </div>
-    <div class="card">
-      <div class="card-header"><div class="dot" style="background:var(--accent-blue)"></div><h4>EMA 62 Trend Line</h4></div>
-      <p>Color-coded Moving Average that switches between <span style="color:var(--accent-blue)">blue (bullish)</span> and <span style="color:var(--accent-red)">red (bearish)</span>. Price touching this EMA triggers "ML/touch" signals in the scanner.</p>
-    </div>
-    <div class="card">
-      <div class="card-header"><div class="dot" style="background:var(--accent-green)"></div><h4>Triple ZigZag System</h4></div>
-      <p>Three nested ZigZag levels for multi-timeframe structure analysis:<br>
-        <span class="color-swatch"><span class="dot" style="background:#ffd700"></span> Large</span>
-        <span class="color-swatch"><span class="dot" style="background:#1e90ff"></span> Medium</span>
-        <span class="color-swatch"><span class="dot" style="background:#28a745"></span> Small</span>
-      </p>
-    </div>
-    <div class="card">
-      <div class="card-header"><div class="dot" style="background:var(--accent-orange)"></div><h4>Magic Lines &amp; Levels</h4></div>
-      <p>Automatically drawn horizontal support/resistance lines at key structural levels (APH/APL). These are the "magic" in Magic Lines — they identify where price is likely to react.</p>
-    </div>
-    <div class="card">
-      <div class="card-header"><div class="dot" style="background:var(--accent-purple)"></div><h4>Multi-Pair Scanner</h4></div>
-      <p>Canvas-based dashboard showing up to 28+ pairs with cycle state, APH/APL levels, ADR data, touch signals, re-entry status, and clickable pair switching.</p>
-    </div>
-  </div>
-</div>
-</section>
-
-<!-- FEATURES -->
-<section id="features">
-<div class="container">
-  <h2><span class="icon gold">⚡</span> Feature Breakdown</h2>
-  <p class="section-subtitle">Detailed look at every component and what it tells you</p>
-
-  <h3>1. Heiken Ashi Candle Colors</h3>
-  <p>The indicator replaces standard candles with smoothed Heiken Ashi candles using 6 color grades:</p>
-  <table class="feature-table">
-    <tr><th>Color</th><th>RGB</th><th>Meaning</th><th>Action</th></tr>
-    <tr><td><span class="color-swatch"><span class="dot" style="background:rgb(128,0,0)"></span> Dark Red</span></td><td class="label">128, 0, 0</td><td>Strong bearish momentum</td><td>Hold shorts / avoid longs</td></tr>
-    <tr><td><span class="color-swatch"><span class="dot" style="background:rgb(255,0,0)"></span> Red</span></td><td class="label">255, 0, 0</td><td>Bearish</td><td>Sell bias active</td></tr>
-    <tr><td><span class="color-swatch"><span class="dot" style="background:rgb(255,165,0)"></span> Orange</span></td><td class="label">255, 165, 0</td><td>Transition / weakening</td><td>Watch for reversal</td></tr>
-    <tr><td><span class="color-swatch"><span class="dot" style="background:rgb(0,6,184)"></span> Dark Blue</span></td><td class="label">0, 6, 184</td><td>Building bullish</td><td>Early buy signals</td></tr>
-    <tr><td><span class="color-swatch"><span class="dot" style="background:rgb(0,0,255)"></span> Blue</span></td><td class="label">0, 0, 255</td><td>Bullish</td><td>Buy bias active</td></tr>
-    <tr><td><span class="color-swatch"><span class="dot" style="background:rgb(99,177,241)"></span> Light Blue</span></td><td class="label">99, 177, 241</td><td>Strong bullish momentum</td><td>Hold longs / trail stops</td></tr>
-  </table>
-
-  <h3>2. VWAP (Volume Weighted Average Price)</h3>
-  <p>The VWAP resets based on your chosen anchor period. It acts as an institutional reference point — price above VWAP = bullish bias, below = bearish bias.</p>
-  <table class="feature-table">
-    <tr><th>Anchor</th><th>Best For</th><th>Reset</th></tr>
-    <tr><td class="label">Session</td><td>Day traders</td><td>Each new trading session</td></tr>
-    <tr><td class="label">Week</td><td>Swing traders</td><td>Every Monday</td></tr>
-    <tr><td class="label">Month</td><td>Position traders</td><td>First of month</td></tr>
-    <tr><td class="label">Quarter</td><td>Long-term bias</td><td>Every 3 months</td></tr>
-  </table>
-
-  <h3>3. EMA 62 Color Line</h3>
-  <p>The 62-period EMA serves as the trend backbone. When candles touch or cross this line, it generates "ML/touch" signals in the scanner — a key entry trigger.</p>
-  <div class="columns">
-    <div class="tip-box success">
-      <div class="tip-label green">Bullish Setup</div>
-      <p>Price pulls back to EMA 62 from above → color line is <span style="color:var(--accent-blue);font-weight:700;">BLUE</span> → scanner shows "Touch" → look for buy re-entry</p>
-    </div>
-    <div class="tip-box danger">
-      <div class="tip-label red">Bearish Setup</div>
-      <p>Price pulls back to EMA 62 from below → color line is <span style="color:var(--accent-red);font-weight:700;">RED</span> → scanner shows "Touch" → look for sell re-entry</p>
-    </div>
-  </div>
-
-  <h3>4. Triple ZigZag Structure</h3>
-  <p>Three ZigZag layers with different depth parameters give you a nested view of market structure across timeframes:</p>
-  <table class="feature-table">
-    <tr><th>ZigZag</th><th>Color</th><th>Purpose</th><th>Arrow Size</th></tr>
-    <tr><td class="label">Large</td><td><span class="color-swatch"><span class="dot" style="background:#ffd700"></span> Yellow</span></td><td>Major swing highs/lows — the "big picture"</td><td>Width 3</td></tr>
-    <tr><td class="label">Medium</td><td><span class="color-swatch"><span class="dot" style="background:#1e90ff"></span> Blue</span></td><td>Intermediate structure</td><td>Width 1</td></tr>
-    <tr><td class="label">Small</td><td><span class="color-swatch"><span class="dot" style="background:#28a745"></span> Green</span></td><td>Minor swings — entry timing</td><td>Width 3</td></tr>
-  </table>
-  <div class="tip-box">
-    <div class="tip-label blue">Pro Tip</div>
-    <p>When all three ZigZag levels confirm the same direction (e.g., all making higher highs), that's the highest-probability trade direction. A new Semaphore level from any ZigZag triggers an alert.</p>
-  </div>
-
-  <h3>5. Cycle Detection</h3>
-  <p>The indicator tracks bull/bear cycles using the Heiken Ashi color-coded candle direction. The cycle state is shown in the scanner's "Cycle" column:</p>
-  <ul style="margin:12px 0 12px 24px;color:var(--text-secondary);">
-    <li><span style="color:var(--accent-blue);font-weight:700;">▲ Bull Cycle</span> — Price trending above EMA, bullish HA candles dominant</li>
-    <li><span style="color:var(--accent-red);font-weight:700;">▼ Bear Cycle</span> — Price trending below EMA, bearish HA candles dominant</li>
-    <li>Re-Entry signals fire when a pullback within a cycle completes and trend resumes</li>
-  </ul>
-</div>
-</section>
-
-<!-- SETUP -->
-<section id="setup">
-<div class="container">
-  <h2><span class="icon green">🔧</span> Installation &amp; Setup</h2>
-  <p class="section-subtitle">Getting Magic Lines running on your charts</p>
-
-  <ol class="step-list">
-    <li>
-      <strong>Copy the indicator file</strong>
-      <p>Place <code>check_magic_lines_v4.mq5</code> into your MT5 data folder:<br>
-      <code>MQL5\Indicators\</code> (or a subfolder of your choice).</p>
-    </li>
-    <li>
-      <strong>Compile in MetaEditor</strong>
-      <p>Open MetaEditor, find the file, and press <span class="kbd">F7</span> to compile. Ensure zero errors. If you see the compiled <code>.ex5</code> file, you're good.</p>
-    </li>
-    <li>
-      <strong>Attach to chart</strong>
-      <p>In MT5, go to <strong>Insert → Indicators → Custom</strong> and select Magic Lines v4. Alternatively, drag it from the Navigator panel onto any chart.</p>
-    </li>
-    <li>
-      <strong>Allow DLL imports</strong>
-      <p>The canvas-based dashboard requires DLL imports. In the indicator properties, check <strong>"Allow DLL imports"</strong> under the Common tab.</p>
-    </li>
-    <li>
-      <strong>Configure input parameters</strong>
-      <p>See the parameters table below for recommended settings based on your trading style.</p>
-    </li>
-  </ol>
-
-  <h3>Key Input Parameters</h3>
-  <table class="feature-table">
-    <tr><th>Parameter</th><th>Default</th><th>Description</th><th>Recommendation</th></tr>
-    <tr><td class="label">VWAP Anchor</td><td>Session</td><td>VWAP reset period</td><td>Session for day trading, Week for swing</td></tr>
-    <tr><td class="label">EMA Period</td><td>62</td><td>Trend MA period</td><td>Keep at 62 (institutional level)</td></tr>
-    <tr><td class="label">ZigZag Depths</td><td>Various</td><td>Sensitivity of each ZigZag</td><td>Leave defaults; lower = more signals</td></tr>
-    <tr><td class="label">Scanner Pairs</td><td>Multi</td><td>Symbols to scan</td><td>Major FX pairs + gold for best results</td></tr>
-    <tr><td class="label">Scanner TF 1</td><td>H1</td><td>First scanner timeframe</td><td>One step above your entry TF</td></tr>
-    <tr><td class="label">Scanner TF 2</td><td>H4</td><td>Second scanner timeframe</td><td>Two steps above your entry TF</td></tr>
-    <tr><td class="label">ADR Period</td><td>14</td><td>Average Daily Range lookback</td><td>14 for standard, 5 for recent volatility</td></tr>
-    <tr><td class="label">Magic Lines Count</td><td>Auto</td><td>Number of ML levels drawn</td><td>Keep auto; manually adjust if cluttered</td></tr>
-    <tr><td class="label">Show Lines</td><td>true</td><td>Toggle Magic Lines on chart</td><td>On for entry analysis, off for clean view</td></tr>
-    <tr><td class="label">Alerts</td><td>Various</td><td>Alert toggles per signal type</td><td>Enable what matters to your strategy</td></tr>
-  </table>
-
-  <div class="tip-box warn">
-    <div class="tip-label orange">Performance Note</div>
-    <p>Each pair in the scanner creates <strong>3 separate iCustom handles</strong> (current TF + 2 additional TFs). Scanning 10 pairs = 30 indicator instances running simultaneously. Start with 5-8 pairs and add more only if your CPU handles it well.</p>
-  </div>
-</div>
-</section>
-
-<!-- TRADE ENTRIES -->
-<section id="trade-entries">
-<div class="container">
-  <h2><span class="icon green">🎯</span> Trade Entry Lines &amp; Signals</h2>
-  <p class="section-subtitle">How to read and act on the indicator's trade signals</p>
-
-  <h3>Entry Signal Types</h3>
-  <div class="card-grid">
-    <div class="card">
-      <div class="card-header"><div class="dot" style="background:var(--accent-blue)"></div><h4>EMA 62 Touch <span class="badge info">PRIMARY</span></h4></div>
-      <p>Price pulls back to the 62 EMA and touches it. The scanner shows <strong>"Touch"</strong> in the ML/touch column. This is the highest-probability entry when aligned with the cycle direction.</p>
-      <ul>
-        <li>Bull cycle + price touches EMA from above → <span class="badge buy">BUY</span></li>
-        <li>Bear cycle + price touches EMA from below → <span class="badge sell">SELL</span></li>
-      </ul>
-    </div>
-    <div class="card">
-      <div class="card-header"><div class="dot" style="background:var(--accent-orange)"></div><h4>Re-Entry Signal <span class="badge warn">CONTINUATION</span></h4></div>
-      <p>After a pullback within an existing trend, when the Heiken Ashi candles resume the trend direction for 2+ candles, a Re-Entry is confirmed.</p>
-      <ul>
-        <li>Scanner shows re-entry direction (▲/▼)</li>
-        <li>Orange line and "Re-Entry" label on chart</li>
-        <li>Best when ADR has room (not over-extended)</li>
-      </ul>
-    </div>
-    <div class="card">
-      <div class="card-header"><div class="dot" style="background:var(--accent-gold)"></div><h4>Magic Line Bounce <span class="badge gold">STRUCTURAL</span></h4></div>
-      <p>Price reaches a Magic Line (horizontal level at APH/APL) and shows rejection. These levels are drawn from the ZigZag-identified highs and lows.</p>
-      <ul>
-        <li>Watch for HA color change at the level</li>
-        <li>Multiple ML levels clustered = stronger zone</li>
-        <li>Best with VWAP confluence</li>
-      </ul>
-    </div>
-    <div class="card">
-      <div class="card-header"><div class="dot" style="background:var(--accent-cyan)"></div><h4>VWAP Cross <span class="badge info">MOMENTUM</span></h4></div>
-      <p>Price crossing the VWAP line signals a shift in intraday bias. Alerts fire for both up and down crosses.</p>
-      <ul>
-        <li>Cross up → bullish session bias shift</li>
-        <li>Cross down → bearish session bias shift</li>
-        <li>Most reliable at start of London/NY sessions</li>
-      </ul>
-    </div>
-  </div>
-
-  <h3>Trade Entry Checklist</h3>
-  <div class="tip-box success">
-    <div class="tip-label green">High-Probability Buy Setup</div>
-    <p>
-      ✅ Bull cycle active (scanner Cycle = ▲ blue)<br>
-      ✅ Price above VWAP<br>
-      ✅ EMA 62 Touch signal (scanner ML/touch = "Touch")<br>
-      ✅ Heiken Ashi candles turning blue after pullback<br>
-      ✅ ADR has room (Real Time ADR not over-extended)<br>
-      ✅ At or near a Magic Line support level
-    </p>
-  </div>
-
-  <div class="tip-box danger">
-    <div class="tip-label red">High-Probability Sell Setup</div>
-    <p>
-      ✅ Bear cycle active (scanner Cycle = ▼ red)<br>
-      ✅ Price below VWAP<br>
-      ✅ EMA 62 Touch signal from below<br>
-      ✅ Heiken Ashi candles turning red after pullback<br>
-      ✅ ADR has room<br>
-      ✅ At or near a Magic Line resistance level
-    </p>
-  </div>
-
-  <h3>Stop Loss &amp; Take Profit Levels</h3>
-  <table class="feature-table">
-    <tr><th>Method</th><th>Stop Loss</th><th>Take Profit</th></tr>
-    <tr><td class="label">EMA Touch</td><td>Beyond the opposite side of the EMA 62 (5-15 pips buffer)</td><td>Next Magic Line level or opposite APH/APL</td></tr>
-    <tr><td class="label">Re-Entry</td><td>Below/above the pullback extreme</td><td>Previous high/low or 1:2 risk-reward</td></tr>
-    <tr><td class="label">ML Bounce</td><td>Beyond the Magic Line by 10-20 pips</td><td>Next ML level in trade direction</td></tr>
-    <tr><td class="label">VWAP Cross</td><td>Opposite side of VWAP + buffer</td><td>Session high/low or ADR target</td></tr>
-  </table>
-</div>
-</section>
-
-<!-- MAGIC LINES -->
-<section id="magic-lines">
-<div class="container">
-  <h2><span class="icon gold">✨</span> Understanding Magic Lines</h2>
-  <p class="section-subtitle">The horizontal levels that give this indicator its name</p>
-
-  <p>Magic Lines are automatically drawn horizontal price levels that mark <strong>APH (All-Time Peak High)</strong> and <strong>APL (All-Time Peak Low)</strong> structures identified by the ZigZag analysis. These are the levels where institutional order flow is concentrated.</p>
-
-  <h3>How Magic Lines Are Calculated</h3>
-  <ol class="step-list">
-    <li>
-      <strong>ZigZag identifies swing points</strong>
-      <p>The triple ZigZag system (Large, Medium, Small) locates swing highs and lows across multiple depth levels.</p>
-    </li>
-    <li>
-      <strong>APH/APL classification</strong>
-      <p>Each swing point is classified as an <strong>APH</strong> (Absolute Price High — a peak that hasn't been broken) or <strong>APL</strong> (Absolute Price Low — a trough that hasn't been broken).</p>
-    </li>
-    <li>
-      <strong>Lines drawn at key levels</strong>
-      <p>Horizontal trend lines are drawn at each confirmed APH/APL level. These extend to the right as potential future support/resistance. Each is labeled (ML 1, ML 2, etc.).</p>
-    </li>
-    <li>
-      <strong>Age tracking (Days)</strong>
-      <p>The scanner shows how many days ago each APH/APL was formed. Recent levels (1-3 days) are most reactive; older levels (10+ days) are more structural.</p>
-    </li>
-  </ol>
-
-  <h3>Reading ML Levels in the Scanner</h3>
-  <table class="feature-table">
-    <tr><th>Column</th><th>Shows</th><th>Example</th><th>Meaning</th></tr>
-    <tr><td class="label">APH/APL-Days</td><td>Current TF APH/APL + age</td><td><span style="color:var(--accent-blue)">APH 2.3</span></td><td>APH formed 2.3 days ago on current TF</td></tr>
-    <tr><td class="label">APH/L.H1-Days</td><td>H1 TF APH/APL + age</td><td><span style="color:var(--accent-red)">APL 5.1</span></td><td>APL formed 5.1 days ago on H1</td></tr>
-    <tr><td class="label">APH/L.H4-Days</td><td>H4 TF APH/APL + age</td><td><span style="color:var(--accent-blue)">APH 12.0</span></td><td>APH formed 12 days ago on H4</td></tr>
-    <tr><td class="label">ML/touch</td><td>EMA 62 touch status</td><td><span style="color:var(--accent-green)">Touch</span></td><td>Price currently touching the EMA 62</td></tr>
-  </table>
-
-  <div class="tip-box">
-    <div class="tip-label blue">Key Insight</div>
-    <p>When APH/APL levels from <strong>multiple timeframes converge</strong> at the same price area (current TF + H1 + H4 all showing similar levels), that creates a <strong>confluence zone</strong> — the most powerful Magic Line setups.</p>
-  </div>
-</div>
-</section>
-
-<!-- SCANNER -->
-<section id="scanner">
-<div class="container">
-  <h2><span class="icon purple">📋</span> Multi-Pair Scanner Dashboard</h2>
-  <p class="section-subtitle">Understanding and using the canvas-based scanner panel</p>
-
-  <h3>Scanner Layout Preview</h3>
-  <div class="scanner-preview">
-    <div class="scanner-header">
-      <span class="title">G-LABS MAGIC LINES — SCANNER</span>
-      <div class="controls">
-        <span style="background:var(--accent-blue);border-radius:2px;width:10px;height:10px;"></span>
-        <span style="background:var(--accent-orange);border-radius:2px;width:10px;height:10px;"></span>
-        <span style="background:var(--accent-red);border-radius:2px;width:10px;height:10px;"></span>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-header"><div class="dot" style="background:var(--accent-blue)"></div><h4>Heiken Ashi Candles</h4></div>
+        <p>Volume-weighted 6-colour HA candles. Dark red/Red/Orange for bears, Dark blue/Blue/Light blue for bulls. Volume intensity shows conviction.</p>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="dot" style="background:var(--accent-gold)"></div><h4>VWAP (Auto-Anchor)</h4></div>
+        <p>Volume Weighted Average Price that auto-adjusts its anchor period based on your chart timeframe. Daily on M1-M15, Weekly on M30-H1, Monthly on H1-H4.</p>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="dot" style="background:var(--accent-cyan)"></div><h4>EMA 62</h4></div>
+        <p>Colour-coded trend line &mdash; blue when price is above (bullish), red when below (bearish). The key level for cycle detection alongside VWAP.</p>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="dot" style="background:var(--accent-green)"></div><h4>Triple ZigZag</h4></div>
+        <p>Large (150/24), Medium (34/6), and Small (14/3) ZigZag levels shown as semafor dots. Visual reference only &mdash; not used in signal logic.</p>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="dot" style="background:var(--accent-orange)"></div><h4>Smart Entry System</h4></div>
+        <p>Entry at HA midpoint with ADR-based SL and Magic Line TP targets. Each label shows pip distance, R:R ratio, and partial close suggestions.</p>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="dot" style="background:var(--accent-purple)"></div><h4>Multi-Pair Scanner</h4></div>
+        <p>9-column live scanner showing cycle direction, ADR%, EMA touch status, re-entry signals, and confluence score across up to 8 pairs.</p>
       </div>
     </div>
-    <div class="scanner-body">
-      <table class="scanner-table">
-        <tr>
-          <th>Pair</th><th>Cycle</th><th>APH/APL-Days</th><th>APH/L.H1-Days</th><th>APH/L.H4-Days</th>
-          <th>Real Time ADR</th><th>ML/touch</th><th>Re-Entry</th><th>ADR/Pips</th><th>Todays Range/Pips</th>
-        </tr>
-        <tr>
-          <td style="color:#ff8c00;font-weight:700;">EURUSD</td>
-          <td style="color:#1e90ff;">▲</td>
-          <td style="color:#1e90ff;">APH 1.2</td>
-          <td style="color:#1e90ff;">APH 3.5</td>
-          <td style="color:#dc3545;">APL 8.1</td>
-          <td style="color:#1e90ff;">0.00234</td>
-          <td style="color:#28a745;font-weight:700;">Touch</td>
-          <td style="color:#64748b;">--</td>
-          <td style="color:#1e90ff;">82</td>
-          <td style="color:#1e90ff;">45</td>
-        </tr>
-        <tr>
-          <td>GBPUSD</td>
-          <td style="color:#dc3545;">▼</td>
-          <td style="color:#dc3545;">APL 0.8</td>
-          <td style="color:#dc3545;">APL 2.1</td>
-          <td style="color:#dc3545;">APL 5.6</td>
-          <td style="color:#dc3545;">-0.00156</td>
-          <td style="color:#64748b;">--</td>
-          <td style="color:#dc3545;">▼</td>
-          <td style="color:#dc3545;">95</td>
-          <td style="color:#dc3545;">67</td>
-        </tr>
-        <tr>
-          <td>USDJPY</td>
-          <td style="color:#1e90ff;">▲</td>
-          <td style="color:#1e90ff;">APH 4.3</td>
-          <td style="color:#64748b;">--</td>
-          <td style="color:#1e90ff;">APH 15.2</td>
-          <td style="color:#1e90ff;">1.245</td>
-          <td style="color:#64748b;">--</td>
-          <td style="color:#1e90ff;">▲</td>
-          <td style="color:#1e90ff;">110</td>
-          <td style="color:#1e90ff;">55</td>
-        </tr>
-        <tr>
-          <td>XAUUSD</td>
-          <td style="color:#1e90ff;">▲</td>
-          <td style="color:#1e90ff;">APH 0.5</td>
-          <td style="color:#1e90ff;">APH 1.8</td>
-          <td style="color:#1e90ff;">APH 6.2</td>
-          <td style="color:#1e90ff;">12.50</td>
-          <td style="color:#28a745;font-weight:700;">Touch</td>
-          <td style="color:#64748b;">--</td>
-          <td style="color:#1e90ff;">2800</td>
-          <td style="color:#1e90ff;">1450</td>
-        </tr>
-      </table>
-    </div>
   </div>
-
-  <h3>Scanner Column Reference</h3>
-  <table class="feature-table">
-    <tr><th>#</th><th>Column</th><th>Description</th><th>Key Values</th></tr>
-    <tr><td>1</td><td class="label">Pair</td><td>Symbol name. Click to switch chart to that pair.</td><td>Current pair highlighted in orange</td></tr>
-    <tr><td>2</td><td class="label">Cycle</td><td>Current bull/bear cycle direction</td><td><span style="color:#1e90ff">▲</span> = Bull, <span style="color:#dc3545">▼</span> = Bear</td></tr>
-    <tr><td>3</td><td class="label">APH/APL-Days</td><td>Current TF: latest APH or APL + days since formation</td><td>Blue = APH, Red = APL</td></tr>
-    <tr><td>4</td><td class="label">APH/L.TF1-Days</td><td>First additional TF: APH/APL + age in days</td><td>Same color coding</td></tr>
-    <tr><td>5</td><td class="label">APH/L.TF2-Days</td><td>Second additional TF: APH/APL + age in days</td><td>Same color coding</td></tr>
-    <tr><td>6</td><td class="label">Real Time ADR</td><td>Current distance from EMA relative to ADR</td><td>Blue = room, Red = over-extended</td></tr>
-    <tr><td>7</td><td class="label">ML/touch</td><td>Whether price is touching the EMA 62</td><td><span style="color:#28a745">Touch</span> = active signal</td></tr>
-    <tr><td>8</td><td class="label">Re-Entry</td><td>Re-entry signal status after pullback</td><td>▲/▼ with direction, or "--"</td></tr>
-    <tr><td>9</td><td class="label">ADR/Pips</td><td>Average Daily Range in pips</td><td>Color matches cycle direction</td></tr>
-    <tr><td>10</td><td class="label">Todays Range/Pips</td><td>Today's actual range in pips so far</td><td>Compare to ADR for extension risk</td></tr>
-  </table>
-
-  <h3>Scanner Interaction</h3>
-  <div class="columns">
-    <div class="card">
-      <h4>🖱️ Click to Switch Pair</h4>
-      <p>Click any pair name in the first column to instantly switch your chart to that symbol. The chart timeframe stays the same.</p>
-    </div>
-    <div class="card">
-      <h4>📌 Drag to Move</h4>
-      <p>Click and drag the title bar to reposition the scanner panel anywhere on your chart.</p>
-    </div>
-    <div class="card">
-      <h4>➖ Minimize</h4>
-      <p>Click the minimize button to collapse the panel. Position and minimize state persist across timeframe changes.</p>
-    </div>
-    <div class="card">
-      <h4>📍 Pin/Unpin</h4>
-      <p>Toggle the pin button to lock or unlock the panel position. Unpinned panels can be freely dragged.</p>
-    </div>
-  </div>
-</div>
 </section>
 
-<!-- ALERTS -->
-<section id="alerts">
-<div class="container">
-  <h2><span class="icon orange">🔔</span> Alert System</h2>
-  <p class="section-subtitle">Configuring alerts to never miss a trade setup</p>
+<!-- ========== SETUP ========== -->
+<section id="setup">
+  <div class="container">
+    <h2><span class="icon green">&#x1F527;</span> Installation &amp; Setup</h2>
+    <p class="section-subtitle">Getting Magic Lines v5 running on your MetaTrader 5 charts.</p>
 
-  <h3>Available Alert Types</h3>
-  <table class="feature-table">
-    <tr><th>Alert</th><th>Trigger</th><th>Priority</th><th>Best For</th></tr>
-    <tr><td class="label">Price Crossing Up VWAP</td><td>Close crosses above VWAP</td><td><span class="badge info">Medium</span></td><td>Session bias shift</td></tr>
-    <tr><td class="label">Price Crossing Down VWAP</td><td>Close crosses below VWAP</td><td><span class="badge info">Medium</span></td><td>Session bias shift</td></tr>
-    <tr><td class="label">New Semaphore Level</td><td>Any ZigZag confirms new swing</td><td><span class="badge warn">High</span></td><td>Structure changes</td></tr>
-    <tr><td class="label">Touch 62 EMA</td><td>Price high/low spans the EMA 62</td><td><span class="badge buy">Critical</span></td><td>Entry trigger</td></tr>
-    <tr><td class="label">Cycle Changed</td><td>Bull↔Bear transition</td><td><span class="badge warn">High</span></td><td>Trend reversal</td></tr>
-    <tr><td class="label">Bull Cycle Started</td><td>Cycle turns bullish</td><td><span class="badge buy">High</span></td><td>New trend beginning</td></tr>
-    <tr><td class="label">Bear Cycle Started</td><td>Cycle turns bearish</td><td><span class="badge sell">High</span></td><td>New trend beginning</td></tr>
-    <tr><td class="label">Bull Re-Entry</td><td>Re-entry confirmed in bull cycle</td><td><span class="badge buy">Critical</span></td><td>Continuation trade</td></tr>
-    <tr><td class="label">Bear Re-Entry</td><td>Re-entry confirmed in bear cycle</td><td><span class="badge sell">Critical</span></td><td>Continuation trade</td></tr>
-  </table>
+    <ol class="step-list">
+      <li><strong>Copy the file</strong> <code>G_Labs_Magic_Lines_v5.mq5</code> into your MT5 <code>MQL5\Indicators\</code> folder.</li>
+      <li><strong>Open MetaEditor</strong> (press <span class="kbd">F4</span> in MT5) and find the file in the Navigator under Indicators.</li>
+      <li><strong>Compile</strong> by pressing <span class="kbd">F7</span>. Ensure zero errors in the output log.</li>
+      <li><strong>Drag the indicator</strong> onto any chart. Recommended timeframes: <span class="badge info">M5</span> <span class="badge info">M15</span> <span class="badge info">H1</span></li>
+      <li><strong>Configure inputs</strong> &mdash; adjust scanner pairs, ADR period, session times to match your broker's server time.</li>
+    </ol>
 
-  <h3>Alert Delivery Methods</h3>
-  <p>Each alert can be delivered through four channels (independently toggleable):</p>
-  <div class="card-grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));">
-    <div class="card" style="text-align:center;">
-      <h4>🔊 Sound Alert</h4>
-      <p>Plays a .wav sound file on your PC. Customizable sound file path.</p>
-    </div>
-    <div class="card" style="text-align:center;">
-      <h4>📱 Push Notification</h4>
-      <p>Sends to your MT5 mobile app via MQL5 push notifications.</p>
-    </div>
-    <div class="card" style="text-align:center;">
-      <h4>📧 Email</h4>
-      <p>Sends an email via MT5's configured SMTP settings.</p>
-    </div>
-    <div class="card" style="text-align:center;">
-      <h4>💬 MT5 Alert</h4>
-      <p>Standard MT5 alert popup with the signal details.</p>
+    <div class="tip-box">
+      <div class="tip-label blue">KEY SETTING</div>
+      <p>The <strong>Scanner Pairs</strong> input accepts comma-separated symbols: <code>EURUSD,GBPUSD,USDJPY,AUDUSD,USDCAD,NZDUSD,USDCHF,EURGBP</code>. If your broker uses suffixes (e.g. EURUSD.m), the indicator auto-detects them.</p>
     </div>
   </div>
-
-  <h3>Alert Message Format</h3>
-  <p>All alerts include the indicator name, signal type, symbol, timeframe, price, and timestamp:</p>
-  <div class="tip-box">
-    <div class="tip-label blue">Example Alert</div>
-    <p><code>G-Labs Magic Lines | Bull Re-Entry Started on EURUSD, M15, at 1.08542, 2026.03.02 14:30:00</code></p>
-  </div>
-
-  <div class="tip-box warn">
-    <div class="tip-label orange">Alert Deduplication</div>
-    <p>Alerts use per-bar time tracking to prevent duplicate alerts on the same candle. A new bar must form before the same alert type can fire again for the same pair.</p>
-  </div>
-</div>
 </section>
 
-<!-- HELPER WINDOW -->
+<!-- ========== CYCLE DETECTION ========== -->
+<section id="cycle">
+  <div class="container">
+    <h2><span class="icon blue">&#x1F504;</span> Cycle Detection</h2>
+    <p class="section-subtitle">How v5 identifies bull and bear cycles &mdash; the foundation of the entire entry system.</p>
+
+    <h3>The "Clean Candle" Concept</h3>
+    <p>A <strong>clean bearish HA candle</strong> has its entire body below BOTH the VWAP and the EMA 62, with <em>no upper wick</em> (haHigh equals haOpen). This means sellers completely dominated with zero retracement.</p>
+    <p style="margin-top:8px;">A <strong>clean bullish HA candle</strong> is the mirror &mdash; entire body above both lines, no lower wick.</p>
+
+    <h3>APH Trigger (Bear Cycle Starts)</h3>
+    <div class="tip-box">
+      <div class="tip-label red">APH &mdash; Average Price High</div>
+      <p>When <strong>2 consecutive clean bearish HA candles</strong> appear below both VWAP and EMA, after price was previously bullish or neutral, the indicator records the <strong>highest high</strong> reached during the previous bull run as the APH level. A <span class="badge sell">SELL</span> cycle begins.</p>
+    </div>
+
+    <h3>APL Trigger (Bull Cycle Starts)</h3>
+    <div class="tip-box success">
+      <div class="tip-label green">APL &mdash; Average Price Low</div>
+      <p>When <strong>2 consecutive clean bullish HA candles</strong> appear above both VWAP and EMA, after price was previously bearish or neutral, the indicator records the <strong>lowest low</strong> as the APL level. A <span class="badge buy">BUY</span> cycle begins.</p>
+    </div>
+
+    <h3>Why Two Candles?</h3>
+    <p>A single clean candle can be noise. Two consecutive candles on the same side of both VWAP and EMA confirms a genuine shift in market structure. The <code>NOT isTCls[2]</code> condition ensures we only fire once at the transition, not on every subsequent candle.</p>
+  </div>
+</section>
+
+<!-- ========== ENTRY SYSTEM ========== -->
+<section id="entries">
+  <div class="container">
+    <h2><span class="icon green">&#x1F3AF;</span> Entry System</h2>
+    <p class="section-subtitle">When a cycle change fires, the full entry system draws automatically on the chart.</p>
+
+    <h3>Entry Price</h3>
+    <p>The entry is placed at the <strong>HA candle midpoint</strong>: <code>(haOpen + haClose) / 2</code>. This is more reliable than the close price because it represents the average commitment level of that candle.</p>
+
+    <h3>Lines Drawn on Chart</h3>
+    <table class="feature-table">
+      <tr><th>Line</th><th>Colour</th><th>Description</th></tr>
+      <tr><td class="label">Entry</td><td style="color:var(--accent-gold)">Gold</td><td>HA midpoint + BUY/SELL label + signal quality (STRONG/WEAK based on volume)</td></tr>
+      <tr><td class="label">APH / APL</td><td style="color:var(--accent-blue)">Blue / Red</td><td>Structural level (highest high or lowest low of previous cycle) + age in days</td></tr>
+      <tr><td class="label">Stop Loss</td><td style="color:var(--accent-red)">Red</td><td>Entry &plusmn; ADR &times; SL Multiplier, with pip distance label</td></tr>
+      <tr><td class="label">TP1 (ML 1)</td><td style="color:var(--accent-green)">Green</td><td>Entry &plusmn; 1&times;ADR &mdash; "TP1 (50%) | XXp | 1:X.X"</td></tr>
+      <tr><td class="label">TP2 (ML 2)</td><td style="color:#50ff78">Bright Green</td><td>Entry &plusmn; 2&times;ADR &mdash; "TP2 (30%) | XXp | 1:X.X"</td></tr>
+      <tr><td class="label">TP3 (ML 3)</td><td style="color:var(--accent-gold)">Gold</td><td>Entry &plusmn; 3&times;ADR &mdash; "TP3 (20%) | XXp | 1:X.X"</td></tr>
+      <tr><td class="label">Breakeven</td><td style="color:#666">Grey dotted</td><td>Appears at entry price when TP1 is hit &mdash; "BE (move SL here)"</td></tr>
+    </table>
+
+    <h3>Signal Quality Rating</h3>
+    <p>Each entry is rated based on volume at the trigger candle:</p>
+    <ul style="margin:12px 0 0 20px;color:var(--text-secondary);">
+      <li><strong>STRONG</strong> &mdash; Volume &gt; 1.5&times; the 21-bar average. High conviction.</li>
+      <li><strong>(no label)</strong> &mdash; Normal volume. Standard signal.</li>
+      <li><strong>WEAK</strong> &mdash; Volume &lt; 0.8&times; average. Low conviction, trade with caution.</li>
+    </ul>
+
+    <h3>Partial Close Strategy</h3>
+    <div class="tip-box success">
+      <div class="tip-label green">RECOMMENDED</div>
+      <p>Close 50% at TP1, move SL to breakeven. Close 30% at TP2, move SL to ML1. Let the remaining 20% run to TP3. This locks in profit while allowing for extension moves.</p>
+    </div>
+
+    <h3>Understanding ADR-Based Targets</h3>
+    <p>Magic Lines are <strong>not</strong> traditional support/resistance. They are ADR-projected price targets measured from the entry. The ADR (Average Daily Range) is calculated over the last 15 days by default. If a pair's ADR is 80 pips, then ML1 is 80 pips from entry, ML2 is 160 pips, ML3 is 240 pips. This scales dynamically with volatility.</p>
+  </div>
+</section>
+
+<!-- ========== MAGIC LINES ========== -->
+<section id="magic-lines">
+  <div class="container">
+    <h2><span class="icon gold">&#x2728;</span> Understanding Magic Lines</h2>
+    <p class="section-subtitle">The core concept that gives the indicator its name.</p>
+
+    <h3>What Are Magic Lines?</h3>
+    <p>Magic Lines are <strong>ADR-based take-profit targets</strong> projected from the entry price when a new cycle starts. They represent where price is statistically likely to reach based on average daily volatility.</p>
+
+    <div class="columns">
+      <div class="card">
+        <div class="card-header"><div class="dot" style="background:var(--accent-green)"></div><h4>Buy Cycle (APL)</h4></div>
+        <ul>
+          <li>ML 1 = Entry + 1&times;ADR (first target)</li>
+          <li>ML 2 = Entry + 2&times;ADR (extension)</li>
+          <li>ML 3 = Entry + 3&times;ADR (full extension)</li>
+          <li>SL = Entry &minus; ADR &times; SL multiplier</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="dot" style="background:var(--accent-red)"></div><h4>Sell Cycle (APH)</h4></div>
+        <ul>
+          <li>ML 1 = Entry &minus; 1&times;ADR (first target)</li>
+          <li>ML 2 = Entry &minus; 2&times;ADR (extension)</li>
+          <li>ML 3 = Entry &minus; 3&times;ADR (full extension)</li>
+          <li>SL = Entry + ADR &times; SL multiplier</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>ADR Multiplier Inputs</h3>
+    <table class="feature-table">
+      <tr><th>Input</th><th>Default</th><th>Purpose</th></tr>
+      <tr><td class="label">ADR Period</td><td>15</td><td>Number of days used to calculate average daily range</td></tr>
+      <tr><td class="label">ADR Multiplier (TP)</td><td>1.0</td><td>Scales target distances. Set to 0.8 for tighter targets, 1.2 for wider</td></tr>
+      <tr><td class="label">ADR Multiplier (SL)</td><td>1.0</td><td>Scales stop loss distance. Set to 0.5 for tighter stops</td></tr>
+      <tr><td class="label">Number of Lines</td><td>4</td><td>Total lines: 1 SL + (N-1) ML targets. Default = 1 SL + 3 TPs</td></tr>
+      <tr><td class="label">Line Extension</td><td>150</td><td>How far right (in bars) the lines extend</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ========== RE-ENTRY ========== -->
+<section id="reentry">
+  <div class="container">
+    <h2><span class="icon orange">&#x1F501;</span> Re-Entry Signals</h2>
+    <p class="section-subtitle">Catching the second (and third) wave within an existing cycle.</p>
+
+    <h3>How Re-Entry Works</h3>
+    <p>After an APL or APH sets the cycle direction, price may retrace before continuing. The re-entry system catches these pullbacks:</p>
+
+    <ol class="step-list">
+      <li><strong>Cycle is active</strong> &mdash; An APL (bull) or APH (bear) has already fired.</li>
+      <li><strong>Pullback detected</strong> &mdash; Price crosses to the <em>opposite</em> side of both VWAP and EMA. This "arms" the re-entry trigger.</li>
+      <li><strong>Resumption confirmed</strong> &mdash; 2 consecutive clean HA candles appear back on the correct side of VWAP+EMA. The re-entry fires.</li>
+    </ol>
+
+    <h3>What Appears on the Chart</h3>
+    <ul style="margin:12px 0 0 20px;color:var(--text-secondary);">
+      <li><strong>Diamond arrow</strong> (blue for bull, red for bear) at the re-entry bar</li>
+      <li><strong>Gold horizontal line</strong> at the HA midpoint, labeled "Re-Entry #1", "#2", etc.</li>
+      <li><strong>"RE#N" text label</strong> directly on the chart for quick visual identification</li>
+    </ul>
+
+    <div class="tip-box warn">
+      <div class="tip-label orange">IMPORTANT</div>
+      <p>Re-entry lines and labels are automatically cleared when a new cycle starts (new APH or APL). Each cycle tracks its own re-entry count from zero.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SCANNER ========== -->
+<section id="scanner">
+  <div class="container">
+    <h2><span class="icon purple">&#x1F4CB;</span> Multi-Pair Scanner</h2>
+    <p class="section-subtitle">Live dashboard showing the state of up to 8 pairs at a glance.</p>
+
+    <div class="scanner-preview">
+      <div class="scanner-header">
+        <span class="title">MAGIC LINES v5</span>
+        <span style="color:var(--accent-cyan);font-size:0.8rem;">LDN NY</span>
+      </div>
+      <div class="scanner-body">
+        <table class="scanner-table">
+          <tr><th>PAIR</th><th>DIR</th><th>HTF</th><th>ADR%</th><th>EMA</th><th>RE</th><th>CF</th><th>ADR</th><th>RNG</th></tr>
+          <tr><td style="color:var(--accent-orange)">EURUSD</td><td style="color:var(--accent-blue)">BUY</td><td style="color:var(--accent-blue)">BULL</td><td style="color:#fff">42%</td><td style="color:var(--accent-green)">YES</td><td style="color:#555">-</td><td style="color:var(--accent-green)">4</td><td>78</td><td>33</td></tr>
+          <tr><td>GBPUSD</td><td style="color:var(--accent-red)">SEL</td><td style="color:var(--accent-red)">BEAR</td><td style="color:var(--accent-orange)">81%</td><td style="color:#555">-</td><td style="color:var(--accent-red)">SEL</td><td style="color:var(--accent-orange)">3</td><td>112</td><td>91</td></tr>
+          <tr><td>USDJPY</td><td style="color:var(--accent-blue)">BUY</td><td style="color:var(--accent-blue)">BULL</td><td style="color:var(--accent-blue)">67%</td><td style="color:#555">-</td><td style="color:#555">-</td><td style="color:var(--accent-blue)">2</td><td>95</td><td>64</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <h3>Column Descriptions</h3>
+    <table class="feature-table">
+      <tr><th>Column</th><th>What It Shows</th></tr>
+      <tr><td class="label">PAIR</td><td>Symbol name (click to switch chart). Current pair highlighted in orange.</td></tr>
+      <tr><td class="label">DIR</td><td>Current timeframe cycle: <span class="badge buy">BUY</span> or <span class="badge sell">SEL</span> based on close vs EMA</td></tr>
+      <tr><td class="label">HTF</td><td>Higher timeframe bias (configurable, default H1): <span style="color:var(--accent-blue)">BULL</span> / <span style="color:var(--accent-red)">BEAR</span></td></tr>
+      <tr><td class="label">ADR%</td><td>Today's range as % of average daily range. White &lt;50%, Blue &lt;75%, Orange &lt;100%, <span style="color:var(--accent-red)">Red &ge;100%</span></td></tr>
+      <tr><td class="label">EMA</td><td><span style="color:var(--accent-green)">YES</span> if current candle is touching the EMA, otherwise <span style="color:#555">&ndash;</span></td></tr>
+      <tr><td class="label">RE</td><td>Re-entry signal active: <span class="badge buy">BUY</span> / <span class="badge sell">SEL</span> or <span style="color:#555">&ndash;</span></td></tr>
+      <tr><td class="label">CF</td><td>Confluence score 0&ndash;5. <span style="color:var(--accent-green)">4+ = Strong</span>, <span style="color:var(--accent-orange)">3 = Moderate</span>, <span style="color:var(--accent-blue)">2 = Building</span></td></tr>
+      <tr><td class="label">ADR</td><td>Average Daily Range in pips</td></tr>
+      <tr><td class="label">RNG</td><td>Today's range so far in pips</td></tr>
+    </table>
+
+    <div class="tip-box">
+      <div class="tip-label blue">PERFORMANCE NOTE</div>
+      <p>The scanner uses lightweight iMA handles instead of loading the full indicator per pair. No iCustom calls. This keeps CPU usage minimal even with 8 pairs scanning.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== HELPER ========== -->
 <section id="helper">
-<div class="container">
-  <h2><span class="icon cyan">💡</span> Helper Window (Recommended Addition)</h2>
-  <p class="section-subtitle">A proposed on-chart helper panel for quick reference — requires source code modification</p>
+  <div class="container">
+    <h2><span class="icon cyan">&#x1F4A1;</span> Trade Helper Window</h2>
+    <p class="section-subtitle">Real-time trade assistant in the bottom-left corner of your chart.</p>
 
-  <div class="tip-box warn">
-    <div class="tip-label orange">Source Code Required</div>
-    <p>The Magic Lines v4 source code is <strong>obfuscated</strong> — all variable/function names are mangled. To add a helper window, you need the original un-obfuscated source. The recommendations below describe exactly what to build.</p>
-  </div>
+    <h3>Helper Fields</h3>
+    <table class="feature-table">
+      <tr><th>Field</th><th>Description</th></tr>
+      <tr><td class="label">Cycle</td><td>Current confirmed cycle: BULL (APL), BEAR (APH), or FLAT</td></tr>
+      <tr><td class="label">VWAP</td><td>Distance from VWAP in pips. Blue = above, Red = below</td></tr>
+      <tr><td class="label">EMA 62</td><td>Distance from EMA in pips. Green when within 15 pips (touch imminent)</td></tr>
+      <tr><td class="label">ADR Used</td><td>Percentage of average daily range consumed today. Red when &gt;90%</td></tr>
+      <tr><td class="label">Near ML</td><td>Distance to the nearest Magic Line target. Gold when close (&lt;20 pips)</td></tr>
+      <tr><td class="label">Quality</td><td>Signal rating 1&ndash;5 stars based on volume, ADR remaining, VWAP position, and cycle status</td></tr>
+      <tr><td class="label">Trail SL</td><td>Dynamic suggestion: "SL at original" &rarr; "Move SL to Breakeven" (TP1 hit) &rarr; "Move SL to ML1" (TP2 hit)</td></tr>
+      <tr><td class="label">Confluence</td><td>Score out of 5 combining cycle, VWAP alignment, EMA proximity, ADR capacity, and ML proximity</td></tr>
+      <tr><td class="label">Action</td><td>Trade recommendation: STRONG BUY/SELL, WATCH ENTRY, BUILDING, or NO SETUP</td></tr>
+    </table>
 
-  <h3>Proposed Helper Window Design</h3>
-  <p>A small, collapsible panel in the top-left corner that shows context-sensitive help based on the current market state:</p>
-
-  <div class="card-grid">
-    <div class="card">
-      <h4>📊 Current State Summary</h4>
-      <ul>
-        <li>Active cycle direction + strength</li>
-        <li>Distance to nearest Magic Line (pips)</li>
-        <li>VWAP position (above/below + distance)</li>
-        <li>EMA 62 touch proximity (%)</li>
-        <li>ADR used today (%)</li>
-      </ul>
-    </div>
-    <div class="card">
-      <h4>🎯 Active Signal Panel</h4>
-      <ul>
-        <li>Flashing indicator when a signal is active</li>
-        <li>Signal type (Touch / Re-Entry / VWAP Cross)</li>
-        <li>Suggested direction (BUY/SELL)</li>
-        <li>Confidence score (number of confluences)</li>
-        <li>Risk level based on ADR extension</li>
-      </ul>
-    </div>
-    <div class="card">
-      <h4>📋 Quick Stats</h4>
-      <ul>
-        <li>Win rate of recent signals (backtest)</li>
-        <li>Average pips per signal type</li>
-        <li>Best performing pairs today</li>
-        <li>Session status (London/NY/Asian)</li>
-        <li>Time to next session open</li>
-      </ul>
-    </div>
-    <div class="card">
-      <h4>❓ Context Help</h4>
-      <ul>
-        <li>Hover any scanner cell for a tooltip</li>
-        <li>"What should I do now?" summary</li>
-        <li>Explanation of current HA candle color</li>
-        <li>Quick glossary: APH, APL, ML, ADR</li>
-        <li>Link to this HTML guide</li>
-      </ul>
+    <div class="tip-box warn">
+      <div class="tip-label orange">ADR EXHAUSTION</div>
+      <p>When ADR Used exceeds 90%, the helper displays a red warning: <strong>"ADR EXHAUSTED &mdash; AVOID ENTRIES"</strong>. Price has already moved its average full-day range, making new entries high-risk.</p>
     </div>
   </div>
-
-  <h3>Implementation Blueprint (MQL5)</h3>
-  <p>To implement the helper window in the un-obfuscated source:</p>
-  <ol class="step-list">
-    <li>
-      <strong>Create a second CCanvas object</strong>
-      <p>Use the same <code>CCanvas</code> class the scanner already uses. Position it at <code>x=10, y=80</code> with a width of ~280px.</p>
-    </li>
-    <li>
-      <strong>Add a toggle input parameter</strong>
-      <p>Add <code>input bool ShowHelperWindow = true;</code> so users can enable/disable it.</p>
-    </li>
-    <li>
-      <strong>Populate in OnTimer()</strong>
-      <p>Update the helper content in the <code>OnTimer()</code> function alongside the scanner refresh. Calculate confluence score from: cycle direction, VWAP position, EMA touch, ADR room.</p>
-    </li>
-    <li>
-      <strong>Color-code the confidence</strong>
-      <p>0-1 confluences = gray (no trade), 2-3 = orange (watch), 4-5 = green (high probability).</p>
-    </li>
-  </ol>
-</div>
 </section>
 
-<!-- PERFORMANCE -->
-<section id="performance">
-<div class="container">
-  <h2><span class="icon red">⚡</span> Performance Optimization</h2>
-  <p class="section-subtitle">Fixing lag, reducing CPU usage, and making the indicator run faster</p>
+<!-- ========== BUTTONS ========== -->
+<section id="buttons">
+  <div class="container">
+    <h2><span class="icon gold">&#x1F39B;</span> Toggle Buttons</h2>
+    <p class="section-subtitle">Clickable toolbar at the top of the chart for toggling features on and off.</p>
 
-  <h3>Current Performance Bottlenecks</h3>
-  <div class="improvement-card perf">
-    <div class="imp-header">
-      <span class="imp-tag perf">CRITICAL</span>
-      <h4>iCustom Multi-Pair Loading (3x per pair)</h4>
-    </div>
-    <p>Each scanned pair creates <strong>three</strong> separate iCustom handles — one for the current timeframe plus two additional timeframes. With 10 pairs, that's <strong>30 indicator instances</strong> running simultaneously, each computing Heiken Ashi, VWAP, EMA, and triple ZigZag calculations.</p>
-    <p style="margin-top:8px;"><strong>Fix:</strong> Reduce scanner pairs to 5-8 maximum. Disable the second additional timeframe if not needed. Consider using a lighter "scanner-only" version of the indicator that skips chart drawing.</p>
+    <table class="feature-table">
+      <tr><th>Button</th><th>Toggles</th><th>Default</th></tr>
+      <tr><td class="label">HA</td><td>Heiken Ashi candle overlay</td><td><span class="badge buy">ON</span></td></tr>
+      <tr><td class="label">VWAP</td><td>VWAP line</td><td><span class="badge buy">ON</span></td></tr>
+      <tr><td class="label">EMA</td><td>EMA 62 colour line</td><td><span class="badge buy">ON</span></td></tr>
+      <tr><td class="label">ZZ</td><td>All three ZigZag levels</td><td><span class="badge buy">ON</span></td></tr>
+      <tr><td class="label">ML</td><td>Entry lines, SL, and Magic Line TP targets</td><td><span class="badge buy">ON</span></td></tr>
+      <tr><td class="label">SESS</td><td>Session vertical markers (London, NY, Asian)</td><td><span class="badge buy">ON</span></td></tr>
+      <tr><td class="label">SIG</td><td>APH/APL signal arrows and re-entry arrows</td><td><span class="badge buy">ON</span></td></tr>
+      <tr><td class="label">SCAN</td><td>Multi-pair scanner dashboard</td><td><span class="badge buy">ON</span></td></tr>
+      <tr><td class="label">HELP</td><td>Trade helper window</td><td><span class="badge buy">ON</span></td></tr>
+    </table>
+
+    <p style="margin-top:16px;color:var(--text-secondary);">Buttons glow blue when active and go dark when disabled. Click the button or its label text to toggle. All toggles are instant &mdash; no need to reopen settings.</p>
   </div>
-
-  <div class="improvement-card perf">
-    <div class="imp-header">
-      <span class="imp-tag perf">HIGH</span>
-      <h4>Canvas Redraw on Every Timer Tick</h4>
-    </div>
-    <p>The canvas-based dashboard redraws the entire panel on every <code>OnTimer()</code> call, even when no data has changed. Canvas bitmap operations are expensive.</p>
-    <p style="margin-top:8px;"><strong>Fix:</strong> Add dirty-flag tracking — only redraw cells whose values actually changed. Cache the previous scanner data array and compare before redrawing.</p>
-  </div>
-
-  <div class="improvement-card perf">
-    <div class="imp-header">
-      <span class="imp-tag perf">MEDIUM</span>
-      <h4>66 Indicator Buffers + 65 Plots</h4>
-    </div>
-    <p>The indicator declares <code>indicator_buffers 66</code> and <code>indicator_plots 65</code>. Each buffer consumes memory proportional to the chart's bar count. On a chart with 100K bars, that's significant.</p>
-    <p style="margin-top:8px;"><strong>Fix:</strong> Audit which buffers are actually needed for display vs. internal calculation. Internal-only buffers can use arrays instead of indicator buffers.</p>
-  </div>
-
-  <div class="improvement-card perf">
-    <div class="imp-header">
-      <span class="imp-tag perf">MEDIUM</span>
-      <h4>Chart Object Accumulation</h4>
-    </div>
-    <p>Magic Lines, labels, and trend lines are created as chart objects. Without cleanup, these accumulate over time and slow down chart rendering.</p>
-    <p style="margin-top:8px;"><strong>Fix:</strong> The <code>OnDeinit()</code> already cleans up objects with the indicator prefix. Ensure <code>ObjectsDeleteAll()</code> runs properly. Limit the maximum number of historical ML lines drawn.</p>
-  </div>
-
-  <h3>Quick Performance Fixes (No Code Changes)</h3>
-  <table class="feature-table">
-    <tr><th>Action</th><th>Impact</th><th>How</th></tr>
-    <tr><td class="label">Reduce scanner pairs</td><td>🟢 High</td><td>Use 5-8 pairs instead of 15+</td></tr>
-    <tr><td class="label">Disable unused ZigZag levels</td><td>🟡 Medium</td><td>Turn off Large or Medium if not used</td></tr>
-    <tr><td class="label">Reduce chart history</td><td>🟢 High</td><td>MT5 → Tools → Options → Charts → Max bars = 5000</td></tr>
-    <tr><td class="label">Use M15+ timeframes</td><td>🟡 Medium</td><td>M1/M5 have far more bars to process</td></tr>
-    <tr><td class="label">Close other indicators</td><td>🟡 Medium</td><td>Remove overlapping indicators</td></tr>
-    <tr><td class="label">Hardware acceleration</td><td>🟢 High</td><td>MT5 → Tools → Options → Charts → Enable hardware acceleration</td></tr>
-  </table>
-</div>
 </section>
 
-<!-- IMPROVEMENTS -->
-<section id="improvements">
-<div class="container">
-  <h2><span class="icon gold">🚀</span> Recommended Improvements</h2>
-  <p class="section-subtitle">Enhancements to make Magic Lines truly amazing (requires un-obfuscated source)</p>
+<!-- ========== ALERTS ========== -->
+<section id="alerts">
+  <div class="container">
+    <h2><span class="icon orange">&#x1F514;</span> Alert System</h2>
+    <p class="section-subtitle">Never miss a cycle change, re-entry, or VWAP cross.</p>
 
-  <div class="improvement-card feature">
-    <div class="imp-header">
-      <span class="imp-tag feature">FEATURE</span>
-      <h4>1. Confluence Score System</h4>
-    </div>
-    <p>Add a 0-5 score for each pair calculated from: cycle direction alignment (+1), VWAP position (+1), EMA 62 touch (+1), ADR room (+1), multi-TF APH/APL agreement (+1). Display as a color-coded number in a new scanner column. Filter scanner to only show pairs with score ≥ 3.</p>
-  </div>
+    <h3>Alert Types</h3>
+    <table class="feature-table">
+      <tr><th>Alert</th><th>Fires When</th></tr>
+      <tr><td class="label">BULL Cycle (APL)</td><td>New bull cycle starts &mdash; 2 clean bull candles above VWAP+EMA after bear period</td></tr>
+      <tr><td class="label">BEAR Cycle (APH)</td><td>New bear cycle starts &mdash; 2 clean bear candles below VWAP+EMA after bull period</td></tr>
+      <tr><td class="label">Bull Re-Entry</td><td>Re-entry signal in a bull cycle (pullback then resume)</td></tr>
+      <tr><td class="label">Bear Re-Entry</td><td>Re-entry signal in a bear cycle</td></tr>
+      <tr><td class="label">VWAP Cross UP</td><td>Price closes above VWAP after being below</td></tr>
+      <tr><td class="label">VWAP Cross DOWN</td><td>Price closes below VWAP after being above</td></tr>
+    </table>
 
-  <div class="improvement-card visual">
-    <div class="imp-header">
-      <span class="imp-tag visual">VISUAL</span>
-      <h4>2. Scanner Visual Overhaul</h4>
+    <h3>Delivery Methods</h3>
+    <div class="columns">
+      <div class="card">
+        <div class="card-header"><div class="dot" style="background:var(--accent-green)"></div><h4>4 Delivery Options</h4></div>
+        <ul>
+          <li><strong>MT5 Alert Popup</strong> &mdash; Standard alert dialog (default: ON)</li>
+          <li><strong>Sound</strong> &mdash; Plays alert.wav (default: ON)</li>
+          <li><strong>Push Notification</strong> &mdash; To your phone via MetaTrader app (default: OFF)</li>
+          <li><strong>Email</strong> &mdash; To configured SMTP in MT5 (default: OFF)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="dot" style="background:var(--accent-blue)"></div><h4>Deduplication</h4></div>
+        <p>All alerts use timestamp-based deduplication. The same alert type will not fire twice on the same bar, preventing alert spam during volatile conditions.</p>
+      </div>
     </div>
-    <p>The current scanner uses a plain table layout. Improvements: add alternating row backgrounds for readability, use gradient fills for the header row, add mini sparkline bars for ADR% used, color-code the entire row background subtly based on cycle direction (faint blue/red tint), add a "last updated" timestamp footer.</p>
   </div>
-
-  <div class="improvement-card feature">
-    <div class="imp-header">
-      <span class="imp-tag feature">FEATURE</span>
-      <h4>3. Trade Entry Lines with SL/TP</h4>
-    </div>
-    <p>When a signal fires (Touch, Re-Entry, ML Bounce), automatically draw: a green entry line at the signal price, a red SL line at the calculated stop loss, a blue TP line at the target. Include pip distance labels on each line. Auto-delete after N bars if trade not taken.</p>
-  </div>
-
-  <div class="improvement-card ux">
-    <div class="imp-header">
-      <span class="imp-tag ux">UX</span>
-      <h4>4. Session Time Zones &amp; Kill Zones</h4>
-    </div>
-    <p>Add vertical background shading for London (08:00-17:00 GMT), New York (13:00-22:00 GMT), and Asian (00:00-09:00 GMT) sessions. Color-code kill zone hours (London open, NY open) where signals are most reliable. Show session countdown timer.</p>
-  </div>
-
-  <div class="improvement-card feature">
-    <div class="imp-header">
-      <span class="imp-tag feature">FEATURE</span>
-      <h4>5. Alert Webhook / Telegram Integration</h4>
-    </div>
-    <p>Add a <code>WebRequest()</code>-based webhook that sends signal data to a custom URL or Telegram bot. Include: signal type, pair, price, direction, confluence score, and a mini chart screenshot URL.</p>
-  </div>
-
-  <div class="improvement-card visual">
-    <div class="imp-header">
-      <span class="imp-tag visual">VISUAL</span>
-      <h4>6. Magic Line Strength Visualization</h4>
-    </div>
-    <p>Not all Magic Lines are equal. Make line thickness proportional to the number of touches/bounces at that level. Add a glow effect (wider semi-transparent line behind the main line) for levels that have been tested 3+ times. Fade out lines that are far from current price.</p>
-  </div>
-
-  <div class="improvement-card perf">
-    <div class="imp-header">
-      <span class="imp-tag perf">PERFORMANCE</span>
-      <h4>7. Lazy Scanner Loading</h4>
-    </div>
-    <p>Instead of loading all pairs on startup, load them one-by-one with a 500ms delay between each. Show a loading progress bar in the scanner. This prevents the initial "MT5 freeze" when the indicator first loads with many pairs.</p>
-  </div>
-
-  <div class="improvement-card ux">
-    <div class="imp-header">
-      <span class="imp-tag ux">UX</span>
-      <h4>8. Signal History Log</h4>
-    </div>
-    <p>Add a scrollable log panel (or write to a CSV file) that records every signal with timestamp, pair, type, price, and outcome (did price reach TP or SL). This gives traders a built-in track record and helps refine which signals work best.</p>
-  </div>
-
-  <div class="improvement-card feature">
-    <div class="imp-header">
-      <span class="imp-tag feature">FEATURE</span>
-      <h4>9. Multi-Timeframe Confirmation Badges</h4>
-    </div>
-    <p>Add small icons next to the pair name showing cycle direction on 3 timeframes simultaneously (e.g., M15▲ H1▲ H4▲). When all three align, add a ⭐ badge. This instantly shows multi-TF alignment without checking multiple charts.</p>
-  </div>
-
-  <div class="improvement-card visual">
-    <div class="imp-header">
-      <span class="imp-tag visual">VISUAL</span>
-      <h4>10. Dynamic ML Zone Boxes</h4>
-    </div>
-    <p>Instead of just horizontal lines, draw semi-transparent rectangular zones around Magic Line clusters. When 2-3 ML levels are within 20 pips of each other, merge them into a "demand/supply zone" box. Label with the number of confluent levels.</p>
-  </div>
-</div>
 </section>
 
-<!-- FAQ -->
+<!-- ========== SESSION MARKERS ========== -->
+<section id="sessions" style="padding:60px 0;">
+  <div class="container">
+    <h2><span class="icon purple">&#x23F0;</span> Session Markers</h2>
+    <p class="section-subtitle">Thin dotted vertical lines mark session open and close times.</p>
+
+    <table class="feature-table">
+      <tr><th>Session</th><th>Default Times</th><th>Colour</th></tr>
+      <tr><td class="label">London</td><td>08:00 &ndash; 17:00 (server time)</td><td><span class="color-swatch"><span class="dot" style="background:#006432"></span> Dark green</span></td></tr>
+      <tr><td class="label">New York</td><td>13:00 &ndash; 22:00</td><td><span class="color-swatch"><span class="dot" style="background:#b46400"></span> Dark orange</span></td></tr>
+      <tr><td class="label">Asian</td><td>00:00 &ndash; 09:00</td><td><span class="color-swatch"><span class="dot" style="background:#3c0064"></span> Dark purple</span></td></tr>
+    </table>
+
+    <p style="margin-top:16px;color:var(--text-secondary);">Session markers use vertical dotted lines instead of filled rectangles. This keeps the chart clean and doesn't obscure price action. Adjust session times in the inputs to match your broker's server timezone.</p>
+  </div>
+</section>
+
+<!-- ========== FAQ ========== -->
 <section id="faq">
-<div class="container">
-  <h2><span class="icon cyan">❓</span> Frequently Asked Questions</h2>
-  <p class="section-subtitle">Common questions and troubleshooting</p>
+  <div class="container">
+    <h2><span class="icon cyan">&#x2753;</span> Frequently Asked Questions</h2>
+    <p class="section-subtitle">Common questions about Magic Lines v5.</p>
 
-  <div class="card" style="margin-bottom:16px;">
-    <h4>Why does the scanner show "--" for some pairs?</h4>
-    <p>The pair may not have enough history loaded, or the symbol name doesn't match your broker's naming convention (e.g., "EURUSD" vs "EURUSD.m" vs "EURUSDm"). Check your broker's exact symbol names in Market Watch.</p>
+    <div class="card" style="margin-bottom:16px;">
+      <h4>Why aren't any entry lines showing?</h4>
+      <p>Entry lines only appear after a cycle change (APH or APL) has fired. If the market hasn't had a clear transition with 2 clean HA candles crossing both VWAP and EMA, no entry will trigger. Try a lower timeframe (M5/M15) for more frequent signals.</p>
+    </div>
+    <div class="card" style="margin-bottom:16px;">
+      <h4>What's the difference between Magic Lines and traditional S/R?</h4>
+      <p>Magic Lines are <strong>forward-projected targets</strong> based on ADR, not historical support/resistance. They represent where price is likely to travel based on average volatility, measured from the entry point. Think of them as statistical price targets.</p>
+    </div>
+    <div class="card" style="margin-bottom:16px;">
+      <h4>How does the VWAP auto-anchor work?</h4>
+      <p>The VWAP resets at different intervals depending on your chart timeframe: Daily for M1-M15, Weekly for M30-H1, Monthly for H1-H4. This ensures VWAP is always relevant to the timeframe you're analysing.</p>
+    </div>
+    <div class="card" style="margin-bottom:16px;">
+      <h4>Can I adjust the signal sensitivity?</h4>
+      <p>The "clean candle" requirement is strict by design &mdash; it filters out noise. To get more signals, lower your chart timeframe. The ADR multipliers control target/SL distances but not signal frequency.</p>
+    </div>
+    <div class="card" style="margin-bottom:16px;">
+      <h4>Why is the scanner showing different data than my chart?</h4>
+      <p>The scanner uses a simplified cycle detection (close vs EMA) for remote pairs, while the chart uses the full HA + VWAP + EMA system. This is by design for performance &mdash; running full calculations across 8 pairs would be too heavy.</p>
+    </div>
+    <div class="card" style="margin-bottom:16px;">
+      <h4>What does the "Quality" rating in the helper mean?</h4>
+      <p>It's a 0&ndash;5 score based on: volume at the cycle change (&gt;1.5x avg = +2), ADR remaining (&lt;70% used = +1), VWAP proximity (&lt;30 pips = +1), and active cycle (+1). Higher scores indicate higher-probability setups.</p>
+    </div>
+    <div class="card">
+      <h4>Does this indicator repaint?</h4>
+      <p>Signals only fire on confirmed bars (when the clean candle conditions are fully met). The ZigZag semafor dots are visual reference only and do not affect signals. Entry lines are drawn at the point of signal confirmation and do not move.</p>
+    </div>
   </div>
-  <div class="card" style="margin-bottom:16px;">
-    <h4>Why is MT5 slow after loading Magic Lines?</h4>
-    <p>The indicator loads 3 iCustom instances per scanner pair. With 10+ pairs, that's 30+ indicator copies. Reduce scanner pairs, increase chart timeframe, and limit max bars in MT5 settings.</p>
-  </div>
-  <div class="card" style="margin-bottom:16px;">
-    <h4>Can I use this with other indicators?</h4>
-    <p>Yes, but since Magic Lines already includes Heiken Ashi, VWAP, EMA, and ZigZag, adding duplicate indicators wastes resources. Consider removing standalone versions of those tools.</p>
-  </div>
-  <div class="card" style="margin-bottom:16px;">
-    <h4>The scanner panel disappeared — how do I get it back?</h4>
-    <p>It may be minimized or positioned off-screen. Remove the indicator and re-add it, which resets the panel position. Alternatively, delete the GlobalVariables with the indicator's name prefix via MT5 → Tools → Global Variables.</p>
-  </div>
-  <div class="card" style="margin-bottom:16px;">
-    <h4>What's the best timeframe for Magic Lines?</h4>
-    <p>M15 and H1 are the sweet spots for forex. M15 gives more frequent signals while H1 gives higher-quality setups. The scanner lets you monitor multiple TFs simultaneously regardless of your chart TF.</p>
-  </div>
-  <div class="card" style="margin-bottom:16px;">
-    <h4>Why can't I edit the source code?</h4>
-    <p>The <code>.mq5</code> file is <strong>obfuscated</strong> — all variable and function names have been replaced with short cryptic identifiers (e.g., <code>c_w_</code>, <code>m_k2</code>, <code>f_j__</code>). This is intentional IP protection. You need the original un-obfuscated source from G-Labs to make modifications.</p>
-  </div>
-  <div class="card" style="margin-bottom:16px;">
-    <h4>How do I add more pairs to the scanner?</h4>
-    <p>The pairs list is configured via input parameters. Look for the symbol array inputs in the indicator settings. Add pairs using your broker's exact symbol names. Remember: each additional pair adds CPU load.</p>
-  </div>
-</div>
 </section>
 
 <!-- FOOTER -->
 <footer class="footer">
   <div class="container">
-    <p><strong>G-Labs Magic Lines v4</strong> — Complete User Guide</p>
-    <p style="margin-top:8px;">Copyright &copy; 2026 G-Labs Software &bull; <a href="http://www.g-labs.software">g-labs.software</a></p>
-    <p style="margin-top:16px;font-size:0.8rem;color:var(--text-muted);">
-      This guide was generated for documentation purposes. Trading involves risk. Past performance is not indicative of future results.
-    </p>
+    <p>G-Labs Magic Lines v5.2 &mdash; User Guide</p>
+    <p style="margin-top:8px;">&copy; 2026 <a href="http://www.g-labs.software">G-Labs Software</a> &bull; Apex Pro Group Ltd</p>
+    <p style="margin-top:12px;font-size:0.8rem;color:var(--text-muted);">This indicator is for educational and informational purposes. Trading involves substantial risk. Past performance does not guarantee future results.</p>
   </div>
 </footer>
 
-<script>
-const tocLinks = document.querySelectorAll('.toc-bar a');
-const sections = document.querySelectorAll('section[id]');
-function activateNav() {
-  let current = '';
-  sections.forEach(s => {
-    if (window.scrollY >= s.offsetTop - 100) current = s.id;
-  });
-  tocLinks.forEach(a => {
-    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
-  });
-}
-window.addEventListener('scroll', activateNav);
-activateNav();
-</script>
 </body>
 </html>
