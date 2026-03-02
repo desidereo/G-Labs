@@ -1,0 +1,1644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connix Smart Trading Dashboard — Complete Trading Guide</title>
+<style>
+  :root {
+    --bg: #0b0e14;
+    --surface: #111620;
+    --surface2: #171d2a;
+    --border: #1e2738;
+    --accent: #3b82f6;
+    --accent2: #8b5cf6;
+    --green: #22c55e;
+    --red: #ef4444;
+    --gold: #eab308;
+    --orange: #f97316;
+    --cyan: #06b6d4;
+    --pink: #ec4899;
+    --text: #e2e8f0;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 16px;
+  }
+
+  /* Sidebar Navigation */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100vh;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    z-index: 100;
+    padding: 20px 0;
+  }
+
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-track { background: transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .sidebar-logo {
+    padding: 10px 24px 24px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+
+  .sidebar-logo h2 {
+    font-size: 18px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+  }
+
+  .sidebar-logo .subtitle {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-top: 4px;
+  }
+
+  .nav-section {
+    padding: 8px 24px 4px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-dim);
+    font-weight: 700;
+  }
+
+  .sidebar a {
+    display: block;
+    padding: 7px 24px 7px 32px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 13.5px;
+    border-left: 3px solid transparent;
+    transition: all 0.15s;
+  }
+
+  .sidebar a:hover {
+    color: var(--text);
+    background: var(--surface2);
+    border-left-color: var(--accent);
+  }
+
+  .sidebar a.sub {
+    padding-left: 46px;
+    font-size: 12.5px;
+    color: var(--text-dim);
+  }
+
+  .sidebar a.sub:hover { color: var(--text-muted); }
+
+  /* Main Content */
+  .main {
+    margin-left: 280px;
+    max-width: 920px;
+    padding: 40px 50px 100px;
+  }
+
+  /* Hero */
+  .hero {
+    text-align: center;
+    padding: 60px 0 50px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 50px;
+  }
+
+  .hero h1 {
+    font-size: 38px;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent2), var(--pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 12px;
+  }
+
+  .hero .tagline {
+    font-size: 18px;
+    color: var(--text-muted);
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  .hero .badge-row {
+    margin-top: 24px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+
+  .badge.blue { border-color: var(--accent); color: var(--accent); }
+  .badge.green { border-color: var(--green); color: var(--green); }
+  .badge.gold { border-color: var(--gold); color: var(--gold); }
+
+  /* Sections */
+  section { margin-bottom: 56px; }
+
+  h2 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    padding-top: 20px;
+    color: var(--text);
+  }
+
+  h2 .num {
+    color: var(--accent);
+    font-weight: 800;
+    margin-right: 8px;
+  }
+
+  h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 32px 0 10px;
+    color: var(--text);
+  }
+
+  h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 22px 0 8px;
+    color: var(--cyan);
+  }
+
+  p { margin-bottom: 14px; color: var(--text-muted); }
+
+  .section-intro {
+    font-size: 17px;
+    color: var(--text-muted);
+    border-left: 3px solid var(--accent);
+    padding-left: 16px;
+    margin-bottom: 28px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 18px 0;
+  }
+
+  .card.highlight {
+    border-color: var(--gold);
+    background: linear-gradient(135deg, rgba(234,179,8,0.05), transparent);
+  }
+
+  .card.tip {
+    border-color: var(--green);
+    background: linear-gradient(135deg, rgba(34,197,94,0.05), transparent);
+  }
+
+  .card.warning {
+    border-color: var(--red);
+    background: linear-gradient(135deg, rgba(239,68,68,0.05), transparent);
+  }
+
+  .card.blue {
+    border-color: var(--accent);
+    background: linear-gradient(135deg, rgba(59,130,246,0.05), transparent);
+  }
+
+  .card-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-bottom: 8px;
+  }
+
+  .card-label.gold { color: var(--gold); }
+  .card-label.green { color: var(--green); }
+  .card-label.red { color: var(--red); }
+  .card-label.blue { color: var(--accent); }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 14px;
+  }
+
+  th {
+    text-align: left;
+    padding: 10px 14px;
+    background: var(--surface2);
+    color: var(--text);
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border-bottom: 2px solid var(--border);
+  }
+
+  td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+
+  tr:hover td { background: rgba(59,130,246,0.03); }
+
+  .color-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  /* Lists */
+  ul, ol {
+    margin: 10px 0 16px 20px;
+    color: var(--text-muted);
+  }
+
+  li { margin-bottom: 6px; }
+  li strong { color: var(--text); }
+
+  /* Diagram boxes */
+  .diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 30px;
+    margin: 20px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    overflow-x: auto;
+    white-space: pre;
+    color: var(--text-muted);
+  }
+
+  /* Flow steps */
+  .flow {
+    display: flex;
+    gap: 12px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+  }
+
+  .flow-step {
+    flex: 1;
+    min-width: 180px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    text-align: center;
+    position: relative;
+  }
+
+  .flow-step .step-num {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: white;
+    font-weight: 700;
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+
+  .flow-step h5 {
+    font-size: 14px;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .flow-step p {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin: 0;
+  }
+
+  /* Color legend strips */
+  .color-legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin: 14px 0;
+  }
+
+  .color-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .color-swatch {
+    width: 32px;
+    height: 14px;
+    border-radius: 3px;
+  }
+
+  /* Kbd-style */
+  kbd {
+    display: inline-block;
+    padding: 2px 7px;
+    font-size: 12px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: inherit;
+    color: var(--text);
+  }
+
+  /* Separator */
+  hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 40px 0;
+  }
+
+  /* Grid layout for settings */
+  .settings-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 16px 0;
+  }
+
+  .setting-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+
+  .setting-item .label {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-bottom: 2px;
+  }
+
+  .setting-item .value {
+    font-size: 14px;
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  /* Strategy boxes */
+  .strategy-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+
+  .strategy-header {
+    padding: 16px 22px;
+    font-weight: 700;
+    font-size: 15px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .strategy-header.buy {
+    background: linear-gradient(90deg, rgba(34,197,94,0.12), transparent);
+    color: var(--green);
+  }
+
+  .strategy-header.sell {
+    background: linear-gradient(90deg, rgba(239,68,68,0.12), transparent);
+    color: var(--red);
+  }
+
+  .strategy-body {
+    padding: 20px 22px;
+  }
+
+  .strategy-body ol {
+    margin-left: 18px;
+  }
+
+  .strategy-body li {
+    margin-bottom: 10px;
+  }
+
+  /* Checklist */
+  .checklist {
+    list-style: none;
+    margin-left: 0;
+  }
+
+  .checklist li {
+    padding: 6px 0 6px 28px;
+    position: relative;
+  }
+
+  .checklist li::before {
+    content: '☐';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 16px;
+  }
+
+  /* Print */
+  @media print {
+    .sidebar { display: none; }
+    .main { margin-left: 0; max-width: 100%; }
+    body { background: white; color: #1a1a1a; }
+    .card { border: 1px solid #ddd; }
+    h2, h3 { color: #1a1a1a; }
+    p, td, li { color: #333; }
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; padding: 24px 20px; }
+    .settings-grid { grid-template-columns: 1fr; }
+    .flow { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== SIDEBAR ===== -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h2>Connix Smart Trading</h2>
+    <div class="subtitle">Complete Trading Guide</div>
+  </div>
+
+  <div class="nav-section">Part 1 — SMC Fundamentals</div>
+  <a href="#smc-intro">What is Smart Money?</a>
+  <a href="#market-structure">Market Structure</a>
+  <a href="#bos-choch">BoS &amp; CHoCH</a>
+  <a href="#order-blocks">Order Blocks</a>
+  <a href="#fvg">Fair Value Gaps</a>
+  <a href="#liquidity">Liquidity &amp; Inducement</a>
+  <a href="#premium-discount">Premium &amp; Discount</a>
+  <a href="#fibonacci">Fibonacci &amp; Golden Zone</a>
+  <a href="#vwap">VWAP</a>
+  <a href="#sessions">Trading Sessions</a>
+
+  <div class="nav-section" style="margin-top:14px;">Part 2 — The Indicator</div>
+  <a href="#installation">Installation</a>
+  <a href="#dashboard-layout">Dashboard Layout</a>
+  <a href="#reading-dashboard">Reading the Dashboard</a>
+  <a href="#chart-overlays">Chart Overlays</a>
+  <a href="#button-panel">Button Panel</a>
+  <a href="#drawing-tools">Drawing Tools</a>
+  <a href="#all-settings">All Settings Reference</a>
+
+  <div class="nav-section" style="margin-top:14px;">Part 3 — Alerts</div>
+  <a href="#alerts">Alert System</a>
+  <a href="#special-alerts">Special HTF-LTF Alerts</a>
+
+  <div class="nav-section" style="margin-top:14px;">Part 4 — Trading</div>
+  <a href="#workflow">Trading Workflow</a>
+  <a href="#strategy-1">Strategy 1: Golden Zone</a>
+  <a href="#strategy-2">Strategy 2: OB + FVG Confluence</a>
+  <a href="#strategy-3">Strategy 3: Session Reversal</a>
+  <a href="#strategy-4">Strategy 4: HTF-LTF Sniper</a>
+  <a href="#risk-management">Risk Management</a>
+  <a href="#checklist">Pre-Trade Checklist</a>
+  <a href="#tips">Tips &amp; Best Practices</a>
+</nav>
+
+<!-- ===== MAIN CONTENT ===== -->
+<div class="main">
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Connix Smart Trading Dashboard</h1>
+  <p class="tagline">A complete guide to Smart Money Concepts, the Connix indicator, and how to trade with both.</p>
+  <div class="badge-row">
+    <span class="badge blue">MetaTrader 5</span>
+    <span class="badge green">ICT / SMC</span>
+    <span class="badge gold">Multi-Symbol Scanner</span>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- PART 1: SMC FUNDAMENTALS       -->
+<!-- ============================== -->
+
+<section id="smc-intro">
+  <h2><span class="num">01</span> What is Smart Money?</h2>
+  <p class="section-intro">Smart Money Concepts (SMC) is a trading methodology based on the idea that large institutional players — banks, hedge funds, and market makers — leave footprints in the market that retail traders can learn to read.</p>
+
+  <p>Unlike traditional technical analysis that relies on lagging indicators (RSI, MACD, moving averages), SMC focuses on <strong>price action and market structure</strong> to understand what institutions are doing <em>right now</em>.</p>
+
+  <div class="card">
+    <p style="margin-bottom:0"><strong>The core principle:</strong> Institutions need liquidity to fill their large orders. They engineer price movements to areas where retail traders have placed predictable stop losses, fill their orders at those levels, and then move price in their intended direction. SMC teaches you to trade <em>with</em> institutions, not against them.</p>
+  </div>
+
+  <h3>Key Concepts at a Glance</h3>
+  <table>
+    <tr><th>Concept</th><th>What It Tells You</th><th>Dashboard Column</th></tr>
+    <tr><td><strong>Market Structure</strong></td><td>Whether the trend is bullish, bearish, or shifting</td><td>BoS / CHoCH</td></tr>
+    <tr><td><strong>Order Blocks</strong></td><td>Where institutions placed their orders (supply/demand)</td><td>OB</td></tr>
+    <tr><td><strong>Fair Value Gaps</strong></td><td>Imbalances in price that tend to get filled</td><td>FVG</td></tr>
+    <tr><td><strong>Premium / Discount</strong></td><td>Whether price is expensive or cheap relative to the range</td><td>R(%)</td></tr>
+    <tr><td><strong>VWAP</strong></td><td>The average price weighted by volume — institutional benchmark</td><td>VWAP</td></tr>
+    <tr><td><strong>Engulfing</strong></td><td>Strong momentum shift via candlestick pattern</td><td>Eng.</td></tr>
+  </table>
+</section>
+
+<hr>
+
+<section id="market-structure">
+  <h2><span class="num">02</span> Market Structure</h2>
+  <p class="section-intro">Market structure is the foundation of SMC. Every market creates a sequence of highs and lows. The pattern of these swings tells you the current trend.</p>
+
+  <h3>Bullish Structure</h3>
+  <p>Price makes <strong>Higher Highs (HH)</strong> and <strong>Higher Lows (HL)</strong>. Each swing low is higher than the previous one, and each swing high exceeds the prior high.</p>
+
+  <div class="diagram">    HH ●                          HH ●
+       / \                        / \
+      /   \         HH ●        /   \
+     /     \       / \  \      /     \
+    /       \     /   \  \    /       \
+   ● HL      \   /     \  \  /         \
+               \ /       \  \/           \
+                ● HL      \  ● HL         ▼
+                           \/
+                            ● HL
+
+   ──────── Trend: BULLISH (buy bias) ────────</div>
+
+  <h3>Bearish Structure</h3>
+  <p>Price makes <strong>Lower Highs (LH)</strong> and <strong>Lower Lows (LL)</strong>. Each swing high fails to reach the prior high, and each swing low breaks below the previous low.</p>
+
+  <div class="diagram">   ● LH
+    / \
+   /   \
+  /     \    ● LH
+ /       \  / \
+▲         \/   \    ● LH
+           ● LL \  / \
+                  \/   \
+                  ● LL  \
+                         \/
+                          ● LL
+
+   ──────── Trend: BEARISH (sell bias) ────────</div>
+
+  <div class="card tip">
+    <div class="card-label green">Indicator Connection</div>
+    <p style="margin-bottom:0;">The <strong>ZigZag overlay</strong> on the Connix dashboard automatically identifies these swing highs and lows. It draws lines connecting the pivots so you can instantly see the structure. The ZigZag settings (Depth: 12, Deviation: 5, Back Step: 3) determine how significant a swing must be to qualify.</p>
+  </div>
+</section>
+
+<hr>
+
+<section id="bos-choch">
+  <h2><span class="num">03</span> Break of Structure &amp; Change of Character</h2>
+  <p class="section-intro">BoS and CHoCH are the two events that define market structure shifts. They are the most important signals in SMC trading.</p>
+
+  <h3>Break of Structure (BoS)</h3>
+  <p>A BoS occurs when price <strong>continues</strong> the current trend by breaking a key level:</p>
+  <ul>
+    <li><strong>Bullish BoS:</strong> Price breaks above the most recent swing high → trend continues up</li>
+    <li><strong>Bearish BoS:</strong> Price breaks below the most recent swing low → trend continues down</li>
+  </ul>
+  <p>A BoS <strong>confirms</strong> the existing trend. It means institutions are still pushing in the same direction.</p>
+
+  <h3>Change of Character (CHoCH)</h3>
+  <p>A CHoCH occurs when price <strong>breaks against</strong> the current trend for the first time:</p>
+  <ul>
+    <li><strong>Bullish CHoCH:</strong> In a downtrend, price breaks above the most recent Lower High → possible reversal to bullish</li>
+    <li><strong>Bearish CHoCH:</strong> In an uptrend, price breaks below the most recent Higher Low → possible reversal to bearish</li>
+  </ul>
+  <p>A CHoCH is the <strong>first warning sign</strong> that the trend may be changing. It does not guarantee a reversal — you need confirmation from other factors.</p>
+
+  <div class="diagram">   BULLISH BoS:                    BEARISH CHoCH:
+
+         ● HH (new high = BoS!)         ● HH
+        /                               / \
+       /                               /   \
+      ● HL                            /     ● (price breaks below HL)
+     / \                             /       \
+    /   \                           ● HL      \
+   ● HL  \                                     ● LL (CHoCH!)
+          \                    
+           ● (previous HH)     Trend may be shifting from
+                               bullish → bearish
+   Trend confirmed bullish</div>
+
+  <div class="card blue">
+    <div class="card-label blue">On the Dashboard</div>
+    <p>The <strong>BoS column</strong> shows:</p>
+    <ul style="margin-bottom:0">
+      <li><strong>"BoS"</strong> in <span style="color:var(--green)">green</span> = Bullish Break of Structure (buy bias confirmed)</li>
+      <li><strong>"BoS"</strong> in <span style="color:var(--red)">red</span> = Bearish Break of Structure (sell bias confirmed)</li>
+      <li><strong>"CHoCH"</strong> in <span style="color:var(--green)">green</span> = Bullish Change of Character (potential reversal to buy)</li>
+      <li><strong>"CHoCH"</strong> in <span style="color:var(--red)">red</span> = Bearish Change of Character (potential reversal to sell)</li>
+      <li><strong>"-"</strong> = No recent structure break</li>
+    </ul>
+  </div>
+
+  <div class="card highlight">
+    <div class="card-label gold">Golden Zone BoS</div>
+    <p style="margin-bottom:0;">When a BoS or CHoCH cell has a <strong>yellow background</strong>, it means the structure break happened while price was in the <strong>Golden Zone (50-61.8% Fibonacci retracement)</strong>. This is considered the highest-probability setup in ICT methodology — institutional entry at an optimal retracement.</p>
+  </div>
+</section>
+
+<hr>
+
+<section id="order-blocks">
+  <h2><span class="num">04</span> Order Blocks (OB)</h2>
+  <p class="section-intro">An Order Block is the last opposing candle before a strong impulsive move. It represents the zone where institutions accumulated their positions before pushing price.</p>
+
+  <h3>Bullish Order Block</h3>
+  <p>The last <strong>bearish (down) candle</strong> before a strong bullish move that breaks structure. When price returns to this zone, it often acts as <strong>demand</strong> — a place to buy.</p>
+
+  <h3>Bearish Order Block</h3>
+  <p>The last <strong>bullish (up) candle</strong> before a strong bearish move that breaks structure. When price returns to this zone, it often acts as <strong>supply</strong> — a place to sell.</p>
+
+  <div class="diagram">   Bullish Order Block:
+
+   Price rallies up (BoS)
+        ↑  ↑  ↑
+        █  █  █
+        █  █  █
+   ┌─────────────┐
+   │ ORDER BLOCK │ ← Last bearish candle before the rally
+   │  (demand)   │    When price comes back here → BUY
+   └─────────────┘
+      ▼  ▼  
+      █  █  (sell-off before the rally)</div>
+
+  <h3>Order Block Lifecycle</h3>
+  <table>
+    <tr><th>Status</th><th>Meaning</th><th>Dashboard Display</th></tr>
+    <tr><td><strong>Active</strong></td><td>OB has not been touched yet — waiting for price to return</td><td>"-"</td></tr>
+    <tr><td><strong>Touched</strong></td><td>Price has reached the OB zone — potential entry</td><td>"touch"</td></tr>
+    <tr><td><strong>Broken</strong></td><td>Price has closed through the OB — it is invalidated</td><td>"broken"</td></tr>
+  </table>
+
+  <div class="card blue">
+    <div class="card-label blue">On the Chart</div>
+    <p>When enabled, the indicator draws:</p>
+    <ul style="margin-bottom:0">
+      <li><strong>Colored rectangle</strong> — the Order Block zone (blue for bullish, red for bearish)</li>
+      <li><strong>White horizontal line</strong> — the 50% midpoint of the OB (a common precision entry level)</li>
+      <li><strong>Arrow</strong> — points to the source candle that caused the structure break</li>
+      <li><strong>"BoS" or "CHoCH" label</strong> — text at the structure break level</li>
+    </ul>
+  </div>
+</section>
+
+<hr>
+
+<section id="fvg">
+  <h2><span class="num">05</span> Fair Value Gaps (FVG)</h2>
+  <p class="section-intro">A Fair Value Gap is a three-candle pattern where the middle candle's body is so large that it leaves a gap between the first candle's wick and the third candle's wick. This gap represents an imbalance in price.</p>
+
+  <h3>Bullish FVG</h3>
+  <p>Forms during an up-move. The gap is between the <strong>high of candle 1</strong> and the <strong>low of candle 3</strong>. Price tends to return to fill this gap before continuing higher.</p>
+
+  <h3>Bearish FVG</h3>
+  <p>Forms during a down-move. The gap is between the <strong>low of candle 1</strong> and the <strong>high of candle 3</strong>. Price tends to return to fill this gap before continuing lower.</p>
+
+  <div class="diagram">   Bullish FVG:
+
+   Candle 3 →    █  ← low of candle 3
+                 █ 
+              ┌─────┐
+              │ GAP │ ← Fair Value Gap (imbalance)
+              └─────┘
+                 █  ← high of candle 1
+   Candle 1 →   █ 
+                 |
+
+   When price returns to fill this gap = potential buy entry</div>
+
+  <div class="card blue">
+    <div class="card-label blue">On the Dashboard</div>
+    <p>The <strong>FVG column</strong> shows:</p>
+    <ul style="margin-bottom:0">
+      <li><strong>"touch"</strong> in <span style="color:var(--green)">green</span> = Price is inside a bullish FVG (potential buy zone)</li>
+      <li><strong>"touch"</strong> in <span style="color:var(--red)">red</span> = Price is inside a bearish FVG (potential sell zone)</li>
+      <li><strong>"-"</strong> = No FVG interaction</li>
+    </ul>
+    <p style="margin-bottom:0">On the chart, FVGs appear as <span style="color:var(--green)">green</span> (bullish) or <span style="color:var(--red)">red</span> (bearish) filled rectangles extending to the current bar.</p>
+  </div>
+</section>
+
+<hr>
+
+<section id="liquidity">
+  <h2><span class="num">06</span> Liquidity &amp; Inducement</h2>
+  <p class="section-intro">Liquidity is where stop-loss orders cluster. Institutions target these pools to fill their large positions. Understanding liquidity is what separates SMC from basic support/resistance trading.</p>
+
+  <h3>Where Does Liquidity Sit?</h3>
+  <ul>
+    <li><strong>Above swing highs</strong> — buy stop orders from retail sellers (stop losses) and breakout buyers</li>
+    <li><strong>Below swing lows</strong> — sell stop orders from retail buyers (stop losses) and breakout sellers</li>
+    <li><strong>Equal highs / equal lows</strong> — especially attractive liquidity because many traders place stops at the same level</li>
+  </ul>
+
+  <h3>The Liquidity Sweep</h3>
+  <p>Institutions will push price <em>beyond</em> a key high or low to trigger those stop orders, collect the liquidity, and then reverse. This is why you often see price spike past a level only to immediately reverse — that's a <strong>liquidity sweep</strong>.</p>
+
+  <div class="card tip">
+    <div class="card-label green">How the Indicator Helps</div>
+    <p style="margin-bottom:0">The <strong>Highs & Lows</strong> overlay and <strong>Fractal SnR</strong> lines show you exactly where liquidity pools are likely sitting. Session highs/lows (Asian, London, New York) are especially important liquidity targets. The <strong>Range % column</strong> tells you whether price is near these extremes.</p>
+  </div>
+</section>
+
+<hr>
+
+<section id="premium-discount">
+  <h2><span class="num">07</span> Premium &amp; Discount Zones</h2>
+  <p class="section-intro">Every trading range has an upper half (premium) and a lower half (discount). The idea is simple: buy in discount zones, sell in premium zones.</p>
+
+  <div class="diagram">   100% ─────── PREMIUM ZONE ─── Swing High ──── (SELL here)
+    |
+    |          Price is expensive relative to the range.
+    |          Look for sell setups in this zone.
+    |
+   61.8% ─── Golden Zone upper boundary
+   50%  ───── EQUILIBRIUM ─── Midpoint ────── (neutral)
+   38.2% ─── Golden Zone lower boundary
+    |
+    |          Price is cheap relative to the range.
+    |          Look for buy setups in this zone.
+    |
+    0% ─────── DISCOUNT ZONE ── Swing Low ──── (BUY here)</div>
+
+  <h3>The Golden Zone (50% - 61.8%)</h3>
+  <p>The area between the 50% and 61.8% Fibonacci retracement is called the <strong>Golden Zone</strong>. Institutional entries most often occur here because it offers a deep enough retracement for a good risk/reward while still being within the trend structure.</p>
+
+  <div class="card blue">
+    <div class="card-label blue">On the Dashboard</div>
+    <p>The <strong>R(%) column</strong> shows where price currently sits in the range:</p>
+    <ul style="margin-bottom:0">
+      <li><span style="color:var(--green)">Green</span> (below 50%) = Discount zone — buy bias</li>
+      <li><span style="color:var(--red)">Red</span> (above 50%) = Premium zone — sell bias</li>
+    </ul>
+    <p style="margin-bottom:0">On the chart, the indicator draws labeled horizontal lines at 100% (PREMIUM), 50% (EQUILIBRIUM), and 0% (DISCOUNT).</p>
+  </div>
+</section>
+
+<hr>
+
+<section id="fibonacci">
+  <h2><span class="num">08</span> Fibonacci &amp; the Golden Zone</h2>
+  <p class="section-intro">The Fibonacci retracement tool is used to measure how far price has pulled back within a trend. In SMC, the most important levels are 0.5 (50%) and 0.618 (61.8%).</p>
+
+  <h3>Key Fibonacci Levels</h3>
+  <table>
+    <tr><th>Level</th><th>Significance</th></tr>
+    <tr><td><strong>0% / 100%</strong></td><td>The swing extremes — starting and ending points</td></tr>
+    <tr><td><strong>23.6%</strong></td><td>Shallow retracement — strong momentum, less reliable entry</td></tr>
+    <tr><td><strong>38.2%</strong></td><td>Moderate retracement — reasonable entry if structure is very strong</td></tr>
+    <tr><td style="color:var(--gold)"><strong>50%</strong></td><td>Equilibrium — the sweet spot for institutional entries</td></tr>
+    <tr><td style="color:var(--gold)"><strong>61.8%</strong></td><td>Deep retracement — the other edge of the Golden Zone</td></tr>
+    <tr><td><strong>76.4%</strong></td><td>Very deep retracement — risky, trend may be weakening</td></tr>
+    <tr><td><strong>-23.6% / -61.8%</strong></td><td>Extension levels — potential profit targets beyond the original swing</td></tr>
+  </table>
+
+  <div class="card tip">
+    <div class="card-label green">Indicator Connection</div>
+    <p style="margin-bottom:0">The indicator <strong>auto-draws Fibonacci</strong> on the latest ZigZag swing. Toggle between "Previous" (last completed swing) and "Current" (developing swing). When the BoS column cell turns <strong>yellow</strong>, it means the structure break happened inside the Golden Zone — the highest-probability setup.</p>
+  </div>
+</section>
+
+<hr>
+
+<section id="vwap">
+  <h2><span class="num">09</span> VWAP</h2>
+  <p class="section-intro">Volume Weighted Average Price (VWAP) shows the average price weighted by volume. Institutions use VWAP as a benchmark — they aim to buy below VWAP and sell above VWAP.</p>
+
+  <h3>How to Use VWAP</h3>
+  <ul>
+    <li><strong>Price above VWAP</strong> = Bullish bias. Institutions that bought below VWAP are in profit.</li>
+    <li><strong>Price below VWAP</strong> = Bearish bias. Institutions that sold above VWAP are in profit.</li>
+    <li><strong>Price touching VWAP</strong> = Potential reaction point. Look for confluence with OBs, FVGs, or structure levels.</li>
+  </ul>
+
+  <div class="card blue">
+    <div class="card-label blue">On the Dashboard</div>
+    <p style="margin-bottom:0">The <strong>VWAP column</strong> shows "touch" when price is interacting with VWAP, and up/down arrows when price crosses VWAP. On the chart, VWAP appears as a yellow line that resets each session.</p>
+  </div>
+</section>
+
+<hr>
+
+<section id="sessions">
+  <h2><span class="num">10</span> Trading Sessions</h2>
+  <p class="section-intro">The forex market operates in three major sessions. Each session has distinct characteristics that SMC traders exploit.</p>
+
+  <table>
+    <tr><th>Session</th><th>Typical GMT Time</th><th>Character</th><th>Dashboard Color</th></tr>
+    <tr>
+      <td><strong>Asian</strong></td>
+      <td>00:00 - 08:00</td>
+      <td>Low volatility, range-building. Establishes the day's initial liquidity pool (Asian high and low).</td>
+      <td><span class="color-dot" style="background:var(--gold)"></span>Yellow</td>
+    </tr>
+    <tr>
+      <td><strong>London</strong></td>
+      <td>08:00 - 14:00</td>
+      <td>High volatility. Often sweeps Asian session liquidity (breaks Asian high or low) before establishing the real move.</td>
+      <td><span class="color-dot" style="background:var(--accent)"></span>Blue</td>
+    </tr>
+    <tr>
+      <td><strong>New York</strong></td>
+      <td>14:00 - 22:00</td>
+      <td>Highest volatility during London-NY overlap (14:00-17:00). Can continue London's move or reverse it.</td>
+      <td><span class="color-dot" style="background:var(--pink)"></span>Pink</td>
+    </tr>
+  </table>
+
+  <div class="card highlight">
+    <div class="card-label gold">Common SMC Play</div>
+    <p style="margin-bottom:0"><strong>Asian Range Sweep:</strong> London session sweeps the Asian session high or low (takes liquidity), triggers a BoS or CHoCH, then reverses. The indicator draws session boxes so you can visually see when this happens. This is one of the most reliable daily setups.</p>
+  </div>
+</section>
+
+<hr>
+
+<!-- ============================== -->
+<!-- PART 2: THE INDICATOR           -->
+<!-- ============================== -->
+
+<section id="installation">
+  <h2><span class="num">11</span> Installation</h2>
+
+  <div class="flow">
+    <div class="flow-step">
+      <div class="step-num">1</div>
+      <h5>Copy File</h5>
+      <p>Copy the .mq5 file to your MT5 indicators folder: MQL5\Indicators\</p>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">2</div>
+      <h5>Restart MT5</h5>
+      <p>Restart MetaTrader 5 or refresh the Navigator panel</p>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">3</div>
+      <h5>Apply to Chart</h5>
+      <p>Drag the indicator onto any chart from the Navigator</p>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">4</div>
+      <h5>Configure</h5>
+      <p>Adjust input settings to your preferences in the properties dialog</p>
+    </div>
+  </div>
+
+  <div class="card warning">
+    <div class="card-label red">Important</div>
+    <p style="margin-bottom:0"><strong>Symbol names must exactly match your broker.</strong> If your broker uses "EURUSD.r", "EURUSDm", or "EURUSD.i", you must use that exact name in the symbol list. Check your broker's Market Watch panel for the correct names.</p>
+  </div>
+
+  <div class="card">
+    <p><strong>Enable mouse tracking:</strong> Right-click the chart → Properties → Common tab → check "Show object properties on mouse click". This is required for the interactive dashboard features (clicking cells, hovering, dragging).</p>
+    <p style="margin-bottom:0"><strong>Session times:</strong> The default session times are in broker server time, not your local time. Adjust based on your broker's GMT offset.</p>
+  </div>
+</section>
+
+<hr>
+
+<section id="dashboard-layout">
+  <h2><span class="num">12</span> Dashboard Layout</h2>
+  <p class="section-intro">The dashboard is a scrollable grid that gives you a bird's-eye view of all your watched symbols across all configured timeframes.</p>
+
+  <div class="diagram">┌────────────────────────────────────────────────────────────────────┐
+│  (EURUSD H4) 2026.03.02 12:30:45            [▲] [✕]              │ ← Header (draggable)
+├──────────┬───────────────────────┬─────────────┬──────────────────┤
+│          │         M15           │     H1      │    H4     │ D1   │ ← Timeframe headers (clickable)
+│          │ VWAP BoS OB FVG R% Eng│ VWAP BoS ...│           │      │
+├──────────┼───────────────────────┼─────────────┼──────────────────┤
+│ AUDCAD   │  -    -   -   -  52  - │            │           │      │
+│ AUDCHF   │  -   BoS  -   -  38  - │            │           │      │
+│ EURUSD   │ touch CHoCH - touch 31 ●│            │           │      │ ← Current symbol highlighted
+│ GBPUSD   │  -    -  touch -  68  - │            │           │      │
+│ ...      │                       │             │           │      │
+├──────────┴───────────────────────┴─────────────┴──────────────────┤
+│                                              Daily Range │  ADR  │
+└──────────────────────────────────────────────────────────────────┘</div>
+
+  <h3>Interacting with the Dashboard</h3>
+  <table>
+    <tr><th>Action</th><th>What Happens</th></tr>
+    <tr><td><strong>Click a symbol name</strong></td><td>Switches the chart to that symbol</td></tr>
+    <tr><td><strong>Click any data cell</strong></td><td>Switches the chart to that symbol AND timeframe</td></tr>
+    <tr><td><strong>Hover over a timeframe header</strong></td><td>A dropdown appears to change which TF that column shows</td></tr>
+    <tr><td><strong>Click the bell icon</strong> (appears on hover)</td><td>Toggle alerts on/off for that specific timeframe</td></tr>
+    <tr><td><strong>Drag the header bar</strong></td><td>Move the dashboard anywhere on the chart</td></tr>
+    <tr><td><strong>Click ▲ (up arrow)</strong></td><td>Collapse dashboard to header only</td></tr>
+    <tr><td><strong>Click ▼ (down arrow)</strong></td><td>Expand dashboard back to full size</td></tr>
+    <tr><td><strong>Click ✕</strong></td><td>Remove the indicator from the chart</td></tr>
+  </table>
+</section>
+
+<hr>
+
+<section id="reading-dashboard">
+  <h2><span class="num">13</span> Reading the Dashboard</h2>
+  <p class="section-intro">Each timeframe group has 6 sub-columns. Here's exactly how to read every cell.</p>
+
+  <h3>VWAP Column</h3>
+  <table>
+    <tr><th>Display</th><th>Color</th><th>Meaning</th></tr>
+    <tr><td>"touch"</td><td><span style="color:var(--green)">Green</span></td><td>Price wick reached VWAP from below (bullish touch)</td></tr>
+    <tr><td>"touch"</td><td><span style="color:var(--red)">Red</span></td><td>Price wick reached VWAP from above (bearish touch)</td></tr>
+    <tr><td>▲ (up arrow)</td><td><span style="color:var(--green)">Green</span></td><td>Price crossed above VWAP</td></tr>
+    <tr><td>▼ (down arrow)</td><td><span style="color:var(--red)">Red</span></td><td>Price crossed below VWAP</td></tr>
+    <tr><td>(blank)</td><td>—</td><td>No VWAP interaction</td></tr>
+  </table>
+
+  <h3>BoS Column</h3>
+  <table>
+    <tr><th>Display</th><th>Color</th><th>Meaning</th></tr>
+    <tr><td>"BoS"</td><td><span style="color:var(--green)">Green</span></td><td>Bullish Break of Structure — trend continues up</td></tr>
+    <tr><td>"BoS"</td><td><span style="color:var(--red)">Red</span></td><td>Bearish Break of Structure — trend continues down</td></tr>
+    <tr><td>"CHoCH"</td><td><span style="color:var(--green)">Green</span></td><td>Bullish Change of Character — potential reversal up</td></tr>
+    <tr><td>"CHoCH"</td><td><span style="color:var(--red)">Red</span></td><td>Bearish Change of Character — potential reversal down</td></tr>
+    <tr><td>Yellow background</td><td>—</td><td><strong>Golden Zone:</strong> BoS/CHoCH happened in the 50-61.8% Fibonacci zone</td></tr>
+    <tr><td>"-"</td><td>White</td><td>No recent structure break</td></tr>
+  </table>
+
+  <h3>OB Column</h3>
+  <table>
+    <tr><th>Display</th><th>Color</th><th>Meaning</th></tr>
+    <tr><td>"touch"</td><td><span style="color:var(--green)">Green</span></td><td>Price is touching a bullish Order Block (buy zone)</td></tr>
+    <tr><td>"touch"</td><td><span style="color:var(--red)">Red</span></td><td>Price is touching a bearish Order Block (sell zone)</td></tr>
+    <tr><td>"broken"</td><td><span style="color:var(--green)">Green</span></td><td>Bullish OB was broken (invalidated)</td></tr>
+    <tr><td>"broken"</td><td><span style="color:var(--red)">Red</span></td><td>Bearish OB was broken (invalidated)</td></tr>
+    <tr><td>"-"</td><td>White</td><td>No OB interaction</td></tr>
+  </table>
+
+  <h3>FVG Column</h3>
+  <table>
+    <tr><th>Display</th><th>Color</th><th>Meaning</th></tr>
+    <tr><td>"touch"</td><td><span style="color:var(--green)">Green</span></td><td>Price is inside a bullish Fair Value Gap</td></tr>
+    <tr><td>"touch"</td><td><span style="color:var(--red)">Red</span></td><td>Price is inside a bearish Fair Value Gap</td></tr>
+    <tr><td>"-"</td><td>White</td><td>No FVG interaction</td></tr>
+  </table>
+
+  <h3>R(%) Column — Range Percentage</h3>
+  <table>
+    <tr><th>Value</th><th>Color</th><th>Zone</th><th>Bias</th></tr>
+    <tr><td>0 - 30%</td><td><span style="color:var(--green)">Green</span></td><td>Deep Discount</td><td>Strong buy area</td></tr>
+    <tr><td>30 - 50%</td><td><span style="color:var(--green)">Green</span></td><td>Discount</td><td>Buy area</td></tr>
+    <tr><td>50%</td><td>—</td><td>Equilibrium</td><td>Neutral</td></tr>
+    <tr><td>50 - 70%</td><td><span style="color:var(--red)">Red</span></td><td>Premium</td><td>Sell area</td></tr>
+    <tr><td>70 - 100%</td><td><span style="color:var(--red)">Red</span></td><td>Deep Premium</td><td>Strong sell area</td></tr>
+  </table>
+
+  <h3>Eng. Column — Engulfing</h3>
+  <table>
+    <tr><th>Display</th><th>Color</th><th>Meaning</th></tr>
+    <tr><td>● (symbol)</td><td><span style="color:var(--green)">Green</span></td><td>Bullish engulfing pattern (current bar engulfs previous bearish bar)</td></tr>
+    <tr><td>● (symbol)</td><td><span style="color:var(--red)">Red</span></td><td>Bearish engulfing pattern (current bar engulfs previous bullish bar)</td></tr>
+    <tr><td>(blank)</td><td>—</td><td>No engulfing pattern</td></tr>
+  </table>
+
+  <h3>Daily Range &amp; ADR Columns</h3>
+  <table>
+    <tr><th>Column</th><th>Shows</th><th>Use</th></tr>
+    <tr><td><strong>Daily Range</strong></td><td>Today's High - Low in pips</td><td>Compare to ADR: if Daily Range nears ADR, the day's move may be exhausted</td></tr>
+    <tr><td><strong>ADR</strong></td><td>Average Daily Range (15-day default) in pips</td><td>Tells you the normal daily move. Useful for setting targets and filtering late entries</td></tr>
+  </table>
+</section>
+
+<hr>
+
+<section id="chart-overlays">
+  <h2><span class="num">14</span> Chart Overlays</h2>
+  <p class="section-intro">These visual elements are drawn directly on your price chart. Toggle each one from the Button Panel.</p>
+
+  <table>
+    <tr><th>Overlay</th><th>What It Draws</th><th>How to Use It</th></tr>
+    <tr>
+      <td><strong>ZigZag</strong></td>
+      <td>Lines connecting swing highs and lows</td>
+      <td>See the market structure at a glance. Identify HH, HL, LH, LL patterns.</td>
+    </tr>
+    <tr>
+      <td><strong>OBs, BoS/CHoCH</strong></td>
+      <td>Order Block rectangles, BoS/CHoCH labels and trendlines, source arrows, OB midpoint lines</td>
+      <td>Identify entry zones (OBs) and structure breaks. The midpoint (white line) is a precision entry level.</td>
+    </tr>
+    <tr>
+      <td><strong>FVGs</strong></td>
+      <td>Colored rectangles for open Fair Value Gaps</td>
+      <td>Identify imbalances where price may return. Green = bullish, Red = bearish.</td>
+    </tr>
+    <tr>
+      <td><strong>VWAP</strong></td>
+      <td>Yellow line (session-anchored)</td>
+      <td>Institutional benchmark. Price above = bullish, below = bearish. Touches are reaction points.</td>
+    </tr>
+    <tr>
+      <td><strong>Asian Box / Sessions</strong></td>
+      <td>Colored rectangles for Asian, London, New York session ranges</td>
+      <td>Identify session highs/lows as liquidity targets. Watch for sweeps at session open.</td>
+    </tr>
+    <tr>
+      <td><strong>Highs &amp; Lows</strong></td>
+      <td>Trendlines extending from session highs and lows</td>
+      <td>Key levels that act as liquidity pools.</td>
+    </tr>
+    <tr>
+      <td><strong>Fractal SnR</strong></td>
+      <td>Horizontal lines at fractal highs/lows from all timeframes</td>
+      <td>Multi-timeframe support/resistance. Higher TF levels are stronger.</td>
+    </tr>
+    <tr>
+      <td><strong>Fibonacci</strong></td>
+      <td>Auto Fibonacci retracement on the latest ZigZag swing</td>
+      <td>Identify the Golden Zone (50-61.8%). Toggle Previous vs Current swing.</td>
+    </tr>
+    <tr>
+      <td><strong>Range (Premium/Discount)</strong></td>
+      <td>Horizontal lines at 100% (Premium), 50% (Equilibrium), 0% (Discount)</td>
+      <td>Visual guide for where to buy (discount) and sell (premium).</td>
+    </tr>
+  </table>
+
+  <div class="color-legend">
+    <div class="color-legend-item"><div class="color-swatch" style="background:var(--accent)"></div> Bullish BoS/OBs</div>
+    <div class="color-legend-item"><div class="color-swatch" style="background:var(--red)"></div> Bearish BoS/OBs</div>
+    <div class="color-legend-item"><div class="color-swatch" style="background:var(--green)"></div> Bullish FVGs</div>
+    <div class="color-legend-item"><div class="color-swatch" style="background:var(--gold)"></div> VWAP / Session (Asian)</div>
+    <div class="color-legend-item"><div class="color-swatch" style="background:var(--pink)"></div> NY Session</div>
+  </div>
+</section>
+
+<hr>
+
+<section id="button-panel">
+  <h2><span class="num">15</span> Button Panel</h2>
+  <p class="section-intro">The button panel lets you toggle chart overlays and features on or off. Active buttons are highlighted.</p>
+
+  <h3>Row 1 — Controls</h3>
+  <table>
+    <tr><th>Button</th><th>Function</th></tr>
+    <tr><td><strong>Timeframes</strong></td><td>When ON, OBs/BoS are shown for <em>all</em> enabled timeframes. When OFF, only the current chart timeframe. Hover to select which TFs to enable.</td></tr>
+    <tr><td><strong>Delete</strong></td><td>Removes all user-drawn objects (your manual drawings only — not indicator overlays)</td></tr>
+  </table>
+
+  <h3>Row 2 — Overlays</h3>
+  <table>
+    <tr><th>Button</th><th>Toggles</th></tr>
+    <tr><td><strong>Fibonacci</strong></td><td>Auto Fibonacci retracement on the chart</td></tr>
+    <tr><td><strong>Highs &amp; Lows</strong></td><td>Session high/low lines</td></tr>
+    <tr><td><strong>Asian Box</strong></td><td>Asian, London, New York session range boxes</td></tr>
+    <tr><td><strong>FVGs</strong></td><td>Fair Value Gap rectangles</td></tr>
+    <tr><td><strong>OBs, BoS/CHoCH</strong></td><td>Order Blocks and structure break lines</td></tr>
+  </table>
+
+  <h3>Row 3 — More Overlays</h3>
+  <table>
+    <tr><th>Button</th><th>Toggles</th></tr>
+    <tr><td><strong>ZigZag</strong></td><td>ZigZag swing lines</td></tr>
+    <tr><td><strong>VWAP</strong></td><td>Volume Weighted Average Price line</td></tr>
+    <tr><td><strong>Fractal SnR</strong></td><td>Fractal support/resistance from all timeframes</td></tr>
+    <tr><td><strong>Tested History</strong></td><td>Historical OBs that have been tested (touched but not broken)</td></tr>
+    <tr><td><strong>OB History</strong></td><td>Old/broken Order Blocks</td></tr>
+  </table>
+
+  <h3>Fibonacci Swing Selector</h3>
+  <p>A "Prev." / "Curr." toggle lets you choose which swing the Fibonacci is drawn on:</p>
+  <ul>
+    <li><strong>Prev.</strong> — The last <em>completed</em> swing (more reliable, the retracement is confirmed)</li>
+    <li><strong>Curr.</strong> — The <em>developing</em> swing (useful for active trades, but the swing may not be finished)</li>
+  </ul>
+</section>
+
+<hr>
+
+<section id="drawing-tools">
+  <h2><span class="num">16</span> Drawing Tools</h2>
+  <p class="section-intro">The drawing panel provides 4 color slots, each with 4 tools. Use these for manual markup.</p>
+
+  <table>
+    <tr><th>Tool</th><th>Usage</th></tr>
+    <tr><td><strong>Filled Rectangle</strong></td><td>Click button → click and drag on chart. Good for marking supply/demand zones.</td></tr>
+    <tr><td><strong>Unfilled Rectangle</strong></td><td>Click button → click and drag. Good for highlighting areas without obscuring price.</td></tr>
+    <tr><td><strong>Horizontal Line</strong></td><td>Click button → click on chart at the price level. Good for marking key levels.</td></tr>
+    <tr><td><strong>Trendline</strong></td><td>Click button → click start point, drag to end point. Good for drawing structure lines.</td></tr>
+  </table>
+  <p>After placing a drawing, the tool auto-deactivates. Use the <strong>Delete</strong> button to clear all manual drawings.</p>
+</section>
+
+<hr>
+
+<section id="all-settings">
+  <h2><span class="num">17</span> All Settings Reference</h2>
+  <p class="section-intro">Complete reference of every configurable input parameter.</p>
+
+  <h3>Display Settings</h3>
+  <table>
+    <tr><th>Setting</th><th>Default</th><th>Description</th></tr>
+    <tr><td>Level width dashboard</td><td>40</td><td>Cell width in pixels</td></tr>
+    <tr><td>Level height dashboard</td><td>20</td><td>Cell height in pixels</td></tr>
+    <tr><td>Font size</td><td>8</td><td>Dashboard text size</td></tr>
+    <tr><td>List of Timeframes</td><td>M15,H1,H4,D1</td><td>Comma-separated TFs shown as column groups</td></tr>
+    <tr><td>Bars look back</td><td>500</td><td>How many bars to analyze per symbol/TF</td></tr>
+  </table>
+
+  <h3>Symbol Settings</h3>
+  <table>
+    <tr><th>Setting</th><th>Default</th><th>Description</th></tr>
+    <tr><td>Symbols list 1</td><td>AUDCAD,...,XAUUSD (29 pairs)</td><td>First symbol list (max 255 chars)</td></tr>
+    <tr><td>Symbols list 2</td><td>(empty)</td><td>Additional symbols</td></tr>
+    <tr><td>Symbols list 3</td><td>(empty)</td><td>Additional symbols</td></tr>
+  </table>
+
+  <h3>ZigZag Settings</h3>
+  <table>
+    <tr><th>Setting</th><th>Default</th><th>Description</th></tr>
+    <tr><td>Depth</td><td>12</td><td>Minimum bars between swings</td></tr>
+    <tr><td>Deviation</td><td>5</td><td>Minimum point deviation for a new swing</td></tr>
+    <tr><td>Back Step</td><td>3</td><td>Minimum bars between adjacent highs/lows</td></tr>
+    <tr><td>Color line</td><td>Red</td><td>ZigZag line color</td></tr>
+    <tr><td>Width line</td><td>1</td><td>ZigZag line thickness</td></tr>
+  </table>
+
+  <h3>BoS/CHoCH Settings</h3>
+  <table>
+    <tr><th>Setting</th><th>Default</th><th>Description</th></tr>
+    <tr><td>Buy Color</td><td>Blue</td><td>Bullish structure color</td></tr>
+    <tr><td>Sell Color</td><td>Red</td><td>Bearish structure color</td></tr>
+  </table>
+
+  <h3>FVG Settings</h3>
+  <table>
+    <tr><th>Setting</th><th>Default</th><th>Description</th></tr>
+    <tr><td>Bullish Color</td><td>Green</td><td>Bullish FVG rectangle color</td></tr>
+    <tr><td>Bearish Color</td><td>Red</td><td>Bearish FVG rectangle color</td></tr>
+  </table>
+
+  <h3>VWAP Settings</h3>
+  <table>
+    <tr><th>Setting</th><th>Default</th><th>Description</th></tr>
+    <tr><td>Volume applied</td><td>Tick Volume</td><td>Volume source for VWAP calculation</td></tr>
+    <tr><td>Price</td><td>Typical (HLC/3)</td><td>Price type used</td></tr>
+    <tr><td>Color line</td><td>Yellow</td><td>VWAP line color</td></tr>
+  </table>
+
+  <h3>Session Settings</h3>
+  <table>
+    <tr><th>Setting</th><th>Default</th><th>Description</th></tr>
+    <tr><td>Asian Color / Start / End</td><td>Yellow / 00:00 / 08:00</td><td>Asian session box (broker server time)</td></tr>
+    <tr><td>London Color / Start / End</td><td>Blue / 09:00 / 14:00</td><td>London session box</td></tr>
+    <tr><td>NewYork Color / Start / End</td><td>Pink / 15:00 / 22:00</td><td>New York session box</td></tr>
+  </table>
+
+  <h3>Engulfing Settings</h3>
+  <table>
+    <tr><th>Setting</th><th>Default</th><th>Description</th></tr>
+    <tr><td>Min ratio (%)</td><td>120</td><td>Engulfing bar must be at least 120% the size of the previous bar</td></tr>
+  </table>
+
+  <h3>ADR Settings</h3>
+  <table>
+    <tr><th>Setting</th><th>Default</th><th>Description</th></tr>
+    <tr><td>ADR period</td><td>15</td><td>Number of days for the average</td></tr>
+  </table>
+
+  <h3>Fractal SnR Colors</h3>
+  <table>
+    <tr><th>Timeframe</th><th>Default Color</th></tr>
+    <tr><td>M1</td><td><span class="color-dot" style="background:#ff0000"></span>Red</td></tr>
+    <tr><td>M5</td><td><span class="color-dot" style="background:#0000ff"></span>Blue</td></tr>
+    <tr><td>M15</td><td><span class="color-dot" style="background:#ff69b4"></span>Pink</td></tr>
+    <tr><td>M30</td><td><span class="color-dot" style="background:#ff8c00"></span>Orange</td></tr>
+    <tr><td>H1</td><td><span class="color-dot" style="background:#d2691e"></span>Chocolate</td></tr>
+    <tr><td>H4</td><td><span class="color-dot" style="background:#ffff00"></span>Yellow</td></tr>
+    <tr><td>D1</td><td><span class="color-dot" style="background:#bdb76b"></span>Dark Khaki</td></tr>
+    <tr><td>W1</td><td><span class="color-dot" style="background:#00ffff"></span>Cyan</td></tr>
+    <tr><td>MN1</td><td><span class="color-dot" style="background:#ffe4c4"></span>Bisque</td></tr>
+  </table>
+</section>
+
+<hr>
+
+<!-- ============================== -->
+<!-- PART 3: ALERTS                  -->
+<!-- ============================== -->
+
+<section id="alerts">
+  <h2><span class="num">18</span> Alert System</h2>
+  <p class="section-intro">The indicator can notify you when key events happen so you don't have to watch the screen constantly.</p>
+
+  <h3>Alert Types</h3>
+  <table>
+    <tr><th>Alert</th><th>Triggers When</th><th>Why It Matters</th></tr>
+    <tr><td><strong>BoS/CHoCH</strong></td><td>A new Break of Structure or Change of Character forms</td><td>The trend has confirmed or potentially reversed</td></tr>
+    <tr><td><strong>OB Touch/Broken</strong></td><td>Price reaches or invalidates an Order Block</td><td>Potential entry (touch) or invalidation (broken)</td></tr>
+    <tr><td><strong>FVG Touch</strong></td><td>Price enters an open Fair Value Gap</td><td>Imbalance being filled — potential reaction</td></tr>
+    <tr><td><strong>Golden Zone</strong></td><td>BoS/CHoCH occurs while price is at 50-61.8% Fibonacci</td><td>Highest-probability SMC setup</td></tr>
+    <tr><td><strong>Engulfing</strong></td><td>Bullish or bearish engulfing pattern detected</td><td>Strong momentum shift</td></tr>
+    <tr><td><strong>VWAP</strong></td><td>Price touches or crosses VWAP</td><td>Institutional benchmark reaction</td></tr>
+  </table>
+
+  <h3>Delivery Methods</h3>
+  <table>
+    <tr><th>Method</th><th>Default</th><th>Setup Required</th></tr>
+    <tr><td>Popup Message</td><td>ON</td><td>None</td></tr>
+    <tr><td>Push Notification</td><td>OFF</td><td>MT5 → Tools → Options → Notifications → enter your MetaQuotes ID</td></tr>
+    <tr><td>Email</td><td>OFF</td><td>MT5 → Tools → Options → Email → configure SMTP</td></tr>
+    <tr><td>Sound</td><td>OFF</td><td>Place .wav file in MT5's Sounds folder</td></tr>
+  </table>
+
+  <h3>Per-Timeframe Alert Control</h3>
+  <p>Hover over any timeframe column header in the dashboard. A small <strong>bell icon</strong> appears. Click it to toggle alerts for that specific timeframe. This lets you, for example, only receive H4 and D1 alerts while ignoring M15 noise.</p>
+</section>
+
+<hr>
+
+<section id="special-alerts">
+  <h2><span class="num">19</span> Special Alerts: HTF-LTF Confluence</h2>
+  <p class="section-intro">This is the most powerful alert feature. It detects when a lower-timeframe Order Block forms inside a higher-timeframe Order Block — a key institutional confluence.</p>
+
+  <h3>How It Works</h3>
+  <div class="flow">
+    <div class="flow-step">
+      <div class="step-num">1</div>
+      <h5>HTF Order Block</h5>
+      <p>A higher-TF OB exists (e.g., H4 bullish OB)</p>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">2</div>
+      <h5>Price Enters HTF OB</h5>
+      <p>Price pulls back into the H4 Order Block zone</p>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">3</div>
+      <h5>LTF OB Forms Inside</h5>
+      <p>An M15 Order Block forms within the bottom 50% of the H4 OB</p>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">4</div>
+      <h5>Alert Fires</h5>
+      <p>Special alert triggers — high-probability entry!</p>
+    </div>
+  </div>
+
+  <h3>Default HTF Mapping</h3>
+  <table>
+    <tr><th>Lower Timeframe</th><th>Higher Timeframe Reference</th></tr>
+    <tr><td>M1</td><td>M5</td></tr>
+    <tr><td>M5</td><td>M15</td></tr>
+    <tr><td>M15</td><td>M30</td></tr>
+    <tr><td>M30</td><td>H1</td></tr>
+    <tr><td>H1</td><td>H4</td></tr>
+    <tr><td>H4</td><td>D1</td></tr>
+    <tr><td>D1</td><td>W1</td></tr>
+    <tr><td>W1</td><td>MN1</td></tr>
+  </table>
+
+  <p>The <strong>"LTF OB within range"</strong> setting (default 50%) controls how strict the detection is. At 50%, the LTF OB must form within the top or bottom half of the HTF OB. Lower values = stricter (LTF OB must be very close to the HTF OB edge). Higher values = more permissive.</p>
+
+  <div class="card highlight">
+    <div class="card-label gold">Why This Is Powerful</div>
+    <p style="margin-bottom:0">This is like getting a sniper entry signal. The H4 OB tells you the institutional level. The M15 OB forming inside it tells you institutions are <em>actively defending that level right now</em>. It's multi-timeframe confirmation automated into a single alert.</p>
+  </div>
+</section>
+
+<hr>
+
+<!-- ============================== -->
+<!-- PART 4: TRADING                 -->
+<!-- ============================== -->
+
+<section id="workflow">
+  <h2><span class="num">20</span> Trading Workflow</h2>
+  <p class="section-intro">Here's the step-by-step process for using the Connix dashboard to find and execute trades.</p>
+
+  <div class="flow">
+    <div class="flow-step">
+      <div class="step-num">1</div>
+      <h5>Scan</h5>
+      <p>Open the dashboard. Look across all symbols for confluence (multiple green or red signals in a row).</p>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">2</div>
+      <h5>Filter</h5>
+      <p>Check R(%): Is price in discount (<50%) for buys or premium (>50%) for sells? Check ADR: Has the day's range already been exhausted?</p>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">3</div>
+      <h5>Drill Down</h5>
+      <p>Click the cell to switch to that pair/TF. Enable chart overlays (OBs, FVGs, Fibonacci) to see the setup visually.</p>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">4</div>
+      <h5>Confirm &amp; Enter</h5>
+      <p>Wait for LTF confirmation (engulfing, LTF BoS, OB touch). Place your trade with proper risk management.</p>
+    </div>
+  </div>
+
+  <h3>What to Look for on the Dashboard</h3>
+
+  <div class="card tip">
+    <div class="card-label green">Strong Buy Signal (Multiple Green Cells in a Row)</div>
+    <p style="margin-bottom:0">
+      <strong>BoS</strong> = green "BoS" (bullish trend confirmed)<br>
+      <strong>OB</strong> = green "touch" (price is at a demand zone)<br>
+      <strong>FVG</strong> = green "touch" (price is filling a bullish imbalance)<br>
+      <strong>R(%)</strong> = below 50% (price is in discount)<br>
+      <strong>VWAP</strong> = green "touch" (price is at institutional benchmark)<br>
+      <strong>Eng.</strong> = green dot (bullish momentum confirmation)
+    </p>
+  </div>
+
+  <div class="card warning">
+    <div class="card-label red">Strong Sell Signal (Multiple Red Cells in a Row)</div>
+    <p style="margin-bottom:0">
+      <strong>BoS</strong> = red "BoS" (bearish trend confirmed)<br>
+      <strong>OB</strong> = red "touch" (price is at a supply zone)<br>
+      <strong>FVG</strong> = red "touch" (price is filling a bearish imbalance)<br>
+      <strong>R(%)</strong> = above 50% (price is in premium)<br>
+      <strong>VWAP</strong> = red "touch" (price rejected from VWAP)<br>
+      <strong>Eng.</strong> = red dot (bearish momentum confirmation)
+    </p>
+  </div>
+</section>
+
+<hr>
+
+<section id="strategy-1">
+  <h2><span class="num">21</span> Strategy 1: Golden Zone Entry</h2>
+  <p class="section-intro">The highest-probability setup. Trade BoS/CHoCH signals that occur in the Fibonacci Golden Zone (50-61.8%).</p>
+
+  <div class="strategy-box">
+    <div class="strategy-header buy">BUY Setup — Golden Zone</div>
+    <div class="strategy-body">
+      <ol>
+        <li><strong>Identify:</strong> On the dashboard, find a symbol/timeframe where the BoS cell shows <strong>"BoS" or "CHoCH" in green with a yellow background</strong>.</li>
+        <li><strong>Confirm range:</strong> Check the R(%) column — it should be below 50% (discount zone).</li>
+        <li><strong>Drill down:</strong> Click the cell to switch to that chart. Enable Fibonacci and OBs overlays.</li>
+        <li><strong>Entry:</strong> Look for price to touch the Order Block or the 50-61.8% Fibonacci zone. Enter buy at the OB midpoint (white line) or on an engulfing candle.</li>
+        <li><strong>Stop Loss:</strong> Below the Order Block low (the bottom of the OB rectangle).</li>
+        <li><strong>Take Profit:</strong> The previous swing high (100% Fibonacci), or the -23.6% / -61.8% extension levels for extended targets.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="strategy-box">
+    <div class="strategy-header sell">SELL Setup — Golden Zone</div>
+    <div class="strategy-body">
+      <ol>
+        <li><strong>Identify:</strong> Find a symbol/timeframe where the BoS cell shows <strong>"BoS" or "CHoCH" in red with a yellow background</strong>.</li>
+        <li><strong>Confirm range:</strong> R(%) should be above 50% (premium zone).</li>
+        <li><strong>Drill down:</strong> Switch to the chart. Enable overlays.</li>
+        <li><strong>Entry:</strong> Price touching the bearish OB or the 50-61.8% zone. Sell at OB midpoint or on bearish engulfing.</li>
+        <li><strong>Stop Loss:</strong> Above the Order Block high.</li>
+        <li><strong>Take Profit:</strong> Previous swing low or Fibonacci extension levels.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<hr>
+
+<section id="strategy-2">
+  <h2><span class="num">22</span> Strategy 2: Order Block + FVG Confluence</h2>
+  <p class="section-intro">When an Order Block and a Fair Value Gap overlap at the same price level, it creates a high-confluence zone.</p>
+
+  <div class="strategy-box">
+    <div class="strategy-header buy">BUY Setup — OB + FVG</div>
+    <div class="strategy-body">
+      <ol>
+        <li><strong>Dashboard scan:</strong> Find a pair where both the <strong>OB column</strong> shows green "touch" AND the <strong>FVG column</strong> shows green "touch" on the same timeframe.</li>
+        <li><strong>Confirm:</strong> R(%) is below 50%. Bonus: BoS column shows green "BoS" (trend is confirmed bullish).</li>
+        <li><strong>Visual check:</strong> Switch to chart and verify the OB rectangle and FVG rectangle overlap.</li>
+        <li><strong>Entry:</strong> Enter buy within the overlapping zone. Best entry is the OB midpoint inside the FVG.</li>
+        <li><strong>Stop Loss:</strong> Below the lower edge of both the OB and FVG (whichever is lower).</li>
+        <li><strong>Take Profit:</strong> The recent swing high, or the opposing Order Block on the same timeframe.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="card tip">
+    <div class="card-label green">Bonus Confluence</div>
+    <p style="margin-bottom:0">If VWAP is also near the OB + FVG zone ("touch" in the VWAP column), this is a <strong>triple confluence</strong> entry — one of the strongest possible setups.</p>
+  </div>
+</section>
+
+<hr>
+
+<section id="strategy-3">
+  <h2><span class="num">23</span> Strategy 3: Session Reversal</h2>
+  <p class="section-intro">Trade the London session sweep of Asian session liquidity — one of the most consistent daily setups.</p>
+
+  <div class="strategy-box">
+    <div class="strategy-header buy">BUY Setup — Asian Low Sweep</div>
+    <div class="strategy-body">
+      <ol>
+        <li><strong>Setup:</strong> Enable the Asian Box overlay. Wait for London session to open.</li>
+        <li><strong>Trigger:</strong> London session sweeps below the Asian session low (takes out stop losses below the yellow box).</li>
+        <li><strong>Confirm:</strong> After the sweep, look for a <strong>bullish CHoCH</strong> on M15 or M5 (the dashboard will show it). This means the sweep has ended and price is reversing.</li>
+        <li><strong>Entry:</strong> Enter buy on the first bullish OB that forms after the CHoCH, or on an FVG fill after the reversal.</li>
+        <li><strong>Stop Loss:</strong> Below the sweep low (the lowest point of the London dip below Asia's range).</li>
+        <li><strong>Take Profit:</strong> The Asian session high, then the previous day's high.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="strategy-box">
+    <div class="strategy-header sell">SELL Setup — Asian High Sweep</div>
+    <div class="strategy-body">
+      <ol>
+        <li><strong>Trigger:</strong> London session breaks above the Asian session high.</li>
+        <li><strong>Confirm:</strong> Bearish CHoCH on M15 or M5.</li>
+        <li><strong>Entry:</strong> Sell on the first bearish OB after the CHoCH.</li>
+        <li><strong>Stop Loss:</strong> Above the sweep high.</li>
+        <li><strong>Take Profit:</strong> Asian session low, then previous day's low.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<hr>
+
+<section id="strategy-4">
+  <h2><span class="num">24</span> Strategy 4: HTF-LTF Sniper Entry</h2>
+  <p class="section-intro">Use the Special Alert to get precision entries at institutional levels. This is the most advanced strategy.</p>
+
+  <div class="strategy-box">
+    <div class="strategy-header buy">BUY Setup — HTF-LTF Confluence</div>
+    <div class="strategy-body">
+      <ol>
+        <li><strong>Higher TF bias:</strong> On H4 or D1, identify a bullish trend (BoS confirmed, bullish structure). There should be an active bullish Order Block on the HTF.</li>
+        <li><strong>Wait for pullback:</strong> Price pulls back toward the H4/D1 Order Block. R(%) on the HTF should be approaching discount (below 50%).</li>
+        <li><strong>Special Alert fires:</strong> The indicator alerts that an M15 (or M5) bullish Order Block has formed inside the bottom 50% of the H4 Order Block.</li>
+        <li><strong>Entry:</strong> Enter buy at the M15 OB zone. This is your "sniper" entry — LTF precision within an HTF institutional level.</li>
+        <li><strong>Stop Loss:</strong> Below the M15 OB (tight stop since your entry is precise).</li>
+        <li><strong>Take Profit:</strong> The HTF swing high. Because your stop is small (LTF OB) and your target is large (HTF swing), you can achieve 3:1, 5:1, or even 10:1 risk/reward.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="card highlight">
+    <div class="card-label gold">Why This Works</div>
+    <p style="margin-bottom:0">The H4 Order Block tells you <em>where</em> institutions will buy. The M15 Order Block forming inside it tells you <em>when</em> they are buying. You're entering at the same time and place as institutional money, with a tight stop loss and a large target.</p>
+  </div>
+</section>
+
+<hr>
+
+<section id="risk-management">
+  <h2><span class="num">25</span> Risk Management</h2>
+  <p class="section-intro">No indicator eliminates risk. Proper money management is what keeps you in the game long enough for your edge to play out.</p>
+
+  <h3>Core Rules</h3>
+  <table>
+    <tr><th>Rule</th><th>Guideline</th></tr>
+    <tr><td><strong>Risk per trade</strong></td><td>Never risk more than 1-2% of your account on a single trade</td></tr>
+    <tr><td><strong>Minimum R:R</strong></td><td>Only take trades with at least 2:1 reward-to-risk ratio</td></tr>
+    <tr><td><strong>Stop loss placement</strong></td><td>Always place stops beyond a structural level (below OB for buys, above OB for sells)</td></tr>
+    <tr><td><strong>ADR filter</strong></td><td>If Daily Range is already > 80% of ADR, avoid new entries in the same direction — the day's move may be exhausted</td></tr>
+    <tr><td><strong>Session timing</strong></td><td>Best entries during London open (08:00-10:00 GMT) and NY open (13:00-15:00 GMT)</td></tr>
+    <tr><td><strong>Correlation</strong></td><td>Avoid taking the same trade on correlated pairs (e.g., long EURUSD and long GBPUSD = doubled risk)</td></tr>
+  </table>
+
+  <h3>Using ADR for Targets</h3>
+  <p>The ADR column tells you the average daily range. Use this to set realistic targets:</p>
+  <ul>
+    <li>If ADR is 80 pips and the day has already moved 60 pips, there may only be ~20 pips left</li>
+    <li>If the day has barely moved relative to ADR, there's room for a larger move</li>
+    <li>Set take profit at levels that are within the remaining ADR potential</li>
+  </ul>
+</section>
+
+<hr>
+
+<section id="checklist">
+  <h2><span class="num">26</span> Pre-Trade Checklist</h2>
+  <p class="section-intro">Run through this checklist before every trade.</p>
+
+  <div class="card">
+    <ul class="checklist">
+      <li><strong>HTF Bias:</strong> Is the higher timeframe trend clear? (D1/H4 showing BoS in my direction)</li>
+      <li><strong>Structure:</strong> Is there a valid BoS or CHoCH on my entry timeframe?</li>
+      <li><strong>Zone:</strong> Is price at a valid entry zone? (Order Block, FVG, or VWAP)</li>
+      <li><strong>Premium/Discount:</strong> Am I buying in discount (R% < 50) or selling in premium (R% > 50)?</li>
+      <li><strong>Golden Zone:</strong> Is the BoS cell highlighted yellow? (bonus, not required)</li>
+      <li><strong>Confluence:</strong> Do I have at least 2 confirming signals? (OB + FVG, OB + VWAP, BoS + Engulfing, etc.)</li>
+      <li><strong>ADR Check:</strong> Is there enough remaining daily range for my target?</li>
+      <li><strong>Session Timing:</strong> Am I entering during an active session? (London or NY, not late Asian)</li>
+      <li><strong>Risk:</strong> Is my risk 1-2% max? Is my R:R at least 2:1?</li>
+      <li><strong>Correlation:</strong> Am I doubling exposure on correlated pairs?</li>
+      <li><strong>Stop Placement:</strong> Is my stop beyond the structural level (below/above the OB)?</li>
+    </ul>
+  </div>
+</section>
+
+<hr>
+
+<section id="tips">
+  <h2><span class="num">27</span> Tips &amp; Best Practices</h2>
+
+  <h3>Performance Optimization</h3>
+  <div class="card">
+    <ul>
+      <li><strong>Reduce the symbol list</strong> if you experience lag. 15-20 pairs is usually plenty.</li>
+      <li><strong>Lower "bars look back"</strong> from 500 to 200-300 for faster calculations.</li>
+      <li><strong>Use fewer timeframe columns</strong> (e.g., H1 and H4 only) if you don't need M15 and D1.</li>
+      <li><strong>Close other indicators</strong> — the dashboard already includes VWAP, ZigZag, and Fibonacci, so you can remove standalone versions.</li>
+    </ul>
+  </div>
+
+  <h3>Session Time Configuration</h3>
+  <div class="card">
+    <p>The session times are in <strong>broker server time</strong>. To find your broker's offset:</p>
+    <ol>
+      <li>In MT5, open the Market Watch panel</li>
+      <li>Look at the time displayed — that's server time</li>
+      <li>Compare to GMT: if server shows 15:00 when it's 13:00 GMT, your broker is GMT+2</li>
+      <li>Adjust session times accordingly (e.g., Asia starts at 02:00 instead of 00:00 for a GMT+2 broker)</li>
+    </ol>
+  </div>
+
+  <h3>Best Timeframe Combinations</h3>
+  <div class="card">
+    <table>
+      <tr><th>Trading Style</th><th>Recommended TFs</th><th>HTF Bias</th><th>Entry TF</th></tr>
+      <tr><td>Scalping</td><td>M1, M5, M15</td><td>M15 or M30</td><td>M1 or M5</td></tr>
+      <tr><td>Day Trading</td><td>M15, H1, H4</td><td>H4 or D1</td><td>M15 or H1</td></tr>
+      <tr><td>Swing Trading</td><td>H1, H4, D1</td><td>D1 or W1</td><td>H1 or H4</td></tr>
+      <tr><td>Position Trading</td><td>H4, D1, W1</td><td>W1 or MN1</td><td>D1</td></tr>
+    </table>
+  </div>
+
+  <h3>Common Mistakes to Avoid</h3>
+  <div class="card warning">
+    <div class="card-label red">Avoid These</div>
+    <ul style="margin-bottom:0">
+      <li><strong>Trading against the HTF trend.</strong> If D1 is bearish, don't take M15 buy signals — they're counter-trend.</li>
+      <li><strong>Entering without confluence.</strong> A single signal (just OB touch, or just BoS) is not enough. Wait for 2+ confirming factors.</li>
+      <li><strong>Ignoring ADR.</strong> If the daily range is nearly exhausted, new entries are low-probability.</li>
+      <li><strong>Over-trading correlated pairs.</strong> EURUSD and GBPUSD often move together — taking the same trade on both doubles your risk.</li>
+      <li><strong>Moving stop losses.</strong> Once placed beyond the structural level, leave it alone. If the OB is broken, the trade idea is invalidated.</li>
+      <li><strong>Trading during news events.</strong> Major news releases (NFP, CPI, FOMC) create erratic price action that can invalidate SMC structures. Avoid entries 30 minutes before and after high-impact news.</li>
+    </ul>
+  </div>
+
+  <h3>Quick Reference — Color Coding</h3>
+  <div class="card">
+    <div class="color-legend" style="flex-direction:column; gap:8px;">
+      <div class="color-legend-item"><div class="color-swatch" style="background:#22c55e"></div> <strong>Green</strong> — Bullish signal (buy bias)</div>
+      <div class="color-legend-item"><div class="color-swatch" style="background:#ef4444"></div> <strong>Red</strong> — Bearish signal (sell bias)</div>
+      <div class="color-legend-item"><div class="color-swatch" style="background:#ffffff"></div> <strong>White</strong> — Neutral / no signal</div>
+      <div class="color-legend-item"><div class="color-swatch" style="background:#eab308"></div> <strong>Yellow background</strong> — Golden Zone (high-probability setup)</div>
+      <div class="color-legend-item"><div class="color-swatch" style="background:#ef4444"></div> <strong>Red row highlight</strong> — Current chart timeframe columns</div>
+      <div class="color-legend-item"><div class="color-swatch" style="background:#ffffff; border:1px solid #666"></div> <strong>White row highlight</strong> — Current symbol row</div>
+    </div>
+  </div>
+</section>
+
+<hr>
+
+<div style="text-align:center; padding:40px 0; color:var(--text-dim);">
+  <p style="font-size:13px;">Connix Smart Trading Dashboard v7 &mdash; User &amp; Trading Guide</p>
+  <p style="font-size:12px;">Created March 2026</p>
+</div>
+
+</div><!-- /main -->
+</body>
+</html>
