@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>G-Labs Trade Manager v4.0 — User Guide</title>
+<style>
+  :root {
+    --bg: #1e2030;
+    --bg2: #262839;
+    --bg3: #2e3045;
+    --border: #373a4e;
+    --text: #dcdee6;
+    --text2: #afb4c3;
+    --text3: #9196a5;
+    --amber: #ffc107;
+    --green: #2ebc2e;
+    --red: #c83c3c;
+    --teal: #26a69a;
+    --blue: #4285f4;
+    --card: #282a3a;
+    --radius: 10px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 0;
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, #1a1c2e 0%, #262839 50%, #1a1c2e 100%);
+    border-bottom: 2px solid var(--amber);
+    padding: 60px 20px 50px;
+    text-align: center;
+  }
+  .hero h1 {
+    font-size: 2.6rem;
+    font-weight: 700;
+    color: var(--amber);
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+  .hero .subtitle {
+    font-size: 1.15rem;
+    color: var(--text2);
+    margin-bottom: 20px;
+  }
+  .hero .badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 18px;
+  }
+  .badge {
+    display: inline-block;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    color: var(--text2);
+  }
+  .badge.amber  { border-color: var(--amber); color: var(--amber); }
+  .badge.green  { border-color: var(--green); color: var(--green); }
+  .badge.teal   { border-color: var(--teal);  color: var(--teal);  }
+  .badge.blue   { border-color: var(--blue);  color: var(--blue);  }
+  .badge.red    { border-color: var(--red);   color: var(--red);   }
+
+  /* Layout */
+  .container { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* Table of Contents */
+  .toc {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    margin-bottom: 48px;
+  }
+  .toc h2 {
+    font-size: 1.2rem;
+    color: var(--amber);
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px;
+  }
+  .toc ol {
+    columns: 2;
+    column-gap: 40px;
+    padding-left: 20px;
+  }
+  .toc li {
+    margin-bottom: 6px;
+    font-size: 0.92rem;
+    break-inside: avoid;
+  }
+  .toc a {
+    color: var(--text2);
+    text-decoration: none;
+    transition: color .15s;
+  }
+  .toc a:hover { color: var(--amber); }
+
+  /* Section */
+  section { margin-bottom: 48px; }
+  section > h2 {
+    font-size: 1.55rem;
+    color: var(--amber);
+    margin-bottom: 18px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  section > h2 .num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--amber);
+    color: var(--bg);
+    font-size: 0.85rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  h3 {
+    font-size: 1.1rem;
+    color: var(--teal);
+    margin: 24px 0 10px;
+  }
+  h4 {
+    font-size: 0.95rem;
+    color: var(--blue);
+    margin: 16px 0 6px;
+  }
+  p { margin-bottom: 12px; color: var(--text2); }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .card.highlight { border-left: 3px solid var(--amber); }
+  .card.green-hl  { border-left: 3px solid var(--green); }
+  .card.red-hl    { border-left: 3px solid var(--red); }
+  .card.teal-hl   { border-left: 3px solid var(--teal); }
+  .card.blue-hl   { border-left: 3px solid var(--blue); }
+  .card h4 { margin-top: 0; }
+
+  /* Feature grid */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .feature-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+  }
+  .feature-card h4 {
+    margin: 0 0 6px;
+    font-size: 0.95rem;
+    color: var(--text);
+  }
+  .feature-card p {
+    font-size: 0.85rem;
+    margin: 0;
+    color: var(--text3);
+  }
+  .feature-card .icon {
+    font-size: 1.4rem;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  /* Lists */
+  ul, ol { padding-left: 24px; margin-bottom: 14px; }
+  li { margin-bottom: 5px; color: var(--text2); font-size: 0.93rem; }
+  li strong { color: var(--text); }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 16px;
+    font-size: 0.9rem;
+  }
+  th, td {
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    background: var(--bg3);
+    color: var(--amber);
+    font-weight: 600;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  td { color: var(--text2); }
+  tr:hover td { background: rgba(255,193,7,0.03); }
+
+  /* Keyboard */
+  kbd {
+    display: inline-block;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 0.82rem;
+    color: var(--amber);
+    box-shadow: 0 1px 0 var(--border);
+  }
+
+  /* Inline label */
+  .label {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .label.buy  { background: rgba(38,166,154,.15); color: var(--teal); }
+  .label.sell { background: rgba(239,83,80,.15); color: var(--red); }
+  .label.on   { background: rgba(46,188,46,.12); color: var(--green); }
+  .label.off  { background: var(--bg3); color: var(--text3); }
+  .label.warn { background: rgba(255,193,7,.12); color: var(--amber); }
+
+  /* Tip box */
+  .tip {
+    background: rgba(255,193,7,0.06);
+    border: 1px solid rgba(255,193,7,0.2);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 16px 0;
+    font-size: 0.9rem;
+    color: var(--text2);
+  }
+  .tip::before {
+    content: "TIP";
+    display: inline-block;
+    font-weight: 700;
+    font-size: 0.72rem;
+    color: var(--amber);
+    margin-right: 8px;
+    letter-spacing: 1px;
+  }
+
+  .warn {
+    background: rgba(200,60,60,0.06);
+    border: 1px solid rgba(200,60,60,0.2);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 16px 0;
+    font-size: 0.9rem;
+    color: var(--text2);
+  }
+  .warn::before {
+    content: "WARNING";
+    display: inline-block;
+    font-weight: 700;
+    font-size: 0.72rem;
+    color: var(--red);
+    margin-right: 8px;
+    letter-spacing: 1px;
+  }
+
+  /* Scroll to top */
+  .back-top {
+    display: block;
+    text-align: center;
+    margin-top: 24px;
+    font-size: 0.85rem;
+  }
+  .back-top a { color: var(--text3); text-decoration: none; }
+  .back-top a:hover { color: var(--amber); }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 32px 20px;
+    border-top: 1px solid var(--border);
+    color: var(--text3);
+    font-size: 0.82rem;
+  }
+  footer strong { color: var(--amber); }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .hero h1 { font-size: 1.8rem; }
+    .toc ol { columns: 1; }
+    .feature-grid { grid-template-columns: 1fr; }
+    table { font-size: 0.82rem; }
+    th, td { padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<div class="hero" id="top">
+  <h1>G-Labs Trade Manager v4.0</h1>
+  <p class="subtitle">The Ultimate MT5 Trade Management Panel</p>
+  <p style="color:var(--text3); font-size:0.88rem; margin-bottom:0;">
+    Pure UI &mdash; No BMP Dependencies &mdash; Zero DLL
+  </p>
+  <div class="badges">
+    <span class="badge amber">8 Trail Modes</span>
+    <span class="badge green">4 Risk Modes</span>
+    <span class="badge teal">Stealth SL/TP</span>
+    <span class="badge blue">OCO Breakout</span>
+    <span class="badge amber">Stats Dashboard</span>
+    <span class="badge green">News Calendar</span>
+    <span class="badge teal">Currency Strength</span>
+    <span class="badge red">Grid Orders</span>
+    <span class="badge blue">7 Tabs</span>
+    <span class="badge amber">15+ Hotkeys</span>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ============ TOC ============ -->
+<nav class="toc">
+  <h2>Table of Contents</h2>
+  <ol>
+    <li><a href="#installation">Installation &amp; Setup</a></li>
+    <li><a href="#overview">Panel Overview</a></li>
+    <li><a href="#trade-tab">Trade Tab</a></li>
+    <li><a href="#risk">Risk Management</a></li>
+    <li><a href="#trade-lines">Chart Trade Lines</a></li>
+    <li><a href="#stealth">Stealth SL/TP</a></li>
+    <li><a href="#trailing">8 Trailing Stop Modes</a></li>
+    <li><a href="#positions-tab">Positions Tab</a></li>
+    <li><a href="#tools-tab">Tools Tab</a></li>
+    <li><a href="#news-tab">News Calendar Tab</a></li>
+    <li><a href="#alerts-tab">Alerts &amp; Scheduler Tab</a></li>
+    <li><a href="#stats-tab">Stats Dashboard Tab</a></li>
+    <li><a href="#settings-tab">Settings Tab</a></li>
+    <li><a href="#oco">OCO Breakout System</a></li>
+    <li><a href="#grid">Grid Orders</a></li>
+    <li><a href="#basket">Basket Management</a></li>
+    <li><a href="#csm">Currency Strength Meter</a></li>
+    <li><a href="#hotkeys">Hotkeys</a></li>
+    <li><a href="#safety">Safety Features</a></li>
+    <li><a href="#notifications">Notifications</a></li>
+    <li><a href="#profiles">Profiles &amp; Persistence</a></li>
+    <li><a href="#inputs">Input Parameters Reference</a></li>
+  </ol>
+</nav>
+
+<!-- ============ 1. INSTALLATION ============ -->
+<section id="installation">
+  <h2><span class="num">1</span>Installation &amp; Setup</h2>
+  <div class="card highlight">
+    <ol>
+      <li>Copy <strong>G-Labs Trade Manager v3.0.mq5</strong> into your <code>MQL5/Experts/</code> folder inside the MetaTrader 5 data directory.</li>
+      <li>Restart MetaTrader 5 or press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>N</kbd> to refresh the Navigator.</li>
+      <li>Drag the Expert Advisor onto any chart.</li>
+      <li>In the Inputs tab, configure your preferred settings (Magic Number, risk %, hotkeys, etc.).</li>
+      <li>Click <strong>OK</strong>. The panel will appear in the top-left corner of your chart.</li>
+      <li>Make sure <strong>AutoTrading</strong> is enabled (green play button on the toolbar).</li>
+    </ol>
+  </div>
+  <div class="tip">The panel position is saved automatically. Drag the header bar to reposition it anywhere on your chart.</div>
+</section>
+
+<!-- ============ 2. OVERVIEW ============ -->
+<section id="overview">
+  <h2><span class="num">2</span>Panel Overview</h2>
+  <p>The panel is divided into <strong>7 tabs</strong>, a <strong>header bar</strong>, and a <strong>status bar</strong>.</p>
+
+  <h3>Header Bar</h3>
+  <ul>
+    <li><strong>Title</strong> &mdash; "G-Labs v4" in amber. Drag this area to move the panel.</li>
+    <li><strong>CS</strong> &mdash; Toggle the Currency Strength Meter heatmap.</li>
+    <li><strong>?</strong> &mdash; Open the built-in Help window (paginated).</li>
+    <li><strong>&minus;</strong> &mdash; Minimize/restore the panel.</li>
+  </ul>
+
+  <h3>Tab Bar</h3>
+  <p>Seven tabs across the top: <strong>Trade</strong>, <strong>Pos</strong>, <strong>Tools</strong>, <strong>News</strong>, <strong>Alerts</strong>, <strong>Stats</strong>, <strong>Config</strong>. Click to switch, or press <kbd>1</kbd>&ndash;<kbd>7</kbd>.</p>
+
+  <h3>Status Bar</h3>
+  <p>The bottom bar shows live data at a glance:</p>
+  <table>
+    <tr><th>Element</th><th>Description</th></tr>
+    <tr><td><strong>Symbol</strong></td><td>Current chart symbol in amber</td></tr>
+    <tr><td><strong>Sp:</strong></td><td>Spread in points. <span class="label warn">Amber &gt; 30pts</span> <span class="label sell">Red &gt; Max Spread</span></td></tr>
+    <tr><td><strong>ML:</strong></td><td>Margin Level %. Color-coded: red &lt; 200%, amber &lt; 500%, normal otherwise</td></tr>
+    <tr><td><strong>P/L</strong></td><td>Floating profit/loss across all positions</td></tr>
+    <tr><td><strong>Countdown</strong></td><td>Time remaining until current candle closes (M:SS)</td></tr>
+    <tr><td><strong>P:</strong></td><td>Number of open positions managed by this EA</td></tr>
+    <tr><td><strong>Session</strong></td><td>Active market session: TKY, LDN, NY (or overlap)</td></tr>
+    <tr><td><strong>Time</strong></td><td>Local clock time</td></tr>
+  </table>
+</section>
+
+<!-- ============ 3. TRADE TAB ============ -->
+<section id="trade-tab">
+  <h2><span class="num">3</span>Trade Tab</h2>
+  <p>The main tab for setting up and executing trades.</p>
+
+  <h3>Account Info</h3>
+  <p>Displays your <strong>Balance</strong>, <strong>Equity</strong>, <strong>P/L</strong>, and <strong>Free Margin</strong> in a compact two-column layout.</p>
+
+  <h3>Risk Mode Selector</h3>
+  <p>Four risk calculation modes are available as toggle buttons:</p>
+  <div class="feature-grid">
+    <div class="feature-card"><h4>% Bal</h4><p>Risk a percentage of your account balance per trade.</p></div>
+    <div class="feature-card"><h4>% Eq</h4><p>Risk a percentage of current equity per trade.</p></div>
+    <div class="feature-card"><h4>Fixed $</h4><p>Risk a fixed dollar amount per trade.</p></div>
+    <div class="feature-card"><h4>Lots</h4><p>Use a fixed lot size regardless of SL distance.</p></div>
+  </div>
+  <p>Use the <strong>+/&minus;</strong> buttons or type directly in the risk value field. Quick presets are available below (e.g., 0.5%, 1%, 2%).</p>
+
+  <h3>RR Presets</h3>
+  <p>Quick buttons to set the Risk:Reward ratio to <strong>1R</strong>, <strong>2R</strong>, or <strong>3R</strong>.</p>
+
+  <h3>SL / TP / RR Controls</h3>
+  <p>Set your Stop Loss and Take Profit in pips, and the RR ratio. Each has +/&minus; buttons for fine adjustment. The calculated <strong>Lot size</strong>, <strong>Risk $</strong>, and <strong>Reward $</strong> are displayed live.</p>
+
+  <h3>Live Trade Metrics</h3>
+  <table>
+    <tr><th>Metric</th><th>Description</th></tr>
+    <tr><td><strong>ATR</strong></td><td>14-period Average True Range in pips (current timeframe)</td></tr>
+    <tr><td><strong>PipV</strong></td><td>Pip value in $ for the calculated lot size</td></tr>
+    <tr><td><strong>Marg</strong></td><td>Estimated margin required. Turns <span style="color:var(--red)">red</span> if it exceeds free margin.</td></tr>
+  </table>
+
+  <h3>Breakeven &amp; Trailing</h3>
+  <p>Toggle <strong>BE</strong> and <strong>Trail</strong> on/off. Set the trigger value and choose between <strong>Pips</strong> or <strong>% of TP</strong> units. When trailing is ON, a row of 8 trail-mode buttons appears for quick switching.</p>
+
+  <h3>RR Lock</h3>
+  <div class="card teal-hl">
+    <p>When <strong>RR Lock</strong> is active, moving the SL (via +/&minus; buttons or dragging the chart line) automatically adjusts the TP to maintain your R:R ratio. This keeps your risk/reward ratio consistent as you fine-tune your entry.</p>
+  </div>
+
+  <h3>Partial Close (PC) Levels</h3>
+  <p>Up to 4 partial-close levels (PC1&ndash;PC4) with adjustable percentages. Toggle PC on/off, or press <strong>Reset</strong> to restore defaults (25/50/75/100%).</p>
+
+  <h3>Trade Controls Row</h3>
+  <table>
+    <tr><th>Button</th><th>Function</th></tr>
+    <tr><td><strong>Lines</strong></td><td>Toggle draggable Entry/SL/TP/BE/PC lines on the chart</td></tr>
+    <tr><td><strong>Order Type</strong></td><td>Cycle: Market &rarr; Buy Limit &rarr; Sell Limit &rarr; Buy Stop &rarr; Sell Stop</td></tr>
+    <tr><td><strong>FLIP</strong></td><td>Swap Buy/Sell direction while keeping SL/TP distances</td></tr>
+    <tr><td><strong>VSL / Stealth SL</strong></td><td>Virtual SL hidden from broker</td></tr>
+    <tr><td><strong>VTP / Stealth TP</strong></td><td>Virtual TP hidden from broker</td></tr>
+  </table>
+
+  <h3>Execution Helpers</h3>
+  <ul>
+    <li><strong>Confirm:ON/OFF</strong> &mdash; Require two clicks to execute a trade.</li>
+    <li><strong>Snap Entry</strong> &mdash; Snap the entry line to the current market price.</li>
+    <li><strong>Auto SL</strong> &mdash; Cycle through auto SL modes: Off / ATR / Candle H/L.</li>
+    <li><strong>Auto TP</strong> &mdash; Cycle through auto TP modes: Off / ATR / RR-based.</li>
+  </ul>
+
+  <h3>Trade State Indicator</h3>
+  <div class="card green-hl">
+    <p><span style="color:var(--green)">&#x25CF; READY TO TRADE</span> &mdash; All checks pass. You can execute.</p>
+  </div>
+  <div class="card red-hl">
+    <p><span style="color:var(--red)">&#x25CF; BLOCKED: Spread 45 &gt; 30</span> &mdash; One or more pre-trade checks have failed. The reason is shown.</p>
+  </div>
+
+  <h3>Live BID / ASK / Spread</h3>
+  <p>Displayed directly above the BUY/SELL buttons. The spread turns red when it exceeds your configured max spread.</p>
+
+  <h3>BUY / SELL Buttons</h3>
+  <p>Large, color-coded execution buttons. Labels change based on order type (e.g., "BUY LIMIT"). When Confirm mode is on, the first click arms the button ("CONFIRM BUY"), the second click executes.</p>
+
+  <h3>CLOSE ALL</h3>
+  <p>One-click button to close all open positions managed by this EA.</p>
+</section>
+
+<!-- ============ 4. RISK ============ -->
+<section id="risk">
+  <h2><span class="num">4</span>Risk Management</h2>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <span class="icon">&#x1F4B0;</span>
+      <h4>% of Balance</h4>
+      <p>Calculates lot size so that if your SL is hit, you lose X% of your account balance.</p>
+    </div>
+    <div class="feature-card">
+      <span class="icon">&#x1F4C8;</span>
+      <h4>% of Equity</h4>
+      <p>Same as above but uses current equity instead of balance, accounting for floating P/L.</p>
+    </div>
+    <div class="feature-card">
+      <span class="icon">&#x1F4B5;</span>
+      <h4>Fixed Dollar</h4>
+      <p>Risk a fixed dollar amount per trade regardless of account size.</p>
+    </div>
+    <div class="feature-card">
+      <span class="icon">&#x1F4E6;</span>
+      <h4>Fixed Lots</h4>
+      <p>Use a specific lot size. Useful for scalping or when you want direct control.</p>
+    </div>
+  </div>
+  <div class="tip">The lot size is always clamped to the broker's min/max lot and step size. The panel will never exceed your configured maximum lot.</div>
+</section>
+
+<!-- ============ 5. TRADE LINES ============ -->
+<section id="trade-lines">
+  <h2><span class="num">5</span>Chart Trade Lines</h2>
+  <p>When <strong>Lines</strong> is toggled ON, draggable horizontal lines appear on the chart:</p>
+  <table>
+    <tr><th>Line</th><th>Color</th><th>Purpose</th></tr>
+    <tr><td><strong>Entry</strong></td><td>Amber</td><td>The price where your order will be placed. For market orders, this is informational.</td></tr>
+    <tr><td><strong>SL</strong></td><td>Red</td><td>Stop Loss price. Drag to adjust; the panel recalculates lot size in real-time.</td></tr>
+    <tr><td><strong>TP</strong></td><td>Green</td><td>Take Profit price. When RR Lock is on, this moves automatically with SL.</td></tr>
+    <tr><td><strong>BE</strong></td><td>Blue</td><td>Breakeven trigger level (when BE is enabled).</td></tr>
+    <tr><td><strong>PC1&ndash;PC4</strong></td><td>Lime shades</td><td>Partial close trigger levels.</td></tr>
+  </table>
+  <p>A <strong>shaded zone</strong> between SL and TP visually shows the trade's risk/reward area. A <strong>TRADE</strong> button appears on the entry line for one-click execution, and a <strong>FLIP</strong> button lets you reverse direction.</p>
+  <div class="tip">Drag the SL line and the panel instantly recalculates your lot size, risk in dollars, and (with RR Lock) your TP level.</div>
+</section>
+
+<!-- ============ 6. STEALTH ============ -->
+<section id="stealth">
+  <h2><span class="num">6</span>Stealth SL/TP</h2>
+  <div class="card highlight">
+    <p>Stealth mode hides your Stop Loss and/or Take Profit from the broker. Instead of placing a real SL/TP with the order, the EA monitors price locally and closes the position when the level is reached.</p>
+    <h4>Why use Stealth mode?</h4>
+    <ul>
+      <li>Prevents broker stop-hunting on your exact SL price.</li>
+      <li>Hides your trade management strategy from the broker's book.</li>
+      <li>Useful when trading with brokers you suspect may widen spreads at SL clusters.</li>
+    </ul>
+    <h4>How it works</h4>
+    <ol>
+      <li>Toggle <strong>VSL</strong> (Stealth SL) or <strong>VTP</strong> (Stealth TP) before placing a trade.</li>
+      <li>The order is sent with SL=0 and/or TP=0 to the broker.</li>
+      <li>The EA stores the virtual levels internally and monitors every tick.</li>
+      <li>When price reaches the virtual level, the EA closes the position via a market order.</li>
+    </ol>
+  </div>
+  <div class="warn">Stealth SL/TP requires the EA to be running. If MetaTrader is closed or the EA is removed, your positions will have no protection. Always have a backup plan.</div>
+</section>
+
+<!-- ============ 7. TRAILING ============ -->
+<section id="trailing">
+  <h2><span class="num">7</span>8 Trailing Stop Modes</h2>
+  <p>When trailing is enabled and the position moves into profit beyond the trail trigger, the SL is progressively moved to lock in gains. Choose from 8 modes:</p>
+  <table>
+    <tr><th>Mode</th><th>Code</th><th>Description</th></tr>
+    <tr><td><strong>Fixed</strong></td><td>Fix</td><td>Trail by a fixed number of pips behind the current price.</td></tr>
+    <tr><td><strong>ATR</strong></td><td>ATR</td><td>Trail by ATR value &times; multiplier. Adapts to volatility.</td></tr>
+    <tr><td><strong>Moving Average</strong></td><td>MA</td><td>Trail SL to the Moving Average price (e.g., 20 MA).</td></tr>
+    <tr><td><strong>Candle</strong></td><td>Cndl</td><td>Trail to the previous candle's high (sells) or low (buys).</td></tr>
+    <tr><td><strong>Parabolic SAR</strong></td><td>PSAR</td><td>Trail to the Parabolic SAR indicator value.</td></tr>
+    <tr><td><strong>Fractal</strong></td><td>Frac</td><td>Trail to the most recent fractal high/low.</td></tr>
+    <tr><td><strong>RR-Based</strong></td><td>RR</td><td>Move SL in increments as position reaches 1R, 2R, 3R of profit.</td></tr>
+    <tr><td><strong>Profit %</strong></td><td>P%</td><td>Lock a percentage of unrealized profit by adjusting SL.</td></tr>
+  </table>
+  <div class="tip">When Trail:ON, the trail mode selector appears directly on the Trade Tab for quick switching. No need to visit Settings.</div>
+</section>
+
+<!-- ============ 8. POSITIONS ============ -->
+<section id="positions-tab">
+  <h2><span class="num">8</span>Positions Tab</h2>
+
+  <h3>View Modes</h3>
+  <p>Toggle between <strong>OPEN</strong> (live positions) and <strong>HIST</strong> (trade history).</p>
+
+  <h3>Quick Action Buttons</h3>
+  <div class="feature-grid">
+    <div class="feature-card"><h4>Close All</h4><p>Close all open positions instantly.</p></div>
+    <div class="feature-card"><h4>Close +</h4><p>Close only positions currently in profit.</p></div>
+    <div class="feature-card"><h4>Close &minus;</h4><p>Close only positions currently in loss.</p></div>
+    <div class="feature-card"><h4>Flatten</h4><p>Close-by opposing positions (hedge netting).</p></div>
+  </div>
+
+  <h3>Position Rows</h3>
+  <p>Each open position displays two rows of information:</p>
+  <h4>Row 1 &mdash; Main Info &amp; Actions</h4>
+  <table>
+    <tr><th>Column</th><th>Description</th></tr>
+    <tr><td><strong>#</strong></td><td>Last 5 digits of the ticket number</td></tr>
+    <tr><td><strong>Sym</strong></td><td>Symbol name</td></tr>
+    <tr><td><strong>Type</strong></td><td>BUY (teal) or SELL (red)</td></tr>
+    <tr><td><strong>Lots</strong></td><td>Volume</td></tr>
+    <tr><td><strong>P/L</strong></td><td>Profit/loss including swap &amp; commission</td></tr>
+    <tr><td><strong>Pips</strong></td><td>Distance in pips from entry</td></tr>
+    <tr><td><kbd>M</kbd></td><td>Manage &mdash; load position onto chart lines</td></tr>
+    <tr><td><kbd>BE</kbd></td><td>Move SL to breakeven + offset</td></tr>
+    <tr><td><kbd>1/2</kbd></td><td>Close 50% of the position</td></tr>
+    <tr><td><kbd>CLOSE</kbd></td><td>Close the entire position</td></tr>
+  </table>
+
+  <h4>Row 2 &mdash; Details</h4>
+  <ul>
+    <li><strong>SL / TP</strong> values (or "---" if none)</li>
+    <li><strong>@ Price</strong> &mdash; the entry price</li>
+    <li><strong>Duration</strong> &mdash; how long the position has been open (e.g., "2h 15m")</li>
+  </ul>
+
+  <h3>P/L Progress Bar</h3>
+  <p>A thin color bar beneath each position shows where the current price sits between SL and TP. Green when in profit territory, red when closer to SL.</p>
+
+  <h3>Pending Orders</h3>
+  <p>Listed below positions with symbol, type, price, volume, and a <strong>Delete</strong> button for each.</p>
+
+  <h3>Summary</h3>
+  <p>At the bottom: total open P/L, position count, win rate, profit factor, average win, and average loss for currently open positions.</p>
+
+  <h3>History View</h3>
+  <p>Switch to HIST to see closed trades over the last 7, 30, or 90 days with pagination.</p>
+</section>
+
+<!-- ============ 9. TOOLS ============ -->
+<section id="tools-tab">
+  <h2><span class="num">9</span>Tools Tab</h2>
+
+  <h3>Quick Actions</h3>
+  <div class="feature-grid">
+    <div class="feature-card"><h4>Close Buys</h4><p>Close all buy positions.</p></div>
+    <div class="feature-card"><h4>Close Sells</h4><p>Close all sell positions.</p></div>
+    <div class="feature-card"><h4>Close Profit</h4><p>Close all profitable positions.</p></div>
+    <div class="feature-card"><h4>Close Loss</h4><p>Close all losing positions.</p></div>
+    <div class="feature-card"><h4>Delete Pending</h4><p>Delete all pending orders.</p></div>
+    <div class="feature-card"><h4>Reverse All</h4><p>Reverse all open positions (close and reopen opposite).</p></div>
+  </div>
+
+  <h3>Scale Out (2-Click Confirm)</h3>
+  <ul>
+    <li><strong>Win 50%</strong> &mdash; Close 50% of all winning positions.</li>
+    <li><strong>Lose 50%</strong> &mdash; Close 50% of all losing positions.</li>
+    <li><strong>All 50%</strong> &mdash; Close 50% of every position.</li>
+  </ul>
+
+  <h3>Basket Management</h3>
+  <ul>
+    <li><strong>Basket BE</strong> &mdash; Calculates and displays the weighted breakeven price across all positions.</li>
+    <li><strong>Close-By</strong> &mdash; Nets opposing buy/sell positions (hedge cleanup).</li>
+    <li><strong>Hedge</strong> &mdash; Opens an opposite position of equal size.</li>
+    <li><strong>Hedge Box</strong> &mdash; Draws a draggable range box on the chart for planning hedges or OCO entries.</li>
+  </ul>
+
+  <h3>Emergency (2-Click Confirm)</h3>
+  <div class="warn">These are destructive actions. The first click arms the button (turns amber with "CONFIRM"), the second click executes.</div>
+  <ul>
+    <li><strong>Panic (Sym)</strong> &mdash; Close ALL positions for the current symbol.</li>
+    <li><strong>Panic (All)</strong> &mdash; Close ALL positions across the entire account.</li>
+    <li><strong>DelPend (Sym)</strong> &mdash; Delete all pending orders for this symbol.</li>
+    <li><strong>DelPend (All)</strong> &mdash; Delete all pending orders account-wide.</li>
+  </ul>
+
+  <h3>Grid Orders</h3>
+  <p>Configure <strong>Distance</strong> (pips), <strong>Count</strong>, and <strong>Multiplier</strong> (lot scaling). Then click <strong>Grid Buy</strong> or <strong>Grid Sell</strong> to place a ladder of limit orders.</p>
+</section>
+
+<!-- ============ 10. NEWS ============ -->
+<section id="news-tab">
+  <h2><span class="num">10</span>News Calendar Tab</h2>
+  <p>Displays upcoming economic events from the built-in MetaTrader 5 calendar.</p>
+  <h3>Filters</h3>
+  <ul>
+    <li><strong>Impact</strong> &mdash; Low / Medium / High</li>
+    <li><strong>Currencies</strong> &mdash; USD, EUR, GBP, JPY, AUD, CAD, CHF, NZD (or All)</li>
+    <li><strong>Days</strong> &mdash; Filter by weekday (or All)</li>
+    <li><strong>Pair Only</strong> &mdash; Only show events for currencies in the current chart pair</li>
+  </ul>
+  <h3>Event Table</h3>
+  <p>Shows day, time, remaining time, currency, event name, and previous/forecast/actual values. Actual values are color-coded vs. forecast.</p>
+  <h3>Chart Integration</h3>
+  <p>Toggle <strong>On Chart</strong> to display news markers directly on the chart as vertical lines.</p>
+  <h3>Time Modes</h3>
+  <p>Switch between Local, Server, and GMT time display.</p>
+</section>
+
+<!-- ============ 11. ALERTS ============ -->
+<section id="alerts-tab">
+  <h2><span class="num">11</span>Alerts &amp; Scheduler Tab</h2>
+  <h3>Price Alerts</h3>
+  <p>Click <strong>Add Alert</strong> to place an alert line at the current price. When price crosses the line, a notification fires. Up to 5 active alerts.</p>
+  <h3>Task Scheduler</h3>
+  <p>Schedule automated actions at specific times:</p>
+  <ul>
+    <li><strong>Close All</strong> &mdash; Close all positions at a set time.</li>
+    <li><strong>Screenshot</strong> &mdash; Take a chart screenshot.</li>
+    <li><strong>Close Profit</strong> / <strong>Close Loss</strong> &mdash; Close filtered positions.</li>
+  </ul>
+  <p>Tasks can be one-time or recurring (weekly).</p>
+  <h3>Over-Trading Monitor</h3>
+  <p>Displays today's trade count vs. max, weekly count vs. max, and daily loss vs. limit.</p>
+</section>
+
+<!-- ============ 12. STATS ============ -->
+<section id="stats-tab">
+  <h2><span class="num">12</span>Stats Dashboard Tab</h2>
+  <p>A comprehensive performance analytics dashboard calculated from your trade history.</p>
+
+  <h3>P/L Summary Cards</h3>
+  <div class="feature-grid">
+    <div class="feature-card"><h4>Today</h4><p>Profit/loss for trades closed today.</p></div>
+    <div class="feature-card"><h4>Week</h4><p>Profit/loss for the last 7 days.</p></div>
+    <div class="feature-card"><h4>Month</h4><p>Profit/loss for the last 30 days.</p></div>
+    <div class="feature-card"><h4>Trades</h4><p>Total number of closed trades.</p></div>
+  </div>
+
+  <h3>Win Rate Bar</h3>
+  <p>A visual progress bar showing your win percentage. Green if &ge; 50%, red if below.</p>
+
+  <h3>Key Metrics</h3>
+  <table>
+    <tr><th>Metric</th><th>Description</th></tr>
+    <tr><td><strong>Profit Factor</strong></td><td>Gross profit / gross loss. Above 1.0 is profitable.</td></tr>
+    <tr><td><strong>Expectancy</strong></td><td>Average profit per trade. Positive means your edge is profitable.</td></tr>
+    <tr><td><strong>Avg RR</strong></td><td>Realized average risk:reward ratio.</td></tr>
+    <tr><td><strong>Avg Win / Avg Loss</strong></td><td>Average dollar amounts for winning and losing trades.</td></tr>
+    <tr><td><strong>Max Drawdown</strong></td><td>Largest peak-to-trough equity decline.</td></tr>
+    <tr><td><strong>Best / Worst Trade</strong></td><td>Largest single win and largest single loss.</td></tr>
+    <tr><td><strong>Gross Profit</strong></td><td>Total profit from all winning trades.</td></tr>
+  </table>
+
+  <h3>Streaks</h3>
+  <p>Maximum consecutive wins and maximum consecutive losses.</p>
+
+  <h3>Account Summary</h3>
+  <p>Balance, Equity, Free Margin, and Margin Level % at the bottom of the tab.</p>
+</section>
+
+<!-- ============ 13. SETTINGS ============ -->
+<section id="settings-tab">
+  <h2><span class="num">13</span>Settings Tab</h2>
+  <h3>General</h3>
+  <ul>
+    <li><strong>Magic Number</strong> &mdash; Read-only display of the EA's magic number.</li>
+    <li><strong>Max Daily DD %</strong> &mdash; Toggle on/off and set the maximum daily drawdown percentage. Trading locks automatically if breached.</li>
+    <li><strong>Profit Target %</strong> &mdash; Toggle on/off and set a daily profit target. Trading locks when reached.</li>
+  </ul>
+  <h3>News Filter</h3>
+  <ul>
+    <li>Toggle the news trading block on/off.</li>
+    <li>Set minutes to block <strong>before</strong> and <strong>after</strong> high-impact news.</li>
+  </ul>
+  <h3>Trade Filters</h3>
+  <ul>
+    <li><strong>Max Spread</strong> &mdash; Block trades when spread exceeds this value (in points). Set 0 to disable.</li>
+    <li><strong>Slippage</strong> &mdash; Maximum allowed slippage in points.</li>
+  </ul>
+  <h3>Save / Load Settings</h3>
+  <p>Save all current panel settings to a file, or load them back. Settings persist across restarts automatically.</p>
+</section>
+
+<!-- ============ 14. OCO ============ -->
+<section id="oco">
+  <h2><span class="num">14</span>OCO Breakout System</h2>
+  <div class="card highlight">
+    <p>OCO (One-Cancels-Other) lets you place a breakout setup where you anticipate a move in either direction but don't know which way.</p>
+    <ol>
+      <li>Click <strong>Box</strong> to draw a Hedge Box on the chart.</li>
+      <li>Drag the top and bottom lines to define your breakout range.</li>
+      <li>Click <strong>OCO</strong> to place a Buy Stop at the top and a Sell Stop at the bottom.</li>
+      <li>SL for each order is placed on the opposite side of the range.</li>
+      <li>When one order triggers, the other pending order is automatically cancelled.</li>
+    </ol>
+  </div>
+  <p>Use <strong>Cancel</strong> to remove the OCO pending orders at any time.</p>
+</section>
+
+<!-- ============ 15. GRID ============ -->
+<section id="grid">
+  <h2><span class="num">15</span>Grid Orders</h2>
+  <p>Place a ladder of limit or stop orders with configurable parameters:</p>
+  <table>
+    <tr><th>Parameter</th><th>Description</th></tr>
+    <tr><td><strong>Dist</strong></td><td>Distance between grid levels in pips.</td></tr>
+    <tr><td><strong>Cnt</strong></td><td>Number of orders in the grid.</td></tr>
+    <tr><td><strong>Mul</strong></td><td>Lot multiplier for each subsequent level (e.g., 1.5x martingale or 1.0 for flat).</td></tr>
+  </table>
+  <p>Click <strong>Grid Buy</strong> or <strong>Grid Sell</strong> to deploy. All orders use your current risk settings as the base lot.</p>
+</section>
+
+<!-- ============ 16. BASKET ============ -->
+<section id="basket">
+  <h2><span class="num">16</span>Basket Management</h2>
+  <ul>
+    <li><strong>Basket BE</strong> &mdash; Shows a line on the chart at the weighted average entry of all open positions. Useful for hedging strategies.</li>
+    <li><strong>Close-By</strong> &mdash; Closes opposing buy and sell positions against each other, netting the result. Reduces the number of open trades.</li>
+    <li><strong>Hedge</strong> &mdash; Opens an equal and opposite position to lock in current P/L.</li>
+    <li><strong>Hedge Box</strong> &mdash; A draggable rectangle on the chart for visually planning hedge ranges or breakout zones.</li>
+  </ul>
+</section>
+
+<!-- ============ 17. CSM ============ -->
+<section id="csm">
+  <h2><span class="num">17</span>Currency Strength Meter</h2>
+  <div class="card blue-hl">
+    <p>Click <strong>CS</strong> on the header to open the Currency Strength Meter heatmap.</p>
+    <ul>
+      <li>Displays relative strength (0&ndash;10) for 8 major currencies: USD, EUR, GBP, JPY, AUD, CAD, CHF, NZD.</li>
+      <li>Calculation uses a weighted average of RSI values across M15 and H1 timeframes.</li>
+      <li>Scores &gt; 7 = <span style="color:var(--green)">Strong (Green)</span></li>
+      <li>Scores &lt; 3 = <span style="color:var(--red)">Weak (Red)</span></li>
+      <li>The heatmap window moves with the main panel.</li>
+    </ul>
+  </div>
+  <div class="tip">Use the CSM to identify the strongest and weakest currencies, then trade pairs where you're buying strength and selling weakness.</div>
+</section>
+
+<!-- ============ 18. HOTKEYS ============ -->
+<section id="hotkeys">
+  <h2><span class="num">18</span>Hotkeys</h2>
+  <p>Hotkeys are enabled via the <code>InpHotkeys</code> input. Press keys when the chart is focused:</p>
+  <table>
+    <tr><th>Key</th><th>Action</th></tr>
+    <tr><td><kbd>1</kbd> &ndash; <kbd>7</kbd></td><td>Switch to tab 1&ndash;7 (Trade, Pos, Tools, News, Alerts, Stats, Config)</td></tr>
+    <tr><td><kbd>B</kbd></td><td>Market Buy</td></tr>
+    <tr><td><kbd>S</kbd></td><td>Market Sell</td></tr>
+    <tr><td><kbd>C</kbd></td><td>Close All Positions</td></tr>
+    <tr><td><kbd>E</kbd></td><td>Breakeven All Positions</td></tr>
+    <tr><td><kbd>L</kbd></td><td>Toggle Trade Lines on chart</td></tr>
+    <tr><td><kbd>F</kbd></td><td>Flip trade direction (Buy &harr; Sell)</td></tr>
+    <tr><td><kbd>D</kbd></td><td>Delete all pending orders</td></tr>
+    <tr><td><kbd>R</kbd></td><td>Reverse all positions</td></tr>
+    <tr><td><kbd>H</kbd></td><td>Open hedge position</td></tr>
+    <tr><td><kbd>Shift</kbd>+<kbd>B</kbd></td><td>Place Buy Limit order</td></tr>
+    <tr><td><kbd>Shift</kbd>+<kbd>S</kbd></td><td>Place Sell Limit order</td></tr>
+    <tr><td><kbd>Shift</kbd>+<kbd>M</kbd></td><td>Minimize / restore panel</td></tr>
+  </table>
+  <div class="tip">Hotkeys only work when the chart window is focused. You can customize the Buy, Sell, Close All, and Breakeven keys in the EA inputs.</div>
+</section>
+
+<!-- ============ 19. SAFETY ============ -->
+<section id="safety">
+  <h2><span class="num">19</span>Safety Features</h2>
+  <p>Multiple layers of protection prevent accidental losses:</p>
+
+  <div class="feature-grid">
+    <div class="feature-card">
+      <span class="icon" style="color:var(--red)">&#x1F6E1;</span>
+      <h4>Margin Check</h4>
+      <p>Blocks trade execution if required margin exceeds free margin.</p>
+    </div>
+    <div class="feature-card">
+      <span class="icon" style="color:var(--amber)">&#x26A0;</span>
+      <h4>Spread Gate</h4>
+      <p>Blocks trades when current spread exceeds your max spread setting.</p>
+    </div>
+    <div class="feature-card">
+      <span class="icon" style="color:var(--blue)">&#x1F4F0;</span>
+      <h4>News Filter</h4>
+      <p>Blocks trading X minutes before and after high-impact news events.</p>
+    </div>
+    <div class="feature-card">
+      <span class="icon" style="color:var(--red)">&#x1F4C9;</span>
+      <h4>Drawdown Protection</h4>
+      <p>Locks trading and optionally closes all positions when daily drawdown exceeds your limit.</p>
+    </div>
+    <div class="feature-card">
+      <span class="icon" style="color:var(--green)">&#x1F3AF;</span>
+      <h4>Profit Target</h4>
+      <p>Locks trading when daily profit target is reached, preventing over-trading.</p>
+    </div>
+    <div class="feature-card">
+      <span class="icon" style="color:var(--teal)">&#x1F512;</span>
+      <h4>Trade Confirmation</h4>
+      <p>Two-click confirmation prevents accidental trade execution.</p>
+    </div>
+    <div class="feature-card">
+      <span class="icon" style="color:var(--amber)">&#x23F1;</span>
+      <h4>Over-Trading Protection</h4>
+      <p>Limits trades per day, per week, and maximum daily loss.</p>
+    </div>
+    <div class="feature-card">
+      <span class="icon" style="color:var(--red)">&#x1F6D1;</span>
+      <h4>Emergency Panic</h4>
+      <p>Two-click panic buttons to instantly flatten everything.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 20. NOTIFICATIONS ============ -->
+<section id="notifications">
+  <h2><span class="num">20</span>Notifications</h2>
+  <table>
+    <tr><th>Type</th><th>Input</th><th>Description</th></tr>
+    <tr><td><strong>Push</strong></td><td>InpPushNotify</td><td>Send push notifications to the MetaTrader mobile app.</td></tr>
+    <tr><td><strong>Email</strong></td><td>InpEmailNotify</td><td>Send email alerts on trade events.</td></tr>
+    <tr><td><strong>Screenshot</strong></td><td>InpScreenshot</td><td>Auto-capture a chart screenshot on trade execution.</td></tr>
+    <tr><td><strong>Sound</strong></td><td>InpSoundAlerts</td><td>Play sound alerts for trades, breakeven, partial closes, and price alerts.</td></tr>
+    <tr><td><strong>Toast</strong></td><td>Built-in</td><td>On-screen popup messages that appear above the status bar for 2.5 seconds.</td></tr>
+  </table>
+</section>
+
+<!-- ============ 21. PROFILES ============ -->
+<section id="profiles">
+  <h2><span class="num">21</span>Profiles &amp; Persistence</h2>
+  <h3>Quick Profiles (Trade Tab)</h3>
+  <p>Three profile slots are available on the Trade tab:</p>
+  <ul>
+    <li><strong>#1, #2, #3</strong> &mdash; Load a saved profile.</li>
+    <li><strong>S1, S2, S3</strong> &mdash; Save current settings to a profile.</li>
+  </ul>
+  <p>Each profile stores: risk mode, risk %, lot size, SL/TP, RR ratio, virtual SL/TP, breakeven, trailing, and partial close settings.</p>
+
+  <h3>Settings Persistence</h3>
+  <p>All panel settings are automatically saved to an INI file when you close the chart or remove the EA. They are restored when you re-attach the EA. You can also manually save/load via the Settings tab.</p>
+
+  <h3>Position State</h3>
+  <p>Per-position state (breakeven status, trailing type, partial close levels) is persisted via MetaTrader's Global Variables, surviving EA restarts and terminal restarts.</p>
+</section>
+
+<!-- ============ 22. INPUTS ============ -->
+<section id="inputs">
+  <h2><span class="num">22</span>Input Parameters Reference</h2>
+
+  <h3>Panel</h3>
+  <table>
+    <tr><th>Parameter</th><th>Default</th><th>Description</th></tr>
+    <tr><td>InpPanelX</td><td>20</td><td>Initial panel X position</td></tr>
+    <tr><td>InpPanelY</td><td>40</td><td>Initial panel Y position</td></tr>
+    <tr><td>InpMagic</td><td>123456</td><td>Magic number for order identification</td></tr>
+  </table>
+
+  <h3>Risk Management</h3>
+  <table>
+    <tr><th>Parameter</th><th>Default</th><th>Description</th></tr>
+    <tr><td>InpRiskPercent</td><td>1.0</td><td>Default risk percentage</td></tr>
+    <tr><td>InpDefaultLots</td><td>0.01</td><td>Default lot size</td></tr>
+    <tr><td>InpMaxLots</td><td>10.0</td><td>Maximum allowed lot size</td></tr>
+  </table>
+
+  <h3>Trade Management</h3>
+  <table>
+    <tr><th>Parameter</th><th>Default</th><th>Description</th></tr>
+    <tr><td>InpAutoBreakeven</td><td>false</td><td>Enable auto breakeven</td></tr>
+    <tr><td>InpBETrigger</td><td>20.0</td><td>Breakeven trigger distance</td></tr>
+    <tr><td>InpBEOffset</td><td>2.0</td><td>Breakeven offset (pips above entry)</td></tr>
+    <tr><td>InpAutoTrailing</td><td>false</td><td>Enable auto trailing stop</td></tr>
+    <tr><td>InpTrailStart</td><td>20.0</td><td>Trail activation distance</td></tr>
+    <tr><td>InpTrailStep</td><td>5.0</td><td>Trailing step size</td></tr>
+  </table>
+
+  <h3>Grid Orders</h3>
+  <table>
+    <tr><th>Parameter</th><th>Default</th><th>Description</th></tr>
+    <tr><td>InpGridDistance</td><td>20</td><td>Distance between grid levels (pips)</td></tr>
+    <tr><td>InpGridOrders</td><td>5</td><td>Number of grid orders</td></tr>
+    <tr><td>InpGridMultiplier</td><td>1.0</td><td>Lot multiplier per level</td></tr>
+  </table>
+
+  <h3>Hotkeys</h3>
+  <table>
+    <tr><th>Parameter</th><th>Default</th><th>Description</th></tr>
+    <tr><td>InpHotkeys</td><td>true</td><td>Enable keyboard shortcuts</td></tr>
+    <tr><td>InpHK_Buy</td><td>B</td><td>Buy hotkey</td></tr>
+    <tr><td>InpHK_Sell</td><td>S</td><td>Sell hotkey</td></tr>
+    <tr><td>InpHK_CloseAll</td><td>C</td><td>Close All hotkey</td></tr>
+    <tr><td>InpHK_BE</td><td>E</td><td>Breakeven hotkey</td></tr>
+  </table>
+
+  <h3>Sessions</h3>
+  <table>
+    <tr><th>Parameter</th><th>Default</th><th>Description</th></tr>
+    <tr><td>InpShowSessions</td><td>true</td><td>Show session boxes on chart</td></tr>
+    <tr><td>InpLondonStart/End</td><td>7/16</td><td>London session hours (GMT)</td></tr>
+    <tr><td>InpNewYorkStart/End</td><td>12/21</td><td>New York session hours (GMT)</td></tr>
+    <tr><td>InpTokyoStart/End</td><td>0/9</td><td>Tokyo session hours (GMT)</td></tr>
+  </table>
+
+  <h3>Notifications</h3>
+  <table>
+    <tr><th>Parameter</th><th>Default</th><th>Description</th></tr>
+    <tr><td>InpPushNotify</td><td>false</td><td>Send push notifications</td></tr>
+    <tr><td>InpEmailNotify</td><td>false</td><td>Send email notifications</td></tr>
+    <tr><td>InpScreenshot</td><td>false</td><td>Screenshot on trade</td></tr>
+    <tr><td>InpSoundAlerts</td><td>true</td><td>Play sound alerts</td></tr>
+  </table>
+
+  <h3>Equity Protection</h3>
+  <table>
+    <tr><th>Parameter</th><th>Default</th><th>Description</th></tr>
+    <tr><td>InpUseMaxDD</td><td>false</td><td>Enable daily drawdown protection</td></tr>
+    <tr><td>InpMaxDD</td><td>5.0</td><td>Maximum daily drawdown (%)</td></tr>
+    <tr><td>InpUseProfitTarget</td><td>false</td><td>Enable profit target</td></tr>
+    <tr><td>InpProfitTarget</td><td>3.0</td><td>Daily profit target (%)</td></tr>
+  </table>
+</section>
+
+<div class="back-top"><a href="#top">&uarr; Back to top</a></div>
+
+</div>
+
+<footer>
+  <p><strong>G-Labs Trade Manager v4.0</strong> &mdash; G-Labs Trading Technologies</p>
+  <p>Pure UI &bull; No BMP &bull; Zero DLL &bull; Built for MetaTrader 5</p>
+</footer>
+
+</body>
+</html>
