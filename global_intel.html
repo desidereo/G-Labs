@@ -120,26 +120,12 @@
             margin-bottom: 10px;
             font-weight: 800;
         }
-        .pizza-display {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-        }
-        .pizza-icon {
-            font-size: 1.8rem;
-            color: var(--warning);
-            animation: pulse 2s infinite;
-        }
-        .pizza-level {
-            font-size: 1.2rem;
-            font-weight: 800;
-            color: #fff;
-        }
-        .pizza-desc {
-            font-size: 0.7rem;
-            color: var(--danger);
-            margin-top: 5px;
+        .pizza-frame {
+            width: 100%;
+            height: 350px;
+            border: none;
+            overflow: hidden;
+            border-radius: 4px;
         }
 
         /* News Ticker */
@@ -367,13 +353,7 @@
             <!-- Pentagon Pizza Index -->
             <div class="pizza-meter">
                 <div class="pizza-title"><i class="fas fa-pizza-slice"></i> PENTAGON PIZZA INDEX</div>
-                <div class="pizza-display">
-                    <div class="pizza-icon"><i class="fas fa-fire"></i></div>
-                    <div>
-                        <div class="pizza-level">HIGH VOLUME</div>
-                        <div class="pizza-desc">Possible Crisis Event</div>
-                    </div>
-                </div>
+                <iframe class="pizza-frame" src="https://www.pizzint.watch/" title="Pentagon Pizza Index"></iframe>
             </div>
 
             <!-- External Intel Links -->
