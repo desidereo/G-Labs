@@ -239,23 +239,97 @@
             border: none;
         }
 
-        /* AI Insights Styling */
-        .ai-insight {
-            background: rgba(41, 98, 255, 0.05);
-            border: 1px solid rgba(41, 98, 255, 0.2);
-            border-left: 3px solid var(--primary);
+        /* AI HUD Overlay (Map) */
+        .ai-hud-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 300px;
+            background: rgba(19, 23, 34, 0.85);
+            border: 1px solid rgba(41, 98, 255, 0.3);
+            border-radius: 4px;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            max-height: 400px;
+        }
+        .ai-hud-header {
+            background: rgba(41, 98, 255, 0.2);
             padding: 10px;
-            margin: 10px;
-            border-radius: 0 4px 4px 0;
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--primary);
+            border-bottom: 1px solid rgba(41, 98, 255, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .ai-hud-content {
+            padding: 10px;
+            overflow-y: auto;
+            flex: 1;
+        }
+        .ai-insight {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 3px solid var(--primary);
+            padding: 8px;
+            margin-bottom: 8px;
+            border-radius: 0 3px 3px 0;
+            font-size: 0.8rem;
             animation: slideIn 0.3s ease-out;
         }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
         
-        .ai-header { font-size: 0.7rem; color: var(--primary); font-weight: 800; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; text-transform: uppercase; }
-        .ai-text { font-size: 0.8rem; color: #e1e1e1; line-height: 1.4; }
-        .trade-action { display: inline-block; margin-top: 5px; font-size: 0.7rem; font-weight: bold; padding: 2px 6px; background: rgba(255,255,255,0.1); border-radius: 4px; }
-        .action-buy { color: var(--success); border: 1px solid rgba(38, 166, 154, 0.5); }
-        .action-sell { color: var(--danger); border: 1px solid rgba(239, 83, 80, 0.5); }
+        /* Pizza Meter Widget */
+        .pizza-widget {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .meter-container {
+            width: 120px;
+            height: 60px;
+            background: #2a2e39;
+            border-radius: 60px 60px 0 0;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        .meter-fill {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #26a69a 0%, #ffcf22 50%, #ef5350 100%);
+            transform-origin: bottom center;
+            transform: rotate(0deg); /* Driven by JS */
+            transition: transform 1s cubic-bezier(0.1, 2, 0.5, 1);
+        }
+        .meter-cover {
+            position: absolute;
+            bottom: 0;
+            left: 20px;
+            width: 80px;
+            height: 40px;
+            background: #1e222d;
+            border-radius: 40px 40px 0 0;
+            z-index: 2;
+        }
+        .meter-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #fff;
+            z-index: 3;
+            margin-top: -20px;
+        }
+        .meter-label { font-size: 0.7rem; color: #787b86; text-transform: uppercase; letter-spacing: 1px; }
 
         /* Bottom Panel (Webcams + Pizza) */
         .bottom-panel {
@@ -381,9 +455,22 @@
         </aside>
 
         <!-- Main Map -->
-        <div id="map"></div>
+        <div id="map">
+            <!-- AI HUD Overlay -->
+            <div class="ai-hud-container">
+                <div class="ai-hud-header">
+                    <span><i class="fas fa-robot"></i> AI INTELLIGENCE FEED</span>
+                    <span style="font-size: 0.65rem; color: #787b86;">LIVE</span>
+                </div>
+                <div class="ai-hud-content" id="ai-hud-feed">
+                    <div style="font-size: 0.7rem; color: #787b86; text-align: center; padding: 10px;">
+                        Waiting for algorithmic signals...
+                    </div>
+                </div>
+            </div>
+        </div>
         
-        <!-- Sidebar: Right Panel (News + Market + AI) -->
+        <!-- Sidebar: Right Panel (News + Market) -->
         <aside class="sidebar-right">
             <div class="panel-header">
                 <span><i class="fas fa-chart-line"></i> LIVE NEWS & ANALYSIS</span>
@@ -403,22 +490,24 @@
                 <button class="channel-btn" onclick="changeChannel('pykpO5kQJ98', this)">EURONEWS</button>
                 <button class="channel-btn" onclick="changeChannel('Bpa0u4Vjjfs', this)">CNBC</button>
             </div>
-
-            <div class="panel-header" style="background: #1e222d; border-top: 1px solid #2a2e39; margin-top: 0;">
-                <span><i class="fas fa-robot"></i> AI INSIGHTS</span>
-            </div>
             
-            <div id="analysis-feed" style="flex: 1; overflow-y: auto;">
-                <!-- AI Analysis items injected here -->
-            </div>
+            <!-- Removed AI Section from here -->
+            
         </aside>
 
         <!-- Bottom Panel: Webcams & Pizza Index -->
         <div class="bottom-panel">
             <!-- Pizza Index Widget -->
             <div class="pizza-mini">
-                <div style="font-size: 0.7rem; color: #787b86; margin-bottom: 5px; font-weight: 800;">PENTAGON PIZZA INDEX</div>
-                <iframe src="https://www.pizzint.watch/" style="width: 100%; height: 150px; border: none; overflow: hidden; transform: scale(0.9);"></iframe>
+                <div class="pizza-widget">
+                    <div class="meter-container">
+                        <div class="meter-fill" id="pizza-meter-fill"></div>
+                        <div class="meter-cover"></div>
+                        <div class="meter-value" id="pizza-value">--</div>
+                    </div>
+                    <div class="meter-label">PENTAGON PIZZA INDEX</div>
+                    <div style="font-size: 0.6rem; color: #555; margin-top: 2px;">Simulated API Data</div>
+                </div>
             </div>
 
             <!-- Webcams -->
@@ -719,11 +808,14 @@
             if(feed.children.length > 20) feed.lastElementChild.remove();
         }
 
-        // Helper: Add item to Analysis
+        // Helper: Add item to AI HUD
         function addAnalysis(text, action, asset) {
-            const feed = document.getElementById('analysis-feed');
+            const feed = document.getElementById('ai-hud-feed');
             if(!feed) return; // Guard clause
             
+            // Remove "Waiting..." placeholder if present
+            if(feed.innerText.includes("Waiting")) feed.innerHTML = "";
+
             const item = document.createElement('div');
             item.className = 'ai-insight';
             
@@ -739,20 +831,38 @@
                 ${actionHtml}
             `;
             feed.prepend(item);
+            
+            // Limit HUD items to 5 to prevent covering map
+            if(feed.children.length > 5) feed.lastElementChild.remove();
         }
 
-        // --- SIMULATED AI FEEDS (World Monitor Clones) ---
-        function loadAIFeeds() {
-            // Initial AI Alerts
-            const aiAlerts = [
-                { type: 'Cyber', title: 'DDoS Attack Detected', desc: 'Targeting Baltic Infrastructure', level: 'high' },
-                { type: 'Infra', title: 'Grid Instability', desc: 'Power fluctuations in Eastern Moldova', level: 'medium' },
-                { type: 'Maritime', title: 'GPS Jamming', desc: 'Signal loss in Black Sea corridor', level: 'high' },
-                { type: 'Finance', title: 'SWIFT Anomaly', desc: 'High-frequency trading spike: DEF-Sec', level: 'low' },
-                { type: 'Bio', title: 'Pathogen Alert', desc: 'Localized outbreak risk: Region 4', level: 'medium' }
-            ];
-
-            aiAlerts.forEach(alert => addIntelItem(alert.type, `${alert.title}: ${alert.desc}`, alert.level));
+        // --- SIMULATED PIZZA INDEX API ---
+        function updatePizzaIndex() {
+            // Simulated API Logic: 
+            // 0-30: Normal, 30-60: Elevated, 60-100: Critical (High Orders)
+            // Random fluctuation with a bias towards "Elevated" for demo purposes
+            const baseLevel = 45; 
+            const noise = Math.floor(Math.random() * 30) - 15;
+            let level = baseLevel + noise;
+            if(level < 0) level = 0;
+            if(level > 100) level = 100;
+            
+            // Update Meter Visuals
+            const fill = document.getElementById('pizza-meter-fill');
+            const value = document.getElementById('pizza-value');
+            
+            // Map 0-100 to rotation (-90deg to 90deg)
+            const rotation = (level / 100) * 180 - 90;
+            
+            if(fill && value) {
+                fill.style.transform = `rotate(${rotation}deg)`;
+                value.innerText = level;
+                
+                // Color coding text
+                if(level < 40) value.style.color = "#26a69a"; // Green
+                else if(level < 70) value.style.color = "#ffcf22"; // Yellow
+                else value.style.color = "#ef5350"; // Red
+            }
         }
 
         // Initialize
@@ -761,10 +871,12 @@
         setTimeout(fetchFlights, 2000);
         setTimeout(fetchNews, 100);
         setTimeout(loadAIFeeds, 1500); // Load AI Feeds
+        setTimeout(updatePizzaIndex, 500); // Initial Pizza Read
 
         // Periodic Updates
-        setInterval(fetchFlights, 120000); // Flights every 2m (Safe for free/unverified accounts)
+        setInterval(fetchFlights, 120000); // Flights every 2m
         setInterval(fetchNews, 300000);   // News every 5m
+        setInterval(updatePizzaIndex, 5000); // Pizza updates every 5s (simulated live data)
         
         // Auto-refresh simulation loop
         const mockEvents = [
