@@ -35,13 +35,15 @@
         
         /* Header */
         header {
-            grid-column: 1 / 4;
+            grid-column: 1 / -1;
+            grid-row: 1 / 2;
             background: #1e222d;
             border-bottom: 1px solid #2a2e39;
             display: flex;
             align-items: center;
             padding: 0 20px;
             justify-content: space-between;
+            z-index: 10;
         }
         .logo { font-weight: 800; font-size: 1.5rem; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 10px; }
         .logo span { color: var(--primary); }
@@ -49,19 +51,50 @@
         .main-nav a { text-decoration: none; color: #b2b5be; font-weight: 600; font-size: 0.9rem; transition: color 0.3s; height: 100%; display: flex; align-items: center; padding: 0 5px; border-bottom: 2px solid transparent; }
         .main-nav a:hover, .main-nav a.active { color: var(--primary); border-bottom-color: var(--primary); }
 
-        /* Main Layout */
+        /* Main Layout Grid */
         .container {
             display: grid;
-            grid-template-columns: 350px 1fr 320px; /* Reverted to original width ratios */
-            grid-template-rows: 60px 1fr 250px; /* Bottom row for Webcams/Pizza */
+            grid-template-columns: 350px 1fr 350px;
+            grid-template-rows: 60px 30px 1fr 220px; /* Header, Ticker, Main, Bottom */
             height: 100vh;
             width: 100vw;
         }
 
-        /* Sidebar: Left Panel (Intel Feed + Pizza) */
+        /* News Ticker */
+        .news-ticker {
+            grid-column: 1 / -1;
+            grid-row: 2 / 3;
+            background: var(--primary);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            white-space: nowrap;
+            font-size: 0.9rem;
+            font-weight: 600;
+            z-index: 5;
+        }
+        .ticker-label {
+            background: #000;
+            padding: 0 15px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            font-weight: 800;
+            z-index: 6;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+        }
+        .ticker-content {
+            display: inline-block;
+            padding-left: 100%;
+            animation: ticker 60s linear infinite;
+        }
+        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+
+        /* Sidebar: Left Panel (Intel Feed) */
         .sidebar-left {
             grid-column: 1 / 2;
-            grid-row: 2 / 4; /* Span full height */
+            grid-row: 3 / 5; /* Spans Main + Bottom rows */
             background: #131722;
             border-right: 1px solid #2a2e39;
             overflow-y: auto;
@@ -78,6 +111,9 @@
             align-items: center;
             font-size: 0.9rem;
             letter-spacing: 0.5px;
+            position: sticky;
+            top: 0;
+            z-index: 5;
         }
         .live-indicator {
             display: flex;
@@ -114,49 +150,6 @@
         .intel-title { font-size: 0.9rem; margin-bottom: 5px; color: #fff; line-height: 1.4; font-weight: 500; }
         .intel-time { font-size: 0.75rem; color: #787b86; }
         
-        /* Pentagon Pizza Index Widget */
-        .pizza-meter {
-            padding: 15px;
-            background: #1e222d;
-            border-bottom: 1px solid #2a2e39;
-            text-align: center;
-        }
-        .pizza-title {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            color: #787b86;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
-            font-weight: 800;
-        }
-        .pizza-frame {
-            width: 100%;
-            height: 350px;
-            border: none;
-            overflow: hidden;
-            border-radius: 4px;
-        }
-
-        /* News Ticker */
-        .news-ticker {
-            grid-column: 1 / 4;
-            grid-row: 3 / 4;
-            background: var(--primary);
-            color: #fff;
-            display: flex;
-            align-items: center;
-            overflow: hidden;
-            white-space: nowrap;
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-        .ticker-content {
-            display: inline-block;
-            padding-left: 100%;
-            animation: ticker 60s linear infinite; /* Slowed down from 20s to 60s */
-        }
-        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
-
         /* Intel Sources Links */
         .source-links {
             display: flex;
@@ -182,48 +175,97 @@
         .source-link:hover { background: var(--primary); color: #fff; }
         .source-link i { font-size: 0.7rem; }
 
+        /* Map Section (Center) */
+        #map {
+            grid-column: 2 / 3;
+            grid-row: 3 / 4;
+            background: #000;
+            z-index: 1;
+        }
+        
+        /* Sidebar: Right Panel (News + Market) */
+        .sidebar-right {
+            grid-column: 3 / 4;
+            grid-row: 3 / 4;
+            background: #131722;
+            border-left: 1px solid #2a2e39;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
         /* Video Controls */
         .video-controls {
             display: flex;
             background: #1e222d;
             border-bottom: 1px solid #2a2e39;
             padding: 5px 10px;
-            gap: 10px;
+            gap: 5px;
             align-items: center;
+            flex-wrap: wrap;
         }
         .channel-btn {
             background: #2a2e39;
             color: #b2b5be;
             border: 1px solid transparent;
-            padding: 4px 10px;
+            padding: 4px 8px;
             border-radius: 4px;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             cursor: pointer;
             font-weight: 600;
             transition: all 0.2s;
+            flex-grow: 1;
+            text-align: center;
         }
         .channel-btn:hover { color: #fff; background: #363a45; }
         .channel-btn.active { background: var(--primary); color: #fff; }
-
-        /* Map Section (Center) */
-        #map {
-            grid-column: 2 / 3;
-            grid-row: 2 / 3;
-            background: #000;
-            z-index: 1;
-        }
         
+        .video-container {
+            width: 100%;
+            height: 200px;
+            position: relative;
+            background: #000;
+            flex-shrink: 0;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* AI Insights Styling */
+        .ai-insight {
+            background: rgba(41, 98, 255, 0.05);
+            border: 1px solid rgba(41, 98, 255, 0.2);
+            border-left: 3px solid var(--primary);
+            padding: 10px;
+            margin: 10px;
+            border-radius: 0 4px 4px 0;
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+        
+        .ai-header { font-size: 0.7rem; color: var(--primary); font-weight: 800; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; text-transform: uppercase; }
+        .ai-text { font-size: 0.8rem; color: #e1e1e1; line-height: 1.4; }
+        .trade-action { display: inline-block; margin-top: 5px; font-size: 0.7rem; font-weight: bold; padding: 2px 6px; background: rgba(255,255,255,0.1); border-radius: 4px; }
+        .action-buy { color: var(--success); border: 1px solid rgba(38, 166, 154, 0.5); }
+        .action-sell { color: var(--danger); border: 1px solid rgba(239, 83, 80, 0.5); }
+
         /* Bottom Panel (Webcams + Pizza) */
         .bottom-panel {
             grid-column: 2 / 4; /* Span across Map and Right Sidebar columns */
-            grid-row: 3 / 4;
+            grid-row: 4 / 5;
             background: #131722;
             border-top: 1px solid #2a2e39;
             display: flex;
             overflow-x: auto;
-            padding: 10px;
-            gap: 15px;
+            padding: 0;
+            gap: 0;
         }
+        .bottom-panel::-webkit-scrollbar { height: 8px; }
 
         /* Webcam Thumbnails in Bottom Panel */
         .webcam-thumb {
@@ -232,22 +274,35 @@
             background: #000;
             position: relative;
             cursor: pointer;
-            border: 1px solid #434651;
+            border-right: 1px solid #434651;
             transition: all 0.2s;
         }
+        .webcam-thumb:hover { filter: brightness(1.2); }
         .webcam-thumb iframe { width: 100%; height: 100%; border: none; pointer-events: none; }
+        .cam-label {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background: rgba(0,0,0,0.7);
+            padding: 2px 5px;
+            font-size: 0.7rem;
+            color: #fff;
+            border-radius: 3px;
+            z-index: 2;
+        }
         
         /* Pizza Index Mini Widget */
         .pizza-mini {
             min-width: 200px;
             background: #1e222d;
-            border: 1px solid #2a2e39;
+            border-right: 1px solid #2a2e39;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            padding: 10px;
         }
-        
+
         /* Map Layer Control Customization */
         .leaflet-control-layers {
             background: var(--dark) !important;
@@ -263,92 +318,6 @@
             display: flex;
             align-items: center;
         }
-
-        /* Sidebar: Right Panel (News + Market) */
-        .sidebar-right {
-            grid-column: 3 / 4;
-            grid-row: 2 / 3;
-            background: #131722;
-            border-left: 1px solid #2a2e39;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-        }
-
-        /* Sidebar: Right Panel (News + Market) */
-        aside.sidebar-right {
-            grid-column: 3 / 4;
-            grid-row: 2 / 3;
-            background: #131722;
-            border-left: 1px solid #2a2e39;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-        }
-
-        /* Bottom Panel - Analysis */
-        .analysis-panel {
-            background: var(--dark);
-            border-top: 1px solid #2a2e39;
-            grid-column: 2 / 3;
-            grid-row: 3 / 4;
-            padding: 0;
-            display: grid;
-            grid-template-columns: 1fr 360px;
-        }
-        
-        .analysis-left {
-            display: flex;
-            flex-direction: column;
-            border-right: 1px solid #2a2e39;
-            overflow: hidden;
-        }
-        
-        .analysis-right {
-            display: flex;
-            flex-direction: column;
-            background: #000;
-            overflow: hidden;
-        }
-
-        .analysis-content {
-            padding: 15px;
-            overflow-y: auto;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        .video-container {
-            flex: 1;
-            position: relative;
-            background: #000;
-        }
-        
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        .ai-insight {
-            background: rgba(41, 98, 255, 0.05);
-            border: 1px solid rgba(41, 98, 255, 0.2);
-            border-left: 3px solid var(--primary);
-            padding: 12px;
-            border-radius: 0 4px 4px 0;
-            animation: slideIn 0.3s ease-out;
-        }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
-        
-        .ai-header { font-size: 0.75rem; color: var(--primary); font-weight: 800; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; text-transform: uppercase; }
-        .ai-text { font-size: 0.9rem; color: #e1e1e1; line-height: 1.5; }
-        .trade-action { display: inline-block; margin-top: 8px; font-size: 0.8rem; font-weight: bold; padding: 4px 8px; background: rgba(255,255,255,0.1); border-radius: 4px; }
-        .action-buy { color: var(--success); border: 1px solid rgba(38, 166, 154, 0.5); }
-        .action-sell { color: var(--danger); border: 1px solid rgba(239, 83, 80, 0.5); }
 
         /* Scrollbar */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -378,7 +347,7 @@
         </nav>
     </header>
 
-    <div class="dashboard-container">
+    <div class="container">
         <!-- News Ticker -->
         <div class="news-ticker">
             <div class="ticker-label">Global Wire</div>
@@ -411,115 +380,65 @@
         <!-- Main Map -->
         <div id="map"></div>
         
-        <!-- Bottom Panel: Webcams & Pizza Index -->
-        <div class="bottom-panel">
-            <!-- Pizza Index Widget -->
-            <div class="pizza-mini">
-                <div style="font-size: 0.7rem; color: #787b86; margin-bottom: 5px; font-weight: 800;">PENTAGON PIZZA INDEX</div>
-                <iframe src="https://www.pizzint.watch/" style="width: 100%; height: 180px; border: none; overflow: hidden;"></iframe>
-            </div>
-
-            <!-- Webcams -->
-            <div class="webcam-thumb" onclick="changeChannel('1-iS7LArMPA', this)">
-                <iframe src="https://www.youtube.com/embed/1-iS7LArMPA?autoplay=1&mute=1&controls=0&showinfo=0" allow="autoplay"></iframe>
-                <div style="position: absolute; top: 5px; left: 5px; background: rgba(0,0,0,0.7); padding: 2px 5px; font-size: 0.7rem; color: #fff;">NYC - Times Square</div>
-            </div>
-            <div class="webcam-thumb" onclick="changeChannel('z_fY1pj1VBw', this)">
-                <iframe src="https://www.youtube.com/embed/z_fY1pj1VBw?autoplay=1&mute=1&controls=0&showinfo=0" allow="autoplay"></iframe>
-                <div style="position: absolute; top: 5px; left: 5px; background: rgba(0,0,0,0.7); padding: 2px 5px; font-size: 0.7rem; color: #fff;">TAIPEI - Elephant Mtn</div>
-            </div>
-            <div class="webcam-thumb" onclick="changeChannel('2l5qY-Xz9iI', this)">
-                <iframe src="https://www.youtube.com/embed/2l5qY-Xz9iI?autoplay=1&mute=1&controls=0&showinfo=0" allow="autoplay"></iframe>
-                <div style="position: absolute; top: 5px; left: 5px; background: rgba(0,0,0,0.7); padding: 2px 5px; font-size: 0.7rem; color: #fff;">WARSAW - City Center</div>
-            </div>
-            <div class="webcam-thumb" onclick="changeChannel('qLogxA4vi_s', this)">
-                <iframe src="https://www.youtube.com/embed/qLogxA4vi_s?autoplay=1&mute=1&controls=0&showinfo=0" allow="autoplay"></iframe>
-                <div style="position: absolute; top: 5px; left: 5px; background: rgba(0,0,0,0.7); padding: 2px 5px; font-size: 0.7rem; color: #fff;">HONG KONG - Victoria Harbour</div>
-            </div>
-            <div class="webcam-thumb" onclick="changeChannel('86YLFOog4GM', this)">
-                <iframe src="https://www.youtube.com/embed/86YLFOog4GM?autoplay=1&mute=1&controls=0&showinfo=0" allow="autoplay"></iframe>
-                <div style="position: absolute; top: 5px; left: 5px; background: rgba(0,0,0,0.7); padding: 2px 5px; font-size: 0.7rem; color: #fff;">SPACE - ISS Live</div>
-            </div>
-        </div>
-
-        <!-- Sidebar: Right Panel (News + Market) -->
+        <!-- Sidebar: Right Panel (News + Market + AI) -->
         <aside class="sidebar-right">
             <div class="panel-header">
-                <span><i class="fas fa-chart-line"></i> GLOBAL MARKETS & NEWS</span>
+                <span><i class="fas fa-chart-line"></i> LIVE NEWS & ANALYSIS</span>
                 <div class="live-indicator"><span class="dot"></span> OPEN</div>
             </div>
 
             <!-- Video Player -->
             <div class="video-container">
                 <iframe id="video-frame" src="https://www.youtube.com/embed/gCNeDWCI0vo?autoplay=1&mute=1" title="Live News" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                
-                <!-- Channel Selector -->
-                <div class="video-controls">
-                    <span style="font-size: 0.65rem; text-transform: uppercase; color: #787b86;">News:</span>
-                    <button class="channel-btn active" onclick="changeChannel('gCNeDWCI0vo', this)">AL JAZEERA</button>
-                    <button class="channel-btn" onclick="changeChannel('YDvsBbKfLPA', this)">SKY NEWS</button>
-                    <button class="channel-btn" onclick="changeChannel('iEpJwprxDdk', this)">BLOOMBERG</button>
-                    <button class="channel-btn" onclick="changeChannel('pykpO5kQJ98', this)">EURONEWS</button>
-                    <button class="channel-btn" onclick="changeChannel('Bpa0u4Vjjfs', this)">CNBC</button>
-                    <button class="channel-btn" onclick="changeChannel('L0G9G_8v4zI', this)">FRANCE 24</button>
-                    <button class="channel-btn" onclick="changeChannel('l8PMl7tUDIE', this)">ABC NEWS</button>
-                    <button class="channel-btn" onclick="changeChannel('UCeY0bbntWzzVIaj2z3QigXg', this)">NBC NEWS</button>
-                </div>
+            </div>
+            
+            <!-- Channel Selector -->
+            <div class="video-controls">
+                <button class="channel-btn active" onclick="changeChannel('gCNeDWCI0vo', this)">AL JAZEERA</button>
+                <button class="channel-btn" onclick="changeChannel('YDvsBbKfLPA', this)">SKY NEWS</button>
+                <button class="channel-btn" onclick="changeChannel('iEpJwprxDdk', this)">BLOOMBERG</button>
+                <button class="channel-btn" onclick="changeChannel('pykpO5kQJ98', this)">EURONEWS</button>
+                <button class="channel-btn" onclick="changeChannel('Bpa0u4Vjjfs', this)">CNBC</button>
+                <button class="channel-btn" onclick="changeChannel('L0G9G_8v4zI', this)">FRANCE 24</button>
             </div>
 
-            <div id="market-data">
-                <!-- Market items -->
+            <div class="panel-header" style="background: #1e222d; border-top: 1px solid #2a2e39; margin-top: 0;">
+                <span><i class="fas fa-robot"></i> AI INSIGHTS</span>
+            </div>
+            
+            <div id="analysis-feed" style="flex: 1; overflow-y: auto;">
+                <!-- AI Analysis items injected here -->
             </div>
         </aside>
 
-        <!-- Bottom Panel: AI Analysis -->
-        <div class="analysis-panel">
-            <!-- Left: AI Analysis Feed -->
-            <div class="analysis-left">
-                <div class="panel-header">
-                    <span><i class="fas fa-microchip"></i> AUTOMATED TRADING INSIGHTS (AI)</span>
-                </div>
-                <div class="analysis-content" id="analysis-feed">
-                    <div class="ai-insight">
-                        <div class="ai-header"><i class="fas fa-robot"></i> System Analysis</div>
-                        <div class="ai-text">Initializing geopolitical correlation engine. Scanning 150+ global data points...</div>
-                    </div>
-                </div>
+        <!-- Bottom Panel: Webcams & Pizza Index -->
+        <div class="bottom-panel">
+            <!-- Pizza Index Widget -->
+            <div class="pizza-mini">
+                <div style="font-size: 0.7rem; color: #787b86; margin-bottom: 5px; font-weight: 800;">PENTAGON PIZZA INDEX</div>
+                <iframe src="https://www.pizzint.watch/" style="width: 100%; height: 150px; border: none; overflow: hidden; transform: scale(0.9);"></iframe>
             </div>
-            
-            <!-- Right: Live Video Stream -->
-            <div class="analysis-right">
-                <div class="panel-header">
-                    <span><i class="fab fa-youtube"></i> LIVE INTEL STREAM</span>
-                    <div class="live-indicator" style="margin-left: auto;"><span class="dot"></span> LIVE</div>
-                </div>
-                <!-- Channel Selector -->
-                <div class="video-controls">
-                    <span style="font-size: 0.65rem; text-transform: uppercase; color: #787b86;">News:</span>
-                    <button class="channel-btn active" onclick="changeChannel('gCNeDWCI0vo', this)">AL JAZEERA</button>
-                    <button class="channel-btn" onclick="changeChannel('YDvsBbKfLPA', this)">SKY NEWS</button>
-                    <button class="channel-btn" onclick="changeChannel('iEpJwprxDdk', this)">BLOOMBERG</button>
-                    <button class="channel-btn" onclick="changeChannel('pykpO5kQJ98', this)">EURONEWS</button>
-                    <button class="channel-btn" onclick="changeChannel('Bpa0u4Vjjfs', this)">CNBC</button>
-                    <button class="channel-btn" onclick="changeChannel('L0G9G_8v4zI', this)">FRANCE 24</button>
-                    <button class="channel-btn" onclick="changeChannel('l8PMl7tUDIE', this)">ABC NEWS</button>
-                    <button class="channel-btn" onclick="changeChannel('UCeY0bbntWzzVIaj2z3QigXg', this)">NBC NEWS</button>
-                    
-                    <span style="font-size: 0.65rem; text-transform: uppercase; color: #787b86; margin-left: 10px;">Cams:</span>
-                    <button class="channel-btn" onclick="changeChannel('1-iS7LArMPA', this)">NYC</button>
-                    <button class="channel-btn" onclick="changeChannel('F8MN0o6RS9o', this)">TOKYO</button>
-                    <button class="channel-btn" onclick="changeChannel('P1Ld2d2c55Q', this)">KYIV</button>
-                    <button class="channel-btn" onclick="changeChannel('86YLFOog4GM', this)">SPACE (ISS)</button>
-                    <button class="channel-btn" onclick="changeChannel('L99k5i4C-Ww', this)">TAIPEI</button>
-                    <button class="channel-btn" onclick="changeChannel('y-duTV0rcW8', this)">MANILA</button>
-                    <button class="channel-btn" onclick="changeChannel('2l5qY-Xz9iI', this)">WARSAW</button>
-                    <button class="channel-btn" onclick="changeChannel('9i5s3q-3j4w', this)">ROTTERDAM</button>
-                    <button class="channel-btn" onclick="changeChannel('qLogxA4vi_s', this)">HK PORT</button>
-                </div>
-                <div class="video-container">
-                    <!-- Default: Al Jazeera English -->
-                    <iframe id="video-frame" src="https://www.youtube.com/embed/gCNeDWCI0vo?autoplay=1&mute=1" title="Global Intel Stream" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-                </div>
+
+            <!-- Webcams -->
+            <div class="webcam-thumb" onclick="changeChannel('1-iS7LArMPA', this)">
+                <iframe src="https://www.youtube.com/embed/1-iS7LArMPA?autoplay=1&mute=1&controls=0&showinfo=0" allow="autoplay"></iframe>
+                <div class="cam-label">NYC - Times Square</div>
+            </div>
+            <div class="webcam-thumb" onclick="changeChannel('z_fY1pj1VBw', this)">
+                <iframe src="https://www.youtube.com/embed/z_fY1pj1VBw?autoplay=1&mute=1&controls=0&showinfo=0" allow="autoplay"></iframe>
+                <div class="cam-label">TAIPEI - Elephant Mtn</div>
+            </div>
+            <div class="webcam-thumb" onclick="changeChannel('2l5qY-Xz9iI', this)">
+                <iframe src="https://www.youtube.com/embed/2l5qY-Xz9iI?autoplay=1&mute=1&controls=0&showinfo=0" allow="autoplay"></iframe>
+                <div class="cam-label">WARSAW - City Center</div>
+            </div>
+            <div class="webcam-thumb" onclick="changeChannel('qLogxA4vi_s', this)">
+                <iframe src="https://www.youtube.com/embed/qLogxA4vi_s?autoplay=1&mute=1&controls=0&showinfo=0" allow="autoplay"></iframe>
+                <div class="cam-label">HONG KONG - Victoria Harbour</div>
+            </div>
+            <div class="webcam-thumb" onclick="changeChannel('86YLFOog4GM', this)">
+                <iframe src="https://www.youtube.com/embed/86YLFOog4GM?autoplay=1&mute=1&controls=0&showinfo=0" allow="autoplay"></iframe>
+                <div class="cam-label">SPACE - ISS Live</div>
             </div>
         </div>
     </div>
@@ -637,8 +556,6 @@
 
                 const data = await response.json();
                 
-                // Clear existing planes if any (simple implementation: clear all markers that are planes)
-                // For now, we just add them. In production, we'd update positions.
                 // Limiting to 50 planes for performance in this demo
                 const flights = data.states.slice(0, 50);
                 
@@ -673,13 +590,13 @@
         function changeChannel(sourceId, btn) {
             // Update Active Button
             document.querySelectorAll('.channel-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+            if(btn) btn.classList.add('active');
 
-            if(sourceId === 'IT-CNN') {
-                window.open('https://www.cnn.com/business/live-news/stock-market-today-cnn-business', '_blank');
-                return;
-            }
-
+            // If it's a webcam click, we might want to show it in the main video player too?
+            // For now, let's keep the main player for news.
+            // If the user clicks a webcam, it stays in the bottom panel.
+            // But if they click a News button, it updates the main player.
+            
             const iframe = document.getElementById('video-frame');
             
             // Check if sourceId is a Channel ID (starts with UC) or Video ID
@@ -754,7 +671,6 @@
         }
 
         // 2. Simulated Global Data (Mocking a paid Intel Feed)
-        // Note: To make this real, replace with API calls to NewsAPI, ACLED, or similar.
         const staticHotspots = [
             { lat: 31.5, lng: 34.8, title: "Middle East Zone", type: "Conflict", icon: icons.conflict, desc: "Heightened alert status." },
             { lat: 50.45, lng: 30.52, title: "Eastern Europe Front", type: "Conflict", icon: icons.conflict, desc: "Movement detected." },
@@ -804,6 +720,8 @@
         // Helper: Add item to Analysis
         function addAnalysis(text, action, asset) {
             const feed = document.getElementById('analysis-feed');
+            if(!feed) return; // Guard clause
+            
             const item = document.createElement('div');
             item.className = 'ai-insight';
             
@@ -823,8 +741,6 @@
 
         // --- SIMULATED AI FEEDS (World Monitor Clones) ---
         function loadAIFeeds() {
-            const feedContainer = document.getElementById('intel-feed');
-            
             // Initial AI Alerts
             const aiAlerts = [
                 { type: 'Cyber', title: 'DDoS Attack Detected', desc: 'Targeting Baltic Infrastructure', level: 'high' },
