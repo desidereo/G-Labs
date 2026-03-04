@@ -29,6 +29,7 @@
             --danger: #ef5350;
             --success: #26a69a;
             --warning: #ffcf22;
+            --sidebar-width: 350px;
         }
         
         body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--darker); color: var(--text); overflow: hidden; }
@@ -51,14 +52,34 @@
         .main-nav a { text-decoration: none; color: #b2b5be; font-weight: 600; font-size: 0.9rem; transition: color 0.3s; height: 100%; display: flex; align-items: center; padding: 0 5px; border-bottom: 2px solid transparent; }
         .main-nav a:hover, .main-nav a.active { color: var(--primary); border-bottom-color: var(--primary); }
 
+        /* Toggle Buttons */
+        .layout-controls { display: flex; gap: 10px; }
+        .toggle-btn {
+            background: #2a2e39;
+            border: none;
+            color: #b2b5be;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+        .toggle-btn:hover, .toggle-btn.active { background: var(--primary); color: #fff; }
+
         /* Main Layout Grid */
         .container {
             display: grid;
-            grid-template-columns: 350px 1fr 350px;
+            grid-template-columns: var(--sidebar-width) 1fr var(--sidebar-width);
             grid-template-rows: 60px 30px 1fr 220px; /* Header, Ticker, Main, Bottom */
             height: 100vh;
             width: 100vw;
+            transition: grid-template-columns 0.3s ease;
         }
+        
+        /* Collapsed States */
+        .container.left-collapsed { grid-template-columns: 0px 1fr var(--sidebar-width); }
+        .container.right-collapsed { grid-template-columns: var(--sidebar-width) 1fr 0px; }
+        .container.both-collapsed { grid-template-columns: 0px 1fr 0px; }
 
         /* News Ticker */
         .news-ticker {
@@ -100,7 +121,12 @@
             overflow: hidden; /* Changed from overflow-y: auto to fix header scroll */
             display: flex;
             flex-direction: column;
+            transition: opacity 0.2s, width 0.3s;
         }
+        
+        /* Hide content when collapsed */
+        .container.left-collapsed .sidebar-left * { opacity: 0; pointer-events: none; }
+        .container.right-collapsed .sidebar-right * { opacity: 0; pointer-events: none; }
         .panel-header {
             padding: 15px;
             background: #1e222d;
@@ -422,6 +448,10 @@
             <a href="custom_development.html">Custom Dev</a>
             <a href="contact.html">Contact</a>
         </nav>
+        <div class="layout-controls">
+            <button class="toggle-btn" onclick="toggleSidebar('left')" title="Toggle Intel Feed"><i class="fas fa-columns"></i> Left</button>
+            <button class="toggle-btn" onclick="toggleSidebar('right')" title="Toggle News Feed"><i class="fas fa-columns"></i> Right</button>
+        </div>
     </header>
 
     <div class="container">
@@ -836,14 +866,29 @@
             if(feed.children.length > 5) feed.lastElementChild.remove();
         }
 
-        // --- SIMULATED PIZZA INDEX API ---
+        // --- SIMULATED PIZZA INDEX API (Time-Aware) ---
         function updatePizzaIndex() {
             // Simulated API Logic: 
-            // 0-30: Normal, 30-60: Elevated, 60-100: Critical (High Orders)
-            // Random fluctuation with a bias towards "Elevated" for demo purposes
-            const baseLevel = 45; 
+            // Base level depends on DC Time (ET). Higher at night (20:00 - 04:00).
+            const now = new Date();
+            // Convert to EST/EDT
+            const dcTime = new Date(now.toLocaleString("en-US", {timeZone: "America/New_York"}));
+            const hour = dcTime.getHours();
+            
+            let baseLevel = 30; // Normal daytime level
+            
+            // "Crisis Hours" Logic: Late night in DC = higher suspicion
+            if (hour >= 20 || hour <= 4) {
+                baseLevel = 65; // Elevated at night
+            } else if (hour > 18) {
+                baseLevel = 50; // Evening ramp-up
+            }
+            
+            // Random fluctuation (+/- 15)
             const noise = Math.floor(Math.random() * 30) - 15;
             let level = baseLevel + noise;
+            
+            // Cap values
             if(level < 0) level = 0;
             if(level > 100) level = 100;
             
@@ -863,6 +908,32 @@
                 else if(level < 70) value.style.color = "#ffcf22"; // Yellow
                 else value.style.color = "#ef5350"; // Red
             }
+        }
+
+        // Layout Toggle Function
+        function toggleSidebar(side) {
+            const container = document.querySelector('.container');
+            const btn = event.target.closest('.toggle-btn');
+            
+            if (side === 'left') {
+                container.classList.toggle('left-collapsed');
+                btn.classList.toggle('active');
+            } else if (side === 'right') {
+                container.classList.toggle('right-collapsed');
+                btn.classList.toggle('active');
+            }
+            
+            // If both collapsed, add special class for full width
+            if (container.classList.contains('left-collapsed') && container.classList.contains('right-collapsed')) {
+                container.classList.add('both-collapsed');
+            } else {
+                container.classList.remove('both-collapsed');
+            }
+            
+            // Trigger Map Resize to fill new space
+            setTimeout(() => {
+                map.invalidateSize();
+            }, 350);
         }
 
         // Initialize
