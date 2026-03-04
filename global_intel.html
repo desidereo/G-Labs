@@ -1113,8 +1113,6 @@
         }
 
         // Browser View Functions
-        // Removed explicit blocking to allow attempting all connections
-        
         function openBrowser(url) {
             const iframe = document.getElementById('browser-frame');
             const toolbar = document.getElementById('browser-toolbar');
@@ -1123,7 +1121,7 @@
             const blockedUI = document.getElementById('blocked-ui');
             
             // Reset UI
-            iframe.style.display = 'block'; // Always try to show iframe
+            iframe.style.display = 'block';
             blockedUI.style.display = 'none';
             
             // Show Toolbar & Hide Map
@@ -1131,9 +1129,19 @@
             mapDiv.style.display = 'none';
             urlText.innerText = url;
             
-            // Attempt to load URL (Referrer hidden to improve success rate)
-            iframe.referrerPolicy = "no-referrer";
-            iframe.src = url;
+            // PROXY TRICK: Use Google Translate as a wrapper to bypass X-Frame-Options
+            // This makes the browser think we are loading a Google page, which is secure and embeddable.
+            const blockedDomains = ['liveuamap.com', 'understandingwar.org', 'reuters.com'];
+            const isBlocked = blockedDomains.some(domain => url.includes(domain));
+            
+            if (isBlocked) {
+                // Wrap in Google Translate
+                iframe.src = `https://translate.google.com/translate?sl=auto&tl=en&u=${encodeURIComponent(url)}`;
+            } else {
+                // Attempt direct load for others
+                iframe.referrerPolicy = "no-referrer";
+                iframe.src = url;
+            }
         }
         
         function openExternal() {
