@@ -137,6 +137,31 @@
         }
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
+        /* Intel Sources Links */
+        .source-links {
+            display: flex;
+            gap: 10px;
+            padding: 10px 15px;
+            background: #1e222d;
+            border-bottom: 1px solid #2a2e39;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        .source-link {
+            color: #b2b5be;
+            text-decoration: none;
+            font-size: 0.75rem;
+            background: #2a2e39;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .source-link:hover { background: var(--primary); color: #fff; }
+        .source-link i { font-size: 0.7rem; }
+
         /* Video Controls */
         .video-controls {
             display: flex;
@@ -165,6 +190,23 @@
             background: #000;
             grid-column: 2 / 3;
             grid-row: 2 / 3;
+            z-index: 1; /* Ensure controls are clickable */
+        }
+        
+        /* Map Layer Control Customization */
+        .leaflet-control-layers {
+            background: var(--dark) !important;
+            border: 1px solid #434651 !important;
+            color: #d1d4dc !important;
+            border-radius: 4px !important;
+            padding: 8px !important;
+        }
+        .leaflet-control-layers-separator { border-top-color: #434651 !important; }
+        .leaflet-control-layers-base label, .leaflet-control-layers-overlays label {
+            margin-bottom: 5px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
         }
 
         /* Right Panel - Market Data */
@@ -284,6 +326,16 @@
                 <span><i class="fas fa-satellite-dish"></i> INTELLIGENCE FEED</span>
                 <div class="live-indicator"><span class="dot"></span> LIVE</div>
             </div>
+            
+            <!-- External Intel Links -->
+            <div class="source-links">
+                <a href="https://liveuamap.com/" target="_blank" class="source-link"><i class="fas fa-map-marked-alt"></i> LiveUAMap</a>
+                <a href="https://www.understandingwar.org/" target="_blank" class="source-link"><i class="fas fa-book"></i> ISW</a>
+                <a href="https://www.bellingcat.com/" target="_blank" class="source-link"><i class="fas fa-search"></i> Bellingcat</a>
+                <a href="https://www.oryxspioenkop.com/" target="_blank" class="source-link"><i class="fas fa-tank"></i> Oryx</a>
+                <a href="https://www.reuters.com/world/" target="_blank" class="source-link"><i class="fas fa-newspaper"></i> Reuters</a>
+            </div>
+
             <div id="intel-feed">
                 <!-- Items injected by JS -->
                 <div class="intel-item">
@@ -394,11 +446,16 @@
                 </div>
                 <!-- Channel Selector -->
                 <div class="video-controls">
-                    <span style="font-size: 0.65rem; text-transform: uppercase; color: #787b86;">Source:</span>
+                    <span style="font-size: 0.65rem; text-transform: uppercase; color: #787b86;">News:</span>
                     <button class="channel-btn active" onclick="changeChannel('gCNeDWCI0vo', this)">AL JAZEERA</button>
-                    <button class="channel-btn" onclick="changeChannel('9Auq9mYxFEE', this)">SKY NEWS</button>
-                    <button class="channel-btn" onclick="changeChannel('O9mnjZpAbH4', this)">NBC NEWS (US)</button>
-                    <button class="channel-btn" onclick="changeChannel('IT-CNN', this)" title="Requires Cable Login - Redirect">CNN (LINK)</button>
+                    <button class="channel-btn" onclick="changeChannel('UCoMdktPbSTixAyNGwb-UYkQ', this)">SKY NEWS</button>
+                    <button class="channel-btn" onclick="changeChannel('UCeY0bbntWzzVIaj2z3QigXg', this)">NBC NEWS</button>
+                    
+                    <span style="font-size: 0.65rem; text-transform: uppercase; color: #787b86; margin-left: 10px;">Cams:</span>
+                    <button class="channel-btn" onclick="changeChannel('1-iS7LArMPA', this)">NYC</button>
+                    <button class="channel-btn" onclick="changeChannel('F8MN0o6RS9o', this)">TOKYO</button>
+                    <button class="channel-btn" onclick="changeChannel('P1Ld2d2c55Q', this)">KYIV</button>
+                    <button class="channel-btn" onclick="changeChannel('86YLFOog4GM', this)">SPACE (ISS)</button>
                 </div>
                 <div class="video-container">
                     <!-- Default: Al Jazeera English -->
@@ -421,11 +478,31 @@
         L.control.zoom({ position: 'topright' }).addTo(map);
         
         // Dark Theme Map Tiles (CartoDB Dark Matter)
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        const darkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
             attribution: '&copy; OpenStreetMap &copy; CARTO',
             subdomains: 'abcd',
             maxZoom: 19
         }).addTo(map);
+
+        // --- LAYER GROUPS ---
+        const layers = {
+            flights: L.layerGroup().addTo(map),
+            quakes: L.layerGroup().addTo(map),
+            nuclear: L.layerGroup(),
+            chokepoints: L.layerGroup(),
+            hotspots: L.layerGroup().addTo(map)
+        };
+
+        // Layer Control
+        const overlayMaps = {
+            "Live Flights (OpenSky)": layers.flights,
+            "Seismic Events (USGS)": layers.quakes,
+            "Intel Hotspots (Sim)": layers.hotspots,
+            "Nuclear Infrastructure": layers.nuclear,
+            "Strategic Chokepoints": layers.chokepoints
+        };
+        
+        L.control.layers(null, overlayMaps, { position: 'bottomright' }).addTo(map);
 
         // Custom Icons
         const icons = {
@@ -433,8 +510,49 @@
             conflict: L.divIcon({ html: '<i class="fas fa-radiation-alt" style="color: #ffcf22; text-shadow: 0 0 10px #ffcf22;"></i>', className: 'marker-icon', iconSize: [16, 16] }),
             econ: L.divIcon({ html: '<i class="fas fa-coins" style="color: #26a69a; text-shadow: 0 0 10px #26a69a;"></i>', className: 'marker-icon', iconSize: [16, 16] }),
             naval: L.divIcon({ html: '<i class="fas fa-ship" style="color: #64b5f6; text-shadow: 0 0 10px #64b5f6;"></i>', className: 'marker-icon', iconSize: [16, 16] }),
-            plane: L.divIcon({ html: '<i class="fas fa-plane" style="color: #2962ff; text-shadow: 0 0 10px #2962ff; transform: rotate(-45deg);"></i>', className: 'marker-icon', iconSize: [16, 16] })
+            plane: L.divIcon({ html: '<i class="fas fa-plane" style="color: #2962ff; text-shadow: 0 0 10px #2962ff; transform: rotate(-45deg);"></i>', className: 'marker-icon', iconSize: [16, 16] }),
+            nuke: L.divIcon({ html: '<i class="fas fa-radiation" style="color: #ff9100; text-shadow: 0 0 10px #ff9100;"></i>', className: 'marker-icon', iconSize: [16, 16] }),
+            lock: L.divIcon({ html: '<i class="fas fa-lock" style="color: #f50057; text-shadow: 0 0 10px #f50057;"></i>', className: 'marker-icon', iconSize: [16, 16] })
         };
+        
+        // --- STATIC DATA LOADERS ---
+        
+        // Nuclear Sites (Major)
+        const nuclearSites = [
+            { lat: 47.5, lng: 34.6, name: "Zaporizhzhia NPP", desc: "Largest in Europe (Ukraine)" },
+            { lat: 31.0, lng: 51.5, name: "Natanz", desc: "Uranium Enrichment (Iran)" },
+            { lat: 41.6, lng: -83.1, name: "Davis-Besse", desc: "Nuclear Power Station (USA)" },
+            { lat: 37.4, lng: 126.9, name: "Hanul", desc: "Nuclear Power Plant (South Korea)" },
+            { lat: 51.0, lng: 1.8, name: "Gravelines", desc: "Nuclear Power Station (France)" }
+        ];
+        
+        nuclearSites.forEach(site => {
+            L.marker([site.lat, site.lng], {icon: icons.nuke})
+                .bindPopup(`<b>${site.name}</b><br>${site.desc}`)
+                .addTo(layers.nuclear);
+        });
+
+        // Strategic Chokepoints
+        const chokepoints = [
+            { lat: 26.5, lng: 56.5, name: "Strait of Hormuz", desc: "Oil Transit Chokepoint", radius: 50000 },
+            { lat: 1.4, lng: 103.5, name: "Malacca Strait", desc: "Global Trade Route", radius: 80000 },
+            { lat: 30.6, lng: 32.3, name: "Suez Canal", desc: "Maritime Chokepoint", radius: 20000 },
+            { lat: 9.1, lng: -79.7, name: "Panama Canal", desc: "Maritime Chokepoint", radius: 20000 },
+            { lat: 12.5, lng: 43.3, name: "Bab el-Mandeb", desc: "Red Sea Entrance", radius: 30000 }
+        ];
+
+        chokepoints.forEach(cp => {
+            L.circle([cp.lat, cp.lng], {
+                color: '#f50057',
+                fillColor: '#f50057',
+                fillOpacity: 0.2,
+                radius: cp.radius
+            }).bindPopup(`<b>${cp.name}</b><br>${cp.desc}`).addTo(layers.chokepoints);
+            
+            L.marker([cp.lat, cp.lng], {icon: icons.lock})
+                .bindPopup(`<b>${cp.name}</b><br>${cp.desc}`)
+                .addTo(layers.chokepoints);
+        });
 
         // Data Fetching Functions
         
@@ -473,7 +591,7 @@
                     
                     if(lat && lon) {
                         L.marker([lat, lon], {icon: icons.plane})
-                            .addTo(map)
+                            .addTo(layers.flights)
                             .bindPopup(`<b>Flight ${callsign}</b><br>Origin: ${origin}<br>Alt: ${flight[7]}m`);
                     }
                 });
@@ -491,20 +609,26 @@
                 addIntelItem('System', msg, 'low');
             }
         }
-
+        
         // Channel Switcher
-        function changeChannel(videoId, btn) {
+        function changeChannel(sourceId, btn) {
             // Update Active Button
             document.querySelectorAll('.channel-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
-            if(videoId === 'IT-CNN') {
+            if(sourceId === 'IT-CNN') {
                 window.open('https://www.cnn.com/business/live-news/stock-market-today-cnn-business', '_blank');
                 return;
             }
 
             const iframe = document.getElementById('video-frame');
-            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`;
+            
+            // Check if sourceId is a Channel ID (starts with UC) or Video ID
+            if(sourceId.startsWith('UC')) {
+                iframe.src = `https://www.youtube.com/embed/live_stream?channel=${sourceId}&autoplay=1&mute=1`;
+            } else {
+                iframe.src = `https://www.youtube.com/embed/${sourceId}?autoplay=1&mute=1`;
+            }
         }
 
         // 2. Global News Feed (RSS via Proxy)
@@ -556,7 +680,7 @@
                     const time = new Date(quake.properties.time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
                     
                     L.marker([coords[1], coords[0]], {icon: icons.quake})
-                        .addTo(map)
+                        .addTo(layers.quakes)
                         .bindPopup(`<b>Magnitude ${mag} Earthquake</b><br>${place}<br>${time}`);
                         
                     addIntelItem('Natural', `M${mag} Quake in ${place}`, 'high');
@@ -584,7 +708,7 @@
         function loadHotspots() {
             staticHotspots.forEach(spot => {
                 L.marker([spot.lat, spot.lng], {icon: spot.icon})
-                    .addTo(map)
+                    .addTo(layers.hotspots)
                     .bindPopup(`<b>${spot.title}</b><br>${spot.type}<br>${spot.desc}`);
                 
                 let priority = 'medium';
@@ -645,7 +769,7 @@
         setTimeout(fetchNews, 100);
 
         // Periodic Updates
-        setInterval(fetchFlights, 60000); // Flights every 60s
+        setInterval(fetchFlights, 120000); // Flights every 2m (Safe for free/unverified accounts)
         setInterval(fetchNews, 300000);   // News every 5m
         
         // Auto-refresh simulation loop
