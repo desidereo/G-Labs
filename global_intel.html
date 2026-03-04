@@ -200,16 +200,53 @@
             display: flex;
             align-items: center;
             gap: 5px;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
         }
         .source-link:hover { background: var(--primary); color: #fff; }
         .source-link i { font-size: 0.7rem; }
 
-        /* Map Section (Center) */
-        #map {
+        /* Main Map Container */
+        .map-wrapper {
             grid-column: 2 / 3;
             grid-row: 3 / 4;
+            position: relative;
             background: #000;
             z-index: 1;
+            overflow: hidden;
+        }
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+        #browser-frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #fff;
+            display: none; /* Hidden by default */
+            z-index: 100;
+        }
+        .browser-toolbar {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 101;
+            display: none;
+        }
+        .close-browser-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
         }
         
         /* Sidebar: Right Panel (News + Market) */
@@ -465,11 +502,11 @@
             
             <!-- External Intel Links -->
             <div class="source-links">
-                <a href="https://liveuamap.com/" target="_blank" class="source-link"><i class="fas fa-map-marked-alt"></i> LiveUAMap</a>
-                <a href="https://www.understandingwar.org/" target="_blank" class="source-link"><i class="fas fa-book"></i> ISW</a>
-                <a href="https://www.bellingcat.com/" target="_blank" class="source-link"><i class="fas fa-search"></i> Bellingcat</a>
-                <a href="https://www.oryxspioenkop.com/" target="_blank" class="source-link"><i class="fas fa-tank"></i> Oryx</a>
-                <a href="https://www.reuters.com/world/" target="_blank" class="source-link"><i class="fas fa-newspaper"></i> Reuters</a>
+                <button onclick="openBrowser('https://liveuamap.com/')" class="source-link"><i class="fas fa-map-marked-alt"></i> LiveUAMap</button>
+                <button onclick="openBrowser('https://www.understandingwar.org/')" class="source-link"><i class="fas fa-book"></i> ISW</button>
+                <button onclick="openBrowser('https://www.bellingcat.com/')" class="source-link"><i class="fas fa-search"></i> Bellingcat</button>
+                <button onclick="openBrowser('https://www.oryxspioenkop.com/')" class="source-link"><i class="fas fa-tank"></i> Oryx</button>
+                <button onclick="openBrowser('https://www.reuters.com/world/')" class="source-link"><i class="fas fa-newspaper"></i> Reuters</button>
             </div>
 
             <div id="intel-feed">
@@ -478,7 +515,13 @@
         </aside>
 
         <!-- Main Map -->
-        <div id="map"></div>
+        <div class="map-wrapper">
+            <div id="map"></div>
+            <iframe id="browser-frame" src=""></iframe>
+            <div class="browser-toolbar" id="browser-toolbar">
+                <button class="close-browser-btn" onclick="closeBrowser()"><i class="fas fa-times"></i> Close Web View</button>
+            </div>
+        </div>
 
         
         <!-- Sidebar: Right Panel (News + Market) -->
@@ -995,6 +1038,38 @@
             setTimeout(() => {
                 map.invalidateSize();
             }, 350);
+        }
+
+        // Browser View Functions
+        function openBrowser(url) {
+            const iframe = document.getElementById('browser-frame');
+            const toolbar = document.getElementById('browser-toolbar');
+            const mapDiv = document.getElementById('map');
+            
+            iframe.style.display = 'block';
+            toolbar.style.display = 'block';
+            mapDiv.style.display = 'none';
+            
+            // Set source after displaying to ensure loading
+            iframe.src = url;
+        }
+
+        function closeBrowser() {
+            const iframe = document.getElementById('browser-frame');
+            const toolbar = document.getElementById('browser-toolbar');
+            const mapDiv = document.getElementById('map');
+            
+            iframe.style.display = 'none';
+            toolbar.style.display = 'none';
+            mapDiv.style.display = 'block';
+            
+            // Clear source to stop media/scripts
+            iframe.src = 'about:blank';
+            
+            // Refresh map layout in case it was resized while hidden
+            setTimeout(() => {
+                map.invalidateSize();
+            }, 100);
         }
 
         // Initialize
