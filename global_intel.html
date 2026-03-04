@@ -220,34 +220,86 @@
             width: 100%;
             height: 100%;
         }
-        #browser-frame {
+        /* Browser Toolbar (Address Bar Style) */
+        .browser-toolbar {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100%;
-            border: none;
-            background: #fff;
-            display: none; /* Hidden by default */
-            z-index: 100;
-        }
-        .browser-toolbar {
-            position: absolute;
-            top: 10px;
-            right: 10px;
+            height: 40px;
+            background: #2a2e39;
+            border-bottom: 1px solid #434651;
+            display: none; /* Flex when active */
+            align-items: center;
+            padding: 0 10px;
+            box-sizing: border-box;
             z-index: 101;
-            display: none;
+            gap: 10px;
         }
-        .close-browser-btn {
-            background: var(--danger);
-            color: white;
+        .browser-url-bar {
+            flex: 1;
+            background: #131722;
+            border: 1px solid #434651;
+            border-radius: 3px;
+            color: #b2b5be;
+            padding: 4px 10px;
+            font-size: 0.8rem;
+            font-family: monospace;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .browser-btn {
+            background: transparent;
+            color: #b2b5be;
             border: none;
-            padding: 5px 15px;
-            border-radius: 4px;
             cursor: pointer;
-            font-weight: bold;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            font-size: 0.9rem;
+            padding: 5px;
+            border-radius: 3px;
         }
+        .browser-btn:hover { background: #363a45; color: #fff; }
+        .browser-btn.close { color: var(--danger); }
+        .browser-btn.close:hover { background: rgba(239, 83, 80, 0.1); }
+        
+        #browser-frame {
+            top: 40px; /* Shift down for toolbar */
+            height: calc(100% - 40px);
+        }
+
+        /* Blocked Content Placeholder */
+        .blocked-placeholder {
+            position: absolute;
+            top: 40px;
+            left: 0;
+            width: 100%;
+            height: calc(100% - 40px);
+            background: #0a0e17;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #b2b5be;
+            z-index: 102;
+            text-align: center;
+        }
+        .blocked-icon { font-size: 3rem; color: #434651; margin-bottom: 15px; }
+        .launch-btn {
+            margin-top: 20px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .launch-btn:hover { background: #1e4bd1; }
         
         /* Sidebar: Right Panel (News + Market) */
         .sidebar-right {
@@ -517,9 +569,29 @@
         <!-- Main Map -->
         <div class="map-wrapper">
             <div id="map"></div>
-            <iframe id="browser-frame" src=""></iframe>
+            
+            <!-- Browser Interface -->
             <div class="browser-toolbar" id="browser-toolbar">
-                <button class="close-browser-btn" onclick="closeBrowser()"><i class="fas fa-times"></i> Close Web View</button>
+                <button class="browser-btn" title="Back"><i class="fas fa-arrow-left"></i></button>
+                <button class="browser-btn" title="Reload"><i class="fas fa-redo"></i></button>
+                <div class="browser-url-bar">
+                    <i class="fas fa-lock" style="color: #26a69a; font-size: 0.7rem;"></i>
+                    <span id="browser-url-text">https://liveuamap.com/</span>
+                </div>
+                <button class="browser-btn" onclick="openExternal()" title="Open in New Tab"><i class="fas fa-external-link-alt"></i></button>
+                <button class="browser-btn close" onclick="closeBrowser()" title="Close Browser"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <iframe id="browser-frame" src=""></iframe>
+            
+            <!-- Blocked Content UI -->
+            <div class="blocked-placeholder" id="blocked-ui">
+                <div class="blocked-icon"><i class="fas fa-shield-alt"></i></div>
+                <div style="font-size: 1.2rem; font-weight: bold; margin-bottom: 10px; color: #fff;">Security Protocol Active</div>
+                <div style="max-width: 400px; line-height: 1.5;">This intelligence source requires a direct secure connection and cannot be embedded.</div>
+                <a href="#" target="_blank" id="launch-external-btn" class="launch-btn">
+                    <i class="fas fa-external-link-alt"></i> OPEN SECURE FEED
+                </a>
             </div>
         </div>
 
@@ -1041,25 +1113,59 @@
         }
 
         // Browser View Functions
+        const BLOCKED_DOMAINS = [
+            'liveuamap.com',
+            'understandingwar.org',
+            'reuters.com'
+        ];
+
         function openBrowser(url) {
             const iframe = document.getElementById('browser-frame');
             const toolbar = document.getElementById('browser-toolbar');
             const mapDiv = document.getElementById('map');
+            const urlText = document.getElementById('browser-url-text');
+            const blockedUI = document.getElementById('blocked-ui');
+            const launchBtn = document.getElementById('launch-external-btn');
             
-            iframe.style.display = 'block';
-            toolbar.style.display = 'block';
+            // Check if domain is blocked
+            const isBlocked = BLOCKED_DOMAINS.some(domain => url.includes(domain));
+            
+            // Reset UI
+            iframe.style.display = 'none';
+            blockedUI.style.display = 'none';
+            
+            // Show Toolbar & Hide Map
+            toolbar.style.display = 'flex';
             mapDiv.style.display = 'none';
+            urlText.innerText = url;
             
-            // Set source after displaying to ensure loading
-            iframe.src = url;
+            if (isBlocked) {
+                // Show Blocked UI
+                blockedUI.style.display = 'flex';
+                launchBtn.href = url;
+                
+                // Auto-open in new tab as convenience
+                // window.open(url, '_blank');
+            } else {
+                // Load Iframe
+                iframe.style.display = 'block';
+                iframe.src = url;
+            }
+        }
+        
+        function openExternal() {
+            const url = document.getElementById('browser-url-text').innerText;
+            if(url) window.open(url, '_blank');
         }
 
         function closeBrowser() {
             const iframe = document.getElementById('browser-frame');
             const toolbar = document.getElementById('browser-toolbar');
             const mapDiv = document.getElementById('map');
+            const blockedUI = document.getElementById('blocked-ui');
             
             iframe.style.display = 'none';
+            blockedUI.style.display = 'none';
             toolbar.style.display = 'none';
             mapDiv.style.display = 'block';
             
