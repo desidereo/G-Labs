@@ -265,22 +265,15 @@
             border: none;
         }
 
-        /* AI HUD Overlay (Map) */
+        /* AI HUD Overlay (Now in Sidebar) */
         .ai-hud-container {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 300px;
-            background: rgba(19, 23, 34, 0.85);
-            border: 1px solid rgba(41, 98, 255, 0.3);
-            border-radius: 4px;
-            z-index: 1000;
-            backdrop-filter: blur(5px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            overflow: hidden;
+            flex: 1;
             display: flex;
             flex-direction: column;
-            max-height: 400px;
+            background: #131722;
+            border-top: 1px solid #2a2e39;
+            overflow: hidden;
+            min-height: 200px;
         }
         .ai-hud-header {
             background: rgba(41, 98, 255, 0.2);
@@ -485,20 +478,8 @@
         </aside>
 
         <!-- Main Map -->
-        <div id="map">
-            <!-- AI HUD Overlay -->
-            <div class="ai-hud-container">
-                <div class="ai-hud-header">
-                    <span><i class="fas fa-robot"></i> AI INTELLIGENCE FEED</span>
-                    <span style="font-size: 0.65rem; color: #787b86;">LIVE</span>
-                </div>
-                <div class="ai-hud-content" id="ai-hud-feed">
-                    <div style="font-size: 0.7rem; color: #787b86; text-align: center; padding: 10px;">
-                        Waiting for algorithmic signals...
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div id="map"></div>
+
         
         <!-- Sidebar: Right Panel (News + Market) -->
         <aside class="sidebar-right">
@@ -521,7 +502,87 @@
                 <button class="channel-btn" onclick="changeChannel('Bpa0u4Vjjfs', this)">CNBC</button>
             </div>
             
-            <!-- Removed AI Section from here -->
+            <!-- Market Overview -->
+            <div style="background: #1e222d; padding: 5px 10px; font-size: 0.8rem; font-weight: 800; color: #fff; border-bottom: 1px solid #2a2e39; border-top: 1px solid #2a2e39;">
+                <i class="fas fa-chart-line"></i> MARKET OVERVIEW
+            </div>
+            <div class="tradingview-widget-container" style="height: 300px; width: 100%;">
+                <div class="tradingview-widget-container__widget"></div>
+                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+                {
+                "colorTheme": "dark",
+                "dateRange": "12M",
+                "showChart": false,
+                "locale": "en",
+                "largeChartUrl": "",
+                "isTransparent": true,
+                "showSymbolLogo": true,
+                "showFloatingTooltip": false,
+                "width": "100%",
+                "height": "100%",
+                "plotLineColorGrowing": "rgba(41, 98, 255, 1)",
+                "plotLineColorFalling": "rgba(255, 0, 0, 1)",
+                "gridLineColor": "rgba(240, 243, 250, 0)",
+                "scaleFontColor": "rgba(106, 109, 120, 1)",
+                "belowLineFillColorGrowing": "rgba(41, 98, 255, 0.12)",
+                "belowLineFillColorFalling": "rgba(255, 0, 0, 0.12)",
+                "belowLineFillColorGrowingBottom": "rgba(41, 98, 255, 0)",
+                "belowLineFillColorFallingBottom": "rgba(255, 0, 0, 0)",
+                "symbolActiveColor": "rgba(41, 98, 255, 0.12)",
+                "tabs": [
+                    {
+                    "title": "Indices",
+                    "symbols": [
+                        { "s": "FOREXCOM:SPXUSD", "d": "S&P 500" },
+                        { "s": "FOREXCOM:NSXUSD", "d": "US 100" },
+                        { "s": "FOREXCOM:DJI", "d": "Dow 30" },
+                        { "s": "INDEX:NKY", "d": "Nikkei 225" }
+                    ],
+                    "originalTitle": "Indices"
+                    },
+                    {
+                    "title": "Futures",
+                    "symbols": [
+                        { "s": "CME_MINI:ES1!", "d": "S&P 500" },
+                        { "s": "COMEX:GC1!", "d": "Gold" },
+                        { "s": "NYMEX:CL1!", "d": "Crude Oil" }
+                    ],
+                    "originalTitle": "Futures"
+                    },
+                    {
+                    "title": "Forex",
+                    "symbols": [
+                        { "s": "FX:EURUSD", "d": "EUR/USD" },
+                        { "s": "FX:GBPUSD", "d": "GBP/USD" },
+                        { "s": "FX:USDJPY", "d": "USD/JPY" }
+                    ],
+                    "originalTitle": "Forex"
+                    },
+                    {
+                    "title": "Crypto",
+                    "symbols": [
+                        { "s": "BINANCE:BTCUSDT", "d": "Bitcoin" },
+                        { "s": "BINANCE:ETHUSDT", "d": "Ethereum" },
+                        { "s": "BINANCE:SOLUSDT", "d": "Solana" }
+                    ]
+                    }
+                ]
+                }
+                </script>
+            </div>
+
+            <!-- AI Intelligence Feed (Moved from Map) -->
+            <div class="ai-hud-container">
+                <div class="ai-hud-header">
+                    <span><i class="fas fa-robot"></i> AI INTELLIGENCE FEED</span>
+                    <span style="font-size: 0.65rem; color: #787b86;">LIVE</span>
+                </div>
+                <div class="ai-hud-content" id="ai-hud-feed">
+                    <div style="font-size: 0.7rem; color: #787b86; text-align: center; padding: 10px;">
+                        Waiting for algorithmic signals...
+                    </div>
+                </div>
+            </div>
             
         </aside>
 
