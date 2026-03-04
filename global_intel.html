@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G-Labs | Global Intel & Trading Dashboard</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HC5C84CZPP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-HC5C84CZPP');
+    </script>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <style>
+        :root {
+            --primary: #2962ff;
+            --dark: #131722;
+            --darker: #0a0e17;
+            --light: #f0f3fa;
+            --text: #d1d4dc;
+            --danger: #ef5350;
+            --success: #26a69a;
+            --warning: #ffcf22;
+        }
+        
+        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--darker); color: var(--text); overflow: hidden; }
+        
+        /* Header */
+        header { padding: 0 20px; background: var(--dark); border-bottom: 1px solid #2a2e39; display: flex; justify-content: space-between; align-items: center; height: 60px; box-sizing: border-box; }
+        .logo { font-weight: 800; font-size: 1.5rem; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 10px; }
+        .logo span { color: var(--primary); }
+        .main-nav { display: flex; gap: 20px; height: 100%; align-items: center; }
+        .main-nav a { text-decoration: none; color: #b2b5be; font-weight: 600; font-size: 0.9rem; transition: color 0.3s; height: 100%; display: flex; align-items: center; padding: 0 5px; border-bottom: 2px solid transparent; }
+        .main-nav a:hover, .main-nav a.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+        /* Dashboard Layout */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 350px 1fr 320px;
+            grid-template-rows: 1fr 250px;
+            height: calc(100vh - 60px);
+            width: 100vw;
+        }
+
+        /* Sidebar - Intel Feed */
+        .sidebar {
+            background: var(--dark);
+            border-right: 1px solid #2a2e39;
+            overflow-y: auto;
+            grid-row: 1 / 3;
+            display: flex;
+            flex-direction: column;
+        }
+        .panel-header {
+            padding: 15px;
+            background: #1e222d;
+            border-bottom: 1px solid #2a2e39;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.7rem;
+            color: var(--danger);
+            text-transform: uppercase;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--danger);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.2); } 100% { opacity: 1; transform: scale(1); } }
+
+        .intel-item {
+            padding: 15px;
+            border-bottom: 1px solid #2a2e39;
+            transition: background 0.2s;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+        }
+        .intel-item:hover { background: #1e222d; border-left-color: var(--primary); }
+        .intel-meta { display: flex; justify-content: space-between; margin-bottom: 5px; }
+        .intel-tag { font-size: 0.65rem; padding: 2px 6px; border-radius: 3px; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px; }
+        .tag-conflict { background: rgba(239, 83, 80, 0.15); color: var(--danger); border: 1px solid rgba(239, 83, 80, 0.3); }
+        .tag-econ { background: rgba(38, 166, 154, 0.15); color: var(--success); border: 1px solid rgba(38, 166, 154, 0.3); }
+        .tag-alert { background: rgba(255, 207, 34, 0.15); color: var(--warning); border: 1px solid rgba(255, 207, 34, 0.3); }
+        .tag-natural { background: rgba(100, 181, 246, 0.15); color: #64b5f6; border: 1px solid rgba(100, 181, 246, 0.3); }
+        
+        .intel-title { font-size: 0.9rem; margin-bottom: 5px; color: #fff; line-height: 1.4; font-weight: 500; }
+        .intel-time { font-size: 0.75rem; color: #787b86; }
+        
+        /* Map Section */
+        #map {
+            background: #000;
+            grid-column: 2 / 3;
+            grid-row: 1 / 2;
+        }
+
+        /* Right Panel - Market Data */
+        .market-panel {
+            background: var(--dark);
+            border-left: 1px solid #2a2e39;
+            grid-column: 3 / 4;
+            grid-row: 1 / 3;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Bottom Panel - Analysis */
+        .analysis-panel {
+            background: var(--dark);
+            border-top: 1px solid #2a2e39;
+            grid-column: 2 / 3;
+            grid-row: 2 / 3;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .analysis-content {
+            padding: 15px;
+            overflow-y: auto;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .ai-insight {
+            background: rgba(41, 98, 255, 0.05);
+            border: 1px solid rgba(41, 98, 255, 0.2);
+            border-left: 3px solid var(--primary);
+            padding: 12px;
+            border-radius: 0 4px 4px 0;
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+        
+        .ai-header { font-size: 0.75rem; color: var(--primary); font-weight: 800; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; text-transform: uppercase; }
+        .ai-text { font-size: 0.9rem; color: #e1e1e1; line-height: 1.5; }
+        .trade-action { display: inline-block; margin-top: 8px; font-size: 0.8rem; font-weight: bold; padding: 4px 8px; background: rgba(255,255,255,0.1); border-radius: 4px; }
+        .action-buy { color: var(--success); border: 1px solid rgba(38, 166, 154, 0.5); }
+        .action-sell { color: var(--danger); border: 1px solid rgba(239, 83, 80, 0.5); }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--dark); }
+        ::-webkit-scrollbar-thumb { background: #434651; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+
+        /* Map Customization */
+        .leaflet-popup-content-wrapper { background: var(--dark); color: #fff; border: 1px solid #434651; border-radius: 4px; }
+        .leaflet-popup-tip { background: var(--dark); border-top: 1px solid #434651; border-left: 1px solid #434651; }
+        .leaflet-container a { color: var(--primary); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo">
+            <i class="fas fa-globe-americas"></i> G-Labs <span>INTEL</span>
+        </a>
+        <nav class="main-nav">
+            <a href="index.html">Home</a>
+            <a href="global_intel.html" class="active">Global Intel</a>
+            <a href="tradingview.html">TradingView</a>
+            <a href="mql5.html">MetaTrader 4/5</a>
+            <a href="custom_development.html">Custom Dev</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <div class="dashboard-container">
+        <!-- Sidebar: Real-time Feed -->
+        <aside class="sidebar">
+            <div class="panel-header">
+                <span><i class="fas fa-satellite-dish"></i> INTELLIGENCE FEED</span>
+                <div class="live-indicator"><span class="dot"></span> LIVE</div>
+            </div>
+            <div id="intel-feed">
+                <!-- Items injected by JS -->
+                <div class="intel-item">
+                    <div class="intel-meta">
+                        <div class="intel-tag tag-alert">System</div>
+                        <div class="intel-time">Now</div>
+                    </div>
+                    <div class="intel-title">Connecting to global data streams...</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Map -->
+        <div id="map"></div>
+
+        <!-- Right Panel: Markets -->
+        <aside class="market-panel">
+            <div class="panel-header">
+                <span><i class="fas fa-chart-bar"></i> MARKET OVERVIEW</span>
+            </div>
+            <!-- TradingView Market Overview Widget -->
+            <div class="tradingview-widget-container" style="height: 100%; width: 100%;">
+                <div class="tradingview-widget-container__widget" style="height: 100%; width: 100%;"></div>
+                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+                {
+                "colorTheme": "dark",
+                "dateRange": "12M",
+                "showChart": true,
+                "locale": "en",
+                "largeChartUrl": "",
+                "isTransparent": false,
+                "showSymbolLogo": true,
+                "showFloatingTooltip": false,
+                "width": "100%",
+                "height": "100%",
+                "plotLineColorGrowing": "rgba(41, 98, 255, 1)",
+                "plotLineColorFalling": "rgba(255, 0, 0, 1)",
+                "gridLineColor": "rgba(240, 243, 250, 0)",
+                "scaleFontColor": "rgba(106, 109, 120, 1)",
+                "belowLineFillColorGrowing": "rgba(41, 98, 255, 0.12)",
+                "belowLineFillColorFalling": "rgba(255, 0, 0, 0.12)",
+                "belowLineFillColorGrowingBottom": "rgba(41, 98, 255, 0)",
+                "belowLineFillColorFallingBottom": "rgba(255, 0, 0, 0)",
+                "symbolActiveColor": "rgba(41, 98, 255, 0.12)",
+                "tabs": [
+                    {
+                    "title": "Indices",
+                    "symbols": [
+                        { "s": "FOREXCOM:SPXUSD", "d": "S&P 500" },
+                        { "s": "FOREXCOM:NSXUSD", "d": "US 100" },
+                        { "s": "FOREXCOM:DJI", "d": "Dow 30" },
+                        { "s": "INDEX:NKY", "d": "Nikkei 225" },
+                        { "s": "INDEX:DEU40", "d": "DAX Index" },
+                        { "s": "FOREXCOM:UKXGBP", "d": "UK 100" }
+                    ],
+                    "originalTitle": "Indices"
+                    },
+                    {
+                    "title": "Futures",
+                    "symbols": [
+                        { "s": "CME_MINI:ES1!", "d": "S&P 500" },
+                        { "s": "CME:6E1!", "d": "Euro" },
+                        { "s": "COMEX:GC1!", "d": "Gold" },
+                        { "s": "NYMEX:CL1!", "d": "WTI Crude Oil" },
+                        { "s": "NYMEX:NG1!", "d": "Gas" },
+                        { "s": "CBOT:ZC1!", "d": "Corn" }
+                    ],
+                    "originalTitle": "Futures"
+                    },
+                    {
+                    "title": "Forex",
+                    "symbols": [
+                        { "s": "FX:EURUSD", "d": "EUR/USD" },
+                        { "s": "FX:GBPUSD", "d": "GBP/USD" },
+                        { "s": "FX:USDJPY", "d": "USD/JPY" },
+                        { "s": "FX:USDCHF", "d": "USD/CHF" },
+                        { "s": "FX:AUDUSD", "d": "AUD/USD" },
+                        { "s": "FX:USDCAD", "d": "USD/CAD" }
+                    ],
+                    "originalTitle": "Forex"
+                    }
+                ]
+                }
+                </script>
+            </div>
+        </aside>
+
+        <!-- Bottom Panel: AI Analysis -->
+        <div class="analysis-panel">
+            <div class="panel-header">
+                <span><i class="fas fa-microchip"></i> AUTOMATED TRADING INSIGHTS (AI)</span>
+            </div>
+            <div class="analysis-content" id="analysis-feed">
+                <div class="ai-insight">
+                    <div class="ai-header"><i class="fas fa-robot"></i> System Analysis</div>
+                    <div class="ai-text">Initializing geopolitical correlation engine. Scanning 150+ global data points...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <script>
+        // Initialize Map
+        const map = L.map('map', {
+            zoomControl: false,
+            attributionControl: false
+        }).setView([25, 10], 2);
+        
+        L.control.zoom({ position: 'topright' }).addTo(map);
+        
+        // Dark Theme Map Tiles (CartoDB Dark Matter)
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap &copy; CARTO',
+            subdomains: 'abcd',
+            maxZoom: 19
+        }).addTo(map);
+
+        // Custom Icons
+        const icons = {
+            quake: L.divIcon({ html: '<i class="fas fa-bullseye" style="color: #ef5350; text-shadow: 0 0 10px #ef5350;"></i>', className: 'marker-icon', iconSize: [16, 16] }),
+            conflict: L.divIcon({ html: '<i class="fas fa-radiation-alt" style="color: #ffcf22; text-shadow: 0 0 10px #ffcf22;"></i>', className: 'marker-icon', iconSize: [16, 16] }),
+            econ: L.divIcon({ html: '<i class="fas fa-coins" style="color: #26a69a; text-shadow: 0 0 10px #26a69a;"></i>', className: 'marker-icon', iconSize: [16, 16] }),
+            naval: L.divIcon({ html: '<i class="fas fa-ship" style="color: #64b5f6; text-shadow: 0 0 10px #64b5f6;"></i>', className: 'marker-icon', iconSize: [16, 16] })
+        };
+
+        // Data Fetching Functions
+        
+        // 1. USGS Earthquakes (Real Data)
+        async function fetchEarthquakes() {
+            try {
+                // Fetch last 24h of 4.5+ quakes
+                const response = await fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_day.geojson');
+                const data = await response.json();
+                
+                data.features.forEach(quake => {
+                    const coords = quake.geometry.coordinates;
+                    const mag = quake.properties.mag;
+                    const place = quake.properties.place;
+                    const time = new Date(quake.properties.time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    
+                    L.marker([coords[1], coords[0]], {icon: icons.quake})
+                        .addTo(map)
+                        .bindPopup(`<b>Magnitude ${mag} Earthquake</b><br>${place}<br>${time}`);
+                        
+                    addIntelItem('Natural', `M${mag} Quake in ${place}`, 'high');
+                    
+                    if(mag > 6.0) {
+                        addAnalysis(`High-magnitude seismic event (M${mag}) in ${place}. Potential supply chain disruption. Watch regional insurance stocks.`, 'SELL', 'Insurance');
+                    }
+                });
+            } catch (e) {
+                console.error('Error fetching quakes:', e);
+            }
+        }
+
+        // 2. Simulated Global Data (Mocking a paid Intel Feed)
+        // Note: To make this real, replace with API calls to NewsAPI, ACLED, or similar.
+        const staticHotspots = [
+            { lat: 31.5, lng: 34.8, title: "Middle East Zone", type: "Conflict", icon: icons.conflict, desc: "Heightened alert status." },
+            { lat: 50.45, lng: 30.52, title: "Eastern Europe Front", type: "Conflict", icon: icons.conflict, desc: "Movement detected." },
+            { lat: 25.2, lng: 55.27, title: "OPEC Summit", type: "Economy", icon: icons.econ, desc: "Production output talks." },
+            { lat: 38.9, lng: -77.03, title: "FOMC Meeting", type: "Economy", icon: icons.econ, desc: "Rate decision pending." },
+            { lat: 24.5, lng: 119.5, title: "Taiwan Strait", type: "Naval", icon: icons.naval, desc: "Naval exercise in progress." },
+            { lat: 10.0, lng: -66.5, title: "Venezuela Export", type: "Economy", icon: icons.econ, desc: "Oil sanction waiver review." }
+        ];
+
+        function loadHotspots() {
+            staticHotspots.forEach(spot => {
+                L.marker([spot.lat, spot.lng], {icon: spot.icon})
+                    .addTo(map)
+                    .bindPopup(`<b>${spot.title}</b><br>${spot.type}<br>${spot.desc}`);
+                
+                let priority = 'medium';
+                if(spot.type === 'Conflict') priority = 'high';
+                addIntelItem(spot.type, spot.title + ': ' + spot.desc, priority);
+            });
+        }
+
+        // Helper: Add item to Sidebar
+        function addIntelItem(tag, title, priority) {
+            const feed = document.getElementById('intel-feed');
+            const item = document.createElement('div');
+            item.className = 'intel-item';
+            
+            let tagClass = 'tag-alert';
+            if(tag === 'Conflict' || priority === 'high') tagClass = 'tag-conflict';
+            if(tag === 'Economy') tagClass = 'tag-econ';
+            if(tag === 'Naval') tagClass = 'tag-natural';
+            if(tag === 'Natural') tagClass = 'tag-natural';
+            
+            item.innerHTML = `
+                <div class="intel-meta">
+                    <div class="intel-tag ${tagClass}">${tag}</div>
+                    <div class="intel-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+                </div>
+                <div class="intel-title">${title}</div>
+            `;
+            feed.prepend(item);
+            
+            // Keep list manageable
+            if(feed.children.length > 20) feed.lastElementChild.remove();
+        }
+
+        // Helper: Add item to Analysis
+        function addAnalysis(text, action, asset) {
+            const feed = document.getElementById('analysis-feed');
+            const item = document.createElement('div');
+            item.className = 'ai-insight';
+            
+            let actionHtml = '';
+            if(action && asset) {
+                const actionClass = action === 'BUY' ? 'action-buy' : 'action-sell';
+                actionHtml = `<div class="trade-action ${actionClass}">${action} ${asset}</div>`;
+            }
+
+            item.innerHTML = `
+                <div class="ai-header"><i class="fas fa-robot"></i> Algo Insight</div>
+                <div class="ai-text">${text}</div>
+                ${actionHtml}
+            `;
+            feed.prepend(item);
+        }
+
+        // Initialize
+        setTimeout(fetchEarthquakes, 1000);
+        setTimeout(loadHotspots, 500);
+        
+        // Auto-refresh simulation loop
+        const mockEvents = [
+            { text: "Gold (XAU/USD) approaching key resistance at 2350. Safe-haven flow increasing due to geopolitical chatter.", action: "BUY", asset: "GOLD" },
+            { text: "Oil (WTI) inventories higher than expected. Bearish pressure mounting on energy sector.", action: "SELL", asset: "USOIL" },
+            { text: "EUR/USD volatility spike detected ahead of ECB Press Conference.", action: null, asset: null },
+            { text: "Bitcoin correlation with Nasdaq 100 decoupling. Crypto market showing independent strength.", action: "BUY", asset: "BTC" },
+            { text: "Yen (JPY) weakening as BoJ maintains dovish stance despite inflation data.", action: "SELL", asset: "JPY" },
+            { text: "Significant volume detected in US 10-Year Treasury Notes. Yield curve shifting.", action: null, asset: null }
+        ];
+
+        let eventIndex = 0;
+        setInterval(() => {
+            // Randomly pick an event to simulate "Live" feel
+            if(Math.random() > 0.5) {
+                const ev = mockEvents[Math.floor(Math.random() * mockEvents.length)];
+                addAnalysis(ev.text, ev.action, ev.asset);
+            }
+        }, 15000); // Check every 15s
+
+    </script>
+</body>
+</html>
