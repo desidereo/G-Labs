@@ -52,8 +52,8 @@
         /* Main Layout */
         .container {
             display: grid;
-            grid-template-columns: 350px 1fr 350px; /* 3-Column Layout */
-            grid-template-rows: 60px 1fr 40px;
+            grid-template-columns: 350px 1fr 320px; /* Reverted to original width ratios */
+            grid-template-rows: 60px 1fr 250px; /* Bottom row for Webcams/Pizza */
             height: 100vh;
             width: 100vw;
         }
@@ -61,7 +61,7 @@
         /* Sidebar: Left Panel (Intel Feed + Pizza) */
         .sidebar-left {
             grid-column: 1 / 2;
-            grid-row: 2 / 3;
+            grid-row: 2 / 4; /* Span full height */
             background: #131722;
             border-right: 1px solid #2a2e39;
             overflow-y: auto;
@@ -213,27 +213,21 @@
             z-index: 1;
         }
         
-        /* Webcam Bar (Below Map) */
-        .webcam-bar {
-            grid-column: 2 / 3;
-            grid-row: 2 / 3;
-            z-index: 10;
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            right: 20px;
-            height: 150px;
-            background: rgba(19, 23, 34, 0.9);
-            border: 1px solid #2a2e39;
-            border-radius: 8px;
+        /* Bottom Panel (Webcams + Pizza) */
+        .bottom-panel {
+            grid-column: 2 / 4; /* Span across Map and Right Sidebar columns */
+            grid-row: 3 / 4;
+            background: #131722;
+            border-top: 1px solid #2a2e39;
             display: flex;
-            gap: 10px;
-            padding: 10px;
             overflow-x: auto;
-            pointer-events: auto; /* Ensure clickable */
+            padding: 10px;
+            gap: 15px;
         }
+
+        /* Webcam Thumbnails in Bottom Panel */
         .webcam-thumb {
-            min-width: 200px;
+            min-width: 250px;
             height: 100%;
             background: #000;
             position: relative;
@@ -241,17 +235,17 @@
             border: 1px solid #434651;
             transition: all 0.2s;
         }
-        .webcam-thumb:hover { border-color: var(--primary); }
         .webcam-thumb iframe { width: 100%; height: 100%; border: none; pointer-events: none; }
-        .webcam-label {
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            background: rgba(0,0,0,0.7);
-            color: #fff;
-            font-size: 0.7rem;
-            padding: 2px 5px;
-            border-radius: 3px;
+        
+        /* Pizza Index Mini Widget */
+        .pizza-mini {
+            min-width: 200px;
+            background: #1e222d;
+            border: 1px solid #2a2e39;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
         
         /* Map Layer Control Customization */
@@ -272,6 +266,17 @@
 
         /* Sidebar: Right Panel (News + Market) */
         .sidebar-right {
+            grid-column: 3 / 4;
+            grid-row: 2 / 3;
+            background: #131722;
+            border-left: 1px solid #2a2e39;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        /* Sidebar: Right Panel (News + Market) */
+        aside.sidebar-right {
             grid-column: 3 / 4;
             grid-row: 2 / 3;
             background: #131722;
@@ -382,19 +387,13 @@
             </div>
         </div>
 
-        <!-- Sidebar: Real-time Feed -->
-        <aside class="sidebar">
+        <!-- Sidebar: Left Panel (Intel Feed) -->
+        <aside class="sidebar-left">
             <div class="panel-header">
                 <span><i class="fas fa-satellite-dish"></i> INTELLIGENCE FEED</span>
                 <div class="live-indicator"><span class="dot"></span> LIVE</div>
             </div>
             
-            <!-- Pentagon Pizza Index -->
-            <div class="pizza-meter">
-                <div class="pizza-title"><i class="fas fa-pizza-slice"></i> PENTAGON PIZZA INDEX</div>
-                <iframe class="pizza-frame" src="https://www.pizzint.watch/" title="Pentagon Pizza Index"></iframe>
-            </div>
-
             <!-- External Intel Links -->
             <div class="source-links">
                 <a href="https://liveuamap.com/" target="_blank" class="source-link"><i class="fas fa-map-marked-alt"></i> LiveUAMap</a>
@@ -406,88 +405,70 @@
 
             <div id="intel-feed">
                 <!-- Items injected by JS -->
-                <div class="intel-item">
-                    <div class="intel-meta">
-                        <div class="intel-tag tag-alert">System</div>
-                        <div class="intel-time">Now</div>
-                    </div>
-                    <div class="intel-title">Connecting to global data streams...</div>
-                </div>
             </div>
         </aside>
 
         <!-- Main Map -->
         <div id="map"></div>
-
-        <!-- Right Panel: Markets -->
-        <aside class="market-panel">
-            <div class="panel-header">
-                <span><i class="fas fa-chart-bar"></i> MARKET OVERVIEW</span>
+        
+        <!-- Bottom Panel: Webcams & Pizza Index -->
+        <div class="bottom-panel">
+            <!-- Pizza Index Widget -->
+            <div class="pizza-mini">
+                <div style="font-size: 0.7rem; color: #787b86; margin-bottom: 5px; font-weight: 800;">PENTAGON PIZZA INDEX</div>
+                <iframe src="https://www.pizzint.watch/" style="width: 100%; height: 180px; border: none; overflow: hidden;"></iframe>
             </div>
-            <!-- TradingView Market Overview Widget -->
-            <div class="tradingview-widget-container" style="height: 100%; width: 100%;">
-                <div class="tradingview-widget-container__widget" style="height: 100%; width: 100%;"></div>
-                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
-                {
-                "colorTheme": "dark",
-                "dateRange": "12M",
-                "showChart": true,
-                "locale": "en",
-                "largeChartUrl": "",
-                "isTransparent": false,
-                "showSymbolLogo": true,
-                "showFloatingTooltip": false,
-                "width": "100%",
-                "height": "100%",
-                "plotLineColorGrowing": "rgba(41, 98, 255, 1)",
-                "plotLineColorFalling": "rgba(255, 0, 0, 1)",
-                "gridLineColor": "rgba(240, 243, 250, 0)",
-                "scaleFontColor": "rgba(106, 109, 120, 1)",
-                "belowLineFillColorGrowing": "rgba(41, 98, 255, 0.12)",
-                "belowLineFillColorFalling": "rgba(255, 0, 0, 0.12)",
-                "belowLineFillColorGrowingBottom": "rgba(41, 98, 255, 0)",
-                "belowLineFillColorFallingBottom": "rgba(255, 0, 0, 0)",
-                "symbolActiveColor": "rgba(41, 98, 255, 0.12)",
-                "tabs": [
-                    {
-                    "title": "Indices",
-                    "symbols": [
-                        { "s": "FOREXCOM:SPXUSD", "d": "S&P 500" },
-                        { "s": "FOREXCOM:NSXUSD", "d": "US 100" },
-                        { "s": "FOREXCOM:DJI", "d": "Dow 30" },
-                        { "s": "INDEX:NKY", "d": "Nikkei 225" },
-                        { "s": "INDEX:DEU40", "d": "DAX Index" },
-                        { "s": "FOREXCOM:UKXGBP", "d": "UK 100" }
-                    ],
-                    "originalTitle": "Indices"
-                    },
-                    {
-                    "title": "Futures",
-                    "symbols": [
-                        { "s": "CME_MINI:ES1!", "d": "S&P 500" },
-                        { "s": "CME:6E1!", "d": "Euro" },
-                        { "s": "COMEX:GC1!", "d": "Gold" },
-                        { "s": "NYMEX:CL1!", "d": "WTI Crude Oil" },
-                        { "s": "NYMEX:NG1!", "d": "Gas" },
-                        { "s": "CBOT:ZC1!", "d": "Corn" }
-                    ],
-                    "originalTitle": "Futures"
-                    },
-                    {
-                    "title": "Forex",
-                    "symbols": [
-                        { "s": "FX:EURUSD", "d": "EUR/USD" },
-                        { "s": "FX:GBPUSD", "d": "GBP/USD" },
-                        { "s": "FX:USDJPY", "d": "USD/JPY" },
-                        { "s": "FX:USDCHF", "d": "USD/CHF" },
-                        { "s": "FX:AUDUSD", "d": "AUD/USD" },
-                        { "s": "FX:USDCAD", "d": "USD/CAD" }
-                    ],
-                    "originalTitle": "Forex"
-                    }
-                ]
-                }
-                </script>
+
+            <!-- Webcams -->
+            <div class="webcam-thumb" onclick="changeChannel('1-iS7LArMPA', this)">
+                <iframe src="https://www.youtube.com/embed/1-iS7LArMPA?autoplay=1&mute=1&controls=0&showinfo=0" allow="autoplay"></iframe>
+                <div style="position: absolute; top: 5px; left: 5px; background: rgba(0,0,0,0.7); padding: 2px 5px; font-size: 0.7rem; color: #fff;">NYC - Times Square</div>
+            </div>
+            <div class="webcam-thumb" onclick="changeChannel('z_fY1pj1VBw', this)">
+                <iframe src="https://www.youtube.com/embed/z_fY1pj1VBw?autoplay=1&mute=1&controls=0&showinfo=0" allow="autoplay"></iframe>
+                <div style="position: absolute; top: 5px; left: 5px; background: rgba(0,0,0,0.7); padding: 2px 5px; font-size: 0.7rem; color: #fff;">TAIPEI - Elephant Mtn</div>
+            </div>
+            <div class="webcam-thumb" onclick="changeChannel('2l5qY-Xz9iI', this)">
+                <iframe src="https://www.youtube.com/embed/2l5qY-Xz9iI?autoplay=1&mute=1&controls=0&showinfo=0" allow="autoplay"></iframe>
+                <div style="position: absolute; top: 5px; left: 5px; background: rgba(0,0,0,0.7); padding: 2px 5px; font-size: 0.7rem; color: #fff;">WARSAW - City Center</div>
+            </div>
+            <div class="webcam-thumb" onclick="changeChannel('qLogxA4vi_s', this)">
+                <iframe src="https://www.youtube.com/embed/qLogxA4vi_s?autoplay=1&mute=1&controls=0&showinfo=0" allow="autoplay"></iframe>
+                <div style="position: absolute; top: 5px; left: 5px; background: rgba(0,0,0,0.7); padding: 2px 5px; font-size: 0.7rem; color: #fff;">HONG KONG - Victoria Harbour</div>
+            </div>
+            <div class="webcam-thumb" onclick="changeChannel('86YLFOog4GM', this)">
+                <iframe src="https://www.youtube.com/embed/86YLFOog4GM?autoplay=1&mute=1&controls=0&showinfo=0" allow="autoplay"></iframe>
+                <div style="position: absolute; top: 5px; left: 5px; background: rgba(0,0,0,0.7); padding: 2px 5px; font-size: 0.7rem; color: #fff;">SPACE - ISS Live</div>
+            </div>
+        </div>
+
+        <!-- Sidebar: Right Panel (News + Market) -->
+        <aside class="sidebar-right">
+            <div class="panel-header">
+                <span><i class="fas fa-chart-line"></i> GLOBAL MARKETS & NEWS</span>
+                <div class="live-indicator"><span class="dot"></span> OPEN</div>
+            </div>
+
+            <!-- Video Player -->
+            <div class="video-container">
+                <iframe id="video-frame" src="https://www.youtube.com/embed/gCNeDWCI0vo?autoplay=1&mute=1" title="Live News" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                
+                <!-- Channel Selector -->
+                <div class="video-controls">
+                    <span style="font-size: 0.65rem; text-transform: uppercase; color: #787b86;">News:</span>
+                    <button class="channel-btn active" onclick="changeChannel('gCNeDWCI0vo', this)">AL JAZEERA</button>
+                    <button class="channel-btn" onclick="changeChannel('YDvsBbKfLPA', this)">SKY NEWS</button>
+                    <button class="channel-btn" onclick="changeChannel('iEpJwprxDdk', this)">BLOOMBERG</button>
+                    <button class="channel-btn" onclick="changeChannel('pykpO5kQJ98', this)">EURONEWS</button>
+                    <button class="channel-btn" onclick="changeChannel('Bpa0u4Vjjfs', this)">CNBC</button>
+                    <button class="channel-btn" onclick="changeChannel('L0G9G_8v4zI', this)">FRANCE 24</button>
+                    <button class="channel-btn" onclick="changeChannel('l8PMl7tUDIE', this)">ABC NEWS</button>
+                    <button class="channel-btn" onclick="changeChannel('UCeY0bbntWzzVIaj2z3QigXg', this)">NBC NEWS</button>
+                </div>
+            </div>
+
+            <div id="market-data">
+                <!-- Market items -->
             </div>
         </aside>
 
