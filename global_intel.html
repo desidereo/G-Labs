@@ -48,7 +48,7 @@
         }
         .logo { font-weight: 800; font-size: 1.5rem; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 10px; }
         .logo span { color: var(--primary); }
-        .main-nav { display: flex; gap: 20px; height: 100%; align-items: center; }
+        .main-nav { display: none; } /* Hidden as per request */
         .main-nav a { text-decoration: none; color: #b2b5be; font-weight: 600; font-size: 0.9rem; transition: color 0.3s; height: 100%; display: flex; align-items: center; padding: 0 5px; border-bottom: 2px solid transparent; }
         .main-nav a:hover, .main-nav a.active { color: var(--primary); border-bottom-color: var(--primary); }
 
@@ -907,8 +907,15 @@
         // 2. Global News Feed (RSS via Proxy)
         async function fetchNews() {
             try {
-                // Using BBC World News via RSS2JSON (Free tier)
-                const res = await fetch('https://api.rss2json.com/v1/api.json?rss_url=http://feeds.bbci.co.uk/news/world/rss.xml');
+                // Fetch from multiple sources
+                const sources = [
+                    'http://feeds.bbci.co.uk/news/world/rss.xml',
+                    'https://www.aljazeera.com/xml/rss/all.xml',
+                    'https://feeds.reuters.com/reuters/worldNews'
+                ];
+                
+                // Use the first one for now (API limits on free proxy)
+                const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(sources[0])}`);
                 const data = await res.json();
                 
                 if(data.status === 'ok') {
@@ -969,12 +976,14 @@
 
         // 2. Simulated Global Data (Mocking a paid Intel Feed)
         const staticHotspots = [
-            { lat: 31.5, lng: 34.8, title: "Middle East Zone", type: "Conflict", icon: icons.conflict, desc: "Heightened alert status." },
-            { lat: 50.45, lng: 30.52, title: "Eastern Europe Front", type: "Conflict", icon: icons.conflict, desc: "Movement detected." },
-            { lat: 25.2, lng: 55.27, title: "OPEC Summit", type: "Economy", icon: icons.econ, desc: "Production output talks." },
-            { lat: 38.9, lng: -77.03, title: "FOMC Meeting", type: "Economy", icon: icons.econ, desc: "Rate decision pending." },
-            { lat: 24.5, lng: 119.5, title: "Taiwan Strait", type: "Naval", icon: icons.naval, desc: "Naval exercise in progress." },
-            { lat: 10.0, lng: -66.5, title: "Venezuela Export", type: "Economy", icon: icons.econ, desc: "Oil sanction waiver review." }
+            { lat: 31.5, lng: 34.8, title: "Gaza/Israel", type: "Conflict", icon: icons.conflict, desc: "Active military operations reported near Rafah border crossing." },
+            { lat: 50.45, lng: 30.52, title: "Kyiv/Ukraine", type: "Conflict", icon: icons.conflict, desc: "Air raid sirens active. Drone activity detected in region." },
+            { lat: 25.03, lng: 121.56, title: "Taiwan ADIZ", type: "Naval", icon: icons.naval, desc: "Multiple incursions by PLA aircraft. Naval patrols increased." },
+            { lat: 12.5, lng: 43.5, title: "Red Sea", type: "Naval", icon: icons.naval, desc: "Merchant vessel reports suspicious approach by skiffs." },
+            { lat: 35.67, lng: 139.65, title: "BoJ Policy", type: "Economy", icon: icons.econ, desc: "Yen volatility expected ahead of Governor statement." },
+            { lat: 38.89, lng: -77.03, title: "US Fed", type: "Economy", icon: icons.econ, desc: "Treasury yield curve inversion deepening." },
+            { lat: 34.05, lng: -118.24, title: "Supply Chain", type: "Economy", icon: icons.econ, desc: "Port of LA reporting increased container backlog." },
+            { lat: 19.43, lng: -99.13, title: "Mexico", type: "Conflict", icon: icons.conflict, desc: "Cartel activity impacting logistics routes in northern states." }
         ];
 
         function loadHotspots() {
