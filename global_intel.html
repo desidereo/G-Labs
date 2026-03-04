@@ -105,6 +105,43 @@
         .intel-title { font-size: 0.9rem; margin-bottom: 5px; color: #fff; line-height: 1.4; font-weight: 500; }
         .intel-time { font-size: 0.75rem; color: #787b86; }
         
+        /* Pentagon Pizza Index Widget */
+        .pizza-meter {
+            padding: 15px;
+            background: #1e222d;
+            border-bottom: 1px solid #2a2e39;
+            text-align: center;
+        }
+        .pizza-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: #787b86;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+        .pizza-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        .pizza-icon {
+            font-size: 1.8rem;
+            color: var(--warning);
+            animation: pulse 2s infinite;
+        }
+        .pizza-level {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #fff;
+        }
+        .pizza-desc {
+            font-size: 0.7rem;
+            color: var(--danger);
+            margin-top: 5px;
+        }
+
         /* News Ticker */
         .news-ticker {
             grid-column: 1 / 4;
@@ -327,6 +364,18 @@
                 <div class="live-indicator"><span class="dot"></span> LIVE</div>
             </div>
             
+            <!-- Pentagon Pizza Index -->
+            <div class="pizza-meter">
+                <div class="pizza-title"><i class="fas fa-pizza-slice"></i> PENTAGON PIZZA INDEX</div>
+                <div class="pizza-display">
+                    <div class="pizza-icon"><i class="fas fa-fire"></i></div>
+                    <div>
+                        <div class="pizza-level">HIGH VOLUME</div>
+                        <div class="pizza-desc">Possible Crisis Event</div>
+                    </div>
+                </div>
+            </div>
+
             <!-- External Intel Links -->
             <div class="source-links">
                 <a href="https://liveuamap.com/" target="_blank" class="source-link"><i class="fas fa-map-marked-alt"></i> LiveUAMap</a>
