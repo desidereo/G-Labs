@@ -97,7 +97,7 @@
             grid-row: 3 / 5; /* Spans Main + Bottom rows */
             background: #131722;
             border-right: 1px solid #2a2e39;
-            overflow-y: auto;
+            overflow: hidden; /* Changed from overflow-y: auto to fix header scroll */
             display: flex;
             flex-direction: column;
         }
@@ -111,9 +111,12 @@
             align-items: center;
             font-size: 0.9rem;
             letter-spacing: 0.5px;
-            position: sticky;
-            top: 0;
-            z-index: 5;
+            /* Sticky removed as container is now fixed */
+        }
+
+        #intel-feed {
+            flex: 1;
+            overflow-y: auto; /* Internal scrolling for feed items */
         }
         .live-indicator {
             display: flex;
