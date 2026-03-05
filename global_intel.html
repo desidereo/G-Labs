@@ -308,12 +308,133 @@
         .sidebar-right {
             grid-column: 3 / 4;
             grid-row: 3 / 4;
-            background: #131722;
+            background: #0a0e17; /* Darker background for dashboard feel */
             border-left: 1px solid #2a2e39;
             display: flex;
             flex-direction: column;
             overflow-y: auto;
+            padding: 10px;
+            gap: 10px;
         }
+
+        /* Dashboard Cards */
+        .dash-card {
+            background: #131722;
+            border: 1px solid #2a2e39;
+            border-radius: 4px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .dash-header {
+            padding: 8px 12px;
+            background: #1e222d;
+            border-bottom: 1px solid #2a2e39;
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: #b2b5be;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .dash-badge {
+            background: rgba(38, 166, 154, 0.2);
+            color: var(--success);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.6rem;
+            border: 1px solid rgba(38, 166, 154, 0.3);
+        }
+        .dash-content {
+            padding: 10px;
+            font-size: 0.8rem;
+        }
+
+        /* Gauge Widget */
+        .risk-gauge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            height: 100px;
+        }
+        .gauge-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 8px solid #2a2e39;
+            border-top-color: var(--warning);
+            border-right-color: var(--warning);
+            transform: rotate(-45deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .gauge-value {
+            transform: rotate(45deg);
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: #fff;
+        }
+        .gauge-label {
+            transform: rotate(45deg);
+            font-size: 0.6rem;
+            color: var(--warning);
+            margin-top: -2px;
+        }
+
+        /* Instability Bars */
+        .instability-row {
+            margin-bottom: 8px;
+        }
+        .instability-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 3px;
+            font-size: 0.7rem;
+            color: #b2b5be;
+        }
+        .progress-bar {
+            height: 4px;
+            background: #2a2e39;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--danger);
+            width: 0%;
+            transition: width 1s ease-out;
+        }
+
+        /* Regional Feed Items */
+        .region-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #2a2e39;
+        }
+        .region-item:last-child { border-bottom: none; }
+        .region-source { font-size: 0.6rem; color: var(--primary); font-weight: 700; margin-bottom: 2px; }
+        .region-title { font-size: 0.75rem; color: #d1d4dc; line-height: 1.3; }
+        .region-title:hover { color: #fff; text-decoration: underline; cursor: pointer; }
+
+        /* Infrastructure Stats */
+        .infra-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        .infra-box {
+            background: #0a0e17;
+            padding: 8px;
+            border-radius: 3px;
+            text-align: center;
+        }
+        .infra-num { font-size: 1.1rem; font-weight: 800; color: #fff; }
+        .infra-label { font-size: 0.65rem; color: #787b86; text-transform: uppercase; }
+
 
         /* Video Controls */
         .video-controls {
@@ -557,10 +678,11 @@
             
             <!-- External Intel Links -->
             <div class="source-links">
-                <button onclick="openBrowser('https://liveuamap.com/')" class="source-link"><i class="fas fa-map-marked-alt"></i> LiveUAMap</button>
-                <button onclick="openBrowser('https://www.understandingwar.org/')" class="source-link"><i class="fas fa-book"></i> ISW</button>
-                <button onclick="openBrowser('https://www.bellingcat.com/')" class="source-link"><i class="fas fa-search"></i> Bellingcat</button>
-                <button onclick="openBrowser('https://www.oryxspioenkop.com/')" class="source-link"><i class="fas fa-tank"></i> Oryx</button>
+                <button onclick="openBrowser('https://liveuamap.com/')" class="source-link"><i class="fas fa-map-marked-alt"></i> Conflict</button>
+                <button onclick="openBrowser('https://www.vesselfinder.com/')" class="source-link"><i class="fas fa-ship"></i> Marine</button>
+                <button onclick="openBrowser('https://threatmap.checkpoint.com/')" class="source-link"><i class="fas fa-shield-alt"></i> Cyber</button>
+                <button onclick="openBrowser('https://firms.modaps.eosdis.nasa.gov/map/')" class="source-link"><i class="fas fa-fire"></i> Fires</button>
+                <button onclick="openBrowser('https://radar.cloudflare.com/outage-center')" class="source-link"><i class="fas fa-plug"></i> Outages</button>
                 <button onclick="openBrowser('https://www.reuters.com/world/')" class="source-link"><i class="fas fa-newspaper"></i> Reuters</button>
             </div>
 
@@ -599,126 +721,145 @@
         </div>
 
         
-        <!-- Sidebar: Right Panel (News + Market) -->
+        <!-- Sidebar: Right Panel (Strategic Dashboard) -->
         <aside class="sidebar-right">
-            <div class="panel-header">
-                <span><i class="fas fa-chart-line"></i> LIVE NEWS & ANALYSIS</span>
-                <div class="live-indicator"><span class="dot"></span> OPEN</div>
-            </div>
-
-            <!-- Video Player -->
-            <div class="video-container">
-                <iframe id="video-frame" src="https://www.youtube.com/embed/gCNeDWCI0vo?autoplay=1&mute=1" title="Live News" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-            </div>
             
-            <!-- Channel Selector -->
-            <div class="video-controls">
-                <button class="channel-btn active" onclick="changeChannel('gCNeDWCI0vo', this)">AL JAZEERA</button>
-                <button class="channel-btn" onclick="changeChannel('YDvsBbKfLPA', this)">SKY NEWS</button>
-                <button class="channel-btn" onclick="changeChannel('iEpJwprxDdk', this)">BLOOMBERG</button>
-                <button class="channel-btn" onclick="changeChannel('pykpO5kQJ98', this)">EURONEWS</button>
-                <button class="channel-btn" onclick="changeChannel('Bpa0u4Vjjfs', this)">CNBC</button>
-            </div>
-            
-            <!-- Market Overview -->
-            <div style="background: #1e222d; padding: 5px 10px; font-size: 0.8rem; font-weight: 800; color: #fff; border-bottom: 1px solid #2a2e39; border-top: 1px solid #2a2e39;">
-                <i class="fas fa-chart-line"></i> MARKET OVERVIEW
-            </div>
-            <div class="tradingview-widget-container" style="height: 250px; width: 100%;">
-                <div class="tradingview-widget-container__widget"></div>
-                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
-                {
-                "colorTheme": "dark",
-                "dateRange": "12M",
-                "showChart": false,
-                "locale": "en",
-                "largeChartUrl": "",
-                "isTransparent": true,
-                "showSymbolLogo": true,
-                "showFloatingTooltip": false,
-                "width": "100%",
-                "height": "100%",
-                "plotLineColorGrowing": "rgba(41, 98, 255, 1)",
-                "plotLineColorFalling": "rgba(255, 0, 0, 1)",
-                "gridLineColor": "rgba(240, 243, 250, 0)",
-                "scaleFontColor": "rgba(106, 109, 120, 1)",
-                "belowLineFillColorGrowing": "rgba(41, 98, 255, 0.12)",
-                "belowLineFillColorFalling": "rgba(255, 0, 0, 0.12)",
-                "belowLineFillColorGrowingBottom": "rgba(41, 98, 255, 0)",
-                "belowLineFillColorFallingBottom": "rgba(255, 0, 0, 0)",
-                "symbolActiveColor": "rgba(41, 98, 255, 0.12)",
-                "tabs": [
-                    {
-                    "title": "Indices",
-                    "symbols": [
-                        { "s": "FOREXCOM:SPXUSD", "d": "S&P 500" },
-                        { "s": "FOREXCOM:NSXUSD", "d": "US 100" },
-                        { "s": "FOREXCOM:DJI", "d": "Dow 30" }
-                    ],
-                    "originalTitle": "Indices"
-                    },
-                    {
-                    "title": "Futures",
-                    "symbols": [
-                        { "s": "COMEX:GC1!", "d": "Gold" },
-                        { "s": "NYMEX:CL1!", "d": "Crude Oil" }
-                    ],
-                    "originalTitle": "Futures"
-                    },
-                    {
-                    "title": "Forex",
-                    "symbols": [
-                        { "s": "FX:EURUSD", "d": "EUR/USD" },
-                        { "s": "FX:GBPUSD", "d": "GBP/USD" },
-                        { "s": "FX:USDJPY", "d": "USD/JPY" }
-                    ],
-                    "originalTitle": "Forex"
-                    },
-                    {
-                    "title": "Crypto",
-                    "symbols": [
-                        { "s": "BINANCE:BTCUSDT", "d": "Bitcoin" },
-                        { "s": "BINANCE:ETHUSDT", "d": "Ethereum" },
-                        { "s": "BINANCE:SOLUSDT", "d": "Solana" }
-                    ]
-                    }
-                ]
-                }
-                </script>
-            </div>
-
-            <!-- Economic Calendar (New Section) -->
-            <div style="background: #1e222d; padding: 5px 10px; font-size: 0.8rem; font-weight: 800; color: #fff; border-bottom: 1px solid #2a2e39; border-top: 1px solid #2a2e39;">
-                <i class="fas fa-calendar-alt"></i> ECONOMIC CALENDAR
-            </div>
-            <div class="tradingview-widget-container" style="height: 250px; width: 100%;">
-                <div class="tradingview-widget-container__widget"></div>
-                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>
-                {
-                "colorTheme": "dark",
-                "isTransparent": true,
-                "width": "100%",
-                "height": "100%",
-                "locale": "en",
-                "importanceFilter": "0,1",
-                "currencyFilter": "USD,EUR,GBP,JPY,AUD,CAD,CHF,CNY"
-                }
-                </script>
-            </div>
-
-            <!-- AI Intelligence Feed (Moved from Map) -->
-            <div class="ai-hud-container">
-                <div class="ai-hud-header">
-                    <span><i class="fas fa-robot"></i> AI INTELLIGENCE FEED</span>
-                    <span style="font-size: 0.65rem; color: #787b86;">LIVE</span>
+            <!-- Video Player (Kept as Top Card) -->
+            <div class="dash-card">
+                <div class="dash-header">
+                    <span><i class="fas fa-video"></i> Live Global News</span>
+                    <span class="dash-badge">LIVE</span>
                 </div>
-                <div class="ai-hud-content" id="ai-hud-feed">
-                    <div style="font-size: 0.7rem; color: #787b86; text-align: center; padding: 10px;">
-                        Waiting for algorithmic signals...
+                <div class="video-container">
+                    <iframe id="video-frame" src="https://www.youtube.com/embed/gCNeDWCI0vo?autoplay=1&mute=1" title="Live News" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                </div>
+                <div class="video-controls">
+                    <button class="channel-btn active" onclick="changeChannel('gCNeDWCI0vo', this)">AL JAZEERA</button>
+                    <button class="channel-btn" onclick="changeChannel('YDvsBbKfLPA', this)">SKY NEWS</button>
+                    <button class="channel-btn" onclick="changeChannel('iEpJwprxDdk', this)">BLOOMBERG</button>
+                </div>
+            </div>
+
+            <!-- Strategic Risk Overview -->
+            <div class="dash-card">
+                <div class="dash-header">
+                    <span><i class="fas fa-tachometer-alt"></i> Strategic Risk Overview</span>
+                    <span class="dash-badge">MODERATE</span>
+                </div>
+                <div class="dash-content" style="display: flex; gap: 10px;">
+                    <div class="risk-gauge">
+                        <div class="gauge-circle">
+                            <div class="gauge-value">48</div>
+                            <div class="gauge-label">MODERATE</div>
+                        </div>
+                    </div>
+                    <div style="flex: 1; padding-top: 10px;">
+                        <div class="instability-row">
+                            <div class="instability-meta"><span>Global Instability</span><span>48/100</span></div>
+                            <div class="progress-bar"><div class="progress-fill" style="width: 48%; background: #ffcf22;"></div></div>
+                        </div>
+                        <div class="instability-row">
+                            <div class="instability-meta"><span>Cyber Threat Level</span><span>72/100</span></div>
+                            <div class="progress-bar"><div class="progress-fill" style="width: 72%; background: #ef5350;"></div></div>
+                        </div>
+                        <div style="font-size: 0.7rem; color: #787b86; margin-top: 5px;">
+                            <i class="fas fa-arrow-right"></i> Trend: Stable
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Country Instability (Fragile States) -->
+            <div class="dash-card">
+                <div class="dash-header">
+                    <span><i class="fas fa-globe-americas"></i> Country Instability</span>
+                    <span class="dash-badge" style="background: rgba(239, 83, 80, 0.2); color: #ef5350; border-color: rgba(239, 83, 80, 0.3);">ALERT</span>
+                </div>
+                <div class="dash-content" id="instability-list">
+                    <!-- Populated by JS -->
+                    <div style="text-align: center; color: #787b86;">Loading FSI Data...</div>
+                </div>
+            </div>
+
+            <!-- Regional Briefs -->
+            <div class="dash-card">
+                <div class="dash-header">
+                    <span><i class="fas fa-newspaper"></i> Regional Intelligence</span>
+                    <div style="display: flex; gap: 5px;">
+                        <button class="channel-btn active" style="padding: 2px 6px; font-size: 0.6rem;" onclick="filterRegion('ALL')">ALL</button>
+                        <button class="channel-btn" style="padding: 2px 6px; font-size: 0.6rem;" onclick="filterRegion('ME')">ME</button>
+                        <button class="channel-btn" style="padding: 2px 6px; font-size: 0.6rem;" onclick="filterRegion('EU')">EU</button>
+                    </div>
+                </div>
+                <div class="dash-content" id="regional-feed" style="max-height: 200px; overflow-y: auto;">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- Infrastructure Cascade -->
+            <div class="dash-card">
+                <div class="dash-header">
+                    <span><i class="fas fa-network-wired"></i> Infrastructure Cascade</span>
+                    <span class="dash-badge">LIVE</span>
+                </div>
+                <div class="dash-content">
+                    <div class="infra-grid">
+                        <div class="infra-box">
+                            <div class="infra-num" id="stat-cables">435</div>
+                            <div class="infra-label">Cables</div>
+                        </div>
+                        <div class="infra-box">
+                            <div class="infra-num" id="stat-ports">120</div>
+                            <div class="infra-label">Major Ports</div>
+                        </div>
+                        <div class="infra-box">
+                            <div class="infra-num" id="stat-chokepoints">8</div>
+                            <div class="infra-label">Chokepoints</div>
+                        </div>
+                        <div class="infra-box">
+                            <div class="infra-num" id="stat-nuke">440</div>
+                            <div class="infra-label">Nuclear Sites</div>
+                        </div>
+                    </div>
+                    <button style="width: 100%; margin-top: 10px; background: #1e222d; border: 1px solid #2a2e39; color: #b2b5be; padding: 5px; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">
+                        <i class="fas fa-search"></i> Analyze Impact Scenario
+                    </button>
+                </div>
+            </div>
             
+            <!-- Market Overview (Compact) -->
+            <div class="dash-card">
+                 <div class="dash-header">
+                    <span><i class="fas fa-chart-line"></i> Markets</span>
+                </div>
+                <div class="tradingview-widget-container" style="height: 150px; width: 100%;">
+                    <div class="tradingview-widget-container__widget"></div>
+                    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+                    {
+                    "colorTheme": "dark",
+                    "dateRange": "12M",
+                    "showChart": false,
+                    "locale": "en",
+                    "largeChartUrl": "",
+                    "isTransparent": true,
+                    "showSymbolLogo": true,
+                    "showFloatingTooltip": false,
+                    "width": "100%",
+                    "height": "100%",
+                    "tabs": [
+                        {
+                        "title": "Indices",
+                        "symbols": [
+                            { "s": "FOREXCOM:SPXUSD", "d": "S&P 500" },
+                            { "s": "FOREXCOM:NSXUSD", "d": "US 100" }
+                        ]
+                        }
+                    ]
+                    }
+                    </script>
+                </div>
+            </div>
+
         </aside>
 
         <!-- Bottom Panel: Webcams & Pizza Index -->
@@ -807,7 +948,8 @@
             naval: L.divIcon({ html: '<i class="fas fa-ship" style="color: #64b5f6; text-shadow: 0 0 10px #64b5f6;"></i>', className: 'marker-icon', iconSize: [16, 16] }),
             plane: L.divIcon({ html: '<i class="fas fa-plane" style="color: #2962ff; text-shadow: 0 0 10px #2962ff; transform: rotate(-45deg);"></i>', className: 'marker-icon', iconSize: [16, 16] }),
             nuke: L.divIcon({ html: '<i class="fas fa-radiation" style="color: #ff9100; text-shadow: 0 0 10px #ff9100;"></i>', className: 'marker-icon', iconSize: [16, 16] }),
-            lock: L.divIcon({ html: '<i class="fas fa-lock" style="color: #f50057; text-shadow: 0 0 10px #f50057;"></i>', className: 'marker-icon', iconSize: [16, 16] })
+            lock: L.divIcon({ html: '<i class="fas fa-lock" style="color: #f50057; text-shadow: 0 0 10px #f50057;"></i>', className: 'marker-icon', iconSize: [16, 16] }),
+            fire: L.divIcon({ html: '<i class="fas fa-fire" style="color: #ff5722; text-shadow: 0 0 10px #ff5722;"></i>', className: 'marker-icon', iconSize: [16, 16] })
         };
         
         // --- STATIC DATA LOADERS ---
@@ -976,8 +1118,28 @@
                             if(category === 'GEOPOL' || category === 'CYBER') intensity = 'high';
                             if(category === 'MARKET') intensity = 'medium';
                             
+                            // Push to Regional Feed Array (Simulated Region Detection)
+                            let region = 'ALL';
+                            if(item.title.includes('US') || item.title.includes('Biden') || item.title.includes('Trump')) region = 'US';
+                            else if(item.title.includes('Europe') || item.title.includes('Ukraine') || item.title.includes('Russia')) region = 'EU';
+                            else if(item.title.includes('China') || item.title.includes('Asia')) region = 'ASIA';
+                            else if(item.title.includes('Israel') || item.title.includes('Gaza') || item.title.includes('Iran')) region = 'ME';
+                            
+                            allRegionalItems.push({
+                                title: item.title,
+                                link: item.link,
+                                source: category,
+                                time: 'Just now',
+                                region: region
+                            });
+                            
                             addIntelItem(category, item.title, intensity, item.link);
                         });
+                        
+                        // Refresh Regional Feed UI
+                        if(allRegionalItems.length > 20) allRegionalItems.shift(); // Keep list short
+                        filterRegion('ALL'); // Refresh display
+                        
                         return data.items;
                     }
                 } catch(e) {
@@ -1102,6 +1264,8 @@
                     else if(title.includes("Cyclone") || title.includes("Hurricane") || title.includes("Typhoon")) { type = "Natural"; icon = icons.conflict; } // Storm
                     else if(title.includes("Drought")) { type = "Natural"; icon = icons.econ; }
                     else if(title.includes("Volcano")) { type = "Natural"; icon = icons.conflict; }
+                    else if(title.includes("Fire") || title.includes("Wildfire")) { type = "Natural"; icon = icons.fire; } // Fires
+                    else { icon = icons.econ; } // Fallback
 
                     if(!isNaN(lat) && !isNaN(lng)) {
                         // Plot on Map
@@ -1295,7 +1459,7 @@
             
             // PROXY TRICK: Use Google Translate as a wrapper to bypass X-Frame-Options
             // This makes the browser think we are loading a Google page, which is secure and embeddable.
-            const blockedDomains = ['liveuamap.com', 'understandingwar.org', 'reuters.com'];
+            const blockedDomains = ['liveuamap.com', 'understandingwar.org', 'reuters.com', 'vesselfinder.com', 'checkpoint.com', 'nasa.gov', 'cloudflare.com'];
             const isBlocked = blockedDomains.some(domain => url.includes(domain));
             
             if (isBlocked) {
@@ -1394,11 +1558,81 @@
             addAnalysis(`Algo Alert: ${pair} showing ${strat} on 15m timeframe. Volatility expected.`, action, pair);
         }
 
+        // 6. DASHBOARD WIDGET LOGIC
+        
+        // Populate Fragile States (Instability Widget)
+        // Source: Fragile States Index 2023 (Top 5) + Simulated Live Shifts
+        function loadInstabilityData() {
+            const container = document.getElementById('instability-list');
+            const states = [
+                { name: "Somalia", score: 111.9, trend: "up" },
+                { name: "Yemen", score: 108.9, trend: "up" },
+                { name: "South Sudan", score: 108.5, trend: "down" },
+                { name: "D.R. Congo", score: 107.2, trend: "stable" },
+                { name: "Syria", score: 107.1, trend: "up" }
+            ];
+            
+            let html = '';
+            states.forEach(state => {
+                const color = state.score > 110 ? '#b71c1c' : '#ef5350';
+                const icon = state.trend === 'up' ? '<i class="fas fa-arrow-up" style="color:#ef5350"></i>' : (state.trend === 'down' ? '<i class="fas fa-arrow-down" style="color:#26a69a"></i>' : '<i class="fas fa-minus" style="color:#787b86"></i>');
+                
+                html += `
+                <div class="instability-row">
+                    <div class="instability-meta">
+                        <span style="display:flex; gap:5px; align-items:center;">${state.name} ${icon}</span>
+                        <span>${state.score}</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: ${state.score/1.2}%; background: ${color};"></div></div>
+                </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        // Regional News Filter Logic
+        let allRegionalItems = [];
+        
+        function filterRegion(region) {
+            const container = document.getElementById('regional-feed');
+            const btns = document.querySelectorAll('.dash-header .channel-btn');
+            
+            // Update buttons
+            btns.forEach(b => {
+                if(b.innerText === region) b.classList.add('active');
+                else b.classList.remove('active');
+            });
+            
+            // Filter Data
+            const filtered = region === 'ALL' ? allRegionalItems : allRegionalItems.filter(i => i.region === region);
+            
+            container.innerHTML = filtered.map(item => `
+                <div class="region-item" onclick="window.open('${item.link}', '_blank')">
+                    <div class="region-source">${item.source} <span style="color:#787b86; font-weight:400;">• ${item.time}</span></div>
+                    <div class="region-title">${item.title}</div>
+                </div>
+            `).join('');
+        }
+        
+        // 7. Update Infrastructure Stats
+        function updateInfraStats() {
+            // Count actual markers on map
+            document.getElementById('stat-nuke').innerText = nuclearSites.length;
+            document.getElementById('stat-chokepoints').innerText = chokepoints.length;
+            // Cables/Ports are static/not fully loaded as objects, so we keep static placeholder or random sim
+            document.getElementById('stat-cables').innerText = "435"; 
+            document.getElementById('stat-ports').innerText = "120";
+        }
+
         function loadAIFeeds() {
              fetchCryptoSentiment();
              // Generate a signal every minute
              setInterval(generateAlgoSignal, 60000);
              generateAlgoSignal(); // Initial
+             
+             // Dashboard Init
+             loadInstabilityData();
+             updateInfraStats();
         }
 
     </script>
