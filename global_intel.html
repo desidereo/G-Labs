@@ -108,8 +108,9 @@
         .ticker-content {
             display: inline-block;
             padding-left: 100%;
-            animation: ticker 60s linear infinite;
+            animation: ticker 120s linear infinite; /* Slowed down from 60s to 120s */
         }
+        .ticker-content:hover { animation-play-state: paused; }
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
         /* Sidebar: Left Panel (Intel Feed) */
@@ -1049,10 +1050,12 @@
                         .addTo(layers.quakes)
                         .bindPopup(`<b>Magnitude ${mag} Earthquake</b><br>${place}<br>${time}<br><a href="${quake.properties.url}" target="_blank">USGS Report</a>`);
                         
-                    addIntelItem('Natural', `M${mag} Quake in ${place}`, 'high', quake.properties.url);
+                    // addIntelItem('Natural', `M${mag} Quake in ${place}`, 'high', quake.properties.url); // Removed to declutter feed
                     
                     if(mag > 6.0) {
                         addAnalysis(`High-magnitude seismic event (M${mag}) in ${place}. Potential supply chain disruption. Watch regional insurance stocks.`, 'SELL', 'Insurance');
+                        // Only add to sidebar if it's really major
+                        addIntelItem('Natural', `MAJOR M${mag} Quake in ${place}`, 'high', quake.properties.url);
                     }
                 });
             } catch (e) {
@@ -1116,8 +1119,8 @@
                     // Only add to sidebar if it's recent (last 24h) or High Priority
                     const isRecent = (new Date() - pubDate) < (24 * 60 * 60 * 1000);
                     
-                    if(isRecent || priority === 'high') {
-                         addIntelItem(type, title, priority);
+                    if(isRecent && priority === 'high') { // STRICTER: Only High Priority AND Recent for GDACS
+                         addIntelItem(type, title, priority, link);
                     }
                 });
                 
@@ -1130,6 +1133,11 @@
         // Helper: Add item to Sidebar
         function addIntelItem(tag, title, priority, link) {
             const feed = document.getElementById('intel-feed');
+            
+            // Deduplication: Check if title already exists
+            const existing = Array.from(feed.children).some(child => child.innerText.includes(title));
+            if(existing) return;
+
             const item = document.createElement('div');
             item.className = 'intel-item';
             
