@@ -969,15 +969,20 @@
         }
 
         // 3. USGS Earthquakes (Real Data)
+        // Only fetching significant quakes (M5.0+) to reduce noise
         async function fetchEarthquakes() {
             try {
-                // Fetch last 24h of 4.5+ quakes
+                // Fetch last 24h of 4.5+ quakes (but filter for 5.0+)
                 const response = await fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_day.geojson');
                 const data = await response.json();
                 
                 data.features.forEach(quake => {
-                    const coords = quake.geometry.coordinates;
                     const mag = quake.properties.mag;
+                    
+                    // Filter: Only show Magnitude 5.0+ to remove "fake" or minor tremors
+                    if(mag < 5.0) return;
+                    
+                    const coords = quake.geometry.coordinates;
                     const place = quake.properties.place;
                     const time = new Date(quake.properties.time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
                     
