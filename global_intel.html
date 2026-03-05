@@ -175,6 +175,8 @@
         .tag-econ { background: rgba(38, 166, 154, 0.15); color: var(--success); border: 1px solid rgba(38, 166, 154, 0.3); }
         .tag-alert { background: rgba(255, 207, 34, 0.15); color: var(--warning); border: 1px solid rgba(255, 207, 34, 0.3); }
         .tag-natural { background: rgba(100, 181, 246, 0.15); color: #64b5f6; border: 1px solid rgba(100, 181, 246, 0.3); }
+        .tag-cyber { background: rgba(213, 0, 249, 0.15); color: #d500f9; border: 1px solid rgba(213, 0, 249, 0.3); }
+        .tag-tech { background: rgba(41, 98, 255, 0.15); color: var(--primary); border: 1px solid rgba(41, 98, 255, 0.3); }
         
         .intel-title { font-size: 0.9rem; margin-bottom: 5px; color: #fff; line-height: 1.4; font-weight: 500; }
         .intel-time { font-size: 0.75rem; color: #787b86; }
@@ -789,7 +791,7 @@
         const overlayMaps = {
             "Live Flights (OpenSky)": layers.flights,
             "Seismic Events (USGS)": layers.quakes,
-            "Intel Hotspots (Sim)": layers.hotspots,
+            "Global Disasters (GDACS)": layers.hotspots,
             "Nuclear Infrastructure": layers.nuclear,
             "Strategic Chokepoints": layers.chokepoints
         };
@@ -923,74 +925,131 @@
 
         // 2. Global News Feed (RSS via Proxy)
         async function fetchNews() {
-            try {
-                // Fetch from multiple sources
-                const sources = [
-                    'https://feeds.reuters.com/reuters/worldNews',
+            const feedCategories = {
+                'CYBER': [
+                    'https://feeds.feedburner.com/TheHackersNews',
+                    'https://www.darkreading.com/rss.xml',
+                    'https://krebsonsecurity.com/feed',
+                    'https://www.bleepingcomputer.com/feed/',
+                    'https://threatpost.com/feed/'
+                ],
+                'GEOPOL': [
                     'https://www.aljazeera.com/xml/rss/all.xml',
+                    'http://feeds.bbci.co.uk/news/world/rss.xml',
+                    'https://feeds.reuters.com/reuters/worldNews',
+                    'https://www.defenceweb.co.za/feed/',
+                    'https://www.rt.com/rss/news/'
+                ],
+                'SPACE': [
+                    'https://www.space.com/feeds.xml',
+                    'https://spacenews.com/feed',
+                    'https://blogs.nasa.gov/stationreport/feed/'
+                ],
+                'MARKET': [
                     'https://finance.yahoo.com/news/rssindex',
                     'https://www.cnbc.com/id/100003114/device/rss/rss.html',
-                    'https://www.sciencedaily.com/rss/earth_climate/natural_disasters.xml', // Natural Disasters
-                    'https://www.sciencedaily.com/rss/earth_climate/environmental_policy.xml' // Environmental Policy
-                ];
-                
-                // Pick one randomly to avoid rate limits and vary content
-                const randomSource = sources[Math.floor(Math.random() * sources.length)];
-                
-                const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(randomSource)}`);
-                const data = await res.json();
-                
-                if(data.status === 'ok') {
-                    const items = data.items;
-                    let tickerText = "";
+                    'https://feeds.bloomberg.com/markets/news.rss'
+                ],
+                'TECH': [
+                    'https://techcrunch.com/feed/',
+                    'https://www.theverge.com/rss/index.xml',
+                    'https://www.wired.com/feed/rss'
+                ]
+            };
+
+            // Flatten sources for ticker (random mix)
+            const allSources = Object.values(feedCategories).flat();
+            
+            // Function to fetch a single category
+            const fetchCategory = async (category, urls) => {
+                try {
+                    // Pick one random URL from this category
+                    const url = urls[Math.floor(Math.random() * urls.length)];
+                    const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
+                    const data = await res.json();
                     
-                    items.forEach(item => {
-                        // Add to Ticker
-                        tickerText += `<span style="margin-right: 50px;"><i class="fas fa-newspaper"></i> ${item.title}</span>`;
-                        
-                        // Add to Sidebar (first 8 only)
-                        addIntelItem('News', item.title, 'medium');
-                    });
-                    
-                    // Update Ticker
-                    const ticker = document.getElementById('ticker-content');
-                    ticker.innerHTML = tickerText + tickerText; // Duplicate for smooth loop
-                    
-                    // AI Analysis of the top headline
-                    if(items.length > 0) {
-                        addAnalysis(`News Alert: ${items[0].title}. Monitoring market impact.`, null, null);
+                    if(data.status === 'ok') {
+                        // Add first 2 items to sidebar
+                        data.items.slice(0, 2).forEach(item => {
+                            let intensity = 'low';
+                            if(category === 'GEOPOL' || category === 'CYBER') intensity = 'high';
+                            if(category === 'MARKET') intensity = 'medium';
+                            
+                            addIntelItem(category, item.title, intensity, item.link);
+                        });
+                        return data.items;
                     }
+                } catch(e) {
+                    console.warn(`Failed to fetch ${category} feed`, e);
                 }
+                return [];
+            };
+
+            // Fetch one from each category in parallel
+            const promises = Object.entries(feedCategories).map(([cat, urls]) => fetchCategory(cat, urls));
+            
+            try {
+                const results = await Promise.all(promises);
+                const allItems = results.flat().filter(i => i); // Flatten and remove undefined
+                
+                // Update Ticker with all items found
+                let tickerText = "";
+                allItems.forEach(item => {
+                     tickerText += `<span style="margin-right: 50px;"><i class="fas fa-newspaper"></i> [${item.categories && item.categories.length > 0 ? item.categories[0].toUpperCase() : 'INTEL'}] ${item.title}</span>`;
+                });
+                
+                const ticker = document.getElementById('ticker-content');
+                if(tickerText) ticker.innerHTML = tickerText + tickerText;
+
+                // AI Analysis of a random top headline
+                if(allItems.length > 0) {
+                    const randomItem = allItems[Math.floor(Math.random() * allItems.length)];
+                    addAnalysis(`Intel Received: ${randomItem.title}. Correlating with global assets.`, 'WATCH', 'Global');
+                }
+
             } catch (e) {
-                console.error('Error fetching news:', e);
-                // Fallback content if API fails
-                document.getElementById('ticker-content').innerHTML = "MARKET ALERT: HIGH VOLATILITY DETECTED IN ASIAN SESSION ... CRUDE OIL SPIKES ON GEOPOLITICAL TENSIONS ... GOLD RECLAIMS $2400 LEVEL ...";
+                console.error('Error in global feed fetch:', e);
+                document.getElementById('ticker-content').innerHTML = "SYSTEM ALERT: INTEL FEED CONNECTION UNSTABLE ... RETRYING SATELLITE UPLINK ...";
             }
         }
 
         // 3. USGS Earthquakes (Real Data)
-        // Only fetching significant quakes (M5.0+) to reduce noise
+        // Only fetching significant quakes (M5.5+) to remove noise
         async function fetchEarthquakes() {
             try {
-                // Fetch last 24h of 4.5+ quakes (but filter for 5.0+)
-                const response = await fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_day.geojson');
+                // Fetch last 7 days of 4.5+ quakes (but filter for 5.5+)
+                const response = await fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson');
                 const data = await response.json();
                 
+                // Clear old quakes before adding new ones
+                layers.quakes.clearLayers();
+
                 data.features.forEach(quake => {
                     const mag = quake.properties.mag;
                     
-                    // Filter: Only show Magnitude 5.0+ to remove "fake" or minor tremors
-                    if(mag < 5.0) return;
+                    // STRICT FILTER: Only show Magnitude 5.5+ (Significant)
+                    if(mag < 5.5) return;
                     
                     const coords = quake.geometry.coordinates;
                     const place = quake.properties.place;
                     const time = new Date(quake.properties.time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
                     
-                    L.marker([coords[1], coords[0]], {icon: icons.quake})
+                    // Determine color based on magnitude
+                    let color = '#ef5350'; // Red default
+                    if(mag >= 7.0) color = '#d500f9'; // Purple for major
+                    else if(mag >= 6.0) color = '#f50057'; // Pink for strong
+                    
+                    const quakeIcon = L.divIcon({ 
+                        html: `<i class="fas fa-bullseye" style="color: ${color}; text-shadow: 0 0 10px ${color}; font-size: ${12 + (mag-5)*2}px;"></i>`, 
+                        className: 'marker-icon', 
+                        iconSize: [20, 20] 
+                    });
+
+                    L.marker([coords[1], coords[0]], {icon: quakeIcon})
                         .addTo(layers.quakes)
-                        .bindPopup(`<b>Magnitude ${mag} Earthquake</b><br>${place}<br>${time}`);
+                        .bindPopup(`<b>Magnitude ${mag} Earthquake</b><br>${place}<br>${time}<br><a href="${quake.properties.url}" target="_blank">USGS Report</a>`);
                         
-                    addIntelItem('Natural', `M${mag} Quake in ${place}`, 'high');
+                    addIntelItem('Natural', `M${mag} Quake in ${place}`, 'high', quake.properties.url);
                     
                     if(mag > 6.0) {
                         addAnalysis(`High-magnitude seismic event (M${mag}) in ${place}. Potential supply chain disruption. Watch regional insurance stocks.`, 'SELL', 'Insurance');
@@ -1029,7 +1088,13 @@
                     let type = "Natural";
                     let icon = icons.econ; // default
                     
-                    if(title.includes("Earthquake")) { type = "Natural"; icon = icons.quake; }
+                    if(title.includes("Earthquake")) { 
+                        type = "Natural"; 
+                        icon = icons.quake; 
+                        // STRICT FILTER: Only show M5.5+ from GDACS too
+                        const magMatch = title.match(/M\s?(\d+(\.\d+)?)/);
+                        if(magMatch && parseFloat(magMatch[1]) < 5.5) return;
+                    }
                     else if(title.includes("Flood")) { type = "Natural"; icon = icons.naval; } // Water/Flood
                     else if(title.includes("Cyclone") || title.includes("Hurricane") || title.includes("Typhoon")) { type = "Natural"; icon = icons.conflict; } // Storm
                     else if(title.includes("Drought")) { type = "Natural"; icon = icons.econ; }
@@ -1058,34 +1123,51 @@
                 
             } catch (e) {
                 console.error("Error fetching GDACS:", e);
-                // Fallback to static if real feed fails
-                if(layers.hotspots.getLayers().length === 0) loadHotspots();
+                addIntelItem('System', 'GDACS Feed Offline', 'low');
             }
         }
 
         // Helper: Add item to Sidebar
-        function addIntelItem(tag, title, priority) {
+        function addIntelItem(tag, title, priority, link) {
             const feed = document.getElementById('intel-feed');
             const item = document.createElement('div');
             item.className = 'intel-item';
             
             let tagClass = 'tag-alert';
             if(tag === 'Conflict' || priority === 'high') tagClass = 'tag-conflict';
-            if(tag === 'Economy') tagClass = 'tag-econ';
-            if(tag === 'Naval') tagClass = 'tag-natural';
-            if(tag === 'Natural') tagClass = 'tag-natural';
+            if(tag === 'Economy' || tag === 'MARKET') tagClass = 'tag-econ';
+            if(tag === 'Naval' || tag === 'Natural') tagClass = 'tag-natural';
+            if(tag === 'CYBER') tagClass = 'tag-cyber'; // New class needed in CSS
+            if(tag === 'GEOPOL') tagClass = 'tag-conflict';
+            if(tag === 'SPACE' || tag === 'TECH') tagClass = 'tag-tech'; // New class needed in CSS
             
+            // Link handling
+            const titleHtml = link 
+                ? `<a href="${link}" target="_blank" style="color:inherit; text-decoration:none; display:block;">${title}</a>` 
+                : title;
+
             item.innerHTML = `
                 <div class="intel-meta">
                     <div class="intel-tag ${tagClass}">${tag}</div>
                     <div class="intel-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
                 </div>
-                <div class="intel-title">${title}</div>
+                <div class="intel-title">${titleHtml}</div>
             `;
+            
+            // Make whole item clickable if link exists (UX improvement)
+            if(link) {
+                item.onclick = (e) => {
+                    // Prevent double firing if clicking the link directly
+                    if(e.target.tagName !== 'A') {
+                        window.open(link, '_blank');
+                    }
+                };
+            }
+            
             feed.prepend(item);
             
             // Keep list manageable
-            if(feed.children.length > 20) feed.lastElementChild.remove();
+            if(feed.children.length > 30) feed.lastElementChild.remove();
         }
 
         // Helper: Add item to AI HUD
@@ -1245,7 +1327,7 @@
 
         // Initialize
         setTimeout(fetchEarthquakes, 1000);
-        setTimeout(fetchGDACS, 500); // Replaces static loadHotspots
+        setTimeout(fetchGDACS, 500); 
         setTimeout(fetchFlights, 2000);
         setTimeout(fetchNews, 100);
         setTimeout(loadAIFeeds, 1500); // Load AI Feeds
