@@ -4,19 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BTMM State Engine Pro — Welcome Pack</title>
-<meta name="description" content="BTMM State Engine MT4/MT5 welcome pack with installation steps, dashboard overview, and signal explanations.">
-<meta name="robots" content="index, follow">
-<link rel="canonical" href="https://www.g-labs.software/guides/BTMM_State_Engine_Welcome_Pack.html">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://www.g-labs.software/guides/BTMM_State_Engine_Welcome_Pack.html">
-<meta property="og:title" content="BTMM State Engine Pro — Welcome Pack">
-<meta property="og:description" content="BTMM State Engine MT4/MT5 welcome pack with installation steps, dashboard overview, and signal explanations.">
-<meta property="og:image" content="https://www.g-labs.software/assets/images/btmm-state-engine-pro-lifetime.png">
-<meta property="twitter:card" content="summary_large_image">
-<meta property="twitter:url" content="https://www.g-labs.software/guides/BTMM_State_Engine_Welcome_Pack.html">
-<meta property="twitter:title" content="BTMM State Engine Pro — Welcome Pack">
-<meta property="twitter:description" content="BTMM State Engine MT4/MT5 welcome pack with installation steps, dashboard overview, and signal explanations.">
-<meta property="twitter:image" content="https://www.g-labs.software/assets/images/btmm-state-engine-pro-lifetime.png">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap');
 
@@ -624,7 +611,7 @@
 <!-- ========== COVER PAGE ========== -->
 <div class="page cover">
 <div class="hero">
-  <div class="hero-badge">Version 2.0 — MetaTrader 5 &amp; MetaTrader 4</div>
+  <div class="hero-badge">Version 2.0 (v1.53) — MetaTrader 5 &amp; MetaTrader 4</div>
   <h1>BTMM STATE ENGINE PRO</h1>
   <div class="subtitle">The Professional Market Maker Cycle Tracker</div>
   <div class="version">Powered by the Beat The Market Maker Methodology — Automated by G-Labs<br>Available on MetaTrader 4 &amp; MetaTrader 5</div>
@@ -645,6 +632,11 @@
       <h3>Precision Entries</h3>
       <p>Type 1, Type 2, Safety &amp; ID50 signals with SL/TP — the moment they fire.</p>
     </div>
+    <div class="hero-feature">
+      <div class="hf-icon">📈</div>
+      <h3>HTF Context Panel</h3>
+      <p>H4 &amp; D1 trend and EMA alignment at a glance — confirm confluence instantly.</p>
+    </div>
   </div>
 
   <div class="hero-footer">
@@ -657,6 +649,23 @@
 <!-- ========== PART 1: THE BTMM METHODOLOGY ========== -->
 <div class="page">
 <section>
+  <div style="background:linear-gradient(135deg, #1A365D 0%, #0A1929 100%); border-radius:12px; padding:22px 28px; margin-bottom:25px; color:white; border-left:4px solid var(--gold);">
+    <div style="font-size:14px; font-weight:800; color:var(--gold); margin-bottom:10px; letter-spacing:1px;">WHAT'S NEW IN v1.53</div>
+    <div style="display:flex; gap:20px; flex-wrap:wrap; font-size:12.5px; line-height:1.8;">
+      <div style="flex:1; min-width:200px;">
+        <div style="color:rgba(255,255,255,0.5); font-weight:600; font-size:11px; text-transform:uppercase; margin-bottom:4px;">New Features</div>
+        <div>&#x2022; <strong>Higher Timeframe Context Panel</strong> — H4 &amp; D1 trend + EMA alignment displayed below the scanner (Part 9)</div>
+        <div>&#x2022; <strong>HTF Status in Alerts</strong> — Signal alerts now include <code style="background:rgba(255,255,255,0.1); padding:1px 4px; border-radius:3px;">[H4:Bullish D1:Bearish]</code> for confluence</div>
+      </div>
+      <div style="flex:1; min-width:200px;">
+        <div style="color:rgba(255,255,255,0.5); font-weight:600; font-size:11px; text-transform:uppercase; margin-bottom:4px;">Improvements</div>
+        <div>&#x2022; <strong>MQL5 Market Validation</strong> — Passes EURUSD M1, XAUUSD D1, GBPUSD M30 tests</div>
+        <div>&#x2022; <strong>HTF Data Accuracy</strong> — Fixed stale D1 trend after symbol switch</div>
+        <div>&#x2022; <strong>Performance</strong> — Persistent indicator handles for HTF EMAs</div>
+      </div>
+    </div>
+  </div>
+
   <h2><span class="part-num">Part 1</span>The Beat The Market Maker Methodology</h2>
   <p>The foreign exchange market is not random. Behind every spike, every stop hunt, every reversal lies a single force: <strong>the market maker</strong>. These institutional participants are contractually obligated to provide liquidity on both sides of the market. To do so profitably, they follow a repeating, mechanical cycle — and once you can see it, you can trade alongside it.</p>
 
@@ -1336,17 +1345,36 @@
 <section>
   <h2><span class="part-num">Part 2</span>Installation Guide</h2>
 
-  <h3>MetaTrader 5 — Quick Setup</h3>
-  <div class="steps">
-    <div class="step"><div class="step-content"><h4>Locate your Indicators folder</h4><p>In MT5: <strong>File → Open Data Folder → MQL5 → Indicators</strong></p></div></div>
-    <div class="step"><div class="step-content"><h4>Copy the file</h4><p>Drop <code>BTMM_State_Engine_Pro.ex5</code> into the Indicators folder.</p></div></div>
-    <div class="step"><div class="step-content"><h4>Refresh</h4><p>Right-click <strong>Indicators</strong> in the Navigator → Refresh (or restart MT5).</p></div></div>
-    <div class="step"><div class="step-content"><h4>Attach to M15 chart</h4><p>Drag the indicator onto any <strong>M15</strong> chart. Configure the Inputs tab and click OK.</p></div></div>
-    <div class="step"><div class="step-content"><h4>Done</h4><p>The indicator auto-configures chart colours, detects your broker's timezone, and starts scanning 28 pairs.</p></div></div>
+  <div style="display:flex; gap:30px; margin-top:30px; flex-wrap:wrap;">
+    <!-- MT5 COLUMN -->
+    <div style="flex:1; min-width:300px;">
+      <h3 style="color:var(--blue); border-bottom:2px solid var(--blue); padding-bottom:10px; margin-top:0;">MetaTrader 5</h3>
+      <div class="steps">
+        <div class="step"><div class="step-content"><h4>Open Data Folder</h4><p>In MT5: <strong>File → Open Data Folder</strong>.</p></div></div>
+        <div class="step"><div class="step-content"><h4>Navigate</h4><p>Go to <strong>MQL5 → Indicators</strong>.</p></div></div>
+        <div class="step"><div class="step-content"><h4>Copy File</h4><p>Copy <code>BTMM_State_Engine_Pro.ex5</code> into this folder.</p></div></div>
+        <div class="step"><div class="step-content"><h4>Refresh</h4><p>Right-click <strong>Indicators</strong> in the Navigator panel and select <strong>Refresh</strong>.</p></div></div>
+        <div class="step"><div class="step-content"><h4>Attach</h4><p>Drag the indicator onto any <strong>M15</strong> chart.</p></div></div>
+      </div>
+    </div>
+
+    <!-- MT4 COLUMN -->
+    <div style="flex:1; min-width:300px;">
+      <h3 style="color:var(--gold); border-bottom:2px solid var(--gold); padding-bottom:10px; margin-top:0;">MetaTrader 4</h3>
+      <div class="steps">
+        <div class="step"><div class="step-content"><h4>Open Data Folder</h4><p>In MT4: <strong>File → Open Data Folder</strong>.</p></div></div>
+        <div class="step"><div class="step-content"><h4>Navigate</h4><p>Go to <strong>MQL4 → Indicators</strong>.</p></div></div>
+        <div class="step"><div class="step-content"><h4>Copy File</h4><p>Copy <code>BTMM_State_Engine_Pro.ex4</code> into this folder.</p></div></div>
+        <div class="step"><div class="step-content"><h4>Refresh</h4><p>Right-click <strong>Indicators</strong> in the Navigator panel and select <strong>Refresh</strong>.</p></div></div>
+        <div class="step"><div class="step-content"><h4>Attach</h4><p>Drag the indicator onto any <strong>M15</strong> chart.</p></div></div>
+      </div>
+    </div>
   </div>
 
-  <h3>MetaTrader 4</h3>
-  <p>Same process — use the <code>.ex4</code> file and place it in <code>MQL4\Indicators\</code>. Both MT5 and MT4 versions are included with your purchase.</p>
+  <div class="callout success" style="margin-top:20px;">
+    <strong>One File, All Features</strong>
+    Both versions (MT4 and MT5) contain the exact same features, scanner logic, and alert systems. The <code>.ex5</code> file is for MetaTrader 5, and the <code>.ex4</code> file is for MetaTrader 4.
+  </div>
 </section>
 
 <!-- ========== PART 3: ASIAN RANGE ========== -->
@@ -1743,10 +1771,76 @@
   </div>
 </div>
 
-<!-- ========== PART 9: ZONE VIS ========== -->
+<!-- ========== PART 9: HTF CONTEXT PANEL ========== -->
 <div class="page">
 <section>
-  <h2><span class="part-num">Part 9</span>Zone Visualisation (ZN)</h2>
+  <h2><span class="part-num">Part 9</span>Higher Timeframe Context Panel</h2>
+  <p><strong>New in v1.53.</strong> A compact panel that sits below the scanner, showing H4 and D1 trend direction and EMA alignment — so you can instantly see if higher timeframes support your H1 BTMM setup.</p>
+
+  <div style="background:#0D0D0D; border-radius:8px; padding:12px 16px; font-family:'JetBrains Mono',monospace; font-size:12px; margin:20px 0; max-width:260px;">
+    <div style="background:#555; color:white; padding:4px 10px; border-radius:3px; font-size:11px; text-align:center; margin-bottom:6px;">HTF CONTEXT</div>
+    <div style="color:#5CDB5C; padding:3px 10px; background:#111; margin-bottom:2px; border-radius:3px;">H1: L3 ▲</div>
+    <div style="color:#5CDB5C; padding:3px 10px; background:#111; margin-bottom:2px; border-radius:3px;">H4: Bullish ✓</div>
+    <div style="color:#5CDB5C; padding:3px 10px; background:#111; margin-bottom:2px; border-radius:3px;">D1: Bullish ✓</div>
+    <div style="color:white; padding:3px 10px; background:#1A4D1A; border-radius:3px; text-align:center; font-weight:bold;">✓ ALL BULLISH</div>
+  </div>
+
+  <h3>What Each Row Shows</h3>
+  <table>
+    <thead><tr><th>Row</th><th>Data</th><th>How to Read It</th></tr></thead>
+    <tbody>
+      <tr><td><strong>H1</strong></td><td>Current BTMM level + direction</td><td>Your main indicator state — e.g. <strong>L3 ▲</strong> means Level 3 Bullish.</td></tr>
+      <tr><td><strong>H4</strong></td><td>H4 trend + EMA alignment</td><td><strong>Bullish/Bearish</strong> based on EMA 5 vs 13. <strong>✓</strong> = EMAs 5&gt;13&gt;50 (or 5&lt;13&lt;50) are stacked.</td></tr>
+      <tr><td><strong>D1</strong></td><td>D1 trend + EMA alignment</td><td>Same logic as H4 but on Daily timeframe.</td></tr>
+      <tr><td><strong>Summary</strong></td><td>All-TF alignment check</td><td><span style="color:#5CDB5C;font-weight:700;">✓ ALL BULLISH</span> / <span style="color:#FF6B7A;font-weight:700;">✓ ALL BEARISH</span> = high confidence. <span style="color:#FF8C00;font-weight:700;">⚠ MIXED TFs</span> = conflicting — use extra caution.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Colour Coding</h3>
+  <table>
+    <thead><tr><th>Colour</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td><span style="color:#5CDB5C; font-weight:700;">Green</span></td><td>Bullish trend with aligned EMAs (5&gt;13&gt;50)</td></tr>
+      <tr><td><span style="color:#FF6B7A; font-weight:700;">Red</span></td><td>Bearish trend with aligned EMAs (5&lt;13&lt;50)</td></tr>
+      <tr><td><span style="color:#FFD700; font-weight:700;">Yellow</span></td><td>Trend present but EMAs not fully stacked — transitioning</td></tr>
+    </tbody>
+  </table>
+
+  <h3>How to Use It</h3>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="fc-icon">✅</div>
+      <h4>All TFs Aligned</h4>
+      <p>H1 bullish + H4 bullish + D1 bullish = <strong>highest confidence</strong>. Trade with full size.</p>
+    </div>
+    <div class="feature-card">
+      <div class="fc-icon">⚠️</div>
+      <h4>Mixed TFs</h4>
+      <p>H1 and higher TFs disagree. Reduce size, tighten stops, or wait for alignment.</p>
+    </div>
+    <div class="feature-card">
+      <div class="fc-icon">🔔</div>
+      <h4>In Alerts</h4>
+      <p>All signal alerts now include HTF status: <code>[H4:Bullish D1:Bullish]</code></p>
+    </div>
+    <div class="feature-card">
+      <div class="fc-icon">⚙️</div>
+      <h4>Settings</h4>
+      <p><code>InpShowHTFPanel</code> to toggle. <code>InpHTFPanelOffsetY</code> to adjust spacing below scanner.</p>
+    </div>
+  </div>
+
+  <div class="callout success">
+    <strong>Pro Tip</strong>
+    The best BTMM setups occur when your H1 Level 2+ signal fires during a Kill Zone AND all three timeframes agree on direction. This is the "triple alignment" — the highest-probability trade the methodology offers.
+  </div>
+</section>
+</div><!-- /page -->
+
+<!-- ========== PART 10: ZONE VIS ========== -->
+<div class="page">
+<section>
+  <h2><span class="part-num">Part 10</span>Zone Visualisation (ZN)</h2>
   <p>Press <strong>[ZN]</strong> to cycle through three modes. Each reveals a different layer of supply and demand.</p>
 
   <div class="zn-compare">
@@ -1782,11 +1876,11 @@
   </div>
 </section>
 
-<!-- ========== PART 10: ADR + STATUS + ALERTS ========== -->
+<!-- ========== PART 11: ADR + STATUS + ALERTS ========== -->
 </div><!-- /page -->
 <div class="page">
 <section>
-  <h2><span class="part-num">Part 10</span>ADR, Status Bar &amp; Alerts</h2>
+  <h2><span class="part-num">Part 11</span>ADR, Status Bar &amp; Alerts</h2>
 
   <h3>Average Daily Range (ADR)</h3>
   <table>
@@ -1828,7 +1922,7 @@
 </div><!-- /page -->
 <div class="page">
 <section>
-  <h2><span class="part-num">Part 11</span>Colour Coding — The Visual Language</h2>
+  <h2><span class="part-num">Part 12</span>Colour Coding — The Visual Language</h2>
 
   <div class="colour-grid">
     <div class="colour-swatch"><div class="swatch" style="background:#1E90FF;"></div><div class="swatch-label"><strong>Blue</strong> — Bullish / UP / PFL</div></div>
@@ -1847,7 +1941,7 @@
 </div><!-- /page -->
 <div class="page dark">
   <div>
-    <h2><span class="part-num" style="color:var(--cyan);">Part 12</span>The Complete Trading Playbook</h2>
+    <h2><span class="part-num" style="color:var(--cyan);">Part 13</span>The Complete Trading Playbook</h2>
 
     <div class="diagram-box" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1);">
       <div class="diagram-title">London Killzone — Entry Decision Flow</div>
@@ -1905,7 +1999,7 @@
 <!-- ========== PART 13: YOUR FIRST SESSION ========== -->
 <div class="page">
 <section>
-  <h2><span class="part-num">Part 13</span>How to Trade BTMM with the Software — Step by Step</h2>
+  <h2><span class="part-num">Part 14</span>How to Trade BTMM with the Software — Step by Step</h2>
   <p>Whether you're on <strong>MT4 or MT5</strong> — the workflow is the same. Follow these nine steps from setup to trade management.</p>
 
   <div class="steps">
@@ -1935,7 +2029,7 @@
 </div><!-- /page -->
 <div class="page dark">
   <div>
-    <h2><span class="part-num" style="color:var(--cyan);">Part 14</span>Configuration Guide</h2>
+    <h2><span class="part-num" style="color:var(--cyan);">Part 15</span>Configuration Guide</h2>
     <p>Most settings work perfectly out of the box. Below are the ones you may want to adjust.</p>
 
     <h3 style="color:var(--gold);">Session &amp; Time Settings</h3>
@@ -1995,13 +2089,23 @@
         <tr><td><code>InpAlertPopupSeconds</code></td><td>10</td><td>How long the popup toast stays visible.</td></tr>
       </tbody>
     </table>
+
+    <h3 style="color:var(--gold);">Higher Timeframe Panel</h3>
+    <table style="color:var(--text);">
+      <thead><tr><th>Input</th><th>Default</th><th>What It Controls</th></tr></thead>
+      <tbody>
+        <tr><td><code>InpShowHTFPanel</code></td><td>true</td><td>Show or hide the Higher Timeframe Context Panel below the scanner.</td></tr>
+        <tr><td><code>InpHTFPanelOffsetY</code></td><td>5</td><td>Vertical pixel gap between the bottom of the scanner and the top of the HTF panel.</td></tr>
+        <tr><td><code>InpShowHTFInAlerts</code></td><td>true</td><td>Append HTF trend status (e.g. <code>[H4:Bullish D1:Bearish]</code>) to all signal alerts.</td></tr>
+      </tbody>
+    </table>
   </div>
 </div>
 
-<!-- ========== PART 15: TROUBLESHOOTING ========== -->
+<!-- ========== PART 16: TROUBLESHOOTING ========== -->
 <div class="page">
 <section>
-  <h2><span class="part-num">Part 15</span>Troubleshooting &amp; Common Issues</h2>
+  <h2><span class="part-num">Part 16</span>Troubleshooting &amp; Common Issues</h2>
 
   <!-- ISSUE 1: SUFFIX -->
   <div style="background:white; border:1px solid var(--border); border-radius:12px; padding:25px; margin:20px 0; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
@@ -2064,10 +2168,10 @@
     </div>
     <p>The indicator uses MetaTrader's built-in <code>SendNotification()</code> function. For it to reach your phone:</p>
     <div class="steps">
-      <div class="step"><div class="step-content"><h4>Install the MT5 mobile app</h4><p>Download <strong>MetaTrader 5</strong> from the App Store or Google Play. Log in to your account.</p></div></div>
+      <div class="step"><div class="step-content"><h4>Install the Mobile App</h4><p>Download <strong>MetaTrader 4 or 5</strong> (matching your desktop version) from the App Store or Google Play. Log in to your account.</p></div></div>
       <div class="step"><div class="step-content"><h4>Get your MetaQuotes ID</h4><p>In the mobile app: <strong>Settings → Messages → MetaQuotes ID</strong>. Copy this code (it looks like <code>A1B2C3D4</code>).</p></div></div>
-      <div class="step"><div class="step-content"><h4>Enter it in MT5 Desktop</h4><p>On your PC: <strong>Tools → Options → Notifications</strong>. Tick <strong>"Enable Push Notifications"</strong> and paste your MetaQuotes ID. Click <strong>Test</strong> to verify.</p></div></div>
-      <div class="step"><div class="step-content"><h4>Keep MT5 running</h4><p>Push notifications only work while MT5 desktop is running and connected. Consider running MT5 on a VPS for 24/5 alerts.</p></div></div>
+      <div class="step"><div class="step-content"><h4>Enter it in Desktop Terminal</h4><p>On your PC: <strong>Tools → Options → Notifications</strong>. Tick <strong>"Enable Push Notifications"</strong> and paste your MetaQuotes ID. Click <strong>Test</strong> to verify.</p></div></div>
+      <div class="step"><div class="step-content"><h4>Keep Terminal running</h4><p>Push notifications only work while the desktop terminal is running and connected. Consider running it on a VPS for 24/5 alerts.</p></div></div>
     </div>
   </div>
 
@@ -2082,8 +2186,8 @@
       <tbody>
         <tr><td>No boxes, no levels, no data</td><td>Wrong timeframe</td><td>Switch to <strong>M15</strong>. The indicator requires the 15-minute chart.</td></tr>
         <tr><td>Very few boxes visible</td><td>Not enough history loaded</td><td>Scroll left on the chart to load more history bars. Increase <code>InpHistoryDays</code> if needed.</td></tr>
-        <tr><td>Chart colours didn't change</td><td>Permissions not ticked</td><td>When attaching, ensure <strong>"Allow modification of indicator's signals"</strong> is enabled in the Common tab. On MT5 also check <strong>Tools → Options → Charts → "Maximum bars in chart"</strong> is at least 50,000.</td></tr>
-        <tr><td>Indicator not in Navigator</td><td>Wrong folder</td><td>Ensure the <code>.ex5</code> file is in <code>MQL5\Indicators\</code> (not a subfolder). Right-click Indicators → Refresh.</td></tr>
+        <tr><td>Chart colours didn't change</td><td>Permissions not ticked</td><td>When attaching, ensure <strong>"Allow DLL imports"</strong> (if prompted) and <strong>"Allow modification of indicator's signals"</strong> are enabled. On MT5 also check <strong>Tools → Options → Charts → "Maximum bars in chart"</strong> is at least 50,000.</td></tr>
+        <tr><td>Indicator not in Navigator</td><td>Wrong folder</td><td>Ensure the <code>.ex5</code> file is in <code>MQL5\Indicators\</code> or <code>.ex4</code> is in <code>MQL4\Indicators\</code>. Right-click Indicators → Refresh.</td></tr>
         <tr><td>Scanner loads some pairs but not all</td><td>Pairs not in Market Watch</td><td>The indicator auto-adds symbols via <code>SymbolSelect()</code>, but some brokers block this. Manually add missing pairs to your Market Watch first.</td></tr>
       </tbody>
     </table>
@@ -2109,9 +2213,10 @@
       <thead><tr><th>Tip</th><th>Details</th></tr></thead>
       <tbody>
         <tr><td><strong>One instance only</strong></td><td>Only attach the indicator to <strong>one chart</strong>. The scanner monitors all 28 pairs from that single chart — no need for multiple instances.</td></tr>
-        <tr><td><strong>Reduce history if slow</strong></td><td>Lower <code>InpHistoryDays</code> from 60 to 30 if MT5 feels sluggish on older hardware.</td></tr>
+        <tr><td><strong>Reduce history if slow</strong></td><td>Lower <code>InpHistoryDays</code> from 60 to 30 if your terminal feels sluggish on older hardware.</td></tr>
         <tr><td><strong>Remove unused pairs</strong></td><td>If you only trade majors, trim the <code>InpSymbols</code> list to reduce CPU usage.</td></tr>
         <tr><td><strong>Close other indicators</strong></td><td>Heavy indicators on the same chart can slow down rendering. The State Engine draws many objects — give it space.</td></tr>
+        <tr><td><strong>Optimised Code</strong></td><td>v1.53 includes full Strategy Tester optimisation. The indicator automatically detects tester mode and skips all graphical operations.</td></tr>
       </tbody>
     </table>
   </div>
@@ -2172,9 +2277,16 @@
         <ul>
           <li>1. Scan for L2/L3 pairs</li>
           <li>2. Check PEAK + DIR + ADR</li>
-          <li>3. Wait for Killzone</li>
-          <li>4. Enter on aligned signal</li>
-          <li>5. Manage with ADR + PF status</li>
+          <li>3. Check HTF Panel alignment</li>
+          <li>4. Wait for Killzone</li>
+          <li>5. Enter on aligned signal</li>
+          <li>6. Manage with ADR + PF status</li>
+        </ul>
+        <h4 style="margin-top:15px;">HTF Panel</h4>
+        <ul>
+          <li><strong>All green</strong> = Triple alignment ★★★★★</li>
+          <li><strong>Mixed</strong> = Reduce size / wait</li>
+          <li><strong>N/A</strong> = Data loading, wait</li>
         </ul>
       </div>
     </div>
@@ -2250,7 +2362,7 @@
 <!-- ========== FOOTER ========== -->
 <div class="page dark" style="display:flex; flex-direction:column; justify-content:flex-end;">
 <div class="footer">
-  <p><strong style="color:white;">BTMM State Engine Pro v2.0</strong></p>
+  <p><strong style="color:white;">BTMM State Engine Pro v2.0 (v1.53)</strong></p>
   <p style="margin-top:5px;">The Professional Market Maker Cycle Tracker — MT4 · MT5</p>
   <p style="margin-top:15px;">
     <a href="https://g-labs.software">g-labs.software</a> &nbsp;|&nbsp;
