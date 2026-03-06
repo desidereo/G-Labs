@@ -1639,31 +1639,36 @@
             } catch {}
         }
 
+        async function fetchIntelTopic(topic, limit = 6) {
+            try {
+                const res = await fetch(`intel_feed.php?topic=${encodeURIComponent(topic)}&limit=${limit}`);
+                if (!res.ok) return [];
+                const data = await res.json();
+                if (data.status !== 'ok' || !Array.isArray(data.items)) return [];
+                return data.items;
+            } catch {
+                return [];
+            }
+        }
+
         async function fetchNews() {
-            const feedCategories = {
-                GEOPOL: ['https://feeds.reuters.com/reuters/worldNews', 'http://feeds.bbci.co.uk/news/world/rss.xml', 'https://www.aljazeera.com/xml/rss/all.xml'],
-                ENERGY: ['https://www.spglobal.com/commodityinsights/en/rss-feed', 'https://www.eia.gov/rss/todayinenergy.xml', 'https://www.opec.org/opec_web/en/rss/rss.xml'],
-                SHIPPING: ['https://www.maritime-executive.com/rss', 'https://www.freightwaves.com/news/feed', 'https://www.porttechnology.org/feed/'],
-                CYBER: ['https://feeds.feedburner.com/TheHackersNews', 'https://www.bleepingcomputer.com/feed/'],
-                MACRO: ['https://www.cnbc.com/id/100003114/device/rss/rss.html', 'https://feeds.bloomberg.com/markets/news.rss', 'https://finance.yahoo.com/news/rssindex']
-            };
-            const fetchCategory = async (category, urls) => {
-                try {
-                    const url = urls[Math.floor(Math.random() * urls.length)];
-                    const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
-                    const data = await res.json();
-                    if (data.status !== 'ok') return [];
-                    data.items.slice(0, 3).forEach(item => {
-                        const region = inferRegion(item.title || '');
-                        allRegionalItems.unshift({ title: item.title, link: item.link, source: category, time: 'Now', region });
-                        addIntelItem(category, item.title, category === 'GEOPOL' ? 'high' : 'medium', item.link);
-                    });
-                    return data.items || [];
-                } catch {
-                    return [];
-                }
-            };
-            const results = await Promise.all(Object.entries(feedCategories).map(([c, u]) => fetchCategory(c, u)));
+            const map = [
+                { category: 'GEOPOL', topic: 'geopol' },
+                { category: 'ENERGY', topic: 'energy' },
+                { category: 'SHIPPING', topic: 'shipping' },
+                { category: 'CYBER', topic: 'cyber' },
+                { category: 'MACRO', topic: 'macro' }
+            ];
+            const results = await Promise.all(map.map(async cfg => {
+                const items = await fetchIntelTopic(cfg.topic, 5);
+                items.slice(0, 3).forEach(item => {
+                    const region = inferRegion(item.title || '');
+                    const time = item.pubDate ? new Date(item.pubDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Now';
+                    allRegionalItems.unshift({ title: item.title, link: item.link, source: cfg.category, time, region });
+                    addIntelItem(cfg.category, item.title, cfg.category === 'GEOPOL' ? 'high' : 'medium', item.link);
+                });
+                return items.map(i => ({ ...i, category: cfg.category }));
+            }));
             const items = results.flat();
             liveMetrics.newsHeadlines = clamp(items.length * 3, 0, 200);
             if (allRegionalItems.length > 40) allRegionalItems = allRegionalItems.slice(0, 40);
@@ -1675,22 +1680,11 @@
             }
             let tickerText = '';
             items.slice(0, 25).forEach(item => {
-                const cat = (item.categories && item.categories[0]) ? item.categories[0].toUpperCase() : 'INTEL';
+                const cat = item.category || 'INTEL';
                 tickerText += `<span style="margin-right:50px;"><i class="fas fa-broadcast-tower"></i> [${cat}] ${item.title}</span>`;
             });
             ticker.innerHTML = tickerText + tickerText;
             updateRiskGauge();
-        }
-
-        async function fetchMiniFeed(feedUrl, limit = 6) {
-            try {
-                const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&count=${limit}`);
-                const data = await res.json();
-                if (data.status !== 'ok' || !Array.isArray(data.items)) return [];
-                return data.items.slice(0, limit);
-            } catch {
-                return [];
-            }
         }
 
         function renderMiniFeed(targetId, metaId, items, fallbackLink) {
@@ -1704,28 +1698,29 @@
             }
             target.innerHTML = items.map(item => {
                 const title = (item.title || 'Untitled').replace(/"/g, '&quot;');
-                const source = item.author || item.source_id || 'live wire';
-                return `<li><a href="${item.link}" target="_blank">${title}</a><span class="src">${source}</span></li>`;
+                const source = item.source || 'live wire';
+                const sev = item.severity ? item.severity.toUpperCase() : 'LIVE';
+                return `<li><a href="${item.link}" target="_blank">${title}</a><span class="src">${source} · ${sev}</span></li>`;
             }).join('');
             meta.innerText = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         }
 
         async function loadMiniFeeds() {
             const feeds = [
-                { target: 'feed-ukraine', meta: 'meta-ukraine', url: 'https://news.google.com/rss/search?q=ukraine+war+frontline&hl=en-GB&gl=GB&ceid=GB:en', fallback: 'https://news.google.com/search?q=ukraine+war' },
-                { target: 'feed-iran', meta: 'meta-iran', url: 'https://news.google.com/rss/search?q=iran+israel+war&hl=en-GB&gl=GB&ceid=GB:en', fallback: 'https://news.google.com/search?q=iran+israel+war' },
-                { target: 'feed-aviation', meta: 'meta-aviation', url: 'https://news.google.com/rss/search?q=military+aviation+activity&hl=en-GB&gl=GB&ceid=GB:en', fallback: 'https://opensky-network.org/' },
-                { target: 'feed-shipping', meta: 'meta-shipping', url: 'https://news.google.com/rss/search?q=red+sea+shipping+disruption&hl=en-GB&gl=GB&ceid=GB:en', fallback: 'https://www.marinetraffic.com/' },
-                { target: 'feed-cyber', meta: 'meta-cyber', url: 'https://feeds.feedburner.com/TheHackersNews', fallback: 'https://thehackernews.com/' },
-                { target: 'feed-weather', meta: 'meta-weather', url: 'https://www.gdacs.org/xml/rss_7d.xml', fallback: 'https://www.gdacs.org/' },
-                { target: 'feed-humanitarian', meta: 'meta-humanitarian', url: 'https://news.google.com/rss/search?q=displacement+crisis&hl=en-GB&gl=GB&ceid=GB:en', fallback: 'https://www.unhcr.org/' },
-                { target: 'feed-economy', meta: 'meta-economy', url: 'https://feeds.bloomberg.com/markets/news.rss', fallback: 'https://www.bloomberg.com/markets' },
-                { target: 'feed-outages', meta: 'meta-outages', url: 'https://news.google.com/rss/search?q=internet+outage+global&hl=en-GB&gl=GB&ceid=GB:en', fallback: 'https://radar.cloudflare.com/outage-center' },
-                { target: 'feed-minerals', meta: 'meta-minerals', url: 'https://news.google.com/rss/search?q=critical+minerals+supply+chain&hl=en-GB&gl=GB&ceid=GB:en', fallback: 'https://www.iea.org/topics/critical-minerals' },
-                { target: 'feed-military', meta: 'meta-military', url: 'https://news.google.com/rss/search?q=military+movements+global&hl=en-GB&gl=GB&ceid=GB:en', fallback: 'https://liveuamap.com/' },
-                { target: 'feed-protests', meta: 'meta-protests', url: 'https://news.google.com/rss/search?q=protests+global&hl=en-GB&gl=GB&ceid=GB:en', fallback: 'https://www.reuters.com/world/' }
+                { target: 'feed-ukraine', meta: 'meta-ukraine', topic: 'ukraine', fallback: 'https://news.google.com/search?q=ukraine+war' },
+                { target: 'feed-iran', meta: 'meta-iran', topic: 'iran', fallback: 'https://news.google.com/search?q=iran+israel+war' },
+                { target: 'feed-aviation', meta: 'meta-aviation', topic: 'aviation', fallback: 'https://opensky-network.org/' },
+                { target: 'feed-shipping', meta: 'meta-shipping', topic: 'shipping', fallback: 'https://www.marinetraffic.com/' },
+                { target: 'feed-cyber', meta: 'meta-cyber', topic: 'cyber', fallback: 'https://thehackernews.com/' },
+                { target: 'feed-weather', meta: 'meta-weather', topic: 'weather', fallback: 'https://www.gdacs.org/' },
+                { target: 'feed-humanitarian', meta: 'meta-humanitarian', topic: 'humanitarian', fallback: 'https://www.unhcr.org/' },
+                { target: 'feed-economy', meta: 'meta-economy', topic: 'economy', fallback: 'https://www.bloomberg.com/markets' },
+                { target: 'feed-outages', meta: 'meta-outages', topic: 'outages', fallback: 'https://radar.cloudflare.com/outage-center' },
+                { target: 'feed-minerals', meta: 'meta-minerals', topic: 'minerals', fallback: 'https://www.iea.org/topics/critical-minerals' },
+                { target: 'feed-military', meta: 'meta-military', topic: 'military', fallback: 'https://liveuamap.com/' },
+                { target: 'feed-protests', meta: 'meta-protests', topic: 'protests', fallback: 'https://www.reuters.com/world/' }
             ];
-            const results = await Promise.all(feeds.map(f => fetchMiniFeed(f.url, 6)));
+            const results = await Promise.all(feeds.map(f => fetchIntelTopic(f.topic, 6)));
             feeds.forEach((f, i) => renderMiniFeed(f.target, f.meta, results[i], f.fallback));
         }
 
