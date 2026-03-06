@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advanced Market Maker MT5 &mdash; User Guide</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #181b23;
+    --surface2: #1e2230;
+    --border: #2a2e3a;
+    --accent: #3b82f6;
+    --accent2: #06b6d4;
+    --green: #22c55e;
+    --red: #ef4444;
+    --gold: #eab308;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --heading: #f1f5f9;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* --- Header --- */
+  .hero {
+    background: linear-gradient(135deg, #0c1220 0%, #162038 50%, #0c1220 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 60px 0 50px;
+    text-align: center;
+  }
+  .hero h1 {
+    font-size: 2.4rem;
+    color: var(--heading);
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+  .hero .subtitle {
+    color: var(--muted);
+    font-size: 1.05rem;
+    margin-bottom: 6px;
+  }
+  .hero .version {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.75rem;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+    margin-top: 10px;
+  }
+
+  /* --- Layout --- */
+  .wrapper {
+    display: flex;
+    max-width: 1320px;
+    margin: 0 auto;
+    gap: 0;
+  }
+
+  /* --- Sidebar --- */
+  .sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 270px;
+    min-width: 270px;
+    overflow-y: auto;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 28px 0;
+    font-size: 0.88rem;
+  }
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  .sidebar .nav-group { margin-bottom: 20px; }
+  .sidebar .nav-title {
+    color: var(--muted);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0 24px;
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+  .sidebar a {
+    display: block;
+    padding: 5px 24px;
+    color: var(--muted);
+    transition: all .15s;
+    border-left: 2px solid transparent;
+  }
+  .sidebar a:hover {
+    color: var(--text);
+    background: rgba(59,130,246,0.06);
+    border-left-color: var(--accent);
+    text-decoration: none;
+  }
+
+  /* --- Main content --- */
+  .content {
+    flex: 1;
+    min-width: 0;
+    padding: 48px 56px 80px;
+  }
+
+  h2 {
+    font-size: 1.55rem;
+    color: var(--heading);
+    margin: 52px 0 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    letter-spacing: -0.3px;
+  }
+  h2:first-of-type { margin-top: 0; }
+  h3 {
+    font-size: 1.15rem;
+    color: var(--accent2);
+    margin: 32px 0 10px;
+  }
+  h4 {
+    font-size: 1rem;
+    color: var(--gold);
+    margin: 22px 0 8px;
+  }
+  p { margin-bottom: 12px; }
+
+  /* --- Tables --- */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0 24px;
+    font-size: 0.9rem;
+  }
+  thead th {
+    background: var(--surface2);
+    color: var(--heading);
+    font-weight: 600;
+    text-align: left;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: 9px 14px;
+    border: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tbody tr:nth-child(even) { background: rgba(255,255,255,0.015); }
+
+  /* --- Code / param blocks --- */
+  code {
+    background: var(--surface2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.88em;
+    font-family: 'Cascadia Code', 'Fira Code', monospace;
+    color: var(--accent2);
+  }
+  .param-table td:first-child { color: var(--accent); font-family: 'Cascadia Code', monospace; font-size: 0.88em; white-space: nowrap; }
+  .param-table td:nth-child(2) { color: var(--muted); white-space: nowrap; }
+
+  /* --- Info boxes --- */
+  .box {
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 18px 0;
+    border-left: 4px solid;
+  }
+  .box-info { background: rgba(59,130,246,0.08); border-color: var(--accent); }
+  .box-tip  { background: rgba(34,197,94,0.08); border-color: var(--green); }
+  .box-warn { background: rgba(234,179,8,0.08); border-color: var(--gold); }
+  .box-danger { background: rgba(239,68,68,0.08); border-color: var(--red); }
+  .box strong { display: block; margin-bottom: 4px; }
+  .box-info strong { color: var(--accent); }
+  .box-tip strong  { color: var(--green); }
+  .box-warn strong { color: var(--gold); }
+  .box-danger strong { color: var(--red); }
+
+  /* --- Lists --- */
+  ul, ol { margin: 8px 0 14px 24px; }
+  li { margin-bottom: 4px; }
+
+  /* --- Panel mockup --- */
+  .panel-mock {
+    display: grid;
+    grid-template-columns: repeat(17, auto);
+    gap: 1px;
+    background: #000;
+    border: 1px solid #000;
+    border-radius: 6px;
+    overflow: auto;
+    margin: 18px 0 24px;
+    font-size: 0.72rem;
+    font-family: 'Verdana', sans-serif;
+    max-width: 100%;
+  }
+  .panel-mock .cell {
+    padding: 4px 7px;
+    text-align: center;
+    white-space: nowrap;
+    min-width: 35px;
+  }
+  .cell-header { background: #000; color: #ffd700; font-weight: bold; }
+  .cell-sym    { background: #376b87; color: #fff; }
+  .cell-sym.active { background: #ffd700; color: #000; }
+  .cell-bg     { background: #3f4d5a; color: #fff; }
+  .cell-green  { background: #1c8a59; color: #fff; }
+  .cell-dgreen { background: #15661d; color: #fff; }
+  .cell-red    { background: #cc2323; color: #fff; }
+  .cell-dred   { background: #911313; color: #fff; }
+  .cell-blue   { background: #376b87; color: #fff; }
+  .cell-dblue  { background: #005987; color: #fff; }
+  .cell-trend  { background: #d1dfe9; font-family: 'Wingdings', sans-serif; }
+
+  /* --- Flow diagrams --- */
+  .flow {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    margin: 18px 0;
+    font-size: 0.9rem;
+    overflow-x: auto;
+  }
+  .flow-step {
+    display: inline-block;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 14px;
+    margin: 4px;
+    vertical-align: middle;
+  }
+  .flow-arrow {
+    display: inline-block;
+    color: var(--accent);
+    font-size: 1.2rem;
+    vertical-align: middle;
+    margin: 0 4px;
+  }
+  .flow-yes { border-color: var(--green); color: var(--green); }
+  .flow-no  { border-color: var(--red); color: var(--red); }
+
+  /* --- Responsive --- */
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    .content { padding: 32px 20px 60px; }
+    .hero h1 { font-size: 1.7rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== HERO ==================== -->
+<div class="hero">
+  <h1>Advanced Market Maker MT5</h1>
+  <div class="subtitle">G-Labs &mdash; Multi-Symbol ADR Dashboard &amp; Trading Toolkit</div>
+  <div class="subtitle" style="font-size:0.85rem;">
+    <a href="https://www.g-labs.software" target="_blank">www.g-labs.software</a>
+  </div>
+  <span class="version">v 1.2</span>
+</div>
+
+<div class="wrapper">
+
+<!-- ==================== SIDEBAR ==================== -->
+<nav class="sidebar">
+  <div class="nav-group">
+    <div class="nav-title">Getting Started</div>
+    <a href="#overview">Overview</a>
+    <a href="#installation">Installation</a>
+    <a href="#first-run">First Run</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-title">Dashboard Panel</div>
+    <a href="#panel">Panel Layout</a>
+    <a href="#col-symbol">SYMBOL</a>
+    <a href="#col-trend">TREND</a>
+    <a href="#col-pf">PF (Price Formation)</a>
+    <a href="#col-max">MAX</a>
+    <a href="#col-rt">RT (Real-Time)</a>
+    <a href="#col-idc">IDC &amp; IDC RT</a>
+    <a href="#col-50m15">50-M15</a>
+    <a href="#col-dc">DC (Daily Candle)</a>
+    <a href="#col-adr">ADR</a>
+    <a href="#col-sh">S-H (Stop Hunt)</a>
+    <a href="#col-dr">DR (Daily Range)</a>
+    <a href="#col-div">DIV (Divergence)</a>
+    <a href="#col-br">BR (Breakers)</a>
+    <a href="#col-yhl">YHL</a>
+    <a href="#col-tdi">TDI</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-title">Chart Overlays</div>
+    <a href="#atr-bands">ATR Bands</a>
+    <a href="#adr-lines">ADR Level Lines</a>
+    <a href="#adr-boxes">ADR Boxes (1 / 3)</a>
+    <a href="#breaker-chart">Breaker Blocks on Chart</a>
+    <a href="#divergence-chart">Divergence Lines</a>
+    <a href="#candle-timer">Candle Timer</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-title">Deep Dive</div>
+    <a href="#tdi-deep">TDI &mdash; How It Works</a>
+    <a href="#trend-filter">Trend Filter</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-title">Configuration</div>
+    <a href="#params-general">General Parameters</a>
+    <a href="#params-ma">Moving Average &amp; Timeframes</a>
+    <a href="#params-div">RSI Divergence</a>
+    <a href="#params-stophunt">Stop Hunt &amp; Daily Range</a>
+    <a href="#params-breaker">Breaker Blocks</a>
+    <a href="#params-alerts">Alerts &amp; Notifications</a>
+    <a href="#params-bands">ATR Bands</a>
+    <a href="#params-tdi">TDI Parameters</a>
+    <a href="#params-visual">Visual &amp; Panel</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-title">Reference</div>
+    <a href="#panel-buttons">Panel Buttons</a>
+    <a href="#color-key">Color Key</a>
+    <a href="#faq">FAQ &amp; Troubleshooting</a>
+  </div>
+</nav>
+
+<!-- ==================== MAIN CONTENT ==================== -->
+<main class="content">
+
+<!-- ========== OVERVIEW ========== -->
+<h2 id="overview">Overview</h2>
+<p>
+  <strong>Advanced Market Maker MT5</strong> is a comprehensive multi-symbol chart indicator for MetaTrader 5.
+  It monitors up to 28+ forex pairs simultaneously from a single chart, presenting a real-time dashboard with
+  ADR analysis, trend detection, order-block breaker identification, TDI SharkFin signals, RSI divergence, stop-hunt
+  detection, and much more.
+</p>
+<p>The indicator consists of two main visual components:</p>
+<ol>
+  <li><strong>Dashboard Panel</strong> &mdash; A multi-column, multi-row grid pinned to the chart showing live data for every watched symbol.</li>
+  <li><strong>Chart Overlays</strong> &mdash; ATR-based bands, ADR level lines, breaker-block rectangles, divergence trendlines, and a candle countdown timer drawn on the active chart symbol.</li>
+</ol>
+
+<div class="box box-info">
+  <strong>Key Capabilities</strong>
+  Multi-symbol ADR monitoring &bull; Dual-timeframe MA trend &amp; crossover detection &bull;
+  Price Formation (PFH/PFL) labeling &bull; Order-block breaker detection on two timeframes &bull;
+  TDI SharkFin signals with trend-filter confluence &bull; RSI divergence (regular &amp; hidden) &bull;
+  Stop-hunt detection &bull; Yesterday H/L proximity alerts &bull; Daily candle confirmation &bull;
+  ATR channel bands &bull; Push notifications &amp; screen alerts &bull; Click-to-switch symbols.
+</div>
+
+<!-- ========== INSTALLATION ========== -->
+<h2 id="installation">Installation</h2>
+<ol>
+  <li>Copy <code>Advanced_Market_Maker_MT5.mq5</code> into your <code>MQL5\Indicators\</code> folder.</li>
+  <li>The indicator ships with a compiled TDI resource (<code>Traders_Dynamic_Index.ex5</code>). This file is embedded &mdash; no separate install is needed.</li>
+  <li>Open MetaTrader 5, press <strong>Ctrl+N</strong> to open the Navigator, expand <em>Indicators</em>, and drag <strong>Advanced Market Maker MT5</strong> onto any chart.</li>
+  <li>In the properties dialog, check <em>"Allow DLL imports"</em> is off (not needed) and click <strong>OK</strong>.</li>
+</ol>
+
+<!-- ========== FIRST RUN ========== -->
+<h2 id="first-run">First Run</h2>
+<p>
+  On the first attach the indicator will build the dashboard panel and calculate data for every symbol listed in the
+  <code>SymbolStr1</code> / <code>SymbolStr2</code> inputs. This may take a few seconds while it downloads
+  history for each pair and timeframe. The panel refreshes every 500 ms via an internal timer.
+</p>
+<div class="box box-warn">
+  <strong>Symbol Names</strong>
+  Make sure the symbol names in <code>SymbolStr1</code> / <code>SymbolStr2</code> match your broker's naming
+  convention exactly (e.g., <code>EURUSD</code> vs <code>EURUSD.i</code>). Unrecognized names are silently skipped.
+</div>
+
+<!-- ============================================================ -->
+<!--                     DASHBOARD PANEL                          -->
+<!-- ============================================================ -->
+<h2 id="panel">Dashboard Panel Layout</h2>
+<p>
+  The panel is displayed on the chart as a grid of interactive buttons. The header row shows column labels;
+  each subsequent row represents one watched symbol. Below is a simplified mockup showing the 17 columns:
+</p>
+
+<div class="panel-mock">
+  <!-- Header -->
+  <div class="cell cell-header">SYMBOL</div>
+  <div class="cell cell-header" style="font-family:Wingdings;">&#x00E9;&#x00EA;</div>
+  <div class="cell cell-header">PF</div>
+  <div class="cell cell-header">MAX</div>
+  <div class="cell cell-header">RT</div>
+  <div class="cell cell-header">IDC</div>
+  <div class="cell cell-header">IDC RT</div>
+  <div class="cell cell-header">50-M15</div>
+  <div class="cell cell-header">DC</div>
+  <div class="cell cell-header">ADR</div>
+  <div class="cell cell-header">S-H</div>
+  <div class="cell cell-header">DR</div>
+  <div class="cell cell-header">DIV</div>
+  <div class="cell cell-header">BR M15</div>
+  <div class="cell cell-header">BR H4</div>
+  <div class="cell cell-header">YHL</div>
+  <div class="cell cell-header">TDI</div>
+
+  <!-- Row 1 (active) -->
+  <div class="cell cell-sym active">EURUSD</div>
+  <div class="cell cell-trend" style="color:#1c8a59;">&#9650;</div>
+  <div class="cell cell-green">2 PFL</div>
+  <div class="cell cell-blue">3.12</div>
+  <div class="cell cell-dblue">2.87</div>
+  <div class="cell cell-green">APL</div>
+  <div class="cell cell-dblue">1.45</div>
+  <div class="cell cell-green">T</div>
+  <div class="cell cell-green">UP</div>
+  <div class="cell cell-bg">87</div>
+  <div class="cell cell-bg"></div>
+  <div class="cell cell-green">92</div>
+  <div class="cell cell-green">RD</div>
+  <div class="cell cell-green">M15</div>
+  <div class="cell cell-dgreen">H4</div>
+  <div class="cell cell-bg"></div>
+  <div class="cell cell-green">UP</div>
+
+  <!-- Row 2 -->
+  <div class="cell cell-sym">GBPUSD</div>
+  <div class="cell cell-trend" style="color:#cc2323;">&#9660;</div>
+  <div class="cell cell-red">1 PFH</div>
+  <div class="cell cell-bg">2.10</div>
+  <div class="cell cell-bg">1.95</div>
+  <div class="cell cell-red">APH</div>
+  <div class="cell cell-dblue">0.88</div>
+  <div class="cell cell-bg"></div>
+  <div class="cell cell-red">DN</div>
+  <div class="cell cell-bg">110</div>
+  <div class="cell cell-red">12</div>
+  <div class="cell cell-red">115</div>
+  <div class="cell cell-red">RD</div>
+  <div class="cell cell-red">M15</div>
+  <div class="cell cell-dred">H4</div>
+  <div class="cell cell-red">H</div>
+  <div class="cell cell-red">DN</div>
+
+  <!-- Row 3 -->
+  <div class="cell cell-sym">USDJPY</div>
+  <div class="cell cell-trend" style="color:#1c8a59;">&#9650;</div>
+  <div class="cell" style="background:#c0c0c0;color:#000;">N.C.P</div>
+  <div class="cell cell-bg">0.85</div>
+  <div class="cell cell-bg">0.72</div>
+  <div class="cell cell-bg"></div>
+  <div class="cell cell-bg"></div>
+  <div class="cell cell-bg"></div>
+  <div class="cell cell-bg"></div>
+  <div class="cell cell-bg">65</div>
+  <div class="cell cell-bg"></div>
+  <div class="cell cell-bg">58</div>
+  <div class="cell cell-bg"></div>
+  <div class="cell cell-bg"></div>
+  <div class="cell cell-bg"></div>
+  <div class="cell cell-bg"></div>
+  <div class="cell cell-bg"></div>
+</div>
+<p style="color:var(--muted);font-size:0.82rem;">
+  The above is a simplified representation. Actual colors, widths and values update in real time on your chart.
+</p>
+
+<!-- ---------- SYMBOL ---------- -->
+<h3 id="col-symbol">SYMBOL Column</h3>
+<p>
+  Displays the pair name. <strong>Click any symbol row</strong> to instantly switch the chart to that pair
+  (if <code>ChangeSymbol = true</code>). The currently active chart symbol is highlighted in gold.
+</p>
+
+<!-- ---------- TREND ---------- -->
+<h3 id="col-trend">TREND Column</h3>
+<p>
+  Shows the primary trend direction on <strong>Time Frame 1</strong> (default H1), determined by the crossover
+  of a <em>Fast MA</em> (default 13 EMA) and a <em>Slow MA</em> (default 50 EMA):
+</p>
+<ul>
+  <li><strong style="color:var(--green);">&#9650; Green arrow</strong> &mdash; Fast MA crossed above Slow MA (bullish).</li>
+  <li><strong style="color:var(--red);">&#9660; Red arrow</strong> &mdash; Fast MA crossed below Slow MA (bearish).</li>
+</ul>
+
+<!-- ---------- PF ---------- -->
+<h3 id="col-pf">PF &mdash; Price Formation</h3>
+<p>
+  Once the total move from the MA-crossover swing point exceeds 1&times;ADR, the indicator labels the
+  swing origin as a <em>Price Formation</em> and counts how many daily bars ago it occurred:
+</p>
+<ul>
+  <li><strong style="color:var(--green);">N PFL</strong> &mdash; Price Formation Low (bullish). <code>N</code> = number of daily bars since the swing low.</li>
+  <li><strong style="color:var(--red);">N PFH</strong> &mdash; Price Formation High (bearish). <code>N</code> = number of daily bars since the swing high.</li>
+  <li><strong style="color:#c0c0c0;">N.C.P</strong> (grey) &mdash; "No Confirmed PF" &mdash; the move hasn't reached 1&times;ADR yet.</li>
+</ul>
+<p>When PF = 1 or 2 days, the cell uses a brighter color (recent formation).</p>
+
+<!-- ---------- MAX ---------- -->
+<h3 id="col-max">MAX Column</h3>
+<p>
+  The peak move (from swing low to swing high within the current trend leg), expressed as a multiple of ADR.
+  For example, <code>3.12</code> means the swing move reached 3.12&times; the average daily range.
+</p>
+<ul>
+  <li><strong style="color:#376b87;">Blue background</strong> &mdash; MAX &ge; <code>AdrMultiplier</code> (default 3.0). This triggers the ADR-reached alert.</li>
+  <li><strong>Default background</strong> &mdash; Below the threshold.</li>
+</ul>
+
+<!-- ---------- RT ---------- -->
+<h3 id="col-rt">RT &mdash; Real-Time ADR Multiple</h3>
+<p>
+  The <em>live</em> distance from the swing point to the current bid, expressed as an ADR multiple.
+  Unlike MAX (which shows the peak), RT updates tick by tick as price moves.
+</p>
+<ul>
+  <li><strong style="color:#005987;">Dark blue background</strong> &mdash; The peak move exceeded <code>AdrMultiplierRT</code> (default 2.5).</li>
+</ul>
+
+<!-- ---------- IDC ---------- -->
+<h3 id="col-idc">IDC &amp; IDC RT</h3>
+<p>
+  IDC stands for <em>Intra-Day Confirmation</em>. It repeats the same trend-and-swing logic as TREND/PF,
+  but on <strong>Time Frame 2</strong> (default M15):
+</p>
+<ul>
+  <li><strong style="color:var(--green);">APL</strong> &mdash; Active Pivot Low (M15 trend is up with move &gt; &frac13; ADR).</li>
+  <li><strong style="color:var(--red);">APH</strong> &mdash; Active Pivot High (M15 trend is down with move &gt; &frac13; ADR).</li>
+</ul>
+<p><strong>IDC RT</strong> shows the real-time ADR multiple for that secondary-timeframe leg.</p>
+
+<!-- ---------- 50-M15 ---------- -->
+<h3 id="col-50m15">50-M15 &mdash; MA Touch</h3>
+<p>
+  Displays <strong style="color:var(--green);">T</strong> when the current M15 candle touches or crosses the
+  Slow MA (50 EMA by default) on the M15 timeframe. Empty otherwise. This is a "touch" event useful for pullback entries.
+</p>
+
+<!-- ---------- DC ---------- -->
+<h3 id="col-dc">DC &mdash; Daily Candle</h3>
+<p>
+  Evaluates <em>yesterday's</em> completed daily candle against the <code>ClosePercent</code> threshold (default 75%):
+</p>
+<ul>
+  <li><strong style="color:var(--green);">UP</strong> (green) &mdash; Yesterday closed bullish in the top 25% of its range, <em>and</em> the H1 trend is also bullish (confluence).</li>
+  <li><strong style="color:var(--red);">DN</strong> (red) &mdash; Yesterday closed bearish in the bottom 25% of its range, <em>and</em> the H1 trend is also bearish.</li>
+  <li><strong>UP/DN in grey</strong> &mdash; The daily candle direction opposes the H1 trend (counter-trend signal).</li>
+</ul>
+
+<!-- ---------- ADR ---------- -->
+<h3 id="col-adr">ADR Column</h3>
+<p>
+  The <em>Average Daily Range</em> in pips, calculated over the last <code>AdrPeriod</code> days (default 15).
+  This is the core measurement used by almost every other column.
+</p>
+
+<!-- ---------- S-H ---------- -->
+<h3 id="col-sh">S-H &mdash; Stop Hunt</h3>
+<p>
+  Detects potential stop-hunt scenarios. The indicator builds a range from the first 8 hours of the trading day
+  using M15 bars. If the daily high or low breaches that range by <code>MinDistance</code>&ndash;<code>MaxDistance</code>
+  pips (and the range is &lt; <code>MaxRange</code> pips), the cell displays the pip distance and highlights:
+</p>
+<ul>
+  <li><strong style="color:var(--green);">Green + number</strong> &mdash; Stop-hunt <em>low</em> detected (bullish implication in an uptrend).</li>
+  <li><strong style="color:var(--red);">Red + number</strong> &mdash; Stop-hunt <em>high</em> detected (bearish implication in a downtrend).</li>
+</ul>
+
+<!-- ---------- DR ---------- -->
+<h3 id="col-dr">DR &mdash; Daily Range</h3>
+<p>
+  Today's intraday range (High &minus; Low) in pips. The background color changes when the range reaches 1&times;ADR:
+</p>
+<ul>
+  <li><strong style="color:var(--green);">Green</strong> &mdash; ADR reached and the low occurred <em>before</em> the high (bullish day structure).</li>
+  <li><strong style="color:var(--red);">Red</strong> &mdash; ADR reached and the high occurred <em>before</em> the low (bearish day structure).</li>
+</ul>
+
+<!-- ---------- DIV ---------- -->
+<h3 id="col-div">DIV &mdash; RSI Divergence</h3>
+<p>
+  Scans for RSI divergence on the configured <code>RsiTimeFrameDiv</code> (default H1) when the real-time
+  ADR multiple exceeds <code>AdrMultiplierDiv</code> (default 2.7):
+</p>
+<ul>
+  <li><strong style="color:var(--green);">RD</strong> (green) &mdash; Regular <em>bullish</em> divergence (price making lower lows, RSI making higher lows).</li>
+  <li><strong style="color:var(--green);">HD</strong> (green) &mdash; Hidden <em>bullish</em> divergence.</li>
+  <li><strong style="color:var(--red);">RD</strong> (red) &mdash; Regular <em>bearish</em> divergence (price making higher highs, RSI making lower highs).</li>
+  <li><strong style="color:var(--red);">HD</strong> (red) &mdash; Hidden <em>bearish</em> divergence.</li>
+</ul>
+
+<!-- ---------- BR ---------- -->
+<h3 id="col-br">BR &mdash; Breaker Blocks</h3>
+<p>
+  Two columns show order-block breaker status on two independent timeframes
+  (<code>BreakerTF1</code> default M15, <code>BreakerTF2</code> default H4).
+  When a candle breaks through a prior swing structure, the source candle's range becomes the breaker zone:
+</p>
+<ul>
+  <li><strong style="color:var(--green);">Green</strong> &mdash; Buy breaker (broken above a sell-side structure).</li>
+  <li><strong style="color:var(--red);">Red</strong> &mdash; Sell breaker (broken below a buy-side structure).</li>
+  <li><strong style="color:#3b6796;">Blue text with TF label</strong> &mdash; Price is retesting the breaker zone (high-probability entry area).</li>
+</ul>
+<p>
+  The breaker columns are toggle-able: click the header button to show/hide breaker data.
+  When hidden, the header turns grey.
+</p>
+
+<!-- ---------- YHL ---------- -->
+<h3 id="col-yhl">YHL &mdash; Yesterday High/Low</h3>
+<p>
+  Signals when the <em>current</em> M15 candle is touching yesterday's high or low:
+</p>
+<ul>
+  <li><strong style="color:var(--red);">H</strong> &mdash; Price is at yesterday's high.</li>
+  <li><strong style="color:var(--green);">L</strong> &mdash; Price is at yesterday's low.</li>
+</ul>
+
+<!-- ---------- TDI ---------- -->
+<h3 id="col-tdi">TDI Column &mdash; SharkFin Signals</h3>
+<p>
+  Displays <strong>TDI SharkFin</strong> reversal signals based on the Traders Dynamic Index sub-indicator
+  running on the configured <code>TimeFrameTDI</code> (default M15). See the
+  <a href="#tdi-deep">TDI Deep Dive</a> section below for a complete explanation.
+</p>
+<ul>
+  <li><strong style="color:var(--green);">UP</strong> (green) &mdash; Bullish SharkFin: RSI recovered from below the lower volatility band.</li>
+  <li><strong style="color:var(--red);">DN</strong> (red) &mdash; Bearish SharkFin: RSI dropped from above the upper volatility band through the lower band.</li>
+  <li><strong>Empty</strong> &mdash; No active SharkFin condition.</li>
+</ul>
+<p>
+  When the <a href="#trend-filter">Trend Filter</a> is enabled, TDI signals are only displayed if they align
+  with the PF and/or IDC direction (confluence filtering).
+</p>
+
+<!-- ============================================================ -->
+<!--                     CHART OVERLAYS                           -->
+<!-- ============================================================ -->
+<h2 id="atr-bands">ATR Bands (Chart Overlay)</h2>
+<p>
+  Three lines are plotted on the chart for the <em>active symbol only</em>:
+</p>
+<ul>
+  <li><strong>Upper Band</strong> = LWMA(<code>Length</code>) + ATR(<code>ATRPeriodBack</code>) &times; <code>ATRMultiplier</code></li>
+  <li><strong>Middle Line</strong> = LWMA of price (also the 50 EMA buffer for reference).</li>
+  <li><strong>Lower Band</strong> = LWMA(<code>Length</code>) &minus; ATR(<code>ATRPeriodBack</code>) &times; <code>ATRMultiplier</code></li>
+</ul>
+<p>
+  Use the <strong>"H Bands / S Bands"</strong> button (bottom-right panel) to show or hide the bands at runtime
+  without removing the indicator.
+</p>
+
+<h2 id="adr-lines">ADR Level Lines</h2>
+<p>
+  When a PF is confirmed for the current chart symbol, horizontal dotted lines are drawn at 1&times;ADR, 2&times;ADR,
+  and 3&times;ADR from the PF swing point. On H4, lines extend up to 9&times;ADR. These serve as target/exhaustion levels.
+</p>
+<ul>
+  <li><strong style="color:var(--green);">Green dotted</strong> &mdash; From a PFL (upside targets).</li>
+  <li><strong style="color:var(--red);">Red dotted</strong> &mdash; From a PFH (downside targets).</li>
+</ul>
+
+<h2 id="adr-boxes">ADR Boxes (1 ADR / 3 ADR)</h2>
+<p>
+  The bottom-right button panel provides <strong>1 ADR</strong> and <strong>3 ADR</strong> buttons.
+  Clicking them drops a draggable rectangle onto the chart sized to exactly 1&times; or 3&times; ADR.
+  Use these for quick visual measurement. The <strong>r</strong> button removes the last placed box.
+</p>
+
+<h2 id="breaker-chart">Breaker Blocks on Chart</h2>
+<p>
+  On the active chart symbol, the indicator draws rectangles for the most recent Source zone and Breaker zone
+  on each configured timeframe. Tooltips describe whether it's a Buy/Sell Source or Breaker.
+  A horizontal Fibonacci-style level line marks the key breaker price.
+</p>
+
+<h2 id="divergence-chart">RSI Divergence Lines on Chart</h2>
+<p>
+  When divergence is detected on the active symbol, a trendline is drawn connecting the two relevant swing points:
+</p>
+<ul>
+  <li><strong>Solid line</strong> &mdash; Regular divergence.</li>
+  <li><strong>Dotted line</strong> &mdash; Hidden divergence.</li>
+</ul>
+
+<h2 id="candle-timer">Candle Countdown Timer</h2>
+<p>
+  A yellow text object near the current candle displays the time remaining until the next bar opens in
+  <code>HH:MM:SS</code> format. It updates on every timer tick (500 ms).
+</p>
+
+<!-- ============================================================ -->
+<!--                     TDI DEEP DIVE                            -->
+<!-- ============================================================ -->
+<h2 id="tdi-deep">TDI &mdash; How It Works (Deep Dive)</h2>
+
+<h3>What Is the TDI?</h3>
+<p>
+  The <strong>Traders Dynamic Index</strong> is a composite indicator built on top of RSI. Rather than
+  using the raw TDI indicator, this Market Maker builds TDI internally from first principles using
+  MT5 native handles. It produces five derived lines from the base RSI:
+</p>
+
+<table>
+  <thead>
+    <tr><th>Line</th><th>Calculation</th><th>Default</th><th>Purpose</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Green Line</strong> (Price Line)</td>
+      <td>MA of RSI, fast smoothing</td>
+      <td>SMA period 2 of RSI(13)</td>
+      <td>Shows instant RSI momentum</td>
+    </tr>
+    <tr>
+      <td><strong>Signal Line</strong></td>
+      <td>MA of RSI, slow smoothing</td>
+      <td>SMA period 7 of RSI(13)</td>
+      <td>Lagging reference (not directly used by SharkFin logic)</td>
+    </tr>
+    <tr>
+      <td><strong>Upper Volatility Band</strong></td>
+      <td>SMA(RSI, 34) + 1.6185 &times; StdDev(RSI, 34)</td>
+      <td>&mdash;</td>
+      <td>Dynamic overbought zone</td>
+    </tr>
+    <tr>
+      <td><strong>Lower Volatility Band</strong></td>
+      <td>SMA(RSI, 34) &minus; 1.6185 &times; StdDev(RSI, 34)</td>
+      <td>&mdash;</td>
+      <td>Dynamic oversold zone</td>
+    </tr>
+    <tr>
+      <td><strong>Market Base Line</strong> (Mid)</td>
+      <td>(Upper + Lower) / 2</td>
+      <td>&mdash;</td>
+      <td>Neutral center of volatility bands</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>
+  The 1.6185 multiplier on the standard deviation creates a channel that adapts to RSI volatility.
+  When RSI is compressed, the bands tighten; when RSI swings widely, the bands expand.
+</p>
+
+<h3>SharkFin Signal Detection</h3>
+<p>
+  The indicator doesn't simply show trend direction. It detects a very specific pattern called a <strong>"SharkFin"</strong>
+  &mdash; a rapid RSI cross of the volatility band boundary that signals an extreme momentum shift.
+  The TDI column is recalculated every time a new bar forms on the <code>TimeFrameTDI</code> (default M15).
+</p>
+
+<h4 style="color:var(--green);">SharkFin UP (Bullish Recovery)</h4>
+<div class="flow">
+  <div class="flow-step">Bar 1: Green Line <strong>&gt;</strong> Lower Band</div>
+  <span class="flow-arrow">&rarr;</span>
+  <div class="flow-step">Bar 2: Green Line <strong>&le;</strong> Lower Band</div>
+  <span class="flow-arrow">&rarr;</span>
+  <div class="flow-step">Bars 3&ndash;4: Green Line was <strong>&lt;</strong> Market Base Line (Mid)</div>
+  <span class="flow-arrow">=</span>
+  <div class="flow-step flow-yes" style="font-weight:bold;">UP signal confirmed</div>
+</div>
+<p><strong>In plain English:</strong></p>
+<ol>
+  <li>The smoothed RSI (Green Line) was <em>below the Market Base Line</em> a few bars back, indicating a weak/oversold state.</li>
+  <li>It then <em>dipped below the Lower Volatility Band</em> (extreme oversold).</li>
+  <li>On the most recent completed bar, it <em>recovered back above the Lower Band</em>.</li>
+</ol>
+<p>
+  This "dip-and-recover" is the SharkFin shape. It suggests that selling pressure was exhausted and momentum
+  is starting to reverse upward. The extra lookback check (bars 3&ndash;4 below the midline) filters out
+  false signals that occur when RSI was already strong.
+</p>
+
+<div class="box box-warn">
+  <strong>Invalidation</strong>
+  If looking back at bars 3&ndash;4 the Green Line was already above the Lower Band (i.e., RSI never truly came from a weak position),
+  the signal is discarded (<code>res = -1</code>). The indicator requires that the RSI was genuinely oversold, not merely fluctuating
+  near the band edge.
+</div>
+
+<h4 style="color:var(--red);">SharkFin DN (Bearish Crash)</h4>
+<div class="flow">
+  <div class="flow-step">Bar 1: Green Line <strong>&le;</strong> Lower Band</div>
+  <span class="flow-arrow">&rarr;</span>
+  <div class="flow-step">Bar 2: Green Line <strong>&ge;</strong> Lower Band</div>
+  <span class="flow-arrow">&rarr;</span>
+  <div class="flow-step">Bars 3&ndash;4: Green Line was <strong>&gt;</strong> Upper Band</div>
+  <span class="flow-arrow">=</span>
+  <div class="flow-step flow-no" style="font-weight:bold;">DN signal confirmed</div>
+</div>
+<p><strong>In plain English:</strong></p>
+<ol>
+  <li>The smoothed RSI was <em>above the Upper Volatility Band</em> a few bars back (overbought/extreme strength).</li>
+  <li>It was still above the Lower Band on bar 2.</li>
+  <li>On bar 1, it has <em>crashed below the Lower Band</em> (from overbought all the way to oversold in a few bars).</li>
+</ol>
+<p>
+  This represents a dramatic momentum collapse &mdash; price went from extreme strength to extreme weakness
+  very quickly. The "sharkfin" shape in this case is the sharp peak followed by the cliff drop.
+  This often signals the start of a strong bearish leg.
+</p>
+
+<div class="box box-info">
+  <strong>Why check the Upper Band?</strong>
+  The bars 3&ndash;4 lookback verifies the RSI came from overbought territory (above the upper band).
+  A simple drop below the lower band could just be normal oscillation &mdash; but a drop from <em>above the upper band
+  to below the lower band</em> in 3&ndash;4 bars is exceptional and much more significant.
+</div>
+
+<h3>Signal Lifecycle</h3>
+<ol>
+  <li>The TDI is only recalculated when a <strong>new bar</strong> forms on <code>TimeFrameTDI</code> (tracked via <code>_LastTime[]</code>). This prevents mid-bar noise.</li>
+  <li>Once a signal fires ("UP" or "DN"), it is <strong>displayed in the panel cell</strong> and <strong>persists</strong> until the next TDI recalculation produces a different result or an empty state.</li>
+  <li>If the <a href="#trend-filter">Trend Filter</a> is active, the signal is only shown when confluence conditions are met.</li>
+  <li>Alerts (screen + push) fire exactly once per new signal when <code>zz != -1</code> (the signal just formed on this calculation cycle, not carried over).</li>
+</ol>
+
+<h3>TDI Configuration Parameters</h3>
+<table class="param-table">
+  <thead><tr><th>Parameter</th><th>Default</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td>TimeFrameTDI</td><td>M15</td><td>Timeframe on which TDI is calculated</td></tr>
+    <tr><td>InpPeriodRSI</td><td>13</td><td>Base RSI period</td></tr>
+    <tr><td>InpAppliedPriceRSI</td><td>Close</td><td>Price used for RSI</td></tr>
+    <tr><td>InpPeriodVolBand</td><td>34</td><td>Period for the SMA and StdDev of RSI (volatility bands)</td></tr>
+    <tr><td>InpPeriodSmRSI</td><td>2</td><td>Fast smoothing of RSI (Green Line)</td></tr>
+    <tr><td>InpMethodSmRSI</td><td>SMA</td><td>Smoothing method for Green Line</td></tr>
+    <tr><td>InpPeriodSmSig</td><td>7</td><td>Slow smoothing of RSI (Signal Line)</td></tr>
+    <tr><td>InpMethodSmSig</td><td>SMA</td><td>Smoothing method for Signal Line</td></tr>
+    <tr><td>InpOverbought</td><td>68</td><td>Static overbought reference level (for TDI chart overlay, not SharkFin logic)</td></tr>
+    <tr><td>InpOversold</td><td>32</td><td>Static oversold reference level</td></tr>
+  </tbody>
+</table>
+
+<!-- ============================================================ -->
+<!--                     TREND FILTER                             -->
+<!-- ============================================================ -->
+<h2 id="trend-filter">Trend Filter (TDI Confluence)</h2>
+<p>
+  The Trend Filter controls <em>whether</em> TDI signals are shown on the dashboard. When
+  <code>TrendFilter = true</code>, a TDI signal must align with other dashboard columns to be displayed.
+  Three sub-filters can be independently enabled:
+</p>
+
+<table>
+  <thead><tr><th>Filter</th><th>Default</th><th>UP signal requires</th><th>DN signal requires</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>TrendFilter1</code></td>
+      <td>true</td>
+      <td>PFL + APL + TDI UP</td>
+      <td>PFH + APH + TDI DN</td>
+    </tr>
+    <tr>
+      <td><code>TrendFilter2</code></td>
+      <td>false</td>
+      <td>PFL + TDI UP</td>
+      <td>PFH + TDI DN</td>
+    </tr>
+    <tr>
+      <td><code>TrendFilter3</code></td>
+      <td>true</td>
+      <td>APL + TDI UP</td>
+      <td>APH + TDI DN</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>
+  If <strong>any</strong> of the enabled filters passes, the signal is shown. If <strong>all</strong> three
+  sub-filters are disabled, TDI signals pass through unfiltered regardless of the master <code>TrendFilter</code> setting.
+</p>
+
+<div class="box box-tip">
+  <strong>Recommended Setup</strong>
+  The defaults (<code>TrendFilter1 = true</code>, <code>TrendFilter3 = true</code>) provide strong confluence:
+  a TDI SharkFin UP only appears when the H1 trend already has a confirmed PFL <em>and/or</em> the M15 timeframe
+  shows an APL. This dramatically reduces noise and focuses attention on high-probability setups.
+</div>
+
+<!-- ============================================================ -->
+<!--                     CONFIGURATION                            -->
+<!-- ============================================================ -->
+<h2 id="params-general">Configuration &mdash; General Parameters</h2>
+<table class="param-table">
+  <thead><tr><th>Parameter</th><th>Default</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td>SymbolStr1</td><td>14 pairs (AUD..EUR)</td><td>First set of symbols, comma-separated</td></tr>
+    <tr><td>SymbolStr2</td><td>14 pairs (EUR..JPY)</td><td>Second set of symbols, comma-separated</td></tr>
+    <tr><td>AdrPeriod</td><td>15</td><td>Number of daily bars used to calculate ADR</td></tr>
+    <tr><td>AdrMultiplier</td><td>3.0</td><td>ADR multiple that triggers the MAX alert</td></tr>
+    <tr><td>AdrMultiplierRT</td><td>2.5</td><td>ADR multiple that highlights the RT column</td></tr>
+    <tr><td>ClosePercent</td><td>75</td><td>Daily candle close threshold (%) for DC column</td></tr>
+    <tr><td>LookBackDays</td><td>5</td><td>Lookback window for certain day-level checks</td></tr>
+    <tr><td>Prefix</td><td>"AMD"</td><td>Text prefix added to alert messages</td></tr>
+  </tbody>
+</table>
+
+<h2 id="params-ma">Moving Average &amp; Timeframes</h2>
+<table class="param-table">
+  <thead><tr><th>Parameter</th><th>Default</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td>TimeFrame</td><td>H1</td><td>Primary timeframe for trend &amp; PF</td></tr>
+    <tr><td>TimeFrame2</td><td>M15</td><td>Secondary timeframe for IDC (APH/APL) &amp; 50-M15</td></tr>
+    <tr><td>MaMethod</td><td>EMA</td><td>Moving average method</td></tr>
+    <tr><td>MaMode</td><td>Close</td><td>Applied price</td></tr>
+    <tr><td>MaShift</td><td>0</td><td>MA shift</td></tr>
+    <tr><td>FastMaPeriod</td><td>13</td><td>Fast MA period</td></tr>
+    <tr><td>SlowMaPeriod</td><td>50</td><td>Slow MA period</td></tr>
+    <tr><td>SendPushPf</td><td>true</td><td>Send push notification when a new PF forms</td></tr>
+    <tr><td>PFH_LHistory</td><td>1000</td><td>How many bars back to scan for historical PFH/PFL labels</td></tr>
+  </tbody>
+</table>
+
+<h2 id="params-div">RSI Divergence Parameters</h2>
+<table class="param-table">
+  <thead><tr><th>Parameter</th><th>Default</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td>ShowDivergence</td><td>true</td><td>Enable divergence scanning</td></tr>
+    <tr><td>AdrMultiplierDiv</td><td>2.7</td><td>Minimum RT ADR multiple before divergence is checked</td></tr>
+    <tr><td>RsiTimeFrameDiv</td><td>H1</td><td>Timeframe for RSI divergence</td></tr>
+    <tr><td>RsiPeriodDiv</td><td>13</td><td>RSI period for divergence</td></tr>
+    <tr><td>RsiPrice</td><td>Close</td><td>Applied price for RSI</td></tr>
+  </tbody>
+</table>
+
+<h2 id="params-stophunt">Stop Hunt &amp; Daily Range</h2>
+<table class="param-table">
+  <thead><tr><th>Parameter</th><th>Default</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td>ShowDailyRange</td><td>true</td><td>Enable the DR column</td></tr>
+    <tr><td>MaxRange</td><td>50</td><td>Max initial-range width (pips) to qualify as a stop-hunt setup</td></tr>
+    <tr><td>MinDistance</td><td>10</td><td>Minimum pip penetration beyond the range</td></tr>
+    <tr><td>MaxDistance</td><td>50</td><td>Maximum pip penetration beyond the range</td></tr>
+  </tbody>
+</table>
+
+<h2 id="params-breaker">Breaker Block Parameters</h2>
+<table class="param-table">
+  <thead><tr><th>Parameter</th><th>Default</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td>SendBreakerAlert</td><td>true</td><td>Show screen alerts for breaker events</td></tr>
+    <tr><td>SendBreakerNotif</td><td>true</td><td>Send push notifications for breaker events</td></tr>
+    <tr><td>BreakerHistory</td><td>1000</td><td>How many bars back to scan for breakers</td></tr>
+    <tr><td>ShowAllBreakers</td><td>false</td><td>If true, keep all historical breaker rectangles on chart</td></tr>
+    <tr><td>ShowBreaker1</td><td>true</td><td>Enable Breaker 1</td></tr>
+    <tr><td>BreakerTF1</td><td>M15</td><td>Timeframe for Breaker 1</td></tr>
+    <tr><td>BuyBreakerClr1</td><td>Green</td><td>Color for buy breakers (TF1)</td></tr>
+    <tr><td>SellBreakerClr1</td><td>Red</td><td>Color for sell breakers (TF1)</td></tr>
+    <tr><td>ShowBreaker2</td><td>true</td><td>Enable Breaker 2</td></tr>
+    <tr><td>BreakerTF2</td><td>H4</td><td>Timeframe for Breaker 2</td></tr>
+    <tr><td>BuyBreakerClr2</td><td>Dark Green</td><td>Color for buy breakers (TF2)</td></tr>
+    <tr><td>SellBreakerClr2</td><td>Dark Red</td><td>Color for sell breakers (TF2)</td></tr>
+  </tbody>
+</table>
+
+<h2 id="params-alerts">Alerts &amp; Notifications</h2>
+<table class="param-table">
+  <thead><tr><th>Parameter</th><th>Default</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td>ShowAlert</td><td>true</td><td>Screen alert when a pair reaches ADR MAX</td></tr>
+    <tr><td>SendNotif</td><td>true</td><td>Push notification for ADR MAX</td></tr>
+    <tr><td>ShowShAlert</td><td>true</td><td>Screen alert for TDI SharkFin signals</td></tr>
+    <tr><td>SendShNotif</td><td>true</td><td>Push notification for TDI SharkFin signals</td></tr>
+    <tr><td>ShowLines</td><td>true</td><td>Draw ADR level lines on chart</td></tr>
+  </tbody>
+</table>
+
+<h2 id="params-bands">ATR Bands Parameters</h2>
+<table class="param-table">
+  <thead><tr><th>Parameter</th><th>Default</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td>LookBack</td><td>500</td><td>Maximum bars for band calculation (0 = disabled)</td></tr>
+    <tr><td>ShowBands</td><td>true</td><td>Draw ATR bands on startup</td></tr>
+    <tr><td>Method</td><td>LWMA</td><td>Moving average type for the band center</td></tr>
+    <tr><td>Lenght</td><td>61</td><td>Period for the center MA</td></tr>
+    <tr><td>Source</td><td>Close</td><td>Price type for the center MA</td></tr>
+    <tr><td>ATRPeriodBack</td><td>110</td><td>ATR period</td></tr>
+    <tr><td>ATRMultiplier</td><td>2.8</td><td>ATR multiplier for band width</td></tr>
+    <tr><td>colorUpperBands</td><td>Blue</td><td>Upper band color</td></tr>
+    <tr><td>colorMiddleBands</td><td>Aqua</td><td>Middle line color</td></tr>
+    <tr><td>colorLowerBands</td><td>Blue</td><td>Lower band color</td></tr>
+  </tbody>
+</table>
+
+<h2 id="params-tdi">TDI Parameters</h2>
+<p>See the <a href="#tdi-deep">TDI Deep Dive</a> section for the full parameter table and explanation.</p>
+
+<h2 id="params-visual">Visual &amp; Panel Parameters</h2>
+<table class="param-table">
+  <thead><tr><th>Parameter</th><th>Default</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td>X</td><td>0</td><td>Panel X offset from left edge</td></tr>
+    <tr><td>Y</td><td>30</td><td>Panel Y offset from top edge</td></tr>
+    <tr><td>H</td><td>22</td><td>Cell height in pixels</td></tr>
+    <tr><td>ChangeSymbol</td><td>true</td><td>Allow clicking symbol names to switch chart</td></tr>
+    <tr><td>Corner</td><td>Right Upper</td><td>Corner anchor for the ADR box panel</td></tr>
+    <tr><td>Adr1BoxColor</td><td>DodgerBlue</td><td>Color of 1-ADR measurement boxes</td></tr>
+    <tr><td>Adr3BoxColor</td><td>Crimson</td><td>Color of 3-ADR measurement boxes</td></tr>
+    <tr><td>ChartOnForeground</td><td>false</td><td>Set chart foreground mode</td></tr>
+  </tbody>
+</table>
+
+<!-- ============================================================ -->
+<!--                     REFERENCE                                -->
+<!-- ============================================================ -->
+<h2 id="panel-buttons">Panel Buttons Reference</h2>
+<table>
+  <thead><tr><th>Button</th><th>Location</th><th>Action</th></tr></thead>
+  <tbody>
+    <tr><td><strong>MIN / MAX</strong></td><td>Top-left of panel</td><td>Minimize or restore the entire dashboard</td></tr>
+    <tr><td><strong>1 ADR</strong></td><td>Bottom-right panel</td><td>Place a 1&times;ADR rectangle on the chart</td></tr>
+    <tr><td><strong>3 ADR</strong></td><td>Bottom-right panel</td><td>Place a 3&times;ADR rectangle on the chart</td></tr>
+    <tr><td><strong>r</strong> (red X)</td><td>Next to 1/3 ADR</td><td>Remove the last placed ADR box</td></tr>
+    <tr><td><strong>H Bands / S Bands</strong></td><td>Bottom-right panel</td><td>Toggle ATR bands visibility</td></tr>
+    <tr><td><strong>H old PFHL / S old PFHL</strong></td><td>Bottom-right panel</td><td>Toggle historical PFH/PFL labels on chart</td></tr>
+    <tr><td><strong>BR M15 / BR H4</strong> (header)</td><td>Panel header row</td><td>Toggle breaker column visibility</td></tr>
+    <tr><td><strong>Symbol name</strong></td><td>Each row</td><td>Switch chart to that symbol</td></tr>
+  </tbody>
+</table>
+
+<h2 id="color-key">Color Key</h2>
+<table>
+  <thead><tr><th>Color</th><th>Meaning</th></tr></thead>
+  <tbody>
+    <tr><td><span style="display:inline-block;width:16px;height:16px;background:#1c8a59;border-radius:3px;vertical-align:middle;"></span> Green</td><td>Bullish signal, buy-side event</td></tr>
+    <tr><td><span style="display:inline-block;width:16px;height:16px;background:#15661d;border-radius:3px;vertical-align:middle;"></span> Dark Green</td><td>Strong/historical bullish (PF &gt; 2 days, H4 buy breaker)</td></tr>
+    <tr><td><span style="display:inline-block;width:16px;height:16px;background:#cc2323;border-radius:3px;vertical-align:middle;"></span> Red</td><td>Bearish signal, sell-side event</td></tr>
+    <tr><td><span style="display:inline-block;width:16px;height:16px;background:#911313;border-radius:3px;vertical-align:middle;"></span> Dark Red</td><td>Strong/historical bearish (PF &gt; 2 days, H4 sell breaker)</td></tr>
+    <tr><td><span style="display:inline-block;width:16px;height:16px;background:#376b87;border-radius:3px;vertical-align:middle;"></span> Blue</td><td>ADR MAX threshold reached</td></tr>
+    <tr><td><span style="display:inline-block;width:16px;height:16px;background:#005987;border-radius:3px;vertical-align:middle;"></span> Dark Blue</td><td>ADR RT threshold reached, IDC RT value</td></tr>
+    <tr><td><span style="display:inline-block;width:16px;height:16px;background:#3f4d5a;border-radius:3px;vertical-align:middle;"></span> Grey</td><td>Default / neutral / no signal</td></tr>
+    <tr><td><span style="display:inline-block;width:16px;height:16px;background:#ffd700;border-radius:3px;vertical-align:middle;"></span> Gold</td><td>Active symbol highlight, header buttons</td></tr>
+    <tr><td><span style="display:inline-block;width:16px;height:16px;background:#c0c0c0;border-radius:3px;vertical-align:middle;"></span> Silver</td><td>N.C.P / counter-trend daily candle</td></tr>
+  </tbody>
+</table>
+
+<h2 id="faq">FAQ &amp; Troubleshooting</h2>
+
+<h4>The panel is empty or some symbols are missing</h4>
+<p>
+  Verify that the symbol names in <code>SymbolStr1</code> / <code>SymbolStr2</code> exactly match your broker's
+  naming convention. Some brokers use suffixes like <code>.i</code>, <code>.m</code>, or <code>_</code>.
+  Only symbols available in your Market Watch will be loaded.
+</p>
+
+<h4>The indicator takes a long time to load</h4>
+<p>
+  On first attach, it must download H1, M15, H4, and D1 history for every symbol. Reduce the symbol count
+  or lower <code>BreakerHistory</code> / <code>PFH_LHistory</code> to speed things up.
+</p>
+
+<h4>TDI column is always empty</h4>
+<p>
+  Check that the <code>TimeFrameTDI</code> data is available for all symbols. If you have Trend Filter enabled
+  and the conditions aren't met, signals will be suppressed. Try setting <code>TrendFilter = false</code> temporarily to confirm TDI is generating signals.
+</p>
+
+<h4>Breaker columns show nothing</h4>
+<p>
+  Breaker columns are toggleable. Click the <strong>BR</strong> header button to activate them. The header
+  background changes from grey (off) to gold (on).
+</p>
+
+<h4>ADR boxes don't appear</h4>
+<p>
+  The boxes are placed at the current price level and may be off-screen if the chart is zoomed to a different
+  time range. Scroll to the current bar or use the bottom-right panel's <strong>r</strong> button to clear
+  and re-place them.
+</p>
+
+<h4>Push notifications not arriving</h4>
+<p>
+  Ensure push notifications are configured in MetaTrader 5 under <em>Tools &rarr; Options &rarr; Notifications</em>
+  with your MetaQuotes ID. The indicator uses <code>SendNotification()</code> which requires this setup.
+</p>
+
+<div style="margin-top:60px; padding-top:24px; border-top:1px solid var(--border); color:var(--muted); font-size:0.82rem; text-align:center;">
+  Advanced Market Maker MT5 v1.2 &mdash; Copyright &copy; 2026 G-Labs &mdash;
+  <a href="https://www.g-labs.software" target="_blank">www.g-labs.software</a>
+</div>
+
+</main>
+</div>
+
+</body>
+</html>
