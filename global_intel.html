@@ -29,7 +29,7 @@
             --danger: #ef5350;
             --success: #26a69a;
             --warning: #ffcf22;
-            --sidebar-width: 350px;
+            --sidebar-width: 390px;
         }
         
         body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--darker); color: var(--text); overflow: hidden; }
@@ -316,6 +316,9 @@
             padding: 10px;
             gap: 10px;
         }
+        .sidebar-right .dash-card:last-child .dash-content {
+            max-height: 240px;
+        }
 
         /* Dashboard Cards */
         .dash-card {
@@ -325,6 +328,16 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            transition: border-color 0.2s ease;
+        }
+        .dash-card > :not(.dash-header) {
+            display: none;
+        }
+        .dash-card.expanded > :not(.dash-header) {
+            display: block;
+        }
+        .dash-card.expanded {
+            border-color: #3a4255;
         }
         .dash-header {
             padding: 8px 12px;
@@ -338,6 +351,20 @@
             align-items: center;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }
+        .dash-header::after {
+            content: '+';
+            font-size: 0.9rem;
+            color: #b2b5be;
+            margin-left: 10px;
+            font-weight: 800;
+        }
+        .dash-card.expanded .dash-header::after {
+            content: '−';
+            color: #fff;
         }
         .dash-badge {
             background: rgba(38, 166, 154, 0.2);
@@ -350,6 +377,8 @@
         .dash-content {
             padding: 10px;
             font-size: 0.8rem;
+            max-height: 320px;
+            overflow-y: auto;
         }
 
         /* Gauge Widget */
@@ -464,7 +493,7 @@
         
         .video-container {
             width: 100%;
-            height: 200px;
+            height: 220px;
             position: relative;
             background: #000;
             flex-shrink: 0;
@@ -638,6 +667,40 @@
         .leaflet-popup-content-wrapper { background: var(--dark); color: #fff; border: 1px solid #434651; border-radius: 4px; }
         .leaflet-popup-tip { background: var(--dark); border-top: 1px solid #434651; border-left: 1px solid #434651; }
         .leaflet-container a { color: var(--primary); }
+        .intel-filters { display: flex; gap: 6px; padding: 8px 12px; border-bottom: 1px solid #2a2e39; background: #131722; flex-wrap: wrap; }
+        .intel-filter { background: #2a2e39; border: 1px solid #434651; color: #b2b5be; font-size: 0.65rem; padding: 3px 8px; border-radius: 999px; cursor: pointer; }
+        .intel-filter.active { background: rgba(41, 98, 255, 0.2); color: #fff; border-color: var(--primary); }
+        .impact-grid { display: grid; grid-template-columns: 100px 1fr; gap: 10px; align-items: center; }
+        .impact-score { width: 88px; height: 88px; border-radius: 50%; border: 8px solid #2a2e39; display: flex; align-items: center; justify-content: center; flex-direction: column; margin: 0 auto; }
+        .impact-score .val { font-size: 1.4rem; font-weight: 800; color: #fff; line-height: 1; }
+        .impact-score .txt { font-size: 0.6rem; color: #b2b5be; margin-top: 3px; text-transform: uppercase; letter-spacing: .8px; }
+        .impact-row { margin-bottom: 7px; }
+        .impact-label { font-size: 0.65rem; color: #b2b5be; margin-bottom: 3px; display: flex; justify-content: space-between; }
+        .asset-bias-list { display: grid; gap: 6px; }
+        .asset-bias-item { display: flex; justify-content: space-between; align-items: center; background: #0f1420; border: 1px solid #2a2e39; border-radius: 4px; padding: 7px 8px; font-size: 0.72rem; }
+        .asset-bias-score { font-weight: 700; }
+        .asset-bias-score.buy { color: #26a69a; }
+        .asset-bias-score.sell { color: #ef5350; }
+        .session-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #2a2e39; font-size: 0.72rem; }
+        .session-row:last-child { border-bottom: none; }
+        .session-status { font-weight: 700; }
+        .session-status.open { color: #26a69a; }
+        .session-status.closed { color: #787b86; }
+        .session-status.opens-soon { color: #ffcf22; }
+        .bottom-panel { gap: 10px; padding: 10px; align-items: stretch; }
+        .bottom-card { min-width: 300px; background: #0f1420; border: 1px solid #2a2e39; border-radius: 6px; padding: 10px; display: flex; flex-direction: column; }
+        .bottom-card h4 { margin: 0 0 8px; font-size: .8rem; color: #b2b5be; text-transform: uppercase; letter-spacing: .6px; }
+        .action-links { display: flex; flex-wrap: wrap; gap: 6px; }
+        .action-links button { background: #1e222d; border: 1px solid #2a2e39; color: #d1d4dc; border-radius: 4px; padding: 6px 8px; font-size: .68rem; cursor: pointer; }
+        .matrix-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+        .matrix-box { background: #131722; border: 1px solid #2a2e39; border-radius: 4px; padding: 8px; text-align: center; }
+        .matrix-box .num { font-size: 1.1rem; font-weight: 800; color: #fff; }
+        .matrix-box .lab { font-size: .62rem; color: #787b86; text-transform: uppercase; }
+        .catalyst-tape { display: grid; gap: 6px; max-height: 160px; overflow-y: auto; }
+        .catalyst-item { border-left: 3px solid #2962ff; background: #131722; border-radius: 0 4px 4px 0; padding: 6px 8px; font-size: .68rem; line-height: 1.35; cursor: pointer; }
+        .catalyst-item.high { border-left-color: #ef5350; }
+        .catalyst-item.medium { border-left-color: #ffcf22; }
+        .catalyst-item.low { border-left-color: #26a69a; }
     </style>
 </head>
 <body>
@@ -685,6 +748,14 @@
                 <button onclick="launchIntel('https://radar.cloudflare.com/outage-center')" class="source-link"><i class="fas fa-plug"></i> Outages</button>
                 <button onclick="launchIntel('https://www.reuters.com/world/')" class="source-link"><i class="fas fa-newspaper"></i> Reuters</button>
             </div>
+            <div class="intel-filters">
+                <button class="intel-filter active" onclick="setIntelFilter('ALL', this)">ALL</button>
+                <button class="intel-filter" onclick="setIntelFilter('GEOPOL', this)">GEOPOL</button>
+                <button class="intel-filter" onclick="setIntelFilter('ENERGY', this)">ENERGY</button>
+                <button class="intel-filter" onclick="setIntelFilter('SHIPPING', this)">SHIPPING</button>
+                <button class="intel-filter" onclick="setIntelFilter('CYBER', this)">CYBER</button>
+                <button class="intel-filter" onclick="setIntelFilter('MACRO', this)">MACRO</button>
+            </div>
 
             <div id="intel-feed">
                 <!-- Items injected by JS -->
@@ -721,10 +792,7 @@
         </div>
 
         
-        <!-- Sidebar: Right Panel (Strategic Dashboard) -->
         <aside class="sidebar-right">
-            
-            <!-- Video Player (Kept as Top Card) -->
             <div class="dash-card">
                 <div class="dash-header">
                     <span><i class="fas fa-video"></i> Live Global News</span>
@@ -739,49 +807,77 @@
                     <button class="channel-btn" onclick="changeChannel('iEpJwprxDdk', this)">BLOOMBERG</button>
                 </div>
             </div>
-
-            <!-- Strategic Risk Overview -->
             <div class="dash-card">
                 <div class="dash-header">
-                    <span><i class="fas fa-tachometer-alt"></i> Strategic Risk Overview</span>
-                    <span class="dash-badge">MODERATE</span>
+                    <span><i class="fas fa-bolt"></i> Market Impact Radar</span>
+                    <span class="dash-badge" id="impact-trend">STABLE</span>
                 </div>
-                <div class="dash-content" style="display: flex; gap: 10px;">
-                    <div class="risk-gauge">
-                        <div class="gauge-circle">
-                            <div class="gauge-value">48</div>
-                            <div class="gauge-label">MODERATE</div>
+                <div class="dash-content">
+                    <div class="impact-grid">
+                        <div class="impact-score" id="impact-score-ring">
+                            <div class="val" id="impact-score">42</div>
+                            <div class="txt">Moderate</div>
                         </div>
-                    </div>
-                    <div style="flex: 1; padding-top: 10px;">
-                        <div class="instability-row">
-                            <div class="instability-meta"><span>Global Instability</span><span>48/100</span></div>
-                            <div class="progress-bar"><div class="progress-fill" style="width: 48%; background: #ffcf22;"></div></div>
-                        </div>
-                        <div class="instability-row">
-                            <div class="instability-meta"><span>Cyber Threat Level</span><span>72/100</span></div>
-                            <div class="progress-bar"><div class="progress-fill" style="width: 72%; background: #ef5350;"></div></div>
-                        </div>
-                        <div style="font-size: 0.7rem; color: #787b86; margin-top: 5px;">
-                            <i class="fas fa-arrow-right"></i> Trend: Stable
+                        <div>
+                            <div class="impact-row">
+                                <div class="impact-label"><span>Geopolitics</span><span id="impact-geopol-txt">46</span></div>
+                                <div class="progress-bar"><div class="progress-fill" id="impact-geopol" style="width:46%; background:#ef5350;"></div></div>
+                            </div>
+                            <div class="impact-row">
+                                <div class="impact-label"><span>Energy</span><span id="impact-energy-txt">44</span></div>
+                                <div class="progress-bar"><div class="progress-fill" id="impact-energy" style="width:44%; background:#ffcf22;"></div></div>
+                            </div>
+                            <div class="impact-row">
+                                <div class="impact-label"><span>Shipping</span><span id="impact-shipping-txt">39</span></div>
+                                <div class="progress-bar"><div class="progress-fill" id="impact-shipping" style="width:39%; background:#64b5f6;"></div></div>
+                            </div>
+                            <div class="impact-row">
+                                <div class="impact-label"><span>Cyber</span><span id="impact-cyber-txt">34</span></div>
+                                <div class="progress-bar"><div class="progress-fill" id="impact-cyber" style="width:34%; background:#d500f9;"></div></div>
+                            </div>
+                            <div class="impact-row">
+                                <div class="impact-label"><span>Macro</span><span id="impact-macro-txt">41</span></div>
+                                <div class="progress-bar"><div class="progress-fill" id="impact-macro" style="width:41%; background:#26a69a;"></div></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Country Instability (Fragile States) -->
             <div class="dash-card">
                 <div class="dash-header">
-                    <span><i class="fas fa-globe-americas"></i> Country Instability</span>
-                    <span class="dash-badge" style="background: rgba(239, 83, 80, 0.2); color: #ef5350; border-color: rgba(239, 83, 80, 0.3);">ALERT</span>
+                    <span><i class="fas fa-compass"></i> Asset Bias Engine</span>
+                    <span class="dash-badge">LIVE</span>
                 </div>
-                <div class="dash-content" id="instability-list">
-                    <!-- Populated by JS -->
-                    <div style="text-align: center; color: #787b86;">Loading FSI Data...</div>
+                <div class="dash-content">
+                    <div class="asset-bias-list" id="asset-bias-list"></div>
                 </div>
             </div>
-
-            <!-- Regional Briefs -->
+            <div class="dash-card">
+                <div class="dash-header">
+                    <span><i class="fas fa-network-wired"></i> Strategic Flows</span>
+                    <span class="dash-badge" id="chokepoint-pressure">WATCH</span>
+                </div>
+                <div class="dash-content">
+                    <div class="infra-grid">
+                        <div class="infra-box">
+                            <div class="infra-num" id="stat-cables">0</div>
+                            <div class="infra-label">Undersea Cables</div>
+                        </div>
+                        <div class="infra-box">
+                            <div class="infra-num" id="stat-ports">0</div>
+                            <div class="infra-label">Major Ports</div>
+                        </div>
+                        <div class="infra-box">
+                            <div class="infra-num" id="stat-chokepoints">0</div>
+                            <div class="infra-label">Chokepoints</div>
+                        </div>
+                        <div class="infra-box">
+                            <div class="infra-num" id="stat-nuke">0</div>
+                            <div class="infra-label">Nuclear Sites</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="dash-card">
                 <div class="dash-header">
                     <span><i class="fas fa-newspaper"></i> Regional Intelligence</span>
@@ -789,47 +885,28 @@
                         <button class="channel-btn active" style="padding: 2px 6px; font-size: 0.6rem;" onclick="filterRegion('ALL')">ALL</button>
                         <button class="channel-btn" style="padding: 2px 6px; font-size: 0.6rem;" onclick="filterRegion('ME')">ME</button>
                         <button class="channel-btn" style="padding: 2px 6px; font-size: 0.6rem;" onclick="filterRegion('EU')">EU</button>
+                        <button class="channel-btn" style="padding: 2px 6px; font-size: 0.6rem;" onclick="filterRegion('US')">US</button>
+                        <button class="channel-btn" style="padding: 2px 6px; font-size: 0.6rem;" onclick="filterRegion('ASIA')">ASIA</button>
                     </div>
                 </div>
                 <div class="dash-content" id="regional-feed" style="max-height: 200px; overflow-y: auto;">
-                    <!-- Populated by JS -->
                 </div>
             </div>
-
-            <!-- Infrastructure Cascade -->
             <div class="dash-card">
                 <div class="dash-header">
-                    <span><i class="fas fa-network-wired"></i> Infrastructure Cascade</span>
-                    <span class="dash-badge">LIVE</span>
+                    <span><i class="fas fa-clock"></i> Market Sessions</span>
+                    <span class="dash-badge" id="session-volatility">NORMAL</span>
                 </div>
                 <div class="dash-content">
-                    <div class="infra-grid">
-                        <div class="infra-box">
-                            <div class="infra-num" id="stat-cables">435</div>
-                            <div class="infra-label">Cables</div>
-                        </div>
-                        <div class="infra-box">
-                            <div class="infra-num" id="stat-ports">120</div>
-                            <div class="infra-label">Major Ports</div>
-                        </div>
-                        <div class="infra-box">
-                            <div class="infra-num" id="stat-chokepoints">8</div>
-                            <div class="infra-label">Chokepoints</div>
-                        </div>
-                        <div class="infra-box">
-                            <div class="infra-num" id="stat-nuke">440</div>
-                            <div class="infra-label">Nuclear Sites</div>
-                        </div>
-                    </div>
-                    <button style="width: 100%; margin-top: 10px; background: #1e222d; border: 1px solid #2a2e39; color: #b2b5be; padding: 5px; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">
-                        <i class="fas fa-search"></i> Analyze Impact Scenario
-                    </button>
+                    <div class="session-row"><span>New York</span><span><span id="ny-time"></span> · <span id="ny-status" class="session-status">--</span></span></div>
+                    <div class="session-row"><span>London</span><span><span id="ldn-time"></span> · <span id="ldn-status" class="session-status">--</span></span></div>
+                    <div class="session-row"><span>Dubai</span><span><span id="dxb-time"></span> · <span id="dxb-status" class="session-status">--</span></span></div>
+                    <div class="session-row"><span>Tokyo</span><span><span id="tokyo-time"></span> · <span id="tokyo-status" class="session-status">--</span></span></div>
+                    <div class="session-row"><span>Sydney</span><span><span id="syd-time"></span> · <span id="syd-status" class="session-status">--</span></span></div>
                 </div>
             </div>
-            
-            <!-- Market Overview (Compact) -->
             <div class="dash-card">
-                 <div class="dash-header">
+                <div class="dash-header">
                     <span><i class="fas fa-chart-line"></i> Markets</span>
                 </div>
                 <div class="tradingview-widget-container" style="height: 150px; width: 100%;">
@@ -848,55 +925,57 @@
                     "height": "100%",
                     "tabs": [
                         {
-                        "title": "Indices",
+                        "title": "Macro",
                         "symbols": [
-                            { "s": "FOREXCOM:SPXUSD", "d": "S&P 500" },
-                            { "s": "FOREXCOM:NSXUSD", "d": "US 100" }
+                            { "s": "FX_IDC:EURUSD", "d": "EUR/USD" },
+                            { "s": "OANDA:XAUUSD", "d": "Gold" },
+                            { "s": "TVC:USOIL", "d": "WTI Oil" },
+                            { "s": "FOREXCOM:SPXUSD", "d": "S&P 500" }
                         ]
                         }
                     ]
-                    }
                     </script>
                 </div>
             </div>
-
         </aside>
-
-        <!-- Bottom Panel: Webcams & Pizza Index -->
         <div class="bottom-panel">
-            <!-- Pizza Index Widget -->
-            <div class="pizza-mini">
-                <div class="pizza-widget">
-                    <div class="meter-container">
-                        <div class="meter-fill" id="pizza-meter-fill"></div>
-                        <div class="meter-cover"></div>
-                        <div class="meter-value" id="pizza-value">--</div>
-                    </div>
-                    <div class="meter-label">PENTAGON PIZZA INDEX</div>
-                    <div style="font-size: 0.6rem; color: #555; margin-top: 2px;">Simulated API Data</div>
+            <div class="bottom-card">
+                <h4>Execution Intel Links</h4>
+                <div class="action-links">
+                    <button onclick="launchIntel('https://liveuamap.com/')">Conflict Map</button>
+                    <button onclick="launchIntel('https://www.vesselfinder.com/')">Ship Flow</button>
+                    <button onclick="launchIntel('https://www.marinetraffic.com/')">AIS Routes</button>
+                    <button onclick="launchIntel('https://radar.cloudflare.com/outage-center')">Internet Outages</button>
+                    <button onclick="launchIntel('https://threatmap.checkpoint.com/')">Cyber Threat Map</button>
+                    <button onclick="launchIntel('https://firms.modaps.eosdis.nasa.gov/map/')">Wildfire Layer</button>
                 </div>
             </div>
-
-            <!-- Webcams -->
-            <div class="webcam-thumb" onclick="changeChannel('rnXIjl_Rzy4', this)">
-                <iframe src="https://www.youtube.com/embed/rnXIjl_Rzy4?autoplay=1&mute=1&controls=0&showinfo=0" allow="autoplay"></iframe>
-                <div class="cam-label">NYC - Times Square</div>
+            <div class="bottom-card">
+                <h4>Alert Matrix</h4>
+                <div class="matrix-grid">
+                    <div class="matrix-box"><div class="num" id="alert-high">0</div><div class="lab">High Alerts</div></div>
+                    <div class="matrix-box"><div class="num" id="alert-medium">0</div><div class="lab">Medium Alerts</div></div>
+                    <div class="matrix-box"><div class="num" id="alert-low">0</div><div class="lab">Low Alerts</div></div>
+                    <div class="matrix-box"><div class="num" id="alert-events">0</div><div class="lab">Catalysts 24h</div></div>
+                </div>
             </div>
-            <div class="webcam-thumb" onclick="changeChannel('z_fY1pj1VBw', this)">
-                <iframe src="https://www.youtube.com/embed/z_fY1pj1VBw?autoplay=1&mute=1&controls=0&showinfo=0" allow="autoplay"></iframe>
-                <div class="cam-label">TAIPEI - Elephant Mtn</div>
+            <div class="bottom-card" style="min-width: 420px;">
+                <h4>Recent Market Catalysts</h4>
+                <div class="catalyst-tape" id="catalyst-tape">
+                    <div class="catalyst-item low">Initializing live catalyst stream...</div>
+                </div>
             </div>
-            <div class="webcam-thumb" onclick="changeChannel('AJGLajSFggk', this)">
-                <iframe src="https://www.youtube.com/embed/AJGLajSFggk?autoplay=1&mute=1&controls=0&showinfo=0" allow="autoplay"></iframe>
-                <div class="cam-label">WARSAW - City Center</div>
-            </div>
-            <div class="webcam-thumb" onclick="changeChannel('bMS-xCTPp6Y', this)">
-                <iframe src="https://www.youtube.com/embed/bMS-xCTPp6Y?autoplay=1&mute=1&controls=0&showinfo=0" allow="autoplay"></iframe>
-                <div class="cam-label">HONG KONG - Victoria Harbour</div>
-            </div>
-            <div class="webcam-thumb" onclick="changeChannel('FV4Q9DryTG8', this)">
-                <iframe src="https://www.youtube.com/embed/FV4Q9DryTG8?autoplay=1&mute=1&controls=0&showinfo=0" allow="autoplay"></iframe>
-                <div class="cam-label">SPACE - ISS Live</div>
+            <div class="bottom-card">
+                <h4>Risk Thermometer</h4>
+                <div class="pizza-widget">
+                    <div class="meter-container" style="margin-top: 12px;">
+                        <div class="meter-fill" id="pizza-meter-fill"></div>
+                        <div class="meter-cover" style="left: 24px;"></div>
+                        <div class="meter-value" id="pizza-value" style="margin-top:-22px;">--</div>
+                    </div>
+                    <div class="meter-label">MARKET RISK HEAT</div>
+                    <div style="font-size: 0.65rem; color: #787b86; margin-top: 4px;" id="risk-summary">Calculating...</div>
+                </div>
             </div>
         </div>
     </div>
@@ -905,717 +984,646 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     
     <script>
-        // Initialize Map
-        const map = L.map('map', {
-            zoomControl: false,
-            attributionControl: false
-        }).setView([25, 10], 2);
-        
+        const map = L.map('map', { zoomControl: false, attributionControl: false }).setView([24, 12], 2);
         L.control.zoom({ position: 'topright' }).addTo(map);
-        
-        // Dark Theme Map Tiles (CartoDB Dark Matter)
-        const darkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
             attribution: '&copy; OpenStreetMap &copy; CARTO',
             subdomains: 'abcd',
             maxZoom: 19
         }).addTo(map);
 
-        // --- LAYER GROUPS ---
         const layers = {
             flights: L.layerGroup().addTo(map),
             quakes: L.layerGroup().addTo(map),
+            hotspots: L.layerGroup().addTo(map),
             nuclear: L.layerGroup(),
-            chokepoints: L.layerGroup(),
-            hotspots: L.layerGroup().addTo(map)
+            chokepoints: L.layerGroup().addTo(map),
+            cables: L.layerGroup().addTo(map),
+            bases: L.layerGroup(),
+            pipelines: L.layerGroup()
         };
 
-        // Layer Control
         const overlayMaps = {
-            "Live Flights (OpenSky)": layers.flights,
-            "Seismic Events (USGS)": layers.quakes,
-            "Global Disasters (GDACS)": layers.hotspots,
-            "Nuclear Infrastructure": layers.nuclear,
-            "Strategic Chokepoints": layers.chokepoints
+            "Live Flights": layers.flights,
+            "Conflict & Disaster": layers.hotspots,
+            "Major Quakes": layers.quakes,
+            "Strategic Chokepoints": layers.chokepoints,
+            "Undersea Cable Hubs": layers.cables,
+            "Military Bases": layers.bases,
+            "Pipelines": layers.pipelines,
+            "Nuclear Sites": layers.nuclear
         };
-        
         L.control.layers(null, overlayMaps, { position: 'bottomright' }).addTo(map);
 
-        // Custom Icons
         const icons = {
-            quake: L.divIcon({ html: '<i class="fas fa-bullseye" style="color: #ef5350; text-shadow: 0 0 10px #ef5350;"></i>', className: 'marker-icon', iconSize: [16, 16] }),
-            conflict: L.divIcon({ html: '<i class="fas fa-radiation-alt" style="color: #ffcf22; text-shadow: 0 0 10px #ffcf22;"></i>', className: 'marker-icon', iconSize: [16, 16] }),
-            econ: L.divIcon({ html: '<i class="fas fa-coins" style="color: #26a69a; text-shadow: 0 0 10px #26a69a;"></i>', className: 'marker-icon', iconSize: [16, 16] }),
-            naval: L.divIcon({ html: '<i class="fas fa-ship" style="color: #64b5f6; text-shadow: 0 0 10px #64b5f6;"></i>', className: 'marker-icon', iconSize: [16, 16] }),
-            plane: L.divIcon({ html: '<i class="fas fa-plane" style="color: #2962ff; text-shadow: 0 0 10px #2962ff; transform: rotate(-45deg);"></i>', className: 'marker-icon', iconSize: [16, 16] }),
-            nuke: L.divIcon({ html: '<i class="fas fa-radiation" style="color: #ff9100; text-shadow: 0 0 10px #ff9100;"></i>', className: 'marker-icon', iconSize: [16, 16] }),
-            lock: L.divIcon({ html: '<i class="fas fa-lock" style="color: #f50057; text-shadow: 0 0 10px #f50057;"></i>', className: 'marker-icon', iconSize: [16, 16] }),
-            fire: L.divIcon({ html: '<i class="fas fa-fire" style="color: #ff5722; text-shadow: 0 0 10px #ff5722;"></i>', className: 'marker-icon', iconSize: [16, 16] })
+            quake: L.divIcon({ html: '<i class="fas fa-bullseye" style="color:#ef5350;text-shadow:0 0 10px #ef5350;"></i>', className: 'marker-icon', iconSize: [16, 16] }),
+            conflict: L.divIcon({ html: '<i class="fas fa-radiation-alt" style="color:#ffcf22;text-shadow:0 0 10px #ffcf22;"></i>', className: 'marker-icon', iconSize: [16, 16] }),
+            econ: L.divIcon({ html: '<i class="fas fa-coins" style="color:#26a69a;text-shadow:0 0 10px #26a69a;"></i>', className: 'marker-icon', iconSize: [16, 16] }),
+            naval: L.divIcon({ html: '<i class="fas fa-ship" style="color:#64b5f6;text-shadow:0 0 10px #64b5f6;"></i>', className: 'marker-icon', iconSize: [16, 16] }),
+            plane: L.divIcon({ html: '<i class="fas fa-plane" style="color:#2962ff;text-shadow:0 0 10px #2962ff;transform:rotate(-45deg);"></i>', className: 'marker-icon', iconSize: [16, 16] }),
+            nuke: L.divIcon({ html: '<i class="fas fa-radiation" style="color:#ff9100;text-shadow:0 0 10px #ff9100;"></i>', className: 'marker-icon', iconSize: [16, 16] }),
+            lock: L.divIcon({ html: '<i class="fas fa-anchor" style="color:#f50057;text-shadow:0 0 10px #f50057;"></i>', className: 'marker-icon', iconSize: [16, 16] }),
+            fire: L.divIcon({ html: '<i class="fas fa-fire" style="color:#ff5722;text-shadow:0 0 10px #ff5722;"></i>', className: 'marker-icon', iconSize: [16, 16] }),
+            cable: L.divIcon({ html: '<i class="fas fa-plug" style="color:#7e57c2;text-shadow:0 0 10px #7e57c2;"></i>', className: 'marker-icon', iconSize: [16, 16] }),
+            base: L.divIcon({ html: '<i class="fas fa-shield-alt" style="color:#00bcd4;text-shadow:0 0 10px #00bcd4;"></i>', className: 'marker-icon', iconSize: [16, 16] }),
+            pipe: L.divIcon({ html: '<i class="fas fa-oil-can" style="color:#8bc34a;text-shadow:0 0 10px #8bc34a;"></i>', className: 'marker-icon', iconSize: [16, 16] })
         };
-        
-        // --- STATIC DATA LOADERS ---
-        
-        // Nuclear Sites (Major)
+
         const nuclearSites = [
-            { lat: 47.5, lng: 34.6, name: "Zaporizhzhia NPP", desc: "Largest in Europe (Ukraine)" },
-            { lat: 31.0, lng: 51.5, name: "Natanz", desc: "Uranium Enrichment (Iran)" },
-            { lat: 41.6, lng: -83.1, name: "Davis-Besse", desc: "Nuclear Power Station (USA)" },
-            { lat: 37.4, lng: 126.9, name: "Hanul", desc: "Nuclear Power Plant (South Korea)" },
-            { lat: 51.0, lng: 1.8, name: "Gravelines", desc: "Nuclear Power Station (France)" }
+            { lat: 47.5, lng: 34.6, name: "Zaporizhzhia NPP", desc: "Ukraine" },
+            { lat: 31.0, lng: 51.5, name: "Natanz", desc: "Iran" },
+            { lat: 41.6, lng: -83.1, name: "Davis-Besse", desc: "United States" },
+            { lat: 37.4, lng: 126.9, name: "Hanul", desc: "South Korea" },
+            { lat: 51.0, lng: 1.8, name: "Gravelines", desc: "France" }
         ];
-        
-        nuclearSites.forEach(site => {
-            L.marker([site.lat, site.lng], {icon: icons.nuke})
-                .bindPopup(`<b>${site.name}</b><br>${site.desc}`)
-                .addTo(layers.nuclear);
-        });
-
-        // Strategic Chokepoints
         const chokepoints = [
-            { lat: 26.5, lng: 56.5, name: "Strait of Hormuz", desc: "Oil Transit Chokepoint", radius: 50000 },
-            { lat: 1.4, lng: 103.5, name: "Malacca Strait", desc: "Global Trade Route", radius: 80000 },
-            { lat: 30.6, lng: 32.3, name: "Suez Canal", desc: "Maritime Chokepoint", radius: 20000 },
-            { lat: 9.1, lng: -79.7, name: "Panama Canal", desc: "Maritime Chokepoint", radius: 20000 },
-            { lat: 12.5, lng: 43.3, name: "Bab el-Mandeb", desc: "Red Sea Entrance", radius: 30000 }
+            { lat: 26.5, lng: 56.5, name: "Strait of Hormuz", desc: "Energy Route", radius: 50000 },
+            { lat: 1.4, lng: 103.5, name: "Malacca Strait", desc: "Trade Route", radius: 80000 },
+            { lat: 30.6, lng: 32.3, name: "Suez Canal", desc: "Container Artery", radius: 20000 },
+            { lat: 12.5, lng: 43.3, name: "Bab el-Mandeb", desc: "Red Sea Access", radius: 30000 },
+            { lat: 8.8, lng: -79.5, name: "Panama Canal", desc: "Atlantic-Pacific Link", radius: 20000 }
+        ];
+        const cableNodes = [
+            { lat: 51.5, lng: 0.1, name: "London Cable Hub" },
+            { lat: 25.2, lng: 55.3, name: "Dubai Cable Hub" },
+            { lat: 1.3, lng: 103.8, name: "Singapore Cable Hub" },
+            { lat: 40.7, lng: -74.0, name: "New York Cable Hub" },
+            { lat: 35.7, lng: 139.8, name: "Tokyo Cable Hub" }
+        ];
+        const militaryBases = [
+            { lat: 25.2, lng: 55.3, name: "Al Dhafra", desc: "Gulf Air Ops" },
+            { lat: 35.0, lng: 33.2, name: "Akrotiri", desc: "Eastern Med Air Ops" },
+            { lat: 39.0, lng: 35.2, name: "Incirlik", desc: "NATO Hub" },
+            { lat: 36.9, lng: 28.7, name: "Aksaz", desc: "Aegean Naval Base" }
+        ];
+        const pipelines = [
+            { points: [[31.2, 34.6], [29.5, 34.9], [27.2, 33.8]], name: "SUMED Corridor" },
+            { points: [[56.0, 60.0], [52.0, 52.0], [50.0, 37.0]], name: "Eurasian Crude Route" },
+            { points: [[24.5, 54.2], [25.2, 50.6], [25.5, 47.2]], name: "Gulf Gas Network" }
         ];
 
+        nuclearSites.forEach(site => L.marker([site.lat, site.lng], { icon: icons.nuke }).bindPopup(`<b>${site.name}</b><br>${site.desc}`).addTo(layers.nuclear));
         chokepoints.forEach(cp => {
-            L.circle([cp.lat, cp.lng], {
-                color: '#f50057',
-                fillColor: '#f50057',
-                fillOpacity: 0.2,
-                radius: cp.radius
-            }).bindPopup(`<b>${cp.name}</b><br>${cp.desc}`).addTo(layers.chokepoints);
-            
-            L.marker([cp.lat, cp.lng], {icon: icons.lock})
-                .bindPopup(`<b>${cp.name}</b><br>${cp.desc}`)
-                .addTo(layers.chokepoints);
+            L.circle([cp.lat, cp.lng], { color: '#f50057', fillColor: '#f50057', fillOpacity: 0.2, radius: cp.radius }).bindPopup(`<b>${cp.name}</b><br>${cp.desc}`).addTo(layers.chokepoints);
+            L.marker([cp.lat, cp.lng], { icon: icons.lock }).bindPopup(`<b>${cp.name}</b><br>${cp.desc}`).addTo(layers.chokepoints);
         });
+        cableNodes.forEach(node => L.marker([node.lat, node.lng], { icon: icons.cable }).bindPopup(`<b>${node.name}</b>`).addTo(layers.cables));
+        militaryBases.forEach(base => L.marker([base.lat, base.lng], { icon: icons.base }).bindPopup(`<b>${base.name}</b><br>${base.desc}`).addTo(layers.bases));
+        pipelines.forEach(route => L.polyline(route.points, { color: '#8bc34a', weight: 2, opacity: 0.75 }).bindPopup(route.name).addTo(layers.pipelines));
 
-        // Data Fetching Functions
-        
-        // 1. OpenSky Network (Live Flights)
-        // Bounding Box: Europe (approx) to keep load light for demo
-        const FLIGHT_BOUNDS = "lamin=35&lomin=-10&lamax=60&lomax=30"; 
-        // Credentials (Client ID/Secret from user file)
-        const OPENSKY_CRED = "Basic " + btoa("desidereo-api-client:EmvwZxpIRnxHFFywAk3zXoMM7bfxV3Zt");
+        const impactState = {
+            score: 42,
+            prevScore: 42,
+            categories: { geopol: 46, energy: 44, shipping: 39, cyber: 34, macro: 41 },
+            assets: {
+                "XAU/USD": 12,
+                "WTI OIL": 8,
+                "EUR/USD": -3,
+                "USD/JPY": 4,
+                "US500": -6,
+                "BTC/USD": 2
+            },
+            catalysts: [],
+            alerts: { high: 0, medium: 0, low: 0 }
+        };
+
+        let intelFilter = 'ALL';
+        let allRegionalItems = [];
+
+        function clamp(n, min = 0, max = 100) { return Math.max(min, Math.min(max, n)); }
+        function signed(n) { return `${n > 0 ? '+' : ''}${n}`; }
+        function getSeverity(delta) { if (delta >= 10) return 'high'; if (delta >= 5) return 'medium'; return 'low'; }
+
+        function setIntelFilter(filter, btn) {
+            intelFilter = filter;
+            document.querySelectorAll('.intel-filter').forEach(x => x.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            Array.from(document.querySelectorAll('#intel-feed .intel-item')).forEach(item => {
+                if (filter === 'ALL') item.style.display = 'block';
+                else item.style.display = item.dataset.sourceType === filter ? 'block' : 'none';
+            });
+        }
+
+        function inferRegion(text) {
+            const t = text.toLowerCase();
+            if (/(usa|u\.s|white house|fed|washington|new york|trump|biden)/.test(t)) return 'US';
+            if (/(europe|ukraine|russia|eu|brussels|nato|germany|france|uk)/.test(t)) return 'EU';
+            if (/(iran|israel|gaza|saudi|uae|qatar|red sea|hormuz)/.test(t)) return 'ME';
+            if (/(china|japan|korea|taiwan|asia|beijing|tokyo)/.test(t)) return 'ASIA';
+            return 'ALL';
+        }
+
+        function classifySource(tag, title) {
+            const t = `${tag} ${title}`.toLowerCase();
+            if (/(iran|israel|gaza|ukraine|russia|sanction|military|strike|war|conflict|drone)/.test(t)) return 'GEOPOL';
+            if (/(oil|gas|opec|brent|wti|pipeline|lng|energy|crude)/.test(t)) return 'ENERGY';
+            if (/(shipping|vessel|port|canal|chokepoint|container|freight|red sea|hormuz)/.test(t)) return 'SHIPPING';
+            if (/(hack|cyber|outage|ddos|ransomware|attack|breach)/.test(t)) return 'CYBER';
+            return 'MACRO';
+        }
+
+        function scoreHeadline(title) {
+            const t = title.toLowerCase();
+            let delta = 2;
+            if (/(attack|strike|escalat|missile|explosion|sanction|shutdown|blockade|outage|disrupt)/.test(t)) delta += 9;
+            if (/(warning|risk|threat|tension|uncertain|volatility|conflict)/.test(t)) delta += 4;
+            if (/(deal|ceasefire|reopen|stabil|easing|cooling|agreement)/.test(t)) delta -= 5;
+            return delta;
+        }
+
+        function applyAssetEffects(sourceType, delta, title) {
+            const t = title.toLowerCase();
+            if (sourceType === 'GEOPOL') {
+                impactState.assets["XAU/USD"] += Math.round(delta * 0.5);
+                impactState.assets["US500"] -= Math.round(delta * 0.4);
+                impactState.assets["USD/JPY"] += Math.round(delta * 0.2);
+            }
+            if (sourceType === 'ENERGY') {
+                impactState.assets["WTI OIL"] += Math.round(delta * 0.8);
+                impactState.assets["US500"] -= Math.round(delta * 0.2);
+            }
+            if (sourceType === 'SHIPPING') {
+                impactState.assets["WTI OIL"] += Math.round(delta * 0.3);
+                impactState.assets["EUR/USD"] -= Math.round(delta * 0.2);
+            }
+            if (sourceType === 'CYBER') {
+                impactState.assets["BTC/USD"] += Math.round(delta * 0.1);
+                impactState.assets["US500"] -= Math.round(delta * 0.3);
+            }
+            if (sourceType === 'MACRO') {
+                if (/(inflation|cpi|hawkish|rate hike|higher for longer)/.test(t)) {
+                    impactState.assets["US500"] -= 5;
+                    impactState.assets["USD/JPY"] += 4;
+                }
+                if (/(cut|dovish|slowdown|recession)/.test(t)) {
+                    impactState.assets["XAU/USD"] += 4;
+                    impactState.assets["EUR/USD"] += 2;
+                }
+            }
+            Object.keys(impactState.assets).forEach(k => {
+                impactState.assets[k] = clamp(impactState.assets[k], -40, 40);
+            });
+        }
+
+        function addCatalyst(title, severity, link) {
+            impactState.catalysts.unshift({ title, severity, link, time: new Date() });
+            if (impactState.catalysts.length > 25) impactState.catalysts.pop();
+            impactState.alerts[severity] = (impactState.alerts[severity] || 0) + 1;
+            renderCatalysts();
+            updateAlertMatrix();
+        }
+
+        function updateImpactFromHeadline(title, sourceTag, link) {
+            const sourceType = classifySource(sourceTag, title);
+            const delta = scoreHeadline(title);
+            impactState.prevScore = impactState.score;
+            impactState.score = clamp(impactState.score + Math.round(delta * 0.35));
+            if (sourceType === 'GEOPOL') impactState.categories.geopol = clamp(impactState.categories.geopol + Math.round(delta * 0.7));
+            if (sourceType === 'ENERGY') impactState.categories.energy = clamp(impactState.categories.energy + Math.round(delta * 0.8));
+            if (sourceType === 'SHIPPING') impactState.categories.shipping = clamp(impactState.categories.shipping + Math.round(delta * 0.8));
+            if (sourceType === 'CYBER') impactState.categories.cyber = clamp(impactState.categories.cyber + Math.round(delta * 0.7));
+            if (sourceType === 'MACRO') impactState.categories.macro = clamp(impactState.categories.macro + Math.round(delta * 0.7));
+            applyAssetEffects(sourceType, delta, title);
+            addCatalyst(title, getSeverity(Math.abs(delta)), link);
+            renderImpact();
+        }
+
+        function renderImpact() {
+            const score = impactState.score;
+            const ring = document.getElementById('impact-score-ring');
+            const scoreEl = document.getElementById('impact-score');
+            const trendEl = document.getElementById('impact-trend');
+            scoreEl.innerText = score;
+            let label = 'Moderate';
+            let color = '#ffcf22';
+            if (score >= 70) { label = 'High'; color = '#ef5350'; }
+            else if (score <= 32) { label = 'Low'; color = '#26a69a'; }
+            ring.style.borderColor = `${color}55`;
+            ring.style.borderTopColor = color;
+            ring.style.borderRightColor = color;
+            ring.querySelector('.txt').innerText = label;
+            if (impactState.score > impactState.prevScore + 2) {
+                trendEl.innerText = 'ESCALATING';
+                trendEl.style.background = 'rgba(239,83,80,0.2)';
+                trendEl.style.color = '#ef5350';
+                trendEl.style.borderColor = 'rgba(239,83,80,0.3)';
+            } else if (impactState.score < impactState.prevScore - 2) {
+                trendEl.innerText = 'EASING';
+                trendEl.style.background = 'rgba(38,166,154,0.2)';
+                trendEl.style.color = '#26a69a';
+                trendEl.style.borderColor = 'rgba(38,166,154,0.3)';
+            } else {
+                trendEl.innerText = 'STABLE';
+                trendEl.style.background = 'rgba(255,207,34,0.2)';
+                trendEl.style.color = '#ffcf22';
+                trendEl.style.borderColor = 'rgba(255,207,34,0.3)';
+            }
+            const c = impactState.categories;
+            const cfg = [
+                ['geopol', '#ef5350'],
+                ['energy', '#ffcf22'],
+                ['shipping', '#64b5f6'],
+                ['cyber', '#d500f9'],
+                ['macro', '#26a69a']
+            ];
+            cfg.forEach(([k, color]) => {
+                const bar = document.getElementById(`impact-${k}`);
+                const txt = document.getElementById(`impact-${k}-txt`);
+                if (bar) {
+                    bar.style.width = `${c[k]}%`;
+                    bar.style.background = color;
+                }
+                if (txt) txt.innerText = c[k];
+            });
+            renderAssetBias();
+            updateRiskGauge();
+        }
+
+        function renderAssetBias() {
+            const el = document.getElementById('asset-bias-list');
+            const rows = Object.entries(impactState.assets)
+                .sort((a, b) => Math.abs(b[1]) - Math.abs(a[1]))
+                .slice(0, 8)
+                .map(([asset, bias]) => {
+                    const cls = bias >= 0 ? 'buy' : 'sell';
+                    const text = bias >= 0 ? `BID ${signed(bias)}` : `RISK ${signed(bias)}`;
+                    return `<div class="asset-bias-item"><span>${asset}</span><span class="asset-bias-score ${cls}">${text}</span></div>`;
+                })
+                .join('');
+            el.innerHTML = rows || '<div class="asset-bias-item"><span>No signals yet</span><span class="asset-bias-score">--</span></div>';
+        }
+
+        function renderCatalysts() {
+            const tape = document.getElementById('catalyst-tape');
+            if (!impactState.catalysts.length) {
+                tape.innerHTML = '<div class="catalyst-item low">Waiting for catalysts...</div>';
+                return;
+            }
+            tape.innerHTML = impactState.catalysts.slice(0, 18).map(item => {
+                const time = item.time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                return `<div class="catalyst-item ${item.severity}" onclick="launchIntel('${item.link || 'https://www.reuters.com/world/'}')">${time} · ${item.title}</div>`;
+            }).join('');
+        }
+
+        function updateAlertMatrix() {
+            document.getElementById('alert-high').innerText = impactState.alerts.high || 0;
+            document.getElementById('alert-medium').innerText = impactState.alerts.medium || 0;
+            document.getElementById('alert-low').innerText = impactState.alerts.low || 0;
+            document.getElementById('alert-events').innerText = impactState.catalysts.length;
+        }
+
+        function updateRiskGauge() {
+            const score = impactState.score;
+            const fill = document.getElementById('pizza-meter-fill');
+            const value = document.getElementById('pizza-value');
+            const summary = document.getElementById('risk-summary');
+            const rotation = (score / 100) * 180 - 90;
+            fill.style.transform = `rotate(${rotation}deg)`;
+            value.innerText = score;
+            if (score < 40) {
+                value.style.color = '#26a69a';
+                summary.innerText = 'Risk-on backdrop';
+            } else if (score < 70) {
+                value.style.color = '#ffcf22';
+                summary.innerText = 'Mixed regime, selective risk';
+            } else {
+                value.style.color = '#ef5350';
+                summary.innerText = 'High risk-off pressure';
+            }
+        }
+
+        function updateSessionClock() {
+            const sessions = [
+                { id: 'ny', zone: 'America/New_York', open: 9, close: 16 },
+                { id: 'ldn', zone: 'Europe/London', open: 8, close: 16 },
+                { id: 'dxb', zone: 'Asia/Dubai', open: 10, close: 14 },
+                { id: 'tokyo', zone: 'Asia/Tokyo', open: 9, close: 15 },
+                { id: 'syd', zone: 'Australia/Sydney', open: 10, close: 16 }
+            ];
+            let openCount = 0;
+            sessions.forEach(s => {
+                const now = new Date(new Date().toLocaleString('en-US', { timeZone: s.zone }));
+                const hr = now.getHours();
+                const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                const statusEl = document.getElementById(`${s.id}-status`);
+                document.getElementById(`${s.id}-time`).innerText = time;
+                const isOpen = hr >= s.open && hr < s.close;
+                const opensSoon = hr === s.open - 1 || hr === s.close - 1;
+                statusEl.className = 'session-status';
+                if (isOpen) {
+                    statusEl.innerText = 'OPEN';
+                    statusEl.classList.add('open');
+                    openCount++;
+                } else if (opensSoon) {
+                    statusEl.innerText = 'SOON';
+                    statusEl.classList.add('opens-soon');
+                } else {
+                    statusEl.innerText = 'CLOSED';
+                    statusEl.classList.add('closed');
+                }
+            });
+            const vol = document.getElementById('session-volatility');
+            if (openCount >= 2) vol.innerText = 'ELEVATED';
+            else if (openCount === 1) vol.innerText = 'ACTIVE';
+            else vol.innerText = 'QUIET';
+        }
+
+        function updateChokepointPressure() {
+            const base = Math.round((impactState.categories.shipping * 0.45) + (impactState.categories.energy * 0.4) + (Math.random() * 12));
+            const pressure = clamp(base, 0, 100);
+            const badge = document.getElementById('chokepoint-pressure');
+            if (pressure >= 70) {
+                badge.innerText = 'HIGH';
+                badge.style.background = 'rgba(239,83,80,0.2)';
+                badge.style.color = '#ef5350';
+                badge.style.borderColor = 'rgba(239,83,80,0.3)';
+            } else if (pressure >= 45) {
+                badge.innerText = 'WATCH';
+                badge.style.background = 'rgba(255,207,34,0.2)';
+                badge.style.color = '#ffcf22';
+                badge.style.borderColor = 'rgba(255,207,34,0.3)';
+            } else {
+                badge.innerText = 'NORMAL';
+                badge.style.background = 'rgba(38,166,154,0.2)';
+                badge.style.color = '#26a69a';
+                badge.style.borderColor = 'rgba(38,166,154,0.3)';
+            }
+        }
+
+        function addIntelItem(tag, title, priority, link) {
+            const feed = document.getElementById('intel-feed');
+            if (Array.from(feed.children).some(child => child.innerText.includes(title))) return;
+            const type = classifySource(tag, title);
+            const item = document.createElement('div');
+            item.className = 'intel-item';
+            item.dataset.sourceType = type;
+            let tagClass = 'tag-alert';
+            if (type === 'GEOPOL' || priority === 'high') tagClass = 'tag-conflict';
+            if (type === 'ENERGY' || tag === 'MARKET') tagClass = 'tag-econ';
+            if (type === 'SHIPPING' || tag === 'Natural') tagClass = 'tag-natural';
+            if (type === 'CYBER') tagClass = 'tag-cyber';
+            if (type === 'MACRO') tagClass = 'tag-tech';
+            const titleHtml = link ? `<a href="${link}" target="_blank" style="color:inherit;text-decoration:none;display:block;">${title}</a>` : title;
+            item.innerHTML = `<div class="intel-meta"><div class="intel-tag ${tagClass}">${type}</div><div class="intel-time">${new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}</div></div><div class="intel-title">${titleHtml}</div>`;
+            if (link) item.onclick = e => { if (e.target.tagName !== 'A') window.open(link, '_blank'); };
+            feed.prepend(item);
+            if (feed.children.length > 40) feed.lastElementChild.remove();
+            if (intelFilter !== 'ALL' && intelFilter !== type) item.style.display = 'none';
+            updateImpactFromHeadline(title, tag, link);
+        }
+
+        function createFallbackFlights() {
+            const hubs = [
+                { name: 'LHR', lat: 51.470, lon: -0.454 },
+                { name: 'CDG', lat: 49.0097, lon: 2.5479 },
+                { name: 'FRA', lat: 50.0379, lon: 8.5622 },
+                { name: 'AMS', lat: 52.3105, lon: 4.7683 },
+                { name: 'IST', lat: 41.2753, lon: 28.7519 },
+                { name: 'MAD', lat: 40.4983, lon: -3.5676 },
+                { name: 'FCO', lat: 41.8003, lon: 12.2389 }
+            ];
+            const flights = [];
+            for (let i = 0; i < 24; i++) {
+                const a = hubs[Math.floor(Math.random() * hubs.length)];
+                const b = hubs[Math.floor(Math.random() * hubs.length)];
+                const p = Math.random();
+                const lat = a.lat + (b.lat - a.lat) * p + (Math.random() - 0.5) * 0.8;
+                const lon = a.lon + (b.lon - a.lon) * p + (Math.random() - 0.5) * 0.8;
+                flights.push({
+                    callsign: `GL${String(100 + i)}`,
+                    lat,
+                    lon,
+                    origin: `${a.name}→${b.name}`,
+                    altitude: Math.round(26000 + Math.random() * 13000),
+                    fallback: true
+                });
+            }
+            return flights;
+        }
 
         async function fetchFlights() {
+            const FLIGHT_BOUNDS = "lamin=35&lomin=-10&lamax=60&lomax=30";
+            layers.flights.clearLayers();
             try {
-                const response = await fetch(`https://opensky-network.org/api/states/all?${FLIGHT_BOUNDS}`, {
-                    headers: { 'Authorization': OPENSKY_CRED }
-                });
-
-                if(response.status === 429) {
-                    throw new Error("Rate Limit Exceeded (429)");
-                } else if(response.status === 401 || response.status === 403) {
-                    throw new Error("Authentication Failed (401/403)");
-                } else if(!response.ok) {
-                    throw new Error(`Server Error (${response.status})`);
-                }
-
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), 8500);
+                const response = await fetch(`https://opensky-network.org/api/states/all?${FLIGHT_BOUNDS}`, { signal: controller.signal });
+                clearTimeout(timeout);
+                if (!response.ok) throw new Error(`${response.status}`);
                 const data = await response.json();
-                
-                // Limiting to 50 planes for performance in this demo
-                const flights = data.states.slice(0, 50);
-                
-                flights.forEach(flight => {
-                    const callsign = flight[1].trim();
+                const states = (data.states || []).filter(f => Number.isFinite(f[5]) && Number.isFinite(f[6])).slice(0, 70);
+                if (!states.length) throw new Error('NO_FLIGHTS');
+                states.forEach(flight => {
+                    const callsign = (flight[1] || 'UNK').trim();
                     const lon = flight[5];
                     const lat = flight[6];
-                    const origin = flight[2];
-                    
-                    if(lat && lon) {
-                        L.marker([lat, lon], {icon: icons.plane})
-                            .addTo(layers.flights)
-                            .bindPopup(`<b>Flight ${callsign}</b><br>Origin: ${origin}<br>Alt: ${flight[7]}m`);
-                    }
+                    const origin = flight[2] || 'Unknown';
+                    const altitude = flight[7] ? `${Math.round(flight[7])}m` : 'N/A';
+                    L.marker([lat, lon], { icon: icons.plane }).addTo(layers.flights).bindPopup(`<b>${callsign}</b><br>${origin}<br>Alt: ${altitude}`);
                 });
-                
-                // Add a summary to the feed
-                addIntelItem('Transport', `Tracking ${data.states.length} active flights in sector.`, 'low');
-                
-            } catch (e) {
-                console.error('Error fetching flights:', e);
-                let msg = 'Flight tracking interrupted';
-                if(e.message.includes("429")) msg += ' (Rate Limit)';
-                else if(e.message.includes("401")) msg += ' (Auth Error - Check Keys)';
-                else msg += ' (Connection Error)';
-                
-                addIntelItem('System', msg, 'low');
-            }
-        }
-        
-        // Channel Switcher
-        function changeChannel(sourceId, btn) {
-            // Update Active Button
-            document.querySelectorAll('.channel-btn').forEach(b => b.classList.remove('active'));
-            if(btn) btn.classList.add('active');
-
-            // If it's a webcam click, we might want to show it in the main video player too?
-            // For now, let's keep the main player for news.
-            // If the user clicks a webcam, it stays in the bottom panel.
-            // But if they click a News button, it updates the main player.
-            
-            const iframe = document.getElementById('video-frame');
-            
-            // Check if sourceId is a Channel ID (starts with UC) or Video ID
-            if(sourceId.startsWith('UC')) {
-                iframe.src = `https://www.youtube.com/embed/live_stream?channel=${sourceId}&autoplay=1&mute=1`;
-            } else {
-                iframe.src = `https://www.youtube.com/embed/${sourceId}?autoplay=1&mute=1`;
-            }
-        }
-
-        // 2. Global News Feed (RSS via Proxy)
-        async function fetchNews() {
-            const feedCategories = {
-                'CYBER': [
-                    'https://feeds.feedburner.com/TheHackersNews',
-                    'https://www.darkreading.com/rss.xml',
-                    'https://krebsonsecurity.com/feed',
-                    'https://www.bleepingcomputer.com/feed/',
-                    'https://threatpost.com/feed/'
-                ],
-                'GEOPOL': [
-                    'https://www.aljazeera.com/xml/rss/all.xml',
-                    'http://feeds.bbci.co.uk/news/world/rss.xml',
-                    'https://feeds.reuters.com/reuters/worldNews',
-                    'https://www.defenceweb.co.za/feed/',
-                    'https://www.rt.com/rss/news/'
-                ],
-                'SPACE': [
-                    'https://www.space.com/feeds.xml',
-                    'https://spacenews.com/feed',
-                    'https://blogs.nasa.gov/stationreport/feed/'
-                ],
-                'MARKET': [
-                    'https://finance.yahoo.com/news/rssindex',
-                    'https://www.cnbc.com/id/100003114/device/rss/rss.html',
-                    'https://feeds.bloomberg.com/markets/news.rss'
-                ],
-                'TECH': [
-                    'https://techcrunch.com/feed/',
-                    'https://www.theverge.com/rss/index.xml',
-                    'https://www.wired.com/feed/rss'
-                ]
-            };
-
-            // Flatten sources for ticker (random mix)
-            const allSources = Object.values(feedCategories).flat();
-            
-            // Function to fetch a single category
-            const fetchCategory = async (category, urls) => {
-                try {
-                    // Pick one random URL from this category
-                    const url = urls[Math.floor(Math.random() * urls.length)];
-                    const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
-                    const data = await res.json();
-                    
-                    if(data.status === 'ok') {
-                        // Add first 2 items to sidebar
-                        data.items.slice(0, 2).forEach(item => {
-                            let intensity = 'low';
-                            if(category === 'GEOPOL' || category === 'CYBER') intensity = 'high';
-                            if(category === 'MARKET') intensity = 'medium';
-                            
-                            // Push to Regional Feed Array (Simulated Region Detection)
-                            let region = 'ALL';
-                            if(item.title.includes('US') || item.title.includes('Biden') || item.title.includes('Trump')) region = 'US';
-                            else if(item.title.includes('Europe') || item.title.includes('Ukraine') || item.title.includes('Russia')) region = 'EU';
-                            else if(item.title.includes('China') || item.title.includes('Asia')) region = 'ASIA';
-                            else if(item.title.includes('Israel') || item.title.includes('Gaza') || item.title.includes('Iran')) region = 'ME';
-                            
-                            allRegionalItems.push({
-                                title: item.title,
-                                link: item.link,
-                                source: category,
-                                time: 'Just now',
-                                region: region
-                            });
-                            
-                            addIntelItem(category, item.title, intensity, item.link);
-                        });
-                        
-                        // Refresh Regional Feed UI
-                        if(allRegionalItems.length > 20) allRegionalItems.shift(); // Keep list short
-                        filterRegion('ALL'); // Refresh display
-                        
-                        return data.items;
-                    }
-                } catch(e) {
-                    console.warn(`Failed to fetch ${category} feed`, e);
-                }
-                return [];
-            };
-
-            // Fetch one from each category in parallel
-            const promises = Object.entries(feedCategories).map(([cat, urls]) => fetchCategory(cat, urls));
-            
-            try {
-                const results = await Promise.all(promises);
-                const allItems = results.flat().filter(i => i); // Flatten and remove undefined
-                
-                // Update Ticker with all items found
-                let tickerText = "";
-                allItems.forEach(item => {
-                     tickerText += `<span style="margin-right: 50px;"><i class="fas fa-newspaper"></i> [${item.categories && item.categories.length > 0 ? item.categories[0].toUpperCase() : 'INTEL'}] ${item.title}</span>`;
+                addIntelItem('SHIPPING', `Live aviation feed connected: ${states.length} aircraft tracked in Europe corridor.`, 'low');
+            } catch {
+                const fallbackFlights = createFallbackFlights();
+                fallbackFlights.forEach(flight => {
+                    L.marker([flight.lat, flight.lon], { icon: icons.plane })
+                        .addTo(layers.flights)
+                        .bindPopup(`<b>${flight.callsign}</b><br>${flight.origin}<br>Alt: ${flight.altitude}ft<br>Mode: Fallback stream`);
                 });
-                
-                const ticker = document.getElementById('ticker-content');
-                if(tickerText) ticker.innerHTML = tickerText + tickerText;
-
-                // AI Analysis of a random top headline
-                if(allItems.length > 0) {
-                    const randomItem = allItems[Math.floor(Math.random() * allItems.length)];
-                    addAnalysis(`Intel Received: ${randomItem.title}. Correlating with global assets.`, 'WATCH', 'Global');
-                }
-
-            } catch (e) {
-                console.error('Error in global feed fetch:', e);
-                document.getElementById('ticker-content').innerHTML = "SYSTEM ALERT: INTEL FEED CONNECTION UNSTABLE ... RETRYING SATELLITE UPLINK ...";
+                addIntelItem('SHIPPING', `Aviation fallback active: ${fallbackFlights.length} aircraft estimates rendered while live ADS-B reconnects.`, 'medium');
             }
         }
 
-        // 3. USGS Earthquakes (Real Data)
-        // Only fetching significant quakes (M5.5+) to remove noise
         async function fetchEarthquakes() {
             try {
-                // Fetch last 7 days of 4.5+ quakes (but filter for 5.5+)
                 const response = await fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson');
                 const data = await response.json();
-                
-                // Clear old quakes before adding new ones
                 layers.quakes.clearLayers();
-
                 data.features.forEach(quake => {
                     const mag = quake.properties.mag;
-                    
-                    // STRICT FILTER: Only show Magnitude 5.5+ (Significant)
-                    if(mag < 5.5) return;
-                    
+                    if (mag < 5.5) return;
                     const coords = quake.geometry.coordinates;
                     const place = quake.properties.place;
-                    const time = new Date(quake.properties.time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                    
-                    // Determine color based on magnitude
-                    let color = '#ef5350'; // Red default
-                    if(mag >= 7.0) color = '#d500f9'; // Purple for major
-                    else if(mag >= 6.0) color = '#f50057'; // Pink for strong
-                    
-                    const quakeIcon = L.divIcon({ 
-                        html: `<i class="fas fa-bullseye" style="color: ${color}; text-shadow: 0 0 10px ${color}; font-size: ${12 + (mag-5)*2}px;"></i>`, 
-                        className: 'marker-icon', 
-                        iconSize: [20, 20] 
-                    });
-
-                    L.marker([coords[1], coords[0]], {icon: quakeIcon})
-                        .addTo(layers.quakes)
-                        .bindPopup(`<b>Magnitude ${mag} Earthquake</b><br>${place}<br>${time}<br><a href="${quake.properties.url}" target="_blank">USGS Report</a>`);
-                        
-                    // addIntelItem('Natural', `M${mag} Quake in ${place}`, 'high', quake.properties.url); // Removed to declutter feed
-                    
-                    if(mag > 6.0) {
-                        addAnalysis(`High-magnitude seismic event (M${mag}) in ${place}. Potential supply chain disruption. Watch regional insurance stocks.`, 'SELL', 'Insurance');
-                        // Only add to sidebar if it's really major
-                        addIntelItem('Natural', `MAJOR M${mag} Quake in ${place}`, 'high', quake.properties.url);
-                    }
+                    const color = mag >= 7 ? '#d500f9' : mag >= 6 ? '#f50057' : '#ef5350';
+                    const quakeIcon = L.divIcon({ html: `<i class="fas fa-bullseye" style="color:${color};text-shadow:0 0 10px ${color};font-size:${12 + (mag - 5) * 2}px;"></i>`, className: 'marker-icon', iconSize: [20, 20] });
+                    L.marker([coords[1], coords[0]], { icon: quakeIcon }).addTo(layers.quakes).bindPopup(`<b>M${mag} Earthquake</b><br>${place}`);
+                    if (mag > 6.2) addIntelItem('GEOPOL', `Major quake M${mag} near ${place}. Monitor insurance and logistics risk.`, 'high', quake.properties.url);
                 });
-            } catch (e) {
-                console.error('Error fetching quakes:', e);
-            }
+            } catch {}
         }
 
-        // 3. REAL DISASTER FEED (GDACS GeoJSON)
-        // Fetches major events: Earthquakes, Floods, Cyclones, Droughts
         async function fetchGDACS() {
             try {
-                // GDACS 7-day feed
                 const res = await fetch('https://www.gdacs.org/xml/rss_7d.xml');
                 const text = await res.text();
                 const parser = new DOMParser();
                 const xml = parser.parseFromString(text, "text/xml");
                 const items = xml.querySelectorAll("item");
-                
-                // Clear old static hotspots if we get real data
                 layers.hotspots.clearLayers();
-                
                 items.forEach(item => {
-                    const title = item.querySelector("title").textContent;
-                    const desc = item.querySelector("description").textContent;
-                    const link = item.querySelector("link").textContent;
-                    const pubDate = new Date(item.querySelector("pubDate").textContent);
-                    
-                    // Extract coordinates from GeoRSS
+                    const title = item.querySelector("title")?.textContent || '';
+                    const desc = item.querySelector("description")?.textContent || '';
+                    const link = item.querySelector("link")?.textContent || '';
                     const lat = parseFloat(item.getElementsByTagName("geo:lat")[0]?.textContent);
                     const lng = parseFloat(item.getElementsByTagName("geo:long")[0]?.textContent);
-                    
-                    // Determine Type
-                    let type = "Natural";
-                    let icon = icons.econ; // default
-                    
-                    if(title.includes("Earthquake")) { 
-                        type = "Natural"; 
-                        icon = icons.quake; 
-                        // STRICT FILTER: Only show M5.5+ from GDACS too
-                        const magMatch = title.match(/M\s?(\d+(\.\d+)?)/);
-                        if(magMatch && parseFloat(magMatch[1]) < 5.5) return;
-                    }
-                    else if(title.includes("Flood")) { type = "Natural"; icon = icons.naval; } // Water/Flood
-                    else if(title.includes("Cyclone") || title.includes("Hurricane") || title.includes("Typhoon")) { type = "Natural"; icon = icons.conflict; } // Storm
-                    else if(title.includes("Drought")) { type = "Natural"; icon = icons.econ; }
-                    else if(title.includes("Volcano")) { type = "Natural"; icon = icons.conflict; }
-                    else if(title.includes("Fire") || title.includes("Wildfire")) { type = "Natural"; icon = icons.fire; } // Fires
-                    else { icon = icons.econ; } // Fallback
-
-                    if(!isNaN(lat) && !isNaN(lng)) {
-                        // Plot on Map
-                        L.marker([lat, lng], {icon: icon})
-                            .addTo(layers.hotspots)
-                            .bindPopup(`<b>${title}</b><br>${desc}<br><a href="#" onclick="launchIntel('${link}'); return false;">View Report</a>`);
-                    }
-
-                    // Add to Sidebar (Limit to recent/major)
-                    // Check if "Red" or "Orange" alert in description or title for high priority
-                    let priority = 'low';
-                    if(title.includes("Red") || desc.includes("Red")) priority = 'high';
-                    else if(title.includes("Orange") || desc.includes("Orange")) priority = 'medium';
-                    
-                    // Only add to sidebar if it's recent (last 24h) or High Priority
-                    const isRecent = (new Date() - pubDate) < (24 * 60 * 60 * 1000);
-                    
-                    if(isRecent && priority === 'high') { // STRICTER: Only High Priority AND Recent for GDACS
-                         addIntelItem(type, title, priority, link);
-                    }
+                    let icon = icons.conflict;
+                    if (/fire|wildfire/i.test(title)) icon = icons.fire;
+                    if (/flood|cyclone|hurricane|typhoon/i.test(title)) icon = icons.naval;
+                    if (/earthquake/i.test(title)) icon = icons.quake;
+                    if (!isNaN(lat) && !isNaN(lng)) L.marker([lat, lng], { icon }).addTo(layers.hotspots).bindPopup(`<b>${title}</b><br>${desc}<br><a href="#" onclick="launchIntel('${link}'); return false;">Open</a>`);
+                    if (/red|orange|major|severe/i.test(title + ' ' + desc)) addIntelItem('MACRO', title, 'medium', link);
                 });
-                
-            } catch (e) {
-                console.error("Error fetching GDACS:", e);
-                addIntelItem('System', 'GDACS Feed Offline', 'low');
-            }
+            } catch {}
         }
 
-        // Helper: Add item to Sidebar
-        function addIntelItem(tag, title, priority, link) {
-            const feed = document.getElementById('intel-feed');
-            
-            // Deduplication: Check if title already exists
-            const existing = Array.from(feed.children).some(child => child.innerText.includes(title));
-            if(existing) return;
-
-            const item = document.createElement('div');
-            item.className = 'intel-item';
-            
-            let tagClass = 'tag-alert';
-            if(tag === 'Conflict' || priority === 'high') tagClass = 'tag-conflict';
-            if(tag === 'Economy' || tag === 'MARKET') tagClass = 'tag-econ';
-            if(tag === 'Naval' || tag === 'Natural') tagClass = 'tag-natural';
-            if(tag === 'CYBER') tagClass = 'tag-cyber'; // New class needed in CSS
-            if(tag === 'GEOPOL') tagClass = 'tag-conflict';
-            if(tag === 'SPACE' || tag === 'TECH') tagClass = 'tag-tech'; // New class needed in CSS
-            
-            // Link handling
-            const titleHtml = link 
-                ? `<a href="${link}" target="_blank" style="color:inherit; text-decoration:none; display:block;">${title}</a>` 
-                : title;
-
-            item.innerHTML = `
-                <div class="intel-meta">
-                    <div class="intel-tag ${tagClass}">${tag}</div>
-                    <div class="intel-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
-                </div>
-                <div class="intel-title">${titleHtml}</div>
-            `;
-            
-            // Make whole item clickable if link exists (UX improvement)
-            if(link) {
-                item.onclick = (e) => {
-                    // Prevent double firing if clicking the link directly
-                    if(e.target.tagName !== 'A') {
-                        window.open(link, '_blank');
-                    }
-                };
+        async function fetchNews() {
+            const feedCategories = {
+                GEOPOL: ['https://feeds.reuters.com/reuters/worldNews', 'http://feeds.bbci.co.uk/news/world/rss.xml', 'https://www.aljazeera.com/xml/rss/all.xml'],
+                ENERGY: ['https://www.spglobal.com/commodityinsights/en/rss-feed', 'https://www.eia.gov/rss/todayinenergy.xml', 'https://www.opec.org/opec_web/en/rss/rss.xml'],
+                SHIPPING: ['https://www.maritime-executive.com/rss', 'https://www.freightwaves.com/news/feed', 'https://www.porttechnology.org/feed/'],
+                CYBER: ['https://feeds.feedburner.com/TheHackersNews', 'https://www.bleepingcomputer.com/feed/'],
+                MACRO: ['https://www.cnbc.com/id/100003114/device/rss/rss.html', 'https://feeds.bloomberg.com/markets/news.rss', 'https://finance.yahoo.com/news/rssindex']
+            };
+            const fetchCategory = async (category, urls) => {
+                try {
+                    const url = urls[Math.floor(Math.random() * urls.length)];
+                    const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
+                    const data = await res.json();
+                    if (data.status !== 'ok') return [];
+                    data.items.slice(0, 3).forEach(item => {
+                        const region = inferRegion(item.title || '');
+                        allRegionalItems.unshift({ title: item.title, link: item.link, source: category, time: 'Now', region });
+                        addIntelItem(category, item.title, category === 'GEOPOL' ? 'high' : 'medium', item.link);
+                    });
+                    return data.items || [];
+                } catch {
+                    return [];
+                }
+            };
+            const results = await Promise.all(Object.entries(feedCategories).map(([c, u]) => fetchCategory(c, u)));
+            const items = results.flat();
+            if (allRegionalItems.length > 40) allRegionalItems = allRegionalItems.slice(0, 40);
+            filterRegion('ALL');
+            const ticker = document.getElementById('ticker-content');
+            if (!items.length) {
+                ticker.innerHTML = "Realtime wire syncing... reconnecting to geopolitical and macro feeds...";
+                return;
             }
-            
-            feed.prepend(item);
-            
-            // Keep list manageable
-            if(feed.children.length > 30) feed.lastElementChild.remove();
+            let tickerText = '';
+            items.slice(0, 25).forEach(item => {
+                const cat = (item.categories && item.categories[0]) ? item.categories[0].toUpperCase() : 'INTEL';
+                tickerText += `<span style="margin-right:50px;"><i class="fas fa-broadcast-tower"></i> [${cat}] ${item.title}</span>`;
+            });
+            ticker.innerHTML = tickerText + tickerText;
         }
 
-        // Helper: Add item to AI HUD
-        function addAnalysis(text, action, asset) {
-            const feed = document.getElementById('ai-hud-feed');
-            if(!feed) return; // Guard clause
-            
-            // Remove "Waiting..." placeholder if present
-            if(feed.innerText.includes("Waiting")) feed.innerHTML = "";
-
-            const item = document.createElement('div');
-            item.className = 'ai-insight';
-            
-            let actionHtml = '';
-            if(action && asset) {
-                const actionClass = action === 'BUY' ? 'action-buy' : 'action-sell';
-                actionHtml = `<div class="trade-action ${actionClass}">${action} ${asset}</div>`;
-            }
-
-            item.innerHTML = `
-                <div class="ai-header"><i class="fas fa-robot"></i> Algo Insight</div>
-                <div class="ai-text">${text}</div>
-                ${actionHtml}
-            `;
-            feed.prepend(item);
-            
-            // Limit HUD items to 5 to prevent covering map
-            if(feed.children.length > 5) feed.lastElementChild.remove();
+        function filterRegion(region) {
+            const container = document.getElementById('regional-feed');
+            const btns = document.querySelectorAll('.dash-header .channel-btn');
+            btns.forEach(b => {
+                if (b.innerText === region) b.classList.add('active');
+                else b.classList.remove('active');
+            });
+            const filtered = region === 'ALL' ? allRegionalItems : allRegionalItems.filter(i => i.region === region);
+            container.innerHTML = filtered.slice(0, 18).map(item => `<div class="region-item" onclick="window.open('${item.link}','_blank')"><div class="region-source">${item.source} <span style="color:#787b86;font-weight:400;">• ${item.time}</span></div><div class="region-title">${item.title}</div></div>`).join('');
         }
 
-        // --- SIMULATED PIZZA INDEX API (Time-Aware) ---
-        function updatePizzaIndex() {
-            // Simulated API Logic: 
-            // Base level depends on DC Time (ET). Higher at night (20:00 - 04:00).
-            const now = new Date();
-            // Convert to EST/EDT
-            const dcTime = new Date(now.toLocaleString("en-US", {timeZone: "America/New_York"}));
-            const hour = dcTime.getHours();
-            
-            let baseLevel = 30; // Normal daytime level
-            
-            // "Crisis Hours" Logic: Late night in DC = higher suspicion
-            if (hour >= 20 || hour <= 4) {
-                baseLevel = 65; // Elevated at night
-            } else if (hour > 18) {
-                baseLevel = 50; // Evening ramp-up
-            }
-            
-            // Random fluctuation (+/- 15)
-            const noise = Math.floor(Math.random() * 30) - 15;
-            let level = baseLevel + noise;
-            
-            // Cap values
-            if(level < 0) level = 0;
-            if(level > 100) level = 100;
-            
-            // Update Meter Visuals
-            const fill = document.getElementById('pizza-meter-fill');
-            const value = document.getElementById('pizza-value');
-            
-            // Map 0-100 to rotation (-90deg to 90deg)
-            const rotation = (level / 100) * 180 - 90;
-            
-            if(fill && value) {
-                fill.style.transform = `rotate(${rotation}deg)`;
-                value.innerText = level;
-                
-                // Color coding text
-                if(level < 40) value.style.color = "#26a69a"; // Green
-                else if(level < 70) value.style.color = "#ffcf22"; // Yellow
-                else value.style.color = "#ef5350"; // Red
-            }
+        function updateInfraStats() {
+            document.getElementById('stat-nuke').innerText = nuclearSites.length;
+            document.getElementById('stat-chokepoints').innerText = chokepoints.length;
+            document.getElementById('stat-cables').innerText = cableNodes.length;
+            document.getElementById('stat-ports').innerText = 120;
         }
 
-        // Layout Toggle Function
-        function toggleSidebar(side) {
-            const container = document.querySelector('.container');
-            const btn = event.target.closest('.toggle-btn');
-            
-            if (side === 'left') {
-                container.classList.toggle('left-collapsed');
-                btn.classList.toggle('active');
-            } else if (side === 'right') {
-                container.classList.toggle('right-collapsed');
-                btn.classList.toggle('active');
-            }
-            
-            // If both collapsed, add special class for full width
-            if (container.classList.contains('left-collapsed') && container.classList.contains('right-collapsed')) {
-                container.classList.add('both-collapsed');
-            } else {
-                container.classList.remove('both-collapsed');
-            }
-            
-            // Trigger Map Resize to fill new space
-            setTimeout(() => {
-                map.invalidateSize();
-            }, 350);
+        function changeChannel(sourceId, btn) {
+            document.querySelectorAll('.video-controls .channel-btn').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            const iframe = document.getElementById('video-frame');
+            if (sourceId.startsWith('UC')) iframe.src = `https://www.youtube.com/embed/live_stream?channel=${sourceId}&autoplay=1&mute=1`;
+            else iframe.src = `https://www.youtube.com/embed/${sourceId}?autoplay=1&mute=1`;
         }
 
-        // Browser View Functions
-        function launchIntel(url) {
-            // DIRECT FIX: Most of these sites (LiveUAMap, Reuters, etc.) block iframe embedding (X-Frame-Options).
-            // Instead of showing a broken iframe, we now open them in a new tab/window.
-            // Using a new function name 'launchIntel' to ensure no caching of old logic.
-            window.open(url, '_blank');
-        }
-
-        // Deprecated but kept for compatibility if called elsewhere
-        function openBrowser(url) {
-            launchIntel(url);
-        }
-        
+        function launchIntel(url) { window.open(url, '_blank'); }
+        function openBrowser(url) { launchIntel(url); }
         function openExternal() {
             const url = document.getElementById('browser-url-text').innerText;
-            if(url) window.open(url, '_blank');
+            if (url) window.open(url, '_blank');
         }
-
         function closeBrowser() {
             const iframe = document.getElementById('browser-frame');
             const toolbar = document.getElementById('browser-toolbar');
             const mapDiv = document.getElementById('map');
             const blockedUI = document.getElementById('blocked-ui');
-            
             iframe.style.display = 'none';
             blockedUI.style.display = 'none';
             toolbar.style.display = 'none';
             mapDiv.style.display = 'block';
-            
-            // Clear source to stop media/scripts
             iframe.src = 'about:blank';
-            
-            // Refresh map layout in case it was resized while hidden
-            setTimeout(() => {
-                map.invalidateSize();
-            }, 100);
+            setTimeout(() => map.invalidateSize(), 100);
         }
 
-        // Initialize
-        setTimeout(fetchEarthquakes, 1000);
-        setTimeout(fetchGDACS, 500); 
-        setTimeout(fetchFlights, 2000);
-        setTimeout(fetchNews, 100);
-        setTimeout(loadAIFeeds, 1500); // Load AI Feeds
-        setTimeout(updatePizzaIndex, 500); // Initial Pizza Read
-
-        // Periodic Updates
-        setInterval(fetchFlights, 120000); // Flights every 2m
-        setInterval(fetchNews, 300000);   // News every 5m
-        setInterval(fetchGDACS, 900000); // GDACS every 15m
-        setInterval(updatePizzaIndex, 5000); // Pizza updates every 5s (simulated live data)
-        
-        // 4. Crypto Sentiment (CoinGecko API)
-        // Replaces Mock AI Events with real market movers
-        async function fetchCryptoSentiment() {
-            try {
-                // Fetch Trending Coins (Real "Hot" assets)
-                const res = await fetch('https://api.coingecko.com/api/v3/search/trending');
-                const data = await res.json();
-                const trending = data.coins.slice(0, 3); // Top 3
-                
-                trending.forEach(coin => {
-                    const item = coin.item;
-                    const change = item.data.price_change_percentage_24h.usd.toFixed(2);
-                    const action = change > 0 ? "BUY" : "SELL";
-                    
-                    addAnalysis(`Market Mover: ${item.name} (${item.symbol}) is trending with ${change}% move.`, action, item.symbol);
-                });
-                
-                // Fetch Global Data (Dominance/Fear)
-                // Note: CoinGecko free API has strict rate limits, so we be careful.
-                
-            } catch (e) {
-                console.error("Error fetching Crypto data:", e);
-                // Fallback to static if API fails
-            }
-        }
-        
-        // 5. Forex/Stock Sentiment (Simulated via Technicals Logic)
-        // Since we don't have a free API for real-time technicals, we simulate "Algo Signals" 
-        // based on the time of day and typical market behavior, but clearer than random text.
-        function generateAlgoSignal() {
-            const sessions = [
-                { name: "Asian Session", start: 0, end: 8, pairs: ["USD/JPY", "AUD/USD"] },
-                { name: "London Session", start: 8, end: 16, pairs: ["EUR/USD", "GBP/USD", "Gold"] },
-                { name: "NY Session", start: 13, end: 21, pairs: ["US30", "SPX500", "BTC/USD"] }
-            ];
-            
-            const hour = new Date().getUTCHours();
-            const activeSession = sessions.find(s => hour >= s.start && hour < s.end) || sessions[0];
-            const pair = activeSession.pairs[Math.floor(Math.random() * activeSession.pairs.length)];
-            
-            const strategies = ["RSI Divergence", "MACD Crossover", "Bollinger Breakout", "Liquidity Sweep", "Order Block Rejection"];
-            const strat = strategies[Math.floor(Math.random() * strategies.length)];
-            const action = Math.random() > 0.5 ? "BUY" : "SELL";
-            
-            addAnalysis(`Algo Alert: ${pair} showing ${strat} on 15m timeframe. Volatility expected.`, action, pair);
+        function toggleSidebar(side) {
+            const container = document.querySelector('.container');
+            if (side === 'left') container.classList.toggle('left-collapsed');
+            if (side === 'right') container.classList.toggle('right-collapsed');
+            if (container.classList.contains('left-collapsed') && container.classList.contains('right-collapsed')) container.classList.add('both-collapsed');
+            else container.classList.remove('both-collapsed');
+            setTimeout(() => map.invalidateSize(), 350);
         }
 
-        // 6. DASHBOARD WIDGET LOGIC
-        
-        // Populate Fragile States (Instability Widget)
-        // Source: Fragile States Index 2023 (Top 5) + Simulated Live Shifts
-        function loadInstabilityData() {
-            const container = document.getElementById('instability-list');
-            const states = [
-                { name: "Somalia", score: 111.9, trend: "up" },
-                { name: "Yemen", score: 108.9, trend: "up" },
-                { name: "South Sudan", score: 108.5, trend: "down" },
-                { name: "D.R. Congo", score: 107.2, trend: "stable" },
-                { name: "Syria", score: 107.1, trend: "up" }
-            ];
-            
-            let html = '';
-            states.forEach(state => {
-                const color = state.score > 110 ? '#b71c1c' : '#ef5350';
-                const icon = state.trend === 'up' ? '<i class="fas fa-arrow-up" style="color:#ef5350"></i>' : (state.trend === 'down' ? '<i class="fas fa-arrow-down" style="color:#26a69a"></i>' : '<i class="fas fa-minus" style="color:#787b86"></i>');
-                
-                html += `
-                <div class="instability-row">
-                    <div class="instability-meta">
-                        <span style="display:flex; gap:5px; align-items:center;">${state.name} ${icon}</span>
-                        <span>${state.score}</span>
-                    </div>
-                    <div class="progress-bar"><div class="progress-fill" style="width: ${state.score/1.2}%; background: ${color};"></div></div>
-                </div>
-                `;
+        function decayImpact() {
+            const c = impactState.categories;
+            c.geopol = clamp(c.geopol - 1);
+            c.energy = clamp(c.energy - 1);
+            c.shipping = clamp(c.shipping - 1);
+            c.cyber = clamp(c.cyber - 1);
+            c.macro = clamp(c.macro - 1);
+            impactState.prevScore = impactState.score;
+            impactState.score = clamp(Math.round((c.geopol + c.energy + c.shipping + c.cyber + c.macro) / 5));
+            Object.keys(impactState.assets).forEach(k => {
+                impactState.assets[k] = impactState.assets[k] > 0 ? impactState.assets[k] - 1 : impactState.assets[k] + 1;
+                if (Math.abs(impactState.assets[k]) < 1) impactState.assets[k] = 0;
             });
-            container.innerHTML = html;
+            renderImpact();
+            updateChokepointPressure();
         }
 
-        // Regional News Filter Logic
-        let allRegionalItems = [];
-        
-        function filterRegion(region) {
-            const container = document.getElementById('regional-feed');
-            const btns = document.querySelectorAll('.dash-header .channel-btn');
-            
-            // Update buttons
-            btns.forEach(b => {
-                if(b.innerText === region) b.classList.add('active');
-                else b.classList.remove('active');
+        function initializeDashboard() {
+            initializeRightPanel();
+            updateInfraStats();
+            updateSessionClock();
+            renderImpact();
+            renderCatalysts();
+            updateAlertMatrix();
+            updateChokepointPressure();
+            fetchEarthquakes();
+            fetchGDACS();
+            fetchFlights();
+            fetchNews();
+            setInterval(fetchFlights, 180000);
+            setInterval(fetchGDACS, 900000);
+            setInterval(fetchEarthquakes, 600000);
+            setInterval(fetchNews, 240000);
+            setInterval(updateSessionClock, 1000);
+            setInterval(decayImpact, 45000);
+            setInterval(updateChokepointPressure, 30000);
+        }
+
+        function initializeRightPanel() {
+            const cards = Array.from(document.querySelectorAll('.sidebar-right .dash-card'));
+            cards.forEach((card, idx) => {
+                if (idx === 0) card.classList.add('expanded');
+                else card.classList.remove('expanded');
+                const header = card.querySelector('.dash-header');
+                if (!header) return;
+                header.onclick = () => {
+                    const isOpen = card.classList.contains('expanded');
+                    cards.forEach(c => c.classList.remove('expanded'));
+                    if (!isOpen) card.classList.add('expanded');
+                };
             });
-            
-            // Filter Data
-            const filtered = region === 'ALL' ? allRegionalItems : allRegionalItems.filter(i => i.region === region);
-            
-            container.innerHTML = filtered.map(item => `
-                <div class="region-item" onclick="window.open('${item.link}', '_blank')">
-                    <div class="region-source">${item.source} <span style="color:#787b86; font-weight:400;">• ${item.time}</span></div>
-                    <div class="region-title">${item.title}</div>
-                </div>
-            `).join('');
-        }
-        
-        // 7. Update Infrastructure Stats
-        function updateInfraStats() {
-            // Count actual markers on map
-            document.getElementById('stat-nuke').innerText = nuclearSites.length;
-            document.getElementById('stat-chokepoints').innerText = chokepoints.length;
-            // Cables/Ports are static/not fully loaded as objects, so we keep static placeholder or random sim
-            document.getElementById('stat-cables').innerText = "435"; 
-            document.getElementById('stat-ports').innerText = "120";
         }
 
-        function loadAIFeeds() {
-             fetchCryptoSentiment();
-             // Generate a signal every minute
-             setInterval(generateAlgoSignal, 60000);
-             generateAlgoSignal(); // Initial
-             
-             // Dashboard Init
-             loadInstabilityData();
-             updateInfraStats();
-        }
-
+        initializeDashboard();
     </script>
 </body>
 </html>
