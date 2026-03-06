@@ -592,6 +592,37 @@
             margin-top: -20px;
         }
         .meter-label { font-size: 0.7rem; color: #787b86; text-transform: uppercase; letter-spacing: 1px; }
+        .heat-explain {
+            font-size: 0.62rem;
+            color: #9aa0ad;
+            margin-top: 6px;
+            text-align: center;
+            max-width: 220px;
+            line-height: 1.35;
+        }
+        .heat-breakdown {
+            margin-top: 8px;
+            width: 100%;
+            display: grid;
+            gap: 4px;
+        }
+        .heat-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.62rem;
+            color: #c6cad3;
+            background: #131722;
+            border: 1px solid #2a2e39;
+            border-radius: 4px;
+            padding: 4px 6px;
+        }
+        .heat-updated {
+            margin-top: 5px;
+            font-size: 0.58rem;
+            color: #6d7382;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
 
         /* Bottom Panel (Webcams + Pizza) */
         .bottom-panel {
@@ -697,6 +728,12 @@
         .matrix-box { background: #131722; border: 1px solid #2a2e39; border-radius: 4px; padding: 8px; text-align: center; }
         .matrix-box .num { font-size: 1.1rem; font-weight: 800; color: #fff; }
         .matrix-box .lab { font-size: .62rem; color: #787b86; text-transform: uppercase; }
+        .alert-details { margin-top: 8px; display: grid; gap: 5px; max-height: 130px; overflow-y: auto; }
+        .alert-details .row { background: #131722; border: 1px solid #2a2e39; border-radius: 4px; padding: 6px 8px; font-size: .66rem; line-height: 1.3; }
+        .alert-details .row.high { border-left: 3px solid #ef5350; }
+        .alert-details .row.medium { border-left: 3px solid #ffcf22; }
+        .alert-details .row.low { border-left: 3px solid #26a69a; }
+        .alert-details .meta { color: #787b86; font-size: .6rem; margin-top: 2px; }
         .catalyst-tape { display: grid; gap: 6px; max-height: 160px; overflow-y: auto; }
         .catalyst-item { border-left: 3px solid #2962ff; background: #131722; border-radius: 0 4px 4px 0; padding: 6px 8px; font-size: .68rem; line-height: 1.35; cursor: pointer; }
         .catalyst-item.high { border-left-color: #ef5350; }
@@ -775,9 +812,139 @@
                 grid-template-columns: repeat(2, minmax(240px, 1fr));
             }
         }
+        @media (max-width: 1200px) {
+            .container {
+                grid-template-columns: 1fr;
+                grid-template-rows: 60px 30px minmax(320px, 55vh) auto auto auto auto;
+                width: 100%;
+            }
+            header {
+                padding: 0 10px;
+            }
+            .logo {
+                font-size: 1.1rem;
+            }
+            .main-nav {
+                gap: 10px;
+                overflow-x: auto;
+                max-width: 70vw;
+            }
+            .main-nav a {
+                font-size: 0.78rem;
+                white-space: nowrap;
+            }
+            .sidebar-left {
+                grid-column: 1 / -1;
+                grid-row: 4 / 5;
+                max-height: 46vh;
+                border-right: none;
+                border-bottom: 1px solid #2a2e39;
+            }
+            .map-wrapper {
+                grid-column: 1 / -1;
+                grid-row: 3 / 4;
+                min-height: 320px;
+            }
+            .sidebar-right {
+                grid-column: 1 / -1;
+                grid-row: 5 / 6;
+                border-left: none;
+                border-top: 1px solid #2a2e39;
+                max-height: none;
+            }
+            .bottom-panel {
+                grid-column: 1 / -1;
+                grid-row: 6 / 7;
+                display: grid;
+                grid-template-columns: 1fr;
+                overflow: visible;
+                padding: 10px;
+                gap: 10px;
+            }
+            .bottom-card {
+                min-width: 0;
+            }
+            .intel-mosaic {
+                grid-column: 1 / -1;
+                grid-row: 7 / 8;
+                grid-template-columns: repeat(2, minmax(220px, 1fr));
+            }
+        }
         @media (max-width: 1080px) {
             .intel-mosaic {
                 grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 768px) {
+            .container {
+                grid-template-rows: 56px 28px minmax(280px, 48vh) auto auto auto auto;
+            }
+            .logo {
+                font-size: 0.98rem;
+                gap: 6px;
+            }
+            .news-ticker {
+                font-size: 0.75rem;
+            }
+            .ticker-label {
+                padding: 0 8px;
+                font-size: 0.7rem;
+            }
+            .panel-header {
+                padding: 10px;
+                font-size: 0.75rem;
+            }
+            .source-links {
+                padding: 8px 10px;
+                gap: 6px;
+            }
+            .source-link {
+                font-size: 0.68rem;
+                padding: 3px 6px;
+            }
+            .dash-content {
+                max-height: 260px;
+            }
+            .video-container {
+                height: 185px;
+            }
+            .impact-grid {
+                grid-template-columns: 1fr;
+            }
+            .impact-score {
+                margin-bottom: 8px;
+            }
+            .matrix-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .heat-explain {
+                max-width: 100%;
+            }
+            .mini-feed-card {
+                min-height: 190px;
+            }
+        }
+        @media (max-width: 480px) {
+            .main-nav {
+                max-width: 60vw;
+            }
+            .main-nav a {
+                font-size: 0.72rem;
+            }
+            .map-wrapper {
+                min-height: 250px;
+            }
+            .sidebar-left {
+                max-height: 40vh;
+            }
+            .dash-content {
+                padding: 8px;
+            }
+            .bottom-card h4 {
+                font-size: 0.72rem;
+            }
+            .matrix-box .num {
+                font-size: 1rem;
             }
         }
     </style>
@@ -1038,6 +1205,7 @@
                     <div class="matrix-box"><div class="num" id="alert-low">0</div><div class="lab">Low Alerts</div></div>
                     <div class="matrix-box"><div class="num" id="alert-events">0</div><div class="lab">Catalysts 24h</div></div>
                 </div>
+                <div class="alert-details" id="alert-details"></div>
             </div>
             <div class="bottom-card" style="min-width: 420px;">
                 <h4>Recent Market Catalysts</h4>
@@ -1055,6 +1223,16 @@
                     </div>
                     <div class="meter-label">MULTI-FACTOR RISK HEAT</div>
                     <div style="font-size: 0.65rem; color: #787b86; margin-top: 4px;" id="risk-summary">Calculating...</div>
+                    <div class="heat-explain">Weights live geopolitical pressure, transport disruption, cyber risk, seismic impact, and headline volume into a single 0-100 trader risk regime score.</div>
+                    <div class="heat-breakdown">
+                        <div class="heat-row"><span>Flights</span><span id="heat-flights">0</span></div>
+                        <div class="heat-row"><span>Major Quakes</span><span id="heat-quakes">0</span></div>
+                        <div class="heat-row"><span>Severe Disasters</span><span id="heat-disasters">0</span></div>
+                        <div class="heat-row"><span>Cyber Events</span><span id="heat-cyber">0</span></div>
+                        <div class="heat-row"><span>Shipping Stress</span><span id="heat-shipping">0</span></div>
+                        <div class="heat-row"><span>Headlines</span><span id="heat-headlines">0</span></div>
+                    </div>
+                    <div class="heat-updated" id="heat-updated">Updated --:--</div>
                 </div>
             </div>
         </div>
@@ -1126,6 +1304,7 @@
             flights: L.layerGroup().addTo(map),
             quakes: L.layerGroup().addTo(map),
             hotspots: L.layerGroup().addTo(map),
+            newsintel: L.layerGroup().addTo(map),
             nuclear: L.layerGroup(),
             chokepoints: L.layerGroup().addTo(map),
             cables: L.layerGroup().addTo(map),
@@ -1136,6 +1315,7 @@
         const overlayMaps = {
             "Live Flights": layers.flights,
             "Conflict & Disaster": layers.hotspots,
+            "Intel Headlines": layers.newsintel,
             "Major Quakes": layers.quakes,
             "Strategic Chokepoints": layers.chokepoints,
             "Undersea Cable Hubs": layers.cables,
@@ -1231,6 +1411,47 @@
         function clamp(n, min = 0, max = 100) { return Math.max(min, Math.min(max, n)); }
         function signed(n) { return `${n > 0 ? '+' : ''}${n}`; }
         function getSeverity(delta) { if (delta >= 10) return 'high'; if (delta >= 5) return 'medium'; return 'low'; }
+        function normalizeText(text) { return (text || '').toLowerCase(); }
+
+        const geoAnchors = [
+            { keys: ['ukraine', 'kyiv', 'donetsk', 'kharkiv'], lat: 49.0, lng: 31.3 },
+            { keys: ['russia', 'moscow', 'kremlin'], lat: 55.75, lng: 37.62 },
+            { keys: ['iran', 'tehran', 'natanz'], lat: 32.0, lng: 53.0 },
+            { keys: ['israel', 'tel aviv', 'jerusalem', 'gaza'], lat: 31.5, lng: 34.8 },
+            { keys: ['red sea', 'bab el-mandeb', 'hormuz'], lat: 19.0, lng: 44.0 },
+            { keys: ['suez', 'egypt'], lat: 30.6, lng: 32.3 },
+            { keys: ['china', 'beijing'], lat: 39.9, lng: 116.4 },
+            { keys: ['taiwan'], lat: 23.7, lng: 121.0 },
+            { keys: ['japan', 'tokyo'], lat: 35.68, lng: 139.69 },
+            { keys: ['korea', 'seoul'], lat: 37.56, lng: 126.97 },
+            { keys: ['europe', 'brussels', 'berlin', 'france', 'germany'], lat: 50.8, lng: 8.5 },
+            { keys: ['united states', 'u.s', 'new york', 'washington', 'fed'], lat: 39.8, lng: -98.6 },
+            { keys: ['london', 'uk'], lat: 51.5, lng: -0.12 }
+        ];
+
+        function regionCenter(region) {
+            if (region === 'EU') return [50.8, 8.5];
+            if (region === 'ME') return [30.7, 37.0];
+            if (region === 'US') return [39.8, -98.6];
+            if (region === 'ASIA') return [34.0, 106.0];
+            return [20.0, 0.0];
+        }
+
+        function locateHeadline(title) {
+            const t = normalizeText(title);
+            for (const anchor of geoAnchors) {
+                if (anchor.keys.some(k => t.includes(k))) return [anchor.lat, anchor.lng];
+            }
+            return regionCenter(inferRegion(title));
+        }
+
+        function iconForCategory(category) {
+            if (category === 'GEOPOL') return icons.conflict;
+            if (category === 'ENERGY') return icons.econ;
+            if (category === 'SHIPPING') return icons.naval;
+            if (category === 'CYBER') return icons.cable;
+            return icons.lock;
+        }
 
         function setIntelFilter(filter, btn) {
             intelFilter = filter;
@@ -1303,8 +1524,8 @@
             });
         }
 
-        function addCatalyst(title, severity, link) {
-            impactState.catalysts.unshift({ title, severity, link, time: new Date() });
+        function addCatalyst(title, severity, link, sourceType) {
+            impactState.catalysts.unshift({ title, severity, link, sourceType, time: new Date() });
             if (impactState.catalysts.length > 25) impactState.catalysts.pop();
             impactState.alerts[severity] = (impactState.alerts[severity] || 0) + 1;
             renderCatalysts();
@@ -1322,7 +1543,7 @@
             if (sourceType === 'CYBER') impactState.categories.cyber = clamp(impactState.categories.cyber + Math.round(delta * 0.7));
             if (sourceType === 'MACRO') impactState.categories.macro = clamp(impactState.categories.macro + Math.round(delta * 0.7));
             applyAssetEffects(sourceType, delta, title);
-            addCatalyst(title, getSeverity(Math.abs(delta)), link);
+            addCatalyst(title, getSeverity(Math.abs(delta)), link, sourceType);
             renderImpact();
         }
 
@@ -1408,6 +1629,16 @@
             document.getElementById('alert-medium').innerText = impactState.alerts.medium || 0;
             document.getElementById('alert-low').innerText = impactState.alerts.low || 0;
             document.getElementById('alert-events').innerText = impactState.catalysts.length;
+            const details = document.getElementById('alert-details');
+            const top = impactState.catalysts.slice(0, 6);
+            if (!top.length) {
+                details.innerHTML = '<div class="row low">No active alerts yet<div class="meta">Waiting for incoming catalysts</div></div>';
+                return;
+            }
+            details.innerHTML = top.map(item => {
+                const t = item.time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                return `<div class="row ${item.severity}" onclick="launchIntel('${item.link || 'https://www.reuters.com/world/'}')">${item.title}<div class="meta">${item.sourceType || 'INTEL'} · ${item.severity.toUpperCase()} · ${t}</div></div>`;
+            }).join('');
         }
 
         function updateRiskGauge() {
@@ -1425,9 +1656,17 @@
             const fill = document.getElementById('pizza-meter-fill');
             const value = document.getElementById('pizza-value');
             const summary = document.getElementById('risk-summary');
+            const updated = document.getElementById('heat-updated');
             const rotation = (pressure / 100) * 180 - 90;
             fill.style.transform = `rotate(${rotation}deg)`;
             value.innerText = pressure;
+            document.getElementById('heat-flights').innerText = liveMetrics.flights;
+            document.getElementById('heat-quakes').innerText = liveMetrics.majorQuakes;
+            document.getElementById('heat-disasters').innerText = liveMetrics.severeDisasters;
+            document.getElementById('heat-cyber').innerText = liveMetrics.cyberEvents;
+            document.getElementById('heat-shipping').innerText = liveMetrics.shippingEvents;
+            document.getElementById('heat-headlines').innerText = liveMetrics.newsHeadlines;
+            updated.innerText = `Updated ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`;
             if (pressure < 40) {
                 value.style.color = '#26a69a';
                 summary.innerText = `Calm regime · Flights ${liveMetrics.flights} · Disasters ${liveMetrics.severeDisasters}`;
@@ -1670,6 +1909,13 @@
                 return items.map(i => ({ ...i, category: cfg.category }));
             }));
             const items = results.flat();
+            layers.newsintel.clearLayers();
+            items.slice(0, 20).forEach(item => {
+                const point = locateHeadline(item.title || '');
+                const icon = iconForCategory(item.category || 'MACRO');
+                const source = item.source || 'wire';
+                L.marker(point, { icon }).addTo(layers.newsintel).bindPopup(`<b>${item.category || 'INTEL'}</b><br>${item.title}<br>${source}`);
+            });
             liveMetrics.newsHeadlines = clamp(items.length * 3, 0, 200);
             if (allRegionalItems.length > 40) allRegionalItems = allRegionalItems.slice(0, 40);
             filterRegion('ALL');
@@ -1778,6 +2024,17 @@
             setTimeout(() => map.invalidateSize(), 350);
         }
 
+        function initializeMapSizing() {
+            const mapWrapper = document.querySelector('.map-wrapper');
+            if (mapWrapper && typeof ResizeObserver !== 'undefined') {
+                const ro = new ResizeObserver(() => map.invalidateSize());
+                ro.observe(mapWrapper);
+            }
+            window.addEventListener('resize', () => map.invalidateSize());
+            setTimeout(() => map.invalidateSize(), 200);
+            setTimeout(() => map.invalidateSize(), 1200);
+        }
+
         function decayImpact() {
             const c = impactState.categories;
             c.geopol = clamp(c.geopol - 1);
@@ -1800,6 +2057,7 @@
 
         function initializeDashboard() {
             initializeRightPanel();
+            initializeMapSizing();
             updateInfraStats();
             updateSessionClock();
             renderImpact();
