@@ -32,7 +32,7 @@
             --sidebar-width: 390px;
         }
         
-        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--darker); color: var(--text); overflow: hidden; }
+        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--darker); color: var(--text); overflow-x: hidden; overflow-y: auto; }
         
         /* Header */
         header {
@@ -70,8 +70,9 @@
         .container {
             display: grid;
             grid-template-columns: var(--sidebar-width) 1fr var(--sidebar-width);
-            grid-template-rows: 60px 30px 1fr 220px; /* Header, Ticker, Main, Bottom */
-            height: 100vh;
+            grid-template-rows: 60px 30px minmax(380px, 1fr) 240px auto;
+            min-height: 100vh;
+            height: auto;
             width: 100vw;
             transition: grid-template-columns 0.3s ease;
         }
@@ -116,7 +117,7 @@
         /* Sidebar: Left Panel (Intel Feed) */
         .sidebar-left {
             grid-column: 1 / 2;
-            grid-row: 3 / 5; /* Spans Main + Bottom rows */
+            grid-row: 3 / 6;
             background: #131722;
             border-right: 1px solid #2a2e39;
             overflow: hidden; /* Changed from overflow-y: auto to fix header scroll */
@@ -701,6 +702,84 @@
         .catalyst-item.high { border-left-color: #ef5350; }
         .catalyst-item.medium { border-left-color: #ffcf22; }
         .catalyst-item.low { border-left-color: #26a69a; }
+        .intel-mosaic {
+            grid-column: 2 / 4;
+            grid-row: 5 / 6;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(240px, 1fr));
+            gap: 10px;
+            padding: 10px;
+            background: #0d121c;
+            border-top: 1px solid #2a2e39;
+        }
+        .mini-feed-card {
+            background: #0f1420;
+            border: 1px solid #2a2e39;
+            border-radius: 6px;
+            min-height: 210px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .mini-feed-head {
+            background: #1a2130;
+            border-bottom: 1px solid #2a2e39;
+            padding: 8px 10px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #d1d4dc;
+        }
+        .mini-feed-meta {
+            font-size: 0.62rem;
+            color: #787b86;
+            font-weight: 600;
+        }
+        .mini-feed-list {
+            margin: 0;
+            padding: 8px 10px;
+            list-style: none;
+            display: grid;
+            gap: 6px;
+            overflow-y: auto;
+            flex: 1;
+        }
+        .mini-feed-list li {
+            border-left: 2px solid #2962ff;
+            background: #131722;
+            border-radius: 0 4px 4px 0;
+            padding: 6px 8px;
+            font-size: 0.7rem;
+            line-height: 1.35;
+        }
+        .mini-feed-list li a {
+            color: #d1d4dc;
+            text-decoration: none;
+        }
+        .mini-feed-list li a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+        .mini-feed-list li .src {
+            display: block;
+            margin-top: 3px;
+            font-size: 0.62rem;
+            color: #787b86;
+        }
+        @media (max-width: 1400px) {
+            .intel-mosaic {
+                grid-template-columns: repeat(2, minmax(240px, 1fr));
+            }
+        }
+        @media (max-width: 1080px) {
+            .intel-mosaic {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -934,6 +1013,7 @@
                         ]
                         }
                     ]
+                    }
                     </script>
                 </div>
             </div>
@@ -966,18 +1046,68 @@
                 </div>
             </div>
             <div class="bottom-card">
-                <h4>Risk Thermometer</h4>
+                <h4>G-Labs Ops Heat Index</h4>
                 <div class="pizza-widget">
                     <div class="meter-container" style="margin-top: 12px;">
                         <div class="meter-fill" id="pizza-meter-fill"></div>
                         <div class="meter-cover" style="left: 24px;"></div>
                         <div class="meter-value" id="pizza-value" style="margin-top:-22px;">--</div>
                     </div>
-                    <div class="meter-label">MARKET RISK HEAT</div>
+                    <div class="meter-label">MULTI-FACTOR RISK HEAT</div>
                     <div style="font-size: 0.65rem; color: #787b86; margin-top: 4px;" id="risk-summary">Calculating...</div>
                 </div>
             </div>
         </div>
+        <section class="intel-mosaic">
+            <div class="mini-feed-card">
+                <div class="mini-feed-head"><span>Ukraine Conflict</span><span class="mini-feed-meta" id="meta-ukraine">loading</span></div>
+                <ul class="mini-feed-list" id="feed-ukraine"><li>Loading latest updates...</li></ul>
+            </div>
+            <div class="mini-feed-card">
+                <div class="mini-feed-head"><span>Iran War Watch</span><span class="mini-feed-meta" id="meta-iran">loading</span></div>
+                <ul class="mini-feed-list" id="feed-iran"><li>Loading latest updates...</li></ul>
+            </div>
+            <div class="mini-feed-card">
+                <div class="mini-feed-head"><span>Aviation Monitor</span><span class="mini-feed-meta" id="meta-aviation">loading</span></div>
+                <ul class="mini-feed-list" id="feed-aviation"><li>Loading latest updates...</li></ul>
+            </div>
+            <div class="mini-feed-card">
+                <div class="mini-feed-head"><span>Ship Traffic & Routes</span><span class="mini-feed-meta" id="meta-shipping">loading</span></div>
+                <ul class="mini-feed-list" id="feed-shipping"><li>Loading latest updates...</li></ul>
+            </div>
+            <div class="mini-feed-card">
+                <div class="mini-feed-head"><span>Cyber Threats</span><span class="mini-feed-meta" id="meta-cyber">loading</span></div>
+                <ul class="mini-feed-list" id="feed-cyber"><li>Loading latest updates...</li></ul>
+            </div>
+            <div class="mini-feed-card">
+                <div class="mini-feed-head"><span>Weather & Natural Alerts</span><span class="mini-feed-meta" id="meta-weather">loading</span></div>
+                <ul class="mini-feed-list" id="feed-weather"><li>Loading latest updates...</li></ul>
+            </div>
+            <div class="mini-feed-card">
+                <div class="mini-feed-head"><span>Displacement & Humanitarian</span><span class="mini-feed-meta" id="meta-humanitarian">loading</span></div>
+                <ul class="mini-feed-list" id="feed-humanitarian"><li>Loading latest updates...</li></ul>
+            </div>
+            <div class="mini-feed-card">
+                <div class="mini-feed-head"><span>Economic Centers</span><span class="mini-feed-meta" id="meta-economy">loading</span></div>
+                <ul class="mini-feed-list" id="feed-economy"><li>Loading latest updates...</li></ul>
+            </div>
+            <div class="mini-feed-card">
+                <div class="mini-feed-head"><span>Internet Outages</span><span class="mini-feed-meta" id="meta-outages">loading</span></div>
+                <ul class="mini-feed-list" id="feed-outages"><li>Loading latest updates...</li></ul>
+            </div>
+            <div class="mini-feed-card">
+                <div class="mini-feed-head"><span>Critical Minerals</span><span class="mini-feed-meta" id="meta-minerals">loading</span></div>
+                <ul class="mini-feed-list" id="feed-minerals"><li>Loading latest updates...</li></ul>
+            </div>
+            <div class="mini-feed-card">
+                <div class="mini-feed-head"><span>Military Activity</span><span class="mini-feed-meta" id="meta-military">loading</span></div>
+                <ul class="mini-feed-list" id="feed-military"><li>Loading latest updates...</li></ul>
+            </div>
+            <div class="mini-feed-card">
+                <div class="mini-feed-head"><span>Protests & Unrest</span><span class="mini-feed-meta" id="meta-protests">loading</span></div>
+                <ul class="mini-feed-list" id="feed-protests"><li>Loading latest updates...</li></ul>
+            </div>
+        </section>
     </div>
 
     <!-- Leaflet JS -->
@@ -1089,6 +1219,14 @@
 
         let intelFilter = 'ALL';
         let allRegionalItems = [];
+        const liveMetrics = {
+            flights: 0,
+            majorQuakes: 0,
+            severeDisasters: 0,
+            newsHeadlines: 0,
+            cyberEvents: 0,
+            shippingEvents: 0
+        };
 
         function clamp(n, min = 0, max = 100) { return Math.max(min, Math.min(max, n)); }
         function signed(n) { return `${n > 0 ? '+' : ''}${n}`; }
@@ -1273,22 +1411,32 @@
         }
 
         function updateRiskGauge() {
-            const score = impactState.score;
+            const pressure = clamp(
+                Math.round(
+                    impactState.score * 0.45 +
+                    Math.min(liveMetrics.flights, 80) * 0.2 +
+                    Math.min(liveMetrics.majorQuakes * 8, 40) +
+                    Math.min(liveMetrics.severeDisasters * 10, 35) +
+                    Math.min(liveMetrics.newsHeadlines * 0.6, 25) +
+                    Math.min(liveMetrics.cyberEvents * 2, 20) +
+                    Math.min(liveMetrics.shippingEvents * 2, 20)
+                )
+            );
             const fill = document.getElementById('pizza-meter-fill');
             const value = document.getElementById('pizza-value');
             const summary = document.getElementById('risk-summary');
-            const rotation = (score / 100) * 180 - 90;
+            const rotation = (pressure / 100) * 180 - 90;
             fill.style.transform = `rotate(${rotation}deg)`;
-            value.innerText = score;
-            if (score < 40) {
+            value.innerText = pressure;
+            if (pressure < 40) {
                 value.style.color = '#26a69a';
-                summary.innerText = 'Risk-on backdrop';
-            } else if (score < 70) {
+                summary.innerText = `Calm regime · Flights ${liveMetrics.flights} · Disasters ${liveMetrics.severeDisasters}`;
+            } else if (pressure < 70) {
                 value.style.color = '#ffcf22';
-                summary.innerText = 'Mixed regime, selective risk';
+                summary.innerText = `Balanced risk · Headlines ${liveMetrics.newsHeadlines} · Shipping ${liveMetrics.shippingEvents}`;
             } else {
                 value.style.color = '#ef5350';
-                summary.innerText = 'High risk-off pressure';
+                summary.innerText = `Risk-off regime · Cyber ${liveMetrics.cyberEvents} · Quakes ${liveMetrics.majorQuakes}`;
             }
         }
 
@@ -1369,6 +1517,9 @@
             feed.prepend(item);
             if (feed.children.length > 40) feed.lastElementChild.remove();
             if (intelFilter !== 'ALL' && intelFilter !== type) item.style.display = 'none';
+            liveMetrics.newsHeadlines = clamp(liveMetrics.newsHeadlines + 1, 0, 400);
+            if (type === 'CYBER') liveMetrics.cyberEvents = clamp(liveMetrics.cyberEvents + 1, 0, 200);
+            if (type === 'SHIPPING') liveMetrics.shippingEvents = clamp(liveMetrics.shippingEvents + 1, 0, 200);
             updateImpactFromHeadline(title, tag, link);
         }
 
@@ -1413,6 +1564,7 @@
                 const data = await response.json();
                 const states = (data.states || []).filter(f => Number.isFinite(f[5]) && Number.isFinite(f[6])).slice(0, 70);
                 if (!states.length) throw new Error('NO_FLIGHTS');
+                liveMetrics.flights = states.length;
                 states.forEach(flight => {
                     const callsign = (flight[1] || 'UNK').trim();
                     const lon = flight[5];
@@ -1424,6 +1576,7 @@
                 addIntelItem('SHIPPING', `Live aviation feed connected: ${states.length} aircraft tracked in Europe corridor.`, 'low');
             } catch {
                 const fallbackFlights = createFallbackFlights();
+                liveMetrics.flights = fallbackFlights.length;
                 fallbackFlights.forEach(flight => {
                     L.marker([flight.lat, flight.lon], { icon: icons.plane })
                         .addTo(layers.flights)
@@ -1431,6 +1584,7 @@
                 });
                 addIntelItem('SHIPPING', `Aviation fallback active: ${fallbackFlights.length} aircraft estimates rendered while live ADS-B reconnects.`, 'medium');
             }
+            updateRiskGauge();
         }
 
         async function fetchEarthquakes() {
@@ -1438,9 +1592,11 @@
                 const response = await fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson');
                 const data = await response.json();
                 layers.quakes.clearLayers();
+                let majorCount = 0;
                 data.features.forEach(quake => {
                     const mag = quake.properties.mag;
                     if (mag < 5.5) return;
+                    majorCount++;
                     const coords = quake.geometry.coordinates;
                     const place = quake.properties.place;
                     const color = mag >= 7 ? '#d500f9' : mag >= 6 ? '#f50057' : '#ef5350';
@@ -1448,6 +1604,8 @@
                     L.marker([coords[1], coords[0]], { icon: quakeIcon }).addTo(layers.quakes).bindPopup(`<b>M${mag} Earthquake</b><br>${place}`);
                     if (mag > 6.2) addIntelItem('GEOPOL', `Major quake M${mag} near ${place}. Monitor insurance and logistics risk.`, 'high', quake.properties.url);
                 });
+                liveMetrics.majorQuakes = majorCount;
+                updateRiskGauge();
             } catch {}
         }
 
@@ -1459,6 +1617,7 @@
                 const xml = parser.parseFromString(text, "text/xml");
                 const items = xml.querySelectorAll("item");
                 layers.hotspots.clearLayers();
+                let severe = 0;
                 items.forEach(item => {
                     const title = item.querySelector("title")?.textContent || '';
                     const desc = item.querySelector("description")?.textContent || '';
@@ -1470,8 +1629,13 @@
                     if (/flood|cyclone|hurricane|typhoon/i.test(title)) icon = icons.naval;
                     if (/earthquake/i.test(title)) icon = icons.quake;
                     if (!isNaN(lat) && !isNaN(lng)) L.marker([lat, lng], { icon }).addTo(layers.hotspots).bindPopup(`<b>${title}</b><br>${desc}<br><a href="#" onclick="launchIntel('${link}'); return false;">Open</a>`);
-                    if (/red|orange|major|severe/i.test(title + ' ' + desc)) addIntelItem('MACRO', title, 'medium', link);
+                    if (/red|orange|major|severe/i.test(title + ' ' + desc)) {
+                        severe++;
+                        addIntelItem('MACRO', title, 'medium', link);
+                    }
                 });
+                liveMetrics.severeDisasters = severe;
+                updateRiskGauge();
             } catch {}
         }
 
@@ -1501,6 +1665,7 @@
             };
             const results = await Promise.all(Object.entries(feedCategories).map(([c, u]) => fetchCategory(c, u)));
             const items = results.flat();
+            liveMetrics.newsHeadlines = clamp(items.length * 3, 0, 200);
             if (allRegionalItems.length > 40) allRegionalItems = allRegionalItems.slice(0, 40);
             filterRegion('ALL');
             const ticker = document.getElementById('ticker-content');
@@ -1514,6 +1679,54 @@
                 tickerText += `<span style="margin-right:50px;"><i class="fas fa-broadcast-tower"></i> [${cat}] ${item.title}</span>`;
             });
             ticker.innerHTML = tickerText + tickerText;
+            updateRiskGauge();
+        }
+
+        async function fetchMiniFeed(feedUrl, limit = 6) {
+            try {
+                const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&count=${limit}`);
+                const data = await res.json();
+                if (data.status !== 'ok' || !Array.isArray(data.items)) return [];
+                return data.items.slice(0, limit);
+            } catch {
+                return [];
+            }
+        }
+
+        function renderMiniFeed(targetId, metaId, items, fallbackLink) {
+            const target = document.getElementById(targetId);
+            const meta = document.getElementById(metaId);
+            if (!target || !meta) return;
+            if (!items.length) {
+                target.innerHTML = `<li><a href="${fallbackLink}" target="_blank">No live items yet. Open source directly.</a><span class="src">standby</span></li>`;
+                meta.innerText = 'standby';
+                return;
+            }
+            target.innerHTML = items.map(item => {
+                const title = (item.title || 'Untitled').replace(/"/g, '&quot;');
+                const source = item.author || item.source_id || 'live wire';
+                return `<li><a href="${item.link}" target="_blank">${title}</a><span class="src">${source}</span></li>`;
+            }).join('');
+            meta.innerText = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+
+        async function loadMiniFeeds() {
+            const feeds = [
+                { target: 'feed-ukraine', meta: 'meta-ukraine', url: 'https://news.google.com/rss/search?q=ukraine+war+frontline&hl=en-GB&gl=GB&ceid=GB:en', fallback: 'https://news.google.com/search?q=ukraine+war' },
+                { target: 'feed-iran', meta: 'meta-iran', url: 'https://news.google.com/rss/search?q=iran+israel+war&hl=en-GB&gl=GB&ceid=GB:en', fallback: 'https://news.google.com/search?q=iran+israel+war' },
+                { target: 'feed-aviation', meta: 'meta-aviation', url: 'https://news.google.com/rss/search?q=military+aviation+activity&hl=en-GB&gl=GB&ceid=GB:en', fallback: 'https://opensky-network.org/' },
+                { target: 'feed-shipping', meta: 'meta-shipping', url: 'https://news.google.com/rss/search?q=red+sea+shipping+disruption&hl=en-GB&gl=GB&ceid=GB:en', fallback: 'https://www.marinetraffic.com/' },
+                { target: 'feed-cyber', meta: 'meta-cyber', url: 'https://feeds.feedburner.com/TheHackersNews', fallback: 'https://thehackernews.com/' },
+                { target: 'feed-weather', meta: 'meta-weather', url: 'https://www.gdacs.org/xml/rss_7d.xml', fallback: 'https://www.gdacs.org/' },
+                { target: 'feed-humanitarian', meta: 'meta-humanitarian', url: 'https://news.google.com/rss/search?q=displacement+crisis&hl=en-GB&gl=GB&ceid=GB:en', fallback: 'https://www.unhcr.org/' },
+                { target: 'feed-economy', meta: 'meta-economy', url: 'https://feeds.bloomberg.com/markets/news.rss', fallback: 'https://www.bloomberg.com/markets' },
+                { target: 'feed-outages', meta: 'meta-outages', url: 'https://news.google.com/rss/search?q=internet+outage+global&hl=en-GB&gl=GB&ceid=GB:en', fallback: 'https://radar.cloudflare.com/outage-center' },
+                { target: 'feed-minerals', meta: 'meta-minerals', url: 'https://news.google.com/rss/search?q=critical+minerals+supply+chain&hl=en-GB&gl=GB&ceid=GB:en', fallback: 'https://www.iea.org/topics/critical-minerals' },
+                { target: 'feed-military', meta: 'meta-military', url: 'https://news.google.com/rss/search?q=military+movements+global&hl=en-GB&gl=GB&ceid=GB:en', fallback: 'https://liveuamap.com/' },
+                { target: 'feed-protests', meta: 'meta-protests', url: 'https://news.google.com/rss/search?q=protests+global&hl=en-GB&gl=GB&ceid=GB:en', fallback: 'https://www.reuters.com/world/' }
+            ];
+            const results = await Promise.all(feeds.map(f => fetchMiniFeed(f.url, 6)));
+            feeds.forEach((f, i) => renderMiniFeed(f.target, f.meta, results[i], f.fallback));
         }
 
         function filterRegion(region) {
@@ -1583,6 +1796,9 @@
                 impactState.assets[k] = impactState.assets[k] > 0 ? impactState.assets[k] - 1 : impactState.assets[k] + 1;
                 if (Math.abs(impactState.assets[k]) < 1) impactState.assets[k] = 0;
             });
+            liveMetrics.newsHeadlines = Math.max(0, liveMetrics.newsHeadlines - 2);
+            liveMetrics.cyberEvents = Math.max(0, liveMetrics.cyberEvents - 1);
+            liveMetrics.shippingEvents = Math.max(0, liveMetrics.shippingEvents - 1);
             renderImpact();
             updateChokepointPressure();
         }
@@ -1599,10 +1815,12 @@
             fetchGDACS();
             fetchFlights();
             fetchNews();
+            loadMiniFeeds();
             setInterval(fetchFlights, 180000);
             setInterval(fetchGDACS, 900000);
             setInterval(fetchEarthquakes, 600000);
             setInterval(fetchNews, 240000);
+            setInterval(loadMiniFeeds, 300000);
             setInterval(updateSessionClock, 1000);
             setInterval(decayImpact, 45000);
             setInterval(updateChokepointPressure, 30000);
