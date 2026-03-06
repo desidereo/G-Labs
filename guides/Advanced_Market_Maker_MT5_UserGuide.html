@@ -300,6 +300,7 @@
     <a href="#col-br">BR (Breakers)</a>
     <a href="#col-yhl">YHL</a>
     <a href="#col-tdi">TDI</a>
+    <a href="#col-cs">Currency Strength</a>
   </div>
   <div class="nav-group">
     <div class="nav-title">Chart Overlays</div>
@@ -469,6 +470,22 @@
   <div class="cell cell-bg"></div>
   <div class="cell cell-bg"></div>
 </div>
+
+<!-- Currency Strength mockup -->
+<div style="display:flex;gap:1px;background:#000;border:1px solid #000;border-radius:0 0 6px 6px;overflow:auto;margin:-10px 0 24px;font-size:0.72rem;font-family:'Verdana',sans-serif;">
+  <div style="flex:1;padding:4px 2px;text-align:center;background:#404040;color:#ffd700;font-weight:bold;white-space:nowrap;">CURRENCY STRENGTH</div>
+</div>
+<div style="display:flex;gap:1px;background:#000;border:1px solid #000;border-radius:0 0 6px 6px;overflow:auto;margin:-18px 0 24px;font-size:0.72rem;font-family:'Verdana',sans-serif;">
+  <div style="flex:1;padding:4px 2px;text-align:center;background:#1c8a59;color:#fff;white-space:nowrap;">AUD 0.8</div>
+  <div style="flex:1;padding:4px 2px;text-align:center;background:#1c8a59;color:#fff;white-space:nowrap;">NZD 0.6</div>
+  <div style="flex:1;padding:4px 2px;text-align:center;background:#15661d;color:#fff;white-space:nowrap;">EUR 0.3</div>
+  <div style="flex:1;padding:4px 2px;text-align:center;background:#3f4d5a;color:#fff;white-space:nowrap;">GBP 0.1</div>
+  <div style="flex:1;padding:4px 2px;text-align:center;background:#3f4d5a;color:#fff;white-space:nowrap;">CHF -0.1</div>
+  <div style="flex:1;padding:4px 2px;text-align:center;background:#911313;color:#fff;white-space:nowrap;">CAD -0.3</div>
+  <div style="flex:1;padding:4px 2px;text-align:center;background:#cc2323;color:#fff;white-space:nowrap;">USD -0.6</div>
+  <div style="flex:1;padding:4px 2px;text-align:center;background:#cc2323;color:#fff;white-space:nowrap;">JPY -0.7</div>
+</div>
+
 <p style="color:var(--muted);font-size:0.82rem;">
   The above is a simplified representation. Actual colors, widths and values update in real time on your chart.
 </p>
@@ -640,6 +657,56 @@
   When the <a href="#trend-filter">Trend Filter</a> is enabled, TDI signals are only displayed if they align
   with the PF and/or IDC direction (confluence filtering).
 </p>
+
+<!-- ---------- CURRENCY STRENGTH ---------- -->
+<h3 id="col-cs">Currency Strength Row</h3>
+<p>
+  Below the main symbol grid, a <strong>"CURRENCY STRENGTH"</strong> row displays the 8 major currencies
+  (USD, EUR, GBP, JPY, AUD, NZD, CAD, CHF) <strong>sorted from strongest to weakest</strong>, left to right.
+  This updates every 500ms alongside the rest of the panel.
+</p>
+
+<h4>How the score is calculated</h4>
+<p>
+  The strength score is derived from the H1 trend direction (the same MA crossover that drives the
+  <a href="#col-trend">TREND</a> column arrow) across all watched pairs:
+</p>
+<ul>
+  <li>For each pair, if the trend is <strong>UP</strong>: the <em>base</em> currency (first 3 letters) gets <code>+1</code> and the <em>quote</em> currency (last 3 letters) gets <code>-1</code>.</li>
+  <li>For each pair, if the trend is <strong>DOWN</strong>: the <em>base</em> gets <code>-1</code> and the <em>quote</em> gets <code>+1</code>.</li>
+  <li>The raw score is divided by the number of pairs containing that currency, producing a normalized value between <code>-1.0</code> (weakest) and <code>+1.0</code> (strongest).</li>
+</ul>
+<p>
+  For example, if EUR appears in 7 pairs and 6 of them show a bullish EUR trend, the EUR score would be
+  approximately <code>+0.7</code>.
+</p>
+
+<h4>Reading the row</h4>
+<p>
+  Each cell displays the currency code and its numeric score (e.g., <code>GBP 0.7</code> or <code>JPY -0.4</code>).
+  The cells are re-sorted on every update, so the <strong>leftmost cell is always the strongest currency</strong>
+  and the <strong>rightmost is always the weakest</strong>.
+</p>
+
+<h4>Color coding</h4>
+<table>
+  <thead><tr><th>Score Range</th><th>Background</th><th>Meaning</th></tr></thead>
+  <tbody>
+    <tr><td>&gt; 0.5</td><td><span style="display:inline-block;width:14px;height:14px;background:#1c8a59;border-radius:3px;vertical-align:middle;"></span> Green</td><td>Strong currency &mdash; bullish across most pairs</td></tr>
+    <tr><td>&gt; 0.2</td><td><span style="display:inline-block;width:14px;height:14px;background:#15661d;border-radius:3px;vertical-align:middle;"></span> Dark Green</td><td>Moderately strong</td></tr>
+    <tr><td>-0.2 to 0.2</td><td><span style="display:inline-block;width:14px;height:14px;background:#3f4d5a;border-radius:3px;vertical-align:middle;"></span> Grey</td><td>Neutral &mdash; mixed signals</td></tr>
+    <tr><td>&lt; -0.2</td><td><span style="display:inline-block;width:14px;height:14px;background:#911313;border-radius:3px;vertical-align:middle;"></span> Dark Red</td><td>Moderately weak</td></tr>
+    <tr><td>&lt; -0.5</td><td><span style="display:inline-block;width:14px;height:14px;background:#cc2323;border-radius:3px;vertical-align:middle;"></span> Red</td><td>Weak currency &mdash; bearish across most pairs</td></tr>
+  </tbody>
+</table>
+
+<div class="box box-tip">
+  <strong>How to use it</strong>
+  Pair the strongest currency (far left) against the weakest (far right) for the highest-conviction setups.
+  For example, if the row reads <code>AUD 0.8 | ... | JPY -0.6</code>, check AUDJPY first &mdash; it has
+  the strongest directional tailwind. Avoid trading pairs where both currencies have similar scores (grey-grey),
+  as those pairs are likely choppy and directionless.
+</div>
 
 <!-- ============================================================ -->
 <!--                     CHART OVERLAYS                           -->
