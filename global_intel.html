@@ -678,12 +678,12 @@
             
             <!-- External Intel Links -->
             <div class="source-links">
-                <button onclick="openBrowser('https://liveuamap.com/')" class="source-link"><i class="fas fa-map-marked-alt"></i> Conflict</button>
-                <button onclick="openBrowser('https://www.vesselfinder.com/')" class="source-link"><i class="fas fa-ship"></i> Marine</button>
-                <button onclick="openBrowser('https://threatmap.checkpoint.com/')" class="source-link"><i class="fas fa-shield-alt"></i> Cyber</button>
-                <button onclick="openBrowser('https://firms.modaps.eosdis.nasa.gov/map/')" class="source-link"><i class="fas fa-fire"></i> Fires</button>
-                <button onclick="openBrowser('https://radar.cloudflare.com/outage-center')" class="source-link"><i class="fas fa-plug"></i> Outages</button>
-                <button onclick="openBrowser('https://www.reuters.com/world/')" class="source-link"><i class="fas fa-newspaper"></i> Reuters</button>
+                <button onclick="launchIntel('https://liveuamap.com/')" class="source-link"><i class="fas fa-map-marked-alt"></i> Conflict</button>
+                <button onclick="launchIntel('https://www.vesselfinder.com/')" class="source-link"><i class="fas fa-ship"></i> Marine</button>
+                <button onclick="launchIntel('https://threatmap.checkpoint.com/')" class="source-link"><i class="fas fa-shield-alt"></i> Cyber</button>
+                <button onclick="launchIntel('https://firms.modaps.eosdis.nasa.gov/map/')" class="source-link"><i class="fas fa-fire"></i> Fires</button>
+                <button onclick="launchIntel('https://radar.cloudflare.com/outage-center')" class="source-link"><i class="fas fa-plug"></i> Outages</button>
+                <button onclick="launchIntel('https://www.reuters.com/world/')" class="source-link"><i class="fas fa-newspaper"></i> Reuters</button>
             </div>
 
             <div id="intel-feed">
@@ -1271,7 +1271,7 @@
                         // Plot on Map
                         L.marker([lat, lng], {icon: icon})
                             .addTo(layers.hotspots)
-                            .bindPopup(`<b>${title}</b><br>${desc}<br><a href="#" onclick="openBrowser('${link}')">View Report</a>`);
+                            .bindPopup(`<b>${title}</b><br>${desc}<br><a href="#" onclick="launchIntel('${link}'); return false;">View Report</a>`);
                     }
 
                     // Add to Sidebar (Limit to recent/major)
@@ -1441,42 +1441,16 @@
         }
 
         // Browser View Functions
-        function openBrowser(url) {
+        function launchIntel(url) {
             // DIRECT FIX: Most of these sites (LiveUAMap, Reuters, etc.) block iframe embedding (X-Frame-Options).
             // Instead of showing a broken iframe, we now open them in a new tab/window.
+            // Using a new function name 'launchIntel' to ensure no caching of old logic.
             window.open(url, '_blank');
-            
-            // The internal browser logic below is disabled to prevent "Refused to connect" errors.
-            /*
-            const iframe = document.getElementById('browser-frame');
-            const toolbar = document.getElementById('browser-toolbar');
-            const mapDiv = document.getElementById('map');
-            const urlText = document.getElementById('browser-url-text');
-            const blockedUI = document.getElementById('blocked-ui');
-            
-            // Reset UI
-            iframe.style.display = 'block';
-            blockedUI.style.display = 'none';
-            
-            // Show Toolbar & Hide Map
-            toolbar.style.display = 'flex';
-            mapDiv.style.display = 'none';
-            urlText.innerText = url;
-            
-            // PROXY TRICK: Use Google Translate as a wrapper to bypass X-Frame-Options
-            // This makes the browser think we are loading a Google page, which is secure and embeddable.
-            const blockedDomains = ['liveuamap.com', 'understandingwar.org', 'reuters.com', 'vesselfinder.com', 'checkpoint.com', 'nasa.gov', 'cloudflare.com'];
-            const isBlocked = blockedDomains.some(domain => url.includes(domain));
-            
-            if (isBlocked) {
-                // Wrap in Google Translate
-                iframe.src = `https://translate.google.com/translate?sl=auto&tl=en&u=${encodeURIComponent(url)}`;
-            } else {
-                // Attempt direct load for others
-                iframe.referrerPolicy = "no-referrer";
-                iframe.src = url;
-            }
-            */
+        }
+
+        // Deprecated but kept for compatibility if called elsewhere
+        function openBrowser(url) {
+            launchIntel(url);
         }
         
         function openExternal() {
