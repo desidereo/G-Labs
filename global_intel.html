@@ -90,9 +90,11 @@
             display: grid;
             grid-template-columns: var(--sidebar-width) 1fr var(--sidebar-width);
             grid-template-rows: 60px 30px minmax(380px, 1fr) minmax(260px, auto) auto;
-            min-height: 100vh;
+            min-height: 100dvh;
             height: auto;
-            width: 100vw;
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
             transition: grid-template-columns 0.3s ease;
         }
         
@@ -238,8 +240,13 @@
             background: #000;
             z-index: 1;
             overflow: hidden;
+            min-height: 0;
+            height: 100%;
+            touch-action: none;
         }
         #map {
+            position: absolute;
+            inset: 0;
             width: 100%;
             height: 100%;
         }
@@ -286,8 +293,15 @@
         .browser-btn.close:hover { background: rgba(239, 83, 80, 0.1); }
         
         #browser-frame {
+            position: absolute;
+            left: 0;
+            width: 100%;
             top: 40px; /* Shift down for toolbar */
             height: calc(100% - 40px);
+            border: none;
+            display: none;
+            z-index: 100;
+            background: #0a0e17;
         }
 
         /* Blocked Content Placeholder */
@@ -871,6 +885,16 @@
             gap: 6px;
             max-width: 55%;
         }
+        .map-tools {
+            position: absolute;
+            top: 78px;
+            left: 10px;
+            z-index: 1000;
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            max-width: 62%;
+        }
         .layer-preset-btn {
             background: rgba(15, 20, 32, 0.85);
             border: 1px solid #2a2e39;
@@ -880,6 +904,64 @@
             font-size: 0.62rem;
             cursor: pointer;
             backdrop-filter: blur(4px);
+        }
+        .map-region-tools {
+            position: absolute;
+            top: 112px;
+            left: 10px;
+            z-index: 1000;
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            max-width: 62%;
+        }
+        .layer-group-panel {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            width: 280px;
+            max-height: calc(100% - 20px);
+            overflow-y: auto;
+            background: rgba(15, 20, 32, 0.92);
+            border: 1px solid #2a2e39;
+            border-radius: 8px;
+            padding: 8px;
+            backdrop-filter: blur(6px);
+        }
+        .layer-group-panel details {
+            border: 1px solid #2a2e39;
+            border-radius: 6px;
+            background: #131722;
+            margin-bottom: 7px;
+            padding: 5px 6px;
+        }
+        .layer-group-panel summary {
+            cursor: pointer;
+            color: #d1d4dc;
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            font-weight: 700;
+        }
+        .layer-group-panel .group-items {
+            display: grid;
+            gap: 5px;
+            margin-top: 6px;
+        }
+        .layer-toggle {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #b2b5be;
+            font-size: 0.64rem;
+            padding: 3px 0;
+        }
+        .layer-toggle input { accent-color: #2962ff; }
+        .layer-preset-btn.active {
+            border-color: #2962ff;
+            color: #fff;
+            background: rgba(41, 98, 255, 0.25);
         }
         .cii-grid { display: grid; gap: 6px; }
         .cii-score { font-size: 1.6rem; font-weight: 800; color: #fff; line-height: 1; text-align: center; }
@@ -1100,6 +1182,14 @@
             .map-wrapper {
                 min-height: 250px;
             }
+            .layer-group-panel {
+                width: 240px;
+                max-height: 52vh;
+            }
+            .map-region-tools {
+                top: 146px;
+                max-width: 82%;
+            }
             .sidebar-left {
                 max-height: 40vh;
             }
@@ -1179,12 +1269,32 @@
         <div class="map-wrapper">
             <div id="map"></div>
             <div class="layer-presets">
-                <button class="layer-preset-btn" onclick="applyLayerPreset('global')">Global</button>
-                <button class="layer-preset-btn" onclick="applyLayerPreset('conflict')">Conflict</button>
-                <button class="layer-preset-btn" onclick="applyLayerPreset('infra')">Infrastructure</button>
-                <button class="layer-preset-btn" onclick="applyLayerPreset('climate')">Climate</button>
-                <button class="layer-preset-btn" onclick="applyLayerPreset('market')">Market</button>
+                <button class="layer-preset-btn" data-preset="global" onclick="applyLayerPreset('global')">Global</button>
+                <button class="layer-preset-btn" data-preset="conflict" onclick="applyLayerPreset('conflict')">Conflict</button>
+                <button class="layer-preset-btn" data-preset="infra" onclick="applyLayerPreset('infra')">Infrastructure</button>
+                <button class="layer-preset-btn" data-preset="climate" onclick="applyLayerPreset('climate')">Climate</button>
+                <button class="layer-preset-btn" data-preset="market" onclick="applyLayerPreset('market')">Market</button>
             </div>
+            <div class="map-tools">
+                <button class="layer-preset-btn" data-time-range="1h" onclick="setTimeRange('1h', this)">1H</button>
+                <button class="layer-preset-btn" data-time-range="6h" onclick="setTimeRange('6h', this)">6H</button>
+                <button class="layer-preset-btn active" data-time-range="24h" onclick="setTimeRange('24h', this)">24H</button>
+                <button class="layer-preset-btn" data-time-range="7d" onclick="setTimeRange('7d', this)">7D</button>
+                <button class="layer-preset-btn" data-time-range="all" onclick="setTimeRange('all', this)">ALL</button>
+                <button class="layer-preset-btn" onclick="shareMapState()">Share State</button>
+                <button class="layer-preset-btn" onclick="sharePresetLink('global')">Share Global</button>
+                <button class="layer-preset-btn" onclick="sharePresetLink('conflict')">Share Conflict</button>
+                <button class="layer-preset-btn" onclick="sharePresetLink('infra')">Share Infra</button>
+            </div>
+            <div class="map-region-tools">
+                <button class="layer-preset-btn active" data-map-region="GLOBAL" onclick="setMapRegion('GLOBAL', this)">Global</button>
+                <button class="layer-preset-btn" data-map-region="AMERICAS" onclick="setMapRegion('AMERICAS', this)">Americas</button>
+                <button class="layer-preset-btn" data-map-region="EUROPE" onclick="setMapRegion('EUROPE', this)">Europe</button>
+                <button class="layer-preset-btn" data-map-region="MENA" onclick="setMapRegion('MENA', this)">MENA</button>
+                <button class="layer-preset-btn" data-map-region="ASIA" onclick="setMapRegion('ASIA', this)">Asia</button>
+                <button class="layer-preset-btn" data-map-region="AFRICA" onclick="setMapRegion('AFRICA', this)">Africa</button>
+            </div>
+            <div class="layer-group-panel" id="layer-group-panel"></div>
             
             <!-- Browser Interface -->
             <div class="browser-toolbar" id="browser-toolbar">
@@ -1674,7 +1784,45 @@
             "Reference: Pipelines": layers.pipelines,
             "Reference: Nuclear Sites": layers.nuclear
         };
-        L.control.layers(null, overlayMaps, { position: 'bottomright' }).addTo(map);
+        const layerControl = L.control.layers(null, overlayMaps, { position: 'bottomright' }).addTo(map);
+        const groupedOverlayMaps = {
+            "Geopolitical": [
+                "Iran Attacks (Live)",
+                "Intel Hotspots (Live)",
+                "Conflict Zones (Live)",
+                "Protests (Live)",
+                "Armed Conflict Events (Live)",
+                "Displacement Flows (Live)"
+            ],
+            "Cyber & Infrastructure": [
+                "Internet Outages (Live)",
+                "Cyber Threats (Live)",
+                "CII Instability (Live)",
+                "GPS Jamming Signals (Live)",
+                "Ship Traffic Signals (Live)",
+                "Trade Routes Signals (Live)"
+            ],
+            "Climate & Disaster": [
+                "Weather Alerts (GDACS)",
+                "Natural Events (EONET)",
+                "Fires (EONET)",
+                "USGS Major Quakes",
+                "Climate Anomalies (Live)"
+            ],
+            "Markets & Macro": [
+                "GDELT Geo Events",
+                "GDELT Macro Pulse",
+                "Economic Centers Signals (Live)",
+                "Critical Minerals Signals (Live)"
+            ],
+            "Strategic Reference": [
+                "Reference: Strategic Chokepoints",
+                "Reference: Undersea Cable Hubs",
+                "Reference: Military Bases",
+                "Reference: Pipelines",
+                "Reference: Nuclear Sites"
+            ]
+        };
 
         const icons = {
             quake: L.divIcon({ html: '<i class="fas fa-bullseye" style="color:#ef5350;text-shadow:0 0 10px #ef5350;"></i>', className: 'marker-icon', iconSize: [16, 16] }),
@@ -1749,6 +1897,9 @@
         };
 
         let intelFilter = 'ALL';
+        let currentPreset = 'global';
+        let currentTimeRange = '24h';
+        let currentMapRegion = 'GLOBAL';
         let allRegionalItems = [];
         const liveMetrics = {
             flights: 0,
@@ -1790,6 +1941,142 @@
         function signed(n) { return `${n > 0 ? '+' : ''}${n}`; }
         function getSeverity(delta) { if (delta >= 10) return 'high'; if (delta >= 5) return 'medium'; return 'low'; }
         function normalizeText(text) { return (text || '').toLowerCase(); }
+        function timeRangeToMs(range = currentTimeRange) {
+            if (range === '1h') return 3600000;
+            if (range === '6h') return 21600000;
+            if (range === '24h') return 86400000;
+            if (range === '7d') return 604800000;
+            return Infinity;
+        }
+        function isWithinRange(dateValue, range = currentTimeRange) {
+            if (range === 'all') return true;
+            const t = dateValue instanceof Date ? dateValue.getTime() : new Date(dateValue).getTime();
+            if (!Number.isFinite(t)) return false;
+            return (Date.now() - t) <= timeRangeToMs(range);
+        }
+        function activeLayerKeys() {
+            return Object.entries(overlayMaps).filter(([, layer]) => map.hasLayer(layer)).map(([name]) => name);
+        }
+        function renderLayerGroupPanel() {
+            const panel = document.getElementById('layer-group-panel');
+            if (!panel) return;
+            panel.innerHTML = Object.entries(groupedOverlayMaps).map(([groupName, layerNames], idx) => {
+                const rows = layerNames.filter(name => overlayMaps[name]).map(name => {
+                    const checked = map.hasLayer(overlayMaps[name]) ? 'checked' : '';
+                    const id = `lg-${name.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}`;
+                    return `<label class="layer-toggle" for="${id}"><input id="${id}" type="checkbox" data-layer-name="${name}" ${checked} onchange="toggleGroupedLayer('${name.replace(/'/g, "\\'")}', this.checked)"><span>${name}</span></label>`;
+                }).join('');
+                return `<details ${idx < 2 ? 'open' : ''}><summary>${groupName}</summary><div class="group-items">${rows}</div></details>`;
+            }).join('');
+        }
+        function syncLayerTogglePanel() {
+            document.querySelectorAll('#layer-group-panel input[data-layer-name]').forEach(input => {
+                const name = input.getAttribute('data-layer-name');
+                if (!name || !overlayMaps[name]) return;
+                input.checked = map.hasLayer(overlayMaps[name]);
+            });
+        }
+        function toggleGroupedLayer(name, enabled) {
+            const layer = overlayMaps[name];
+            if (!layer) return;
+            if (enabled && !map.hasLayer(layer)) map.addLayer(layer);
+            if (!enabled && map.hasLayer(layer)) map.removeLayer(layer);
+            updateMapUrlState();
+        }
+        function setMapRegion(region, btn, skipUrlUpdate = false) {
+            currentMapRegion = region;
+            document.querySelectorAll('[data-map-region]').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            if (region === 'AMERICAS') map.setView([16, -95], 3);
+            else if (region === 'EUROPE') map.setView([52, 12], 4);
+            else if (region === 'MENA') map.setView([28, 42], 4);
+            else if (region === 'ASIA') map.setView([23, 102], 4);
+            else if (region === 'AFRICA') map.setView([3, 20], 3);
+            else map.setView([24, 12], 2);
+            if (!skipUrlUpdate) updateMapUrlState();
+        }
+        function sharePresetLink(preset) {
+            applyLayerPreset(preset);
+            const presetRegion = preset === 'conflict' ? 'MENA' : preset === 'market' ? 'EUROPE' : preset === 'infra' ? 'GLOBAL' : preset === 'climate' ? 'ASIA' : 'GLOBAL';
+            setMapRegion(presetRegion, document.querySelector(`[data-map-region="${presetRegion}"]`));
+            updateMapUrlState();
+            const url = window.location.href;
+            if (navigator.clipboard?.writeText) navigator.clipboard.writeText(url);
+            addIntelItem('MACRO', `${preset.toUpperCase()} preset link copied for team sharing.`, 'low');
+        }
+        function applyMapUrlState() {
+            const params = new URLSearchParams(window.location.search);
+            const lat = Number(params.get('lat'));
+            const lon = Number(params.get('lon'));
+            const zoom = Number(params.get('zoom'));
+            if (Number.isFinite(lat) && Number.isFinite(lon) && Number.isFinite(zoom)) map.setView([lat, lon], clamp(zoom, 1, 18));
+            const timeRange = params.get('timeRange');
+            if (timeRange && ['1h','6h','24h','7d','all'].includes(timeRange)) currentTimeRange = timeRange;
+            document.querySelectorAll('[data-time-range]').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-time-range') === currentTimeRange);
+            });
+            const region = params.get('region');
+            if (region && ['GLOBAL','AMERICAS','EUROPE','MENA','ASIA','AFRICA'].includes(region)) {
+                currentMapRegion = region;
+                document.querySelectorAll('[data-map-region]').forEach(btn => {
+                    btn.classList.toggle('active', btn.getAttribute('data-map-region') === currentMapRegion);
+                });
+                if (!(Number.isFinite(lat) && Number.isFinite(lon) && Number.isFinite(zoom))) {
+                    setMapRegion(currentMapRegion, document.querySelector(`[data-map-region="${currentMapRegion}"]`), true);
+                }
+            }
+            const preset = params.get('preset');
+            if (preset && ['global','conflict','infra','climate','market'].includes(preset)) {
+                currentPreset = preset;
+            }
+            const layersParam = params.get('layers');
+            if (layersParam) {
+                const requested = new Set(layersParam.split(',').map(s => s.trim()).filter(Boolean));
+                Object.entries(overlayMaps).forEach(([name, layer]) => {
+                    if (requested.has(name)) {
+                        if (!map.hasLayer(layer)) map.addLayer(layer);
+                    } else if (map.hasLayer(layer)) {
+                        map.removeLayer(layer);
+                    }
+                });
+            }
+            syncLayerTogglePanel();
+        }
+        function updateMapUrlState() {
+            const center = map.getCenter();
+            const zoom = map.getZoom();
+            const params = new URLSearchParams(window.location.search);
+            params.set('lat', center.lat.toFixed(4));
+            params.set('lon', center.lng.toFixed(4));
+            params.set('zoom', String(zoom));
+            params.set('timeRange', currentTimeRange);
+            params.set('layers', activeLayerKeys().join(','));
+            params.set('preset', currentPreset);
+            params.set('region', currentMapRegion);
+            const next = `${window.location.pathname}?${params.toString()}`;
+            window.history.replaceState({}, '', next);
+        }
+        function shareMapState() {
+            updateMapUrlState();
+            const url = window.location.href;
+            if (navigator.clipboard?.writeText) navigator.clipboard.writeText(url);
+            addIntelItem('MACRO', 'Map state link copied to clipboard for team sharing.', 'low');
+        }
+        function setTimeRange(range, btn) {
+            currentTimeRange = range;
+            document.querySelectorAll('[data-time-range]').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            fetchEarthquakes();
+            fetchGDACS();
+            fetchNews();
+            fetchGdeltEvents();
+            fetchGdeltMacroPulse();
+            fetchCyberAlertsLayer();
+            fetchAdvancedThematicLayers();
+            fetchEonetLayers();
+            fetchOpsNewsApps();
+            updateMapUrlState();
+        }
         function updatePageScore() {
             const total = Object.keys(pageHealth).length;
             const good = Object.values(pageHealth).filter(Boolean).length;
@@ -2189,7 +2476,7 @@
                 { name: 'Minerals', topic: 'minerals' }
             ];
             const result = await Promise.all(apps.map(async app => {
-                const items = await fetchIntelTopic(app.topic, 3);
+                const items = (await fetchIntelTopic(app.topic, 6)).filter(item => isWithinRange(item.pubDate || item.date || item.timestamp || ''));
                 const top = items[0] || null;
                 return {
                     name: app.name,
@@ -2241,6 +2528,10 @@
         }
 
         function applyLayerPreset(preset) {
+            currentPreset = preset;
+            document.querySelectorAll('.layer-presets .layer-preset-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-preset') === preset);
+            });
             const hideAll = [
                 layers.iranAttacks, layers.newsintel, layers.armedConflict, layers.militaryOps, layers.shipTraffic,
                 layers.tradeRoutesLive, layers.protests, layers.displacement, layers.climate, layers.hotspots,
@@ -2255,6 +2546,8 @@
             else if (preset === 'climate') add([layers.hotspots, layers.naturalEvents, layers.fires, layers.climate, layers.quakes, layers.dayNight]);
             else if (preset === 'market') add([layers.gdeltMacro, layers.economicCentersLive, layers.mineralsLive, layers.newsintel, layers.dayNight]);
             else add([layers.iranAttacks, layers.newsintel, layers.hotspots, layers.gdelt, layers.gdeltMacro, layers.cyberAlerts, layers.naturalEvents, layers.fires, layers.flights, layers.dayNight]);
+            syncLayerTogglePanel();
+            updateMapUrlState();
         }
 
         function updateSessionClock() {
@@ -2394,7 +2687,7 @@
                 const data = await response.json();
                 layers.quakes.clearLayers();
                 let majorCount = 0;
-                data.features.forEach(quake => {
+                data.features.filter(quake => isWithinRange(quake?.properties?.time)).forEach(quake => {
                     const mag = quake.properties.mag;
                     if (mag < 5.5) return;
                     majorCount++;
@@ -2423,7 +2716,7 @@
                 const items = xml.querySelectorAll("item");
                 layers.hotspots.clearLayers();
                 let severe = 0;
-                items.forEach(item => {
+                Array.from(items).filter(item => isWithinRange(item.querySelector("pubDate")?.textContent || '')).forEach(item => {
                     const title = item.querySelector("title")?.textContent || '';
                     const desc = item.querySelector("description")?.textContent || '';
                     const link = item.querySelector("link")?.textContent || '';
@@ -2478,7 +2771,7 @@
                 });
                 return items.map(i => ({ ...i, category: cfg.category }));
             }));
-            const items = results.flat();
+            const items = results.flat().filter(item => isWithinRange(item.pubDate || item.date || item.timestamp || ''));
             layers.newsintel.clearLayers();
             items.slice(0, 20).forEach(item => {
                 const point = locateHeadline(item.title || '');
@@ -2514,7 +2807,7 @@
                     fetchIntelTopic('cyber', 10),
                     fetchIntelTopic('outages', 10)
                 ]);
-                const items = [...cyberItems, ...outageItems];
+                const items = [...cyberItems, ...outageItems].filter(item => isWithinRange(item.pubDate || item.date || item.timestamp || ''));
                 layers.cyberAlerts.clearLayers();
                 items.slice(0, 20).forEach(item => {
                     const point = locateHeadline(item.title || '');
@@ -2536,7 +2829,7 @@
             const data = await res.json();
             if (data.status !== 'ok' || !Array.isArray(data.events) || !data.events.length) throw new Error('GDELT_THEME_DATA');
             layer.clearLayers();
-            data.events.slice(0, limit).forEach(ev => {
+            data.events.filter(ev => isWithinRange(ev.date || ev.publishedAt || ev.updatedAt || '') || currentTimeRange === 'all').slice(0, limit).forEach(ev => {
                 const link = ev.url ? `<br><a href="${ev.url}" target="_blank">Open source</a>` : '';
                 L.marker([ev.lat, ev.lng], { icon }).addTo(layer).bindPopup(`<b>${ev.name}</b><br>${ev.title}${link}`);
             });
@@ -2589,7 +2882,7 @@
                 events.forEach(ev => {
                     const geo = Array.isArray(ev.geometry) ? ev.geometry : [];
                     const cats = Array.isArray(ev.categories) ? ev.categories.map(c => (c.title || '').toLowerCase()) : [];
-                    const latestPoint = geo.slice().reverse().find(g => g.type === 'Point' && Array.isArray(g.coordinates) && g.coordinates.length >= 2);
+                    const latestPoint = geo.slice().reverse().find(g => g.type === 'Point' && Array.isArray(g.coordinates) && g.coordinates.length >= 2 && isWithinRange(g.date || g.timestamp || ev.closed || ev.geometry?.[0]?.date || ''));
                     if (!latestPoint) return;
                     const lat = latestPoint.coordinates[1];
                     const lng = latestPoint.coordinates[0];
@@ -3024,6 +3317,12 @@
         function initializeDashboard() {
             initializeRightPanel();
             initializeMapSizing();
+            renderLayerGroupPanel();
+            applyMapUrlState();
+            map.on('moveend', updateMapUrlState);
+            map.on('zoomend', updateMapUrlState);
+            map.on('overlayadd', () => { syncLayerTogglePanel(); updateMapUrlState(); });
+            map.on('overlayremove', () => { syncLayerTogglePanel(); updateMapUrlState(); });
             updateInfraStats();
             updateSessionClock();
             renderImpact();
@@ -3067,7 +3366,9 @@
             setInterval(updateSessionClock, 1000);
             setInterval(decayImpact, 45000);
             setInterval(updateChokepointPressure, 30000);
-            applyLayerPreset('global');
+            const params = new URLSearchParams(window.location.search);
+            if (!params.get('layers')) applyLayerPreset('global');
+            else { syncLayerTogglePanel(); updateMapUrlState(); }
         }
 
         function initializeRightPanel() {
