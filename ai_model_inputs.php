@@ -127,6 +127,18 @@ if ($finageKey) {
     }
 }
 
+if (!count($sources)) {
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'No AI input providers available',
+        'updatedAt' => gmdate('c'),
+        'sources' => [],
+        'features' => $features,
+        'finage_proxy_count' => null
+    ]);
+    exit;
+}
+
 $payload = [
     'status' => 'ok',
     'updatedAt' => gmdate('c'),

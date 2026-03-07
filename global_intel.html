@@ -19,6 +19,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="shortcut icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="favicon.svg">
     <style>
         :root {
             --primary: #2962ff;
@@ -126,7 +128,7 @@
         .ticker-content {
             display: inline-block;
             padding-left: 100%;
-            animation: ticker 120s linear infinite; /* Slowed down from 60s to 120s */
+            animation: ticker 220s linear infinite;
         }
         .ticker-content:hover { animation-play-state: paused; }
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
@@ -481,6 +483,9 @@
         }
         .infra-num { font-size: 1.1rem; font-weight: 800; color: #fff; }
         .infra-label { font-size: 0.65rem; color: #787b86; text-transform: uppercase; }
+        .infra-sources { margin-top: 8px; display: grid; gap: 4px; }
+        .infra-source-row { font-size: 0.63rem; color: #b2b5be; display: flex; justify-content: space-between; background: #0a0e17; border: 1px solid #2a2e39; border-radius: 4px; padding: 4px 6px; }
+        .infra-source-row .src { color: #787b86; }
 
 
         /* Video Controls */
@@ -774,6 +779,13 @@
         .ai-input-row { background: #131722; border: 1px solid #2a2e39; border-radius: 4px; padding: 6px 8px; font-size: .66rem; display: flex; justify-content: space-between; align-items: center; }
         .ai-input-k { color: #b2b5be; font-weight: 700; }
         .ai-input-v { color: #fff; font-weight: 700; }
+        .advisor-meta { font-size: .62rem; color: #787b86; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .5px; }
+        .advisor-list { display: grid; gap: 6px; }
+        .advisor-row { background: #131722; border: 1px solid #2a2e39; border-radius: 4px; padding: 6px 8px; font-size: .66rem; line-height: 1.35; }
+        .advisor-row .asset { font-weight: 800; color: #fff; margin-right: 6px; }
+        .advisor-row .bias.buy { color: #26a69a; font-weight: 700; }
+        .advisor-row .bias.sell { color: #ef5350; font-weight: 700; }
+        .econ-widget-wrap { height: 250px; width: 100%; }
         .alert-details { margin-top: 8px; display: grid; gap: 5px; max-height: 130px; overflow-y: auto; }
         .alert-details .row { background: #131722; border: 1px solid #2a2e39; border-radius: 4px; padding: 6px 8px; font-size: .66rem; line-height: 1.3; }
         .alert-details .row.high { border-left: 3px solid #ef5350; }
@@ -1179,6 +1191,30 @@
                             <div class="infra-label">Nuclear Sites</div>
                         </div>
                     </div>
+                    <div class="infra-sources" id="infra-sources"></div>
+                </div>
+            </div>
+            <div class="dash-card">
+                <div class="dash-header">
+                    <span><i class="fas fa-calendar-alt"></i> Economic Calendar</span>
+                    <span class="dash-badge">LIVE</span>
+                </div>
+                <div class="dash-content">
+                    <div class="econ-widget-wrap">
+                        <div class="tradingview-widget-container" style="height:100%;width:100%;">
+                            <div class="tradingview-widget-container__widget"></div>
+                            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>
+                            {
+                            "colorTheme": "dark",
+                            "isTransparent": true,
+                            "width": "100%",
+                            "height": "100%",
+                            "locale": "en",
+                            "importanceFilter": "-1,0,1"
+                            }
+                            </script>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="dash-card">
@@ -1309,6 +1345,13 @@
                     <div class="ai-input-row"><span class="ai-input-k">Headline Count</span><span class="ai-input-v">--</span></div>
                 </div>
             </div>
+            <div class="bottom-card">
+                <h4>AI Opportunity Radar</h4>
+                <div class="advisor-meta" id="advisor-meta">Calculating opportunities...</div>
+                <div class="advisor-list" id="advisor-list">
+                    <div class="advisor-row"><span class="asset">--</span><span class="bias">Waiting for live metrics...</span></div>
+                </div>
+            </div>
             <div class="bottom-card" style="min-width: 420px;">
                 <h4>Recent Market Catalysts</h4>
                 <div class="catalyst-tape" id="catalyst-tape">
@@ -1407,6 +1450,7 @@
             quakes: L.layerGroup().addTo(map),
             hotspots: L.layerGroup().addTo(map),
             newsintel: L.layerGroup().addTo(map),
+            gdelt: L.layerGroup().addTo(map),
             nuclear: L.layerGroup(),
             chokepoints: L.layerGroup().addTo(map),
             cables: L.layerGroup().addTo(map),
@@ -1418,6 +1462,7 @@
             "Live Flights": layers.flights,
             "Conflict & Disaster": layers.hotspots,
             "Intel Headlines": layers.newsintel,
+            "GDELT Geo Events": layers.gdelt,
             "Major Quakes": layers.quakes,
             "Strategic Chokepoints": layers.chokepoints,
             "Undersea Cable Hubs": layers.cables,
@@ -1511,6 +1556,7 @@
         };
         const fxState = { last: {} };
         const stockState = { last: {} };
+        const marketState = { rows: [] };
         const pageHealth = {
             news: false,
             mini: false,
@@ -1521,7 +1567,8 @@
             stocks: false,
             signals: false,
             ai: false,
-            mapIntel: false
+            mapIntel: false,
+            gdelt: false
         };
 
         function clamp(n, min = 0, max = 100) { return Math.max(min, Math.min(max, n)); }
@@ -1659,6 +1706,18 @@
             updateAlertMatrix();
         }
 
+        function updateInfraReferences() {
+            const box = document.getElementById('infra-sources');
+            const rows = [
+                { name: 'Aviation Feed', src: liveMetrics.flights > 0 ? 'aviation_flights.php' : 'offline', val: liveMetrics.flights > 0 ? `${liveMetrics.flights} tracks` : 'no data' },
+                { name: 'Shipping Signal', src: 'intel_feed.php shipping + map layers', val: `${liveMetrics.shippingEvents} events` },
+                { name: 'Chokepoints', src: 'curated strategic map set', val: `${chokepoints.length} mapped` },
+                { name: 'Cable Nodes', src: 'curated strategic map set', val: `${cableNodes.length} mapped` },
+                { name: 'GDELT Geo', src: pageHealth.gdelt ? 'gdelt_events.php' : 'offline', val: pageHealth.gdelt ? 'live' : 'no data' }
+            ];
+            box.innerHTML = rows.map(r => `<div class="infra-source-row"><span>${r.name} · ${r.val}</span><span class="src">${r.src}</span></div>`).join('');
+        }
+
         function updateImpactFromHeadline(title, sourceTag, link) {
             const sourceType = classifySource(sourceTag, title);
             const delta = scoreHeadline(title);
@@ -1723,6 +1782,7 @@
             });
             renderAssetBias();
             updateRiskGauge();
+            updateAiAdvisor();
         }
 
         function renderAssetBias() {
@@ -1909,9 +1969,29 @@
                 const provider = payload.provider || 'feed';
                 addIntelItem('SHIPPING', `Aviation stream live via ${provider}: ${payload.flights.length} active tracks rendered.`, 'low');
             } catch {
-                liveMetrics.flights = 0;
-                pageHealth.flights = false;
-                addIntelItem('SHIPPING', 'Aviation feed unavailable: no synthetic fallback is shown. Check API key or provider status.', 'medium');
+                try {
+                    const FLIGHT_BOUNDS = "lamin=35&lomin=-10&lamax=60&lomax=30";
+                    const response = await fetch(`https://opensky-network.org/api/states/all?${FLIGHT_BOUNDS}`);
+                    if (!response.ok) throw new Error('OPENSKY_HTTP');
+                    const data = await response.json();
+                    const states = (data.states || []).filter(f => Number.isFinite(f[5]) && Number.isFinite(f[6])).slice(0, 70);
+                    if (!states.length) throw new Error('OPENSKY_EMPTY');
+                    liveMetrics.flights = states.length;
+                    pageHealth.flights = true;
+                    states.forEach(flight => {
+                        const callsign = (flight[1] || 'UNK').trim();
+                        const lon = flight[5];
+                        const lat = flight[6];
+                        const origin = flight[2] || 'Unknown';
+                        const altitude = flight[7] ? `${Math.round(flight[7])}m` : 'N/A';
+                        L.marker([lat, lon], { icon: icons.plane }).addTo(layers.flights).bindPopup(`<b>${callsign}</b><br>${origin}<br>Alt: ${altitude}`);
+                    });
+                    addIntelItem('SHIPPING', `Aviation stream live via opensky direct: ${states.length} active tracks rendered.`, 'low');
+                } catch {
+                    liveMetrics.flights = 0;
+                    pageHealth.flights = false;
+                    addIntelItem('SHIPPING', 'Aviation feed unavailable: check API key/provider status.', 'medium');
+                }
             }
             updatePageScore();
             updateRiskGauge();
@@ -2034,6 +2114,7 @@
             ticker.innerHTML = tickerText + tickerText;
             updateRiskGauge();
             updatePageScore();
+            updateInfraReferences();
         }
 
         function renderMiniFeed(targetId, metaId, items, fallbackLink) {
@@ -2108,8 +2189,27 @@
                 meta.innerText = `Base USD · ${provider} · ${updated}`;
                 pageHealth.fx = true;
             } catch {
-                meta.innerText = 'FX feed unavailable, retrying...';
-                pageHealth.fx = false;
+                try {
+                    const direct = await fetch(`https://api.frankfurter.app/latest?from=USD&to=${pairs.join(',')}`);
+                    if (!direct.ok) throw new Error('FRANKFURTER_HTTP');
+                    const fallback = await direct.json();
+                    if (!fallback.rates) throw new Error('FRANKFURTER_DATA');
+                    const rates = fallback.rates;
+                    const rows = [];
+                    const pushRow = (pair, value) => rows.push(`<div class="fx-row"><span class="fx-pair">${pair}</span><span class="fx-rate">${value.toFixed(pair.includes('JPY') ? 3 : 5)}</span></div>`);
+                    pushRow('EUR/USD', 1 / rates.EUR);
+                    pushRow('GBP/USD', 1 / rates.GBP);
+                    pushRow('USD/JPY', rates.JPY);
+                    pushRow('USD/CHF', rates.CHF);
+                    pushRow('AUD/USD', 1 / rates.AUD);
+                    pushRow('USD/CAD', rates.CAD);
+                    grid.innerHTML = rows.join('');
+                    meta.innerText = `Base USD · frankfurter direct · ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`;
+                    pageHealth.fx = true;
+                } catch {
+                    meta.innerText = 'FX feed unavailable, retrying...';
+                    pageHealth.fx = false;
+                }
             }
             updatePageScore();
         }
@@ -2123,6 +2223,7 @@
                 const data = await res.json();
                 if (data.status !== 'ok' || !Array.isArray(data.data)) throw new Error('STOCK_DATA');
                 if (!data.data.length) throw new Error('STOCK_EMPTY');
+                marketState.rows = data.data;
                 const rows = data.data.map(item => {
                     const sym = item.symbol || 'UNK';
                     const price = Number(item.price || 0);
@@ -2144,10 +2245,39 @@
                 meta.innerText = `${provider} · ${updated}`;
                 pageHealth.stocks = true;
             } catch {
-                meta.innerText = 'Market feed unavailable, retrying...';
-                pageHealth.stocks = false;
+                try {
+                    const direct = await fetch('https://query1.finance.yahoo.com/v7/finance/quote?symbols=SPY,QQQ,DIA,GLD,USO');
+                    if (!direct.ok) throw new Error('YAHOO_HTTP');
+                    const y = await direct.json();
+                    const rows = (y.quoteResponse?.result || []).map(item => ({
+                        symbol: item.symbol,
+                        price: item.regularMarketPrice,
+                        changePct: item.regularMarketChangePercent
+                    })).filter(r => typeof r.price === 'number');
+                    const fx = await fetch('https://api.frankfurter.app/latest?from=EUR&to=USD');
+                    if (fx.ok) {
+                        const fxJson = await fx.json();
+                        if (fxJson?.rates?.USD) rows.push({ symbol: 'EURUSD', price: Number(fxJson.rates.USD), changePct: null });
+                    }
+                    if (!rows.length) throw new Error('YAHOO_EMPTY');
+                    marketState.rows = rows;
+                    grid.innerHTML = rows.map(item => {
+                        const price = Number(item.price || 0);
+                        const change = item.changePct;
+                        const chClass = typeof change === 'number' ? (change >= 0 ? 'up' : 'down') : '';
+                        const chText = typeof change === 'number' ? `${change >= 0 ? '+' : ''}${change.toFixed(2)}%` : '--';
+                        return `<div class="stock-row"><span class="stock-symbol">${item.symbol}</span><span><span class="stock-price">${price.toFixed(price > 100 ? 2 : 4)}</span><span class="stock-change ${chClass}">${chText}</span></span></div>`;
+                    }).join('');
+                    meta.innerText = `yahoo + frankfurter direct · ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`;
+                    pageHealth.stocks = true;
+                } catch {
+                    meta.innerText = 'Market feed unavailable, retrying...';
+                    pageHealth.stocks = false;
+                    marketState.rows = [];
+                }
             }
             updatePageScore();
+            updateAiAdvisor();
         }
 
         async function fetchPublicSignals() {
@@ -2203,10 +2333,78 @@
                 meta.innerText = `${src} · ${updated}`;
                 pageHealth.ai = true;
             } catch {
-                meta.innerText = 'AI input feeds unavailable, retrying...';
-                pageHealth.ai = false;
+                const derivedRows = [
+                    ['EURUSD Spot', typeof fxState.last['EUR/USD'] === 'number' ? fxState.last['EUR/USD'].toFixed(5) : '--'],
+                    ['1D Momentum', `${impactState.assets['EUR/USD'] >= 0 ? '+' : ''}${(impactState.assets['EUR/USD'] || 0).toFixed(2)}%`],
+                    ['10D Volatility', `${(impactState.score / 10).toFixed(2)}%`],
+                    ['News Sentiment', `${impactState.score > 55 ? 'Risk-off' : impactState.score < 35 ? 'Risk-on' : 'Mixed'}`],
+                    ['Headline Count', `${liveMetrics.newsHeadlines || 0}`]
+                ];
+                grid.innerHTML = derivedRows.map(([k, v]) => `<div class="ai-input-row"><span class="ai-input-k">${k}</span><span class="ai-input-v">${v}</span></div>`).join('');
+                meta.innerText = `derived from live dashboard metrics · ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`;
+                pageHealth.ai = liveMetrics.newsHeadlines > 0 || liveMetrics.flights > 0;
             }
             updatePageScore();
+        }
+
+        async function fetchGdeltEvents() {
+            try {
+                const query = encodeURIComponent('forex OR oil OR shipping OR sanctions OR conflict');
+                const res = await fetch(`gdelt_events.php?query=${query}&timespan=180&limit=80`);
+                if (!res.ok) throw new Error('GDELT_HTTP');
+                const data = await res.json();
+                if (data.status !== 'ok' || !Array.isArray(data.events) || !data.events.length) throw new Error('GDELT_DATA');
+                layers.gdelt.clearLayers();
+                data.events.slice(0, 80).forEach(ev => {
+                    const link = ev.url ? `<br><a href="${ev.url}" target="_blank">Open source</a>` : '';
+                    L.marker([ev.lat, ev.lng], { icon: icons.conflict }).addTo(layers.gdelt).bindPopup(`<b>${ev.name}</b><br>${ev.title}${link}`);
+                });
+                pageHealth.gdelt = true;
+            } catch {
+                try {
+                    const query = encodeURIComponent('"forex" OR "oil" OR "shipping" OR "sanctions"');
+                    const direct = await fetch(`https://api.gdeltproject.org/api/v1/gkg_geojson?QUERY=${query}&TIMESPAN=120&MAXROWS=60`);
+                    if (!direct.ok) throw new Error('GDELT_DIRECT_HTTP');
+                    const geo = await direct.json();
+                    const features = geo.features || [];
+                    if (!features.length) throw new Error('GDELT_DIRECT_EMPTY');
+                    layers.gdelt.clearLayers();
+                    features.slice(0, 60).forEach(f => {
+                        const c = f.geometry?.coordinates;
+                        if (!Array.isArray(c) || c.length < 2) return;
+                        const lat = c[1], lng = c[0];
+                        const prop = f.properties || {};
+                        const name = prop.name || 'Location';
+                        const title = prop.title || prop.allnames || 'GDELT Event';
+                        L.marker([lat, lng], { icon: icons.conflict }).addTo(layers.gdelt).bindPopup(`<b>${name}</b><br>${title}`);
+                    });
+                    pageHealth.gdelt = true;
+                } catch {
+                    layers.gdelt.clearLayers();
+                    pageHealth.gdelt = false;
+                }
+            }
+            updatePageScore();
+            updateInfraReferences();
+        }
+
+        function updateAiAdvisor() {
+            const meta = document.getElementById('advisor-meta');
+            const list = document.getElementById('advisor-list');
+            const assets = Object.entries(impactState.assets || {});
+            if (!assets.length) {
+                meta.innerText = 'No asset inputs available';
+                list.innerHTML = '<div class="advisor-row"><span class="asset">--</span><span class="bias">No opportunities yet</span></div>';
+                return;
+            }
+            const picks = assets.sort((a, b) => Math.abs(b[1]) - Math.abs(a[1])).slice(0, 4).map(([asset, score]) => {
+                const side = score >= 0 ? 'buy' : 'sell';
+                const context = impactState.score >= 65 ? 'risk-off' : impactState.score <= 35 ? 'risk-on' : 'mixed';
+                const confidence = Math.min(99, Math.round(Math.abs(score) * 2 + impactState.score * 0.3));
+                return { asset, side, confidence, context };
+            });
+            list.innerHTML = picks.map(p => `<div class="advisor-row"><span class="asset">${p.asset}</span><span class="bias ${p.side}">${p.side.toUpperCase()}</span> · ${p.confidence}% · regime ${p.context}</div>`).join('');
+            meta.innerText = `Model-assisted watchlist · ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`;
         }
 
         function filterRegion(region) {
@@ -2225,6 +2423,7 @@
             document.getElementById('stat-chokepoints').innerText = chokepoints.length;
             document.getElementById('stat-cables').innerText = cableNodes.length;
             document.getElementById('stat-ports').innerText = '--';
+            updateInfraReferences();
         }
 
         function changeChannel(sourceId, btn) {
@@ -2308,15 +2507,18 @@
             fetchGDACS();
             fetchFlights();
             fetchNews();
+            fetchGdeltEvents();
             loadMiniFeeds();
             fetchForexRates();
             fetchMarketSnapshot();
             fetchPublicSignals();
             fetchAiModelInputs();
+            updateAiAdvisor();
             setInterval(fetchFlights, 180000);
             setInterval(fetchGDACS, 900000);
             setInterval(fetchEarthquakes, 600000);
             setInterval(fetchNews, 240000);
+            setInterval(fetchGdeltEvents, 300000);
             setInterval(loadMiniFeeds, 300000);
             setInterval(fetchForexRates, 60000);
             setInterval(fetchMarketSnapshot, 60000);

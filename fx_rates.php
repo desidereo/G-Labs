@@ -77,6 +77,21 @@ function normalizeExchangeHostRates($data, $requestedBase, $symbols) {
     ];
 }
 
+function normalizeFrankfurterRates($data, $requestedBase, $symbols) {
+    if (!isset($data['rates']) || !is_array($data['rates'])) return null;
+    $rates = [];
+    foreach ($symbols as $s) {
+        if ($s === $requestedBase) $rates[$s] = 1.0;
+        elseif (isset($data['rates'][$s]) && is_numeric($data['rates'][$s])) $rates[$s] = floatval($data['rates'][$s]);
+    }
+    return [
+        'provider' => 'frankfurter',
+        'base' => $requestedBase,
+        'timestamp' => isset($data['date']) ? strtotime($data['date']) : time(),
+        'rates' => $rates
+    ];
+}
+
 $cacheKey = 'g_labs_fx_' . $base . '_' . implode('', $symbols) . '.json';
 $cachePath = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $cacheKey;
 $cacheTtl = 120;
@@ -101,6 +116,12 @@ if (!$result) {
     $fallbackUrl = 'https://api.exchangerate.host/latest?base=' . urlencode($base) . '&symbols=' . urlencode(implode(',', $symbols));
     $fallbackData = fetchJson($fallbackUrl);
     $result = normalizeExchangeHostRates($fallbackData, $base, $symbols);
+}
+
+if (!$result) {
+    $frankfurterUrl = 'https://api.frankfurter.app/latest?from=' . urlencode($base) . '&to=' . urlencode(implode(',', array_filter($symbols, function ($s) use ($base) { return $s !== $base; })));
+    $frankfurterData = fetchJson($frankfurterUrl);
+    $result = normalizeFrankfurterRates($frankfurterData, $base, $symbols);
 }
 
 if (!$result || !isset($result['rates']) || !count($result['rates'])) {

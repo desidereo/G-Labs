@@ -72,6 +72,21 @@ function normalizeStooqCsv($csv) {
     return $rows;
 }
 
+function normalizeYahooQuote($data) {
+    if (!isset($data['quoteResponse']['result']) || !is_array($data['quoteResponse']['result'])) return [];
+    $rows = [];
+    foreach ($data['quoteResponse']['result'] as $item) {
+        if (!isset($item['symbol'], $item['regularMarketPrice']) || !is_numeric($item['regularMarketPrice'])) continue;
+        $changePct = isset($item['regularMarketChangePercent']) && is_numeric($item['regularMarketChangePercent']) ? floatval($item['regularMarketChangePercent']) : null;
+        $rows[] = [
+            'symbol' => strtoupper($item['symbol']),
+            'price' => floatval($item['regularMarketPrice']),
+            'changePct' => $changePct
+        ];
+    }
+    return $rows;
+}
+
 $cacheKey = 'g_labs_stocks_' . implode('', $symbols) . '.json';
 $cachePath = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $cacheKey;
 $cacheTtl = 120;
@@ -103,6 +118,38 @@ if (!count($rows)) {
             $rows = normalizeStooqCsv($csv);
             if (count($rows)) $provider = 'stooq';
         }
+    }
+}
+
+if (!count($rows)) {
+    $yahooMap = [
+        'SPY' => 'SPY',
+        'QQQ' => 'QQQ',
+        'DIA' => 'DIA',
+        'GLD' => 'GLD',
+        'USO' => 'USO'
+    ];
+    $yahooSymbols = [];
+    foreach ($symbols as $s) {
+        if (isset($yahooMap[$s])) $yahooSymbols[] = $yahooMap[$s];
+    }
+    if (count($yahooSymbols)) {
+        $yahooUrl = 'https://query1.finance.yahoo.com/v7/finance/quote?symbols=' . urlencode(implode(',', $yahooSymbols));
+        $yahooData = fetchJsonPayload($yahooUrl);
+        $rows = normalizeYahooQuote($yahooData);
+        if (count($rows)) $provider = 'yahoo_finance';
+    }
+}
+
+if (count($rows) && in_array('EURUSD', $symbols, true)) {
+    $fx = fetchJsonPayload('https://api.frankfurter.app/latest?from=EUR&to=USD');
+    if ($fx && isset($fx['rates']['USD']) && is_numeric($fx['rates']['USD'])) {
+        $rows[] = [
+            'symbol' => 'EURUSD',
+            'price' => floatval($fx['rates']['USD']),
+            'changePct' => null
+        ];
+        if (!$provider) $provider = 'frankfurter';
     }
 }
 
