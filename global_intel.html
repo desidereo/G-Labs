@@ -949,6 +949,81 @@
             gap: 5px;
             margin-top: 6px;
         }
+        .layer-group-tools {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+        .layer-group-title {
+            color: #d1d4dc;
+            font-size: 0.66rem;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            font-weight: 700;
+            margin: 2px 0 6px;
+        }
+        .view-history-list {
+            display: grid;
+            gap: 5px;
+            margin: 6px 0 8px;
+        }
+        .view-history-row {
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: 5px;
+            align-items: center;
+            border: 1px solid #2a2e39;
+            border-radius: 5px;
+            background: #101522;
+            padding: 5px;
+        }
+        .view-history-name {
+            color: #d1d4dc;
+            font-size: 0.62rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .mini-action-btn {
+            border: 1px solid #2a2e39;
+            background: #1a2130;
+            color: #b2b5be;
+            border-radius: 4px;
+            font-size: 0.58rem;
+            padding: 3px 6px;
+            cursor: pointer;
+        }
+        .mini-action-btn:hover { color: #fff; border-color: #2962ff; }
+        .slot-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px;
+            margin: 6px 0 8px;
+        }
+        .slot-btn {
+            border: 1px solid #2a2e39;
+            background: #111827;
+            color: #c6cad3;
+            border-radius: 4px;
+            font-size: 0.6rem;
+            padding: 4px 6px;
+            cursor: pointer;
+            text-align: left;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .slot-btn.active {
+            border-color: #2962ff;
+            color: #fff;
+            background: rgba(41, 98, 255, 0.24);
+        }
+        .slot-row-actions {
+            display: flex;
+            gap: 5px;
+            margin-top: 4px;
+        }
         .layer-toggle {
             display: flex;
             align-items: center;
@@ -1295,6 +1370,7 @@
                 <button class="layer-preset-btn" data-map-region="AFRICA" onclick="setMapRegion('AFRICA', this)">Africa</button>
             </div>
             <div class="layer-group-panel" id="layer-group-panel"></div>
+            <input type="file" id="view-pack-file" accept="application/json" style="display:none;">
             
             <!-- Browser Interface -->
             <div class="browser-toolbar" id="browser-toolbar">
@@ -1900,6 +1976,8 @@
         let currentPreset = 'global';
         let currentTimeRange = '24h';
         let currentMapRegion = 'GLOBAL';
+        const savedViewsStorageKey = 'glabs_saved_map_views_v1';
+        const quickSlotsStorageKey = 'glabs_quick_map_slots_v1';
         let allRegionalItems = [];
         const liveMetrics = {
             flights: 0,
@@ -1957,10 +2035,233 @@
         function activeLayerKeys() {
             return Object.entries(overlayMaps).filter(([, layer]) => map.hasLayer(layer)).map(([name]) => name);
         }
+        function refreshLiveMapFeeds() {
+            fetchEarthquakes();
+            fetchGDACS();
+            fetchNews();
+            fetchGdeltEvents();
+            fetchGdeltMacroPulse();
+            fetchCyberAlertsLayer();
+            fetchAdvancedThematicLayers();
+            fetchEonetLayers();
+            fetchOpsNewsApps();
+        }
+        function readSavedViews() {
+            try {
+                const raw = localStorage.getItem(savedViewsStorageKey);
+                const parsed = raw ? JSON.parse(raw) : [];
+                return Array.isArray(parsed) ? parsed : [];
+            } catch {
+                return [];
+            }
+        }
+        function writeSavedViews(items) {
+            const trimmed = items.slice(0, 20);
+            localStorage.setItem(savedViewsStorageKey, JSON.stringify(trimmed));
+        }
+        function defaultQuickSlots() {
+            return [
+                { id: 'ops', name: 'Ops', preset: 'conflict', region: 'MENA', timeRange: '24h' },
+                { id: 'macro', name: 'Macro', preset: 'market', region: 'EUROPE', timeRange: '24h' },
+                { id: 'infra', name: 'Infra', preset: 'infra', region: 'GLOBAL', timeRange: '7d' },
+                { id: 'climate', name: 'Climate', preset: 'climate', region: 'ASIA', timeRange: '7d' }
+            ];
+        }
+        function readQuickSlots() {
+            try {
+                const raw = localStorage.getItem(quickSlotsStorageKey);
+                const parsed = raw ? JSON.parse(raw) : null;
+                if (!Array.isArray(parsed) || !parsed.length) return defaultQuickSlots();
+                return parsed.slice(0, 8);
+            } catch {
+                return defaultQuickSlots();
+            }
+        }
+        function writeQuickSlots(items) {
+            localStorage.setItem(quickSlotsStorageKey, JSON.stringify(items.slice(0, 8)));
+        }
+        function captureCurrentMapState() {
+            const center = map.getCenter();
+            return {
+                lat: Number(center.lat.toFixed(4)),
+                lon: Number(center.lng.toFixed(4)),
+                zoom: map.getZoom(),
+                timeRange: currentTimeRange,
+                preset: currentPreset,
+                region: currentMapRegion,
+                layers: activeLayerKeys()
+            };
+        }
+        function applyCapturedMapState(state) {
+            if (!state) return;
+            if (state.preset) applyLayerPreset(state.preset);
+            if (state.region) setMapRegion(state.region, document.querySelector(`[data-map-region="${state.region}"]`), true);
+            if (state.timeRange) setTimeRange(state.timeRange, document.querySelector(`[data-time-range="${state.timeRange}"]`));
+            if (Array.isArray(state.layers) && state.layers.length) {
+                const requested = new Set(state.layers);
+                Object.entries(overlayMaps).forEach(([name, layer]) => {
+                    if (requested.has(name)) {
+                        if (!map.hasLayer(layer)) map.addLayer(layer);
+                    } else if (map.hasLayer(layer)) {
+                        map.removeLayer(layer);
+                    }
+                });
+            }
+            if (Number.isFinite(state.lat) && Number.isFinite(state.lon) && Number.isFinite(state.zoom)) {
+                map.setView([state.lat, state.lon], clamp(state.zoom, 1, 18));
+            }
+            syncLayerTogglePanel();
+            updateMapUrlState();
+        }
+        function useQuickSlot(slotId) {
+            const slot = readQuickSlots().find(s => s.id === slotId);
+            if (!slot) return;
+            applyCapturedMapState(slot);
+            refreshLiveMapFeeds();
+            renderLayerGroupPanel();
+        }
+        function saveQuickSlot(slotId) {
+            const slots = readQuickSlots();
+            const idx = slots.findIndex(s => s.id === slotId);
+            if (idx < 0) return;
+            const state = captureCurrentMapState();
+            slots[idx] = { ...slots[idx], ...state };
+            writeQuickSlots(slots);
+            renderLayerGroupPanel();
+            addIntelItem('MACRO', `Quick slot "${slots[idx].name}" updated.`, 'low');
+        }
+        function renameQuickSlot(slotId) {
+            const slots = readQuickSlots();
+            const idx = slots.findIndex(s => s.id === slotId);
+            if (idx < 0) return;
+            const nextName = (window.prompt('Rename quick slot', slots[idx].name || 'View') || '').trim();
+            if (!nextName) return;
+            slots[idx].name = nextName.slice(0, 20);
+            writeQuickSlots(slots);
+            renderLayerGroupPanel();
+        }
+        function exportViewPack() {
+            const payload = {
+                version: 1,
+                exportedAt: new Date().toISOString(),
+                app: 'g-labs-global-intel',
+                quickSlots: readQuickSlots(),
+                savedViews: readSavedViews()
+            };
+            const json = JSON.stringify(payload, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `g-labs-view-pack-${Date.now()}.json`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+            if (navigator.clipboard?.writeText) navigator.clipboard.writeText(json);
+            addIntelItem('MACRO', 'View pack exported and copied to clipboard.', 'low');
+        }
+        function triggerImportViewPack() {
+            const input = document.getElementById('view-pack-file');
+            if (!input) return;
+            input.value = '';
+            input.click();
+        }
+        function handleViewPackFileSelected(event) {
+            const file = event?.target?.files?.[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = () => {
+                try {
+                    importViewPackFromText(String(reader.result || ''));
+                } catch {
+                    addIntelItem('ALERT', 'Failed to import view pack. Check file format.', 'medium');
+                }
+            };
+            reader.readAsText(file);
+        }
+        function importViewPackFromText(text) {
+            const payload = JSON.parse(text);
+            const importedSaved = Array.isArray(payload?.savedViews) ? payload.savedViews.filter(v => v && v.id && v.name && v.url) : [];
+            const importedSlots = Array.isArray(payload?.quickSlots) ? payload.quickSlots.filter(s => s && s.id && s.name) : [];
+            if (!importedSaved.length && !importedSlots.length) throw new Error('EMPTY_PACK');
+            if (importedSaved.length) writeSavedViews(importedSaved);
+            if (importedSlots.length) writeQuickSlots(importedSlots);
+            renderLayerGroupPanel();
+            addIntelItem('MACRO', `Imported view pack · ${importedSaved.length} saved views · ${importedSlots.length} quick slots.`, 'low');
+        }
+        function saveCurrentView() {
+            updateMapUrlState();
+            const defaultName = `${currentPreset.toUpperCase()} · ${currentMapRegion} · ${currentTimeRange}`;
+            const name = (window.prompt('Name this map view', defaultName) || '').trim();
+            if (!name) return;
+            const views = readSavedViews();
+            const next = [{ id: `${Date.now()}-${Math.random().toString(16).slice(2,8)}`, name, url: window.location.href, ts: Date.now() }, ...views.filter(v => v.name !== name)];
+            writeSavedViews(next);
+            renderLayerGroupPanel();
+            addIntelItem('MACRO', `Saved view "${name}" to map history.`, 'low');
+        }
+        function openSavedView(id) {
+            const item = readSavedViews().find(v => v.id === id);
+            if (!item?.url) return;
+            const parsed = new URL(item.url, window.location.origin);
+            window.history.replaceState({}, '', `${parsed.pathname}${parsed.search}`);
+            applyMapUrlState();
+            refreshLiveMapFeeds();
+            updateMapUrlState();
+        }
+        function deleteSavedView(id) {
+            writeSavedViews(readSavedViews().filter(v => v.id !== id));
+            renderLayerGroupPanel();
+        }
+        function clearSavedViews() {
+            writeSavedViews([]);
+            renderLayerGroupPanel();
+        }
+        function setAllLayerGroupSections(opened) {
+            document.querySelectorAll('#layer-group-panel details').forEach(d => {
+                d.open = opened;
+            });
+        }
         function renderLayerGroupPanel() {
             const panel = document.getElementById('layer-group-panel');
             if (!panel) return;
-            panel.innerHTML = Object.entries(groupedOverlayMaps).map(([groupName, layerNames], idx) => {
+            const views = readSavedViews();
+            const slots = readQuickSlots();
+            const toolsHtml = `
+                <div class="layer-group-title">Layer Controls</div>
+                <div class="layer-group-tools">
+                    <button class="mini-action-btn" onclick="setAllLayerGroupSections(true)">Expand All</button>
+                    <button class="mini-action-btn" onclick="setAllLayerGroupSections(false)">Collapse All</button>
+                    <button class="mini-action-btn" onclick="saveCurrentView()">Save View</button>
+                    <button class="mini-action-btn" onclick="clearSavedViews()">Clear Views</button>
+                    <button class="mini-action-btn" onclick="exportViewPack()">Export Pack</button>
+                    <button class="mini-action-btn" onclick="triggerImportViewPack()">Import Pack</button>
+                </div>
+                <div class="layer-group-title">Quick Slots</div>
+                <div class="slot-grid">
+                    ${slots.map(s => `
+                        <button class="slot-btn ${currentPreset === s.preset && currentMapRegion === s.region ? 'active' : ''}" title="${s.name}" onclick="useQuickSlot('${s.id}')">${s.name}</button>
+                    `).join('')}
+                </div>
+                <div class="slot-row-actions">
+                    ${slots.map(s => `<button class="mini-action-btn" onclick="saveQuickSlot('${s.id}')">Save ${s.name}</button>`).join('')}
+                </div>
+                <div class="slot-row-actions">
+                    ${slots.map(s => `<button class="mini-action-btn" onclick="renameQuickSlot('${s.id}')">Rename ${s.name}</button>`).join('')}
+                </div>
+                <div class="layer-group-title">Saved Views</div>
+                <div class="view-history-list">
+                    ${views.length ? views.map(v => `
+                        <div class="view-history-row">
+                            <div class="view-history-name">${v.name}</div>
+                            <button class="mini-action-btn" onclick="openSavedView('${v.id}')">Open</button>
+                            <button class="mini-action-btn" onclick="deleteSavedView('${v.id}')">Del</button>
+                        </div>
+                    `).join('') : `<div class="view-history-row"><div class="view-history-name">No saved views yet</div><span></span><span></span></div>`}
+                </div>
+            `;
+            const groupsHtml = Object.entries(groupedOverlayMaps).map(([groupName, layerNames], idx) => {
                 const rows = layerNames.filter(name => overlayMaps[name]).map(name => {
                     const checked = map.hasLayer(overlayMaps[name]) ? 'checked' : '';
                     const id = `lg-${name.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}`;
@@ -1968,6 +2269,7 @@
                 }).join('');
                 return `<details ${idx < 2 ? 'open' : ''}><summary>${groupName}</summary><div class="group-items">${rows}</div></details>`;
             }).join('');
+            panel.innerHTML = toolsHtml + groupsHtml;
         }
         function syncLayerTogglePanel() {
             document.querySelectorAll('#layer-group-panel input[data-layer-name]').forEach(input => {
@@ -2066,15 +2368,7 @@
             currentTimeRange = range;
             document.querySelectorAll('[data-time-range]').forEach(b => b.classList.remove('active'));
             if (btn) btn.classList.add('active');
-            fetchEarthquakes();
-            fetchGDACS();
-            fetchNews();
-            fetchGdeltEvents();
-            fetchGdeltMacroPulse();
-            fetchCyberAlertsLayer();
-            fetchAdvancedThematicLayers();
-            fetchEonetLayers();
-            fetchOpsNewsApps();
+            refreshLiveMapFeeds();
             updateMapUrlState();
         }
         function updatePageScore() {
@@ -3318,6 +3612,11 @@
             initializeRightPanel();
             initializeMapSizing();
             renderLayerGroupPanel();
+            const packInput = document.getElementById('view-pack-file');
+            if (packInput && !packInput.dataset.bound) {
+                packInput.addEventListener('change', handleViewPackFileSelected);
+                packInput.dataset.bound = '1';
+            }
             applyMapUrlState();
             map.on('moveend', updateMapUrlState);
             map.on('zoomend', updateMapUrlState);
