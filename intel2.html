@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G-Labs | Intel 2</title>
+    <meta name="description" content="Intel 2 embeds a World Monitor-based global intelligence dashboard as a separate subpage.">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <style>
+        :root {
+            --primary: #2962ff;
+            --dark: #131722;
+            --muted: #787b86;
+            --border: #2a2e39;
+            --bg: #0d1119;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: #d1d4dc;
+        }
+        header {
+            height: 56px;
+            border-bottom: 1px solid var(--border);
+            background: #0f1522;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 14px;
+            gap: 10px;
+        }
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 800;
+            letter-spacing: 0.3px;
+        }
+        .logo span { color: var(--primary); }
+        .toolbar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+        .btn {
+            border: 1px solid var(--border);
+            background: #1a2130;
+            color: #d1d4dc;
+            border-radius: 5px;
+            padding: 6px 10px;
+            font-size: 0.76rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn.primary {
+            background: rgba(41, 98, 255, 0.24);
+            border-color: #2962ff;
+            color: #fff;
+        }
+        .status {
+            color: var(--muted);
+            font-size: 0.72rem;
+        }
+        .frame-wrap {
+            height: calc(100dvh - 56px);
+            width: 100%;
+            background: #000;
+        }
+        #intel2-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+            background: #000;
+        }
+        @media (max-width: 900px) {
+            .status { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">
+            <img src="favicon.svg" alt="G-Labs" style="height:24px;width:24px;">
+            <span>G-LABS</span> INTEL 2
+        </a>
+        <div class="toolbar">
+            <span class="status">Standalone World Monitor subpage. Global Intel remains unchanged.</span>
+            <a class="btn" href="global_intel.html">Back to Intel 1</a>
+            <a class="btn primary" href="pro/index.html" target="_blank">Open Fullscreen</a>
+        </div>
+    </header>
+    <div class="frame-wrap">
+        <iframe id="intel2-frame" src="pro/index.html" loading="eager"></iframe>
+    </div>
+</body>
+</html>
