@@ -53,7 +53,24 @@
         .main-nav a:hover, .main-nav a.active { color: var(--primary); border-bottom-color: var(--primary); }
 
         /* Toggle Buttons */
-        .layout-controls { display: none; } /* Hidden as per request */
+        .layout-controls { display: flex; align-items: center; gap: 8px; }
+        .page-score {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #131722;
+            border: 1px solid #2a2e39;
+            color: #d1d4dc;
+            border-radius: 999px;
+            padding: 5px 10px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+        .page-score .val {
+            color: #ffcf22;
+            font-size: 0.8rem;
+        }
         .toggle-btn {
             background: #2a2e39;
             border: none;
@@ -732,6 +749,31 @@
         .matrix-box { background: #131722; border: 1px solid #2a2e39; border-radius: 4px; padding: 8px; text-align: center; }
         .matrix-box .num { font-size: 1.1rem; font-weight: 800; color: #fff; }
         .matrix-box .lab { font-size: .62rem; color: #787b86; text-transform: uppercase; }
+        .fx-meta { font-size: .62rem; color: #787b86; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .5px; }
+        .fx-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+        .fx-row { background: #131722; border: 1px solid #2a2e39; border-radius: 4px; padding: 6px 8px; display: flex; justify-content: space-between; align-items: center; font-size: .68rem; }
+        .fx-pair { color: #b2b5be; font-weight: 700; }
+        .fx-rate { color: #fff; font-weight: 700; }
+        .fx-rate.up { color: #26a69a; }
+        .fx-rate.down { color: #ef5350; }
+        .stock-meta { font-size: .62rem; color: #787b86; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .5px; }
+        .stock-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+        .stock-row { background: #131722; border: 1px solid #2a2e39; border-radius: 4px; padding: 6px 8px; display: flex; justify-content: space-between; align-items: center; font-size: .68rem; }
+        .stock-symbol { color: #b2b5be; font-weight: 700; }
+        .stock-price { color: #fff; font-weight: 700; }
+        .stock-change { font-size: .62rem; font-weight: 700; margin-left: 6px; }
+        .stock-change.up { color: #26a69a; }
+        .stock-change.down { color: #ef5350; }
+        .signal-meta { font-size: .62rem; color: #787b86; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .5px; }
+        .signal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+        .signal-row { background: #131722; border: 1px solid #2a2e39; border-radius: 4px; padding: 6px 8px; font-size: .66rem; display: flex; justify-content: space-between; align-items: center; }
+        .signal-name { color: #b2b5be; font-weight: 700; }
+        .signal-value { color: #fff; font-weight: 700; text-align: right; }
+        .ai-input-meta { font-size: .62rem; color: #787b86; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .5px; }
+        .ai-input-grid { display: grid; gap: 6px; }
+        .ai-input-row { background: #131722; border: 1px solid #2a2e39; border-radius: 4px; padding: 6px 8px; font-size: .66rem; display: flex; justify-content: space-between; align-items: center; }
+        .ai-input-k { color: #b2b5be; font-weight: 700; }
+        .ai-input-v { color: #fff; font-weight: 700; }
         .alert-details { margin-top: 8px; display: grid; gap: 5px; max-height: 130px; overflow-y: auto; }
         .alert-details .row { background: #131722; border: 1px solid #2a2e39; border-radius: 4px; padding: 6px 8px; font-size: .66rem; line-height: 1.3; }
         .alert-details .row.high { border-left: 3px solid #ef5350; }
@@ -873,6 +915,13 @@
                 grid-row: 7 / 8;
                 grid-template-columns: repeat(2, minmax(220px, 1fr));
             }
+            .layout-controls {
+                gap: 6px;
+            }
+            .page-score {
+                padding: 4px 8px;
+                font-size: 0.66rem;
+            }
         }
         @media (max-width: 1080px) {
             .intel-mosaic {
@@ -935,6 +984,9 @@
             .main-nav a {
                 font-size: 0.72rem;
             }
+            .layout-controls {
+                display: none;
+            }
             .map-wrapper {
                 min-height: 250px;
             }
@@ -968,6 +1020,7 @@
             <a href="contact.html">Contact</a>
         </nav>
         <div class="layout-controls">
+            <div class="page-score"><span>Page Score</span><span class="val" id="page-score-val">0/10</span></div>
             <button class="toggle-btn" onclick="toggleSidebar('left')" title="Toggle Intel Feed"><i class="fas fa-columns"></i> Left</button>
             <button class="toggle-btn" onclick="toggleSidebar('right')" title="Toggle News Feed"><i class="fas fa-columns"></i> Right</button>
         </div>
@@ -1211,6 +1264,51 @@
                 </div>
                 <div class="alert-details" id="alert-details"></div>
             </div>
+            <div class="bottom-card">
+                <h4>Live FX Snapshot</h4>
+                <div class="fx-meta" id="fx-meta">Loading rates...</div>
+                <div class="fx-grid" id="fx-grid">
+                    <div class="fx-row"><span class="fx-pair">EUR/USD</span><span class="fx-rate">--</span></div>
+                    <div class="fx-row"><span class="fx-pair">GBP/USD</span><span class="fx-rate">--</span></div>
+                    <div class="fx-row"><span class="fx-pair">USD/JPY</span><span class="fx-rate">--</span></div>
+                    <div class="fx-row"><span class="fx-pair">USD/CHF</span><span class="fx-rate">--</span></div>
+                    <div class="fx-row"><span class="fx-pair">AUD/USD</span><span class="fx-rate">--</span></div>
+                    <div class="fx-row"><span class="fx-pair">USD/CAD</span><span class="fx-rate">--</span></div>
+                </div>
+            </div>
+            <div class="bottom-card">
+                <h4>Live Market Snapshot</h4>
+                <div class="stock-meta" id="stock-meta">Loading equities...</div>
+                <div class="stock-grid" id="stock-grid">
+                    <div class="stock-row"><span class="stock-symbol">SPY</span><span><span class="stock-price">--</span></span></div>
+                    <div class="stock-row"><span class="stock-symbol">QQQ</span><span><span class="stock-price">--</span></span></div>
+                    <div class="stock-row"><span class="stock-symbol">DIA</span><span><span class="stock-price">--</span></span></div>
+                    <div class="stock-row"><span class="stock-symbol">GLD</span><span><span class="stock-price">--</span></span></div>
+                    <div class="stock-row"><span class="stock-symbol">USO</span><span><span class="stock-price">--</span></span></div>
+                    <div class="stock-row"><span class="stock-symbol">EURUSD</span><span><span class="stock-price">--</span></span></div>
+                </div>
+            </div>
+            <div class="bottom-card">
+                <h4>Public API Signals</h4>
+                <div class="signal-meta" id="signal-meta">Loading public signals...</div>
+                <div class="signal-grid" id="signal-grid">
+                    <div class="signal-row"><span class="signal-name">BTC/USD</span><span class="signal-value">--</span></div>
+                    <div class="signal-row"><span class="signal-name">ETH/USD</span><span class="signal-value">--</span></div>
+                    <div class="signal-row"><span class="signal-name">Fear & Greed</span><span class="signal-value">--</span></div>
+                    <div class="signal-row"><span class="signal-name">Wind</span><span class="signal-value">--</span></div>
+                </div>
+            </div>
+            <div class="bottom-card">
+                <h4>AI Model Inputs</h4>
+                <div class="ai-input-meta" id="ai-input-meta">Loading model features...</div>
+                <div class="ai-input-grid" id="ai-input-grid">
+                    <div class="ai-input-row"><span class="ai-input-k">EURUSD Spot</span><span class="ai-input-v">--</span></div>
+                    <div class="ai-input-row"><span class="ai-input-k">1D Momentum</span><span class="ai-input-v">--</span></div>
+                    <div class="ai-input-row"><span class="ai-input-k">10D Volatility</span><span class="ai-input-v">--</span></div>
+                    <div class="ai-input-row"><span class="ai-input-k">News Sentiment</span><span class="ai-input-v">--</span></div>
+                    <div class="ai-input-row"><span class="ai-input-k">Headline Count</span><span class="ai-input-v">--</span></div>
+                </div>
+            </div>
             <div class="bottom-card" style="min-width: 420px;">
                 <h4>Recent Market Catalysts</h4>
                 <div class="catalyst-tape" id="catalyst-tape">
@@ -1411,11 +1509,36 @@
             cyberEvents: 0,
             shippingEvents: 0
         };
+        const fxState = { last: {} };
+        const stockState = { last: {} };
+        const pageHealth = {
+            news: false,
+            mini: false,
+            flights: false,
+            quakes: false,
+            gdacs: false,
+            fx: false,
+            stocks: false,
+            signals: false,
+            ai: false,
+            mapIntel: false
+        };
 
         function clamp(n, min = 0, max = 100) { return Math.max(min, Math.min(max, n)); }
         function signed(n) { return `${n > 0 ? '+' : ''}${n}`; }
         function getSeverity(delta) { if (delta >= 10) return 'high'; if (delta >= 5) return 'medium'; return 'low'; }
         function normalizeText(text) { return (text || '').toLowerCase(); }
+        function updatePageScore() {
+            const total = Object.keys(pageHealth).length;
+            const good = Object.values(pageHealth).filter(Boolean).length;
+            const score = Math.round((good / total) * 10);
+            const el = document.getElementById('page-score-val');
+            if (!el) return;
+            el.innerText = `${score}/10`;
+            if (score >= 9) el.style.color = '#26a69a';
+            else if (score >= 7) el.style.color = '#ffcf22';
+            else el.style.color = '#ef5350';
+        }
 
         const geoAnchors = [
             { keys: ['ukraine', 'kyiv', 'donetsk', 'kharkiv'], lat: 49.0, lng: 31.3 },
@@ -1720,7 +1843,7 @@
         }
 
         function updateChokepointPressure() {
-            const base = Math.round((impactState.categories.shipping * 0.45) + (impactState.categories.energy * 0.4) + (Math.random() * 12));
+            const base = Math.round((impactState.categories.shipping * 0.5) + (impactState.categories.energy * 0.45) + (liveMetrics.shippingEvents * 0.6));
             const pressure = clamp(base, 0, 100);
             const badge = document.getElementById('chokepoint-pressure');
             if (pressure >= 70) {
@@ -1766,67 +1889,31 @@
             updateImpactFromHeadline(title, tag, link);
         }
 
-        function createFallbackFlights() {
-            const hubs = [
-                { name: 'LHR', lat: 51.470, lon: -0.454 },
-                { name: 'CDG', lat: 49.0097, lon: 2.5479 },
-                { name: 'FRA', lat: 50.0379, lon: 8.5622 },
-                { name: 'AMS', lat: 52.3105, lon: 4.7683 },
-                { name: 'IST', lat: 41.2753, lon: 28.7519 },
-                { name: 'MAD', lat: 40.4983, lon: -3.5676 },
-                { name: 'FCO', lat: 41.8003, lon: 12.2389 }
-            ];
-            const flights = [];
-            for (let i = 0; i < 24; i++) {
-                const a = hubs[Math.floor(Math.random() * hubs.length)];
-                const b = hubs[Math.floor(Math.random() * hubs.length)];
-                const p = Math.random();
-                const lat = a.lat + (b.lat - a.lat) * p + (Math.random() - 0.5) * 0.8;
-                const lon = a.lon + (b.lon - a.lon) * p + (Math.random() - 0.5) * 0.8;
-                flights.push({
-                    callsign: `GL${String(100 + i)}`,
-                    lat,
-                    lon,
-                    origin: `${a.name}→${b.name}`,
-                    altitude: Math.round(26000 + Math.random() * 13000),
-                    fallback: true
-                });
-            }
-            return flights;
-        }
-
         async function fetchFlights() {
-            const FLIGHT_BOUNDS = "lamin=35&lomin=-10&lamax=60&lomax=30";
             layers.flights.clearLayers();
             try {
-                const controller = new AbortController();
-                const timeout = setTimeout(() => controller.abort(), 8500);
-                const response = await fetch(`https://opensky-network.org/api/states/all?${FLIGHT_BOUNDS}`, { signal: controller.signal });
-                clearTimeout(timeout);
-                if (!response.ok) throw new Error(`${response.status}`);
-                const data = await response.json();
-                const states = (data.states || []).filter(f => Number.isFinite(f[5]) && Number.isFinite(f[6])).slice(0, 70);
-                if (!states.length) throw new Error('NO_FLIGHTS');
-                liveMetrics.flights = states.length;
-                states.forEach(flight => {
-                    const callsign = (flight[1] || 'UNK').trim();
-                    const lon = flight[5];
-                    const lat = flight[6];
-                    const origin = flight[2] || 'Unknown';
-                    const altitude = flight[7] ? `${Math.round(flight[7])}m` : 'N/A';
+                const res = await fetch('aviation_flights.php?region=eu&limit=70');
+                if (!res.ok) throw new Error('AVIATION_HTTP');
+                const payload = await res.json();
+                if (payload.status !== 'ok' || !Array.isArray(payload.flights) || !payload.flights.length) throw new Error('AVIATION_EMPTY');
+                liveMetrics.flights = payload.flights.length;
+                pageHealth.flights = true;
+                payload.flights.forEach(flight => {
+                    const callsign = (flight.callsign || 'UNK').trim();
+                    const lon = flight.lon;
+                    const lat = flight.lat;
+                    const origin = flight.origin || 'Unknown';
+                    const altitude = typeof flight.altitude === 'number' ? `${Math.round(flight.altitude)}m` : 'N/A';
                     L.marker([lat, lon], { icon: icons.plane }).addTo(layers.flights).bindPopup(`<b>${callsign}</b><br>${origin}<br>Alt: ${altitude}`);
                 });
-                addIntelItem('SHIPPING', `Live aviation feed connected: ${states.length} aircraft tracked in Europe corridor.`, 'low');
+                const provider = payload.provider || 'feed';
+                addIntelItem('SHIPPING', `Aviation stream live via ${provider}: ${payload.flights.length} active tracks rendered.`, 'low');
             } catch {
-                const fallbackFlights = createFallbackFlights();
-                liveMetrics.flights = fallbackFlights.length;
-                fallbackFlights.forEach(flight => {
-                    L.marker([flight.lat, flight.lon], { icon: icons.plane })
-                        .addTo(layers.flights)
-                        .bindPopup(`<b>${flight.callsign}</b><br>${flight.origin}<br>Alt: ${flight.altitude}ft<br>Mode: Fallback stream`);
-                });
-                addIntelItem('SHIPPING', `Aviation fallback active: ${fallbackFlights.length} aircraft estimates rendered while live ADS-B reconnects.`, 'medium');
+                liveMetrics.flights = 0;
+                pageHealth.flights = false;
+                addIntelItem('SHIPPING', 'Aviation feed unavailable: no synthetic fallback is shown. Check API key or provider status.', 'medium');
             }
+            updatePageScore();
             updateRiskGauge();
         }
 
@@ -1848,8 +1935,12 @@
                     if (mag > 6.2) addIntelItem('GEOPOL', `Major quake M${mag} near ${place}. Monitor insurance and logistics risk.`, 'high', quake.properties.url);
                 });
                 liveMetrics.majorQuakes = majorCount;
+                pageHealth.quakes = data.features && data.features.length > 0;
                 updateRiskGauge();
-            } catch {}
+            } catch {
+                pageHealth.quakes = false;
+            }
+            updatePageScore();
         }
 
         async function fetchGDACS() {
@@ -1878,8 +1969,12 @@
                     }
                 });
                 liveMetrics.severeDisasters = severe;
+                pageHealth.gdacs = items.length > 0;
                 updateRiskGauge();
-            } catch {}
+            } catch {
+                pageHealth.gdacs = false;
+            }
+            updatePageScore();
         }
 
         async function fetchIntelTopic(topic, limit = 6) {
@@ -1920,12 +2015,15 @@
                 const source = item.source || 'wire';
                 L.marker(point, { icon }).addTo(layers.newsintel).bindPopup(`<b>${item.category || 'INTEL'}</b><br>${item.title}<br>${source}`);
             });
+            pageHealth.news = items.length > 0;
+            pageHealth.mapIntel = items.length > 0;
             liveMetrics.newsHeadlines = clamp(items.length * 3, 0, 200);
             if (allRegionalItems.length > 40) allRegionalItems = allRegionalItems.slice(0, 40);
             filterRegion('ALL');
             const ticker = document.getElementById('ticker-content');
             if (!items.length) {
                 ticker.innerHTML = "Realtime wire syncing... reconnecting to geopolitical and macro feeds...";
+                updatePageScore();
                 return;
             }
             let tickerText = '';
@@ -1935,6 +2033,7 @@
             });
             ticker.innerHTML = tickerText + tickerText;
             updateRiskGauge();
+            updatePageScore();
         }
 
         function renderMiniFeed(targetId, metaId, items, fallbackLink) {
@@ -1972,6 +2071,142 @@
             ];
             const results = await Promise.all(feeds.map(f => fetchIntelTopic(f.topic, 6)));
             feeds.forEach((f, i) => renderMiniFeed(f.target, f.meta, results[i], f.fallback));
+            pageHealth.mini = results.some(r => Array.isArray(r) && r.length > 0);
+            updatePageScore();
+        }
+
+        async function fetchForexRates() {
+            const pairs = ['EUR','GBP','JPY','CHF','AUD','CAD'];
+            const grid = document.getElementById('fx-grid');
+            const meta = document.getElementById('fx-meta');
+            try {
+                const res = await fetch(`fx_rates.php?base=USD&symbols=${pairs.join(',')}`);
+                if (!res.ok) throw new Error('FX_HTTP');
+                const data = await res.json();
+                if (data.status !== 'ok' || !data.rates) throw new Error('FX_DATA');
+                const rates = data.rates;
+                const rows = [];
+                const pushRow = (pair, value) => {
+                    const prev = fxState.last[pair];
+                    let cls = '';
+                    if (typeof prev === 'number') {
+                        if (value > prev) cls = 'up';
+                        if (value < prev) cls = 'down';
+                    }
+                    fxState.last[pair] = value;
+                    rows.push(`<div class="fx-row"><span class="fx-pair">${pair}</span><span class="fx-rate ${cls}">${value.toFixed(pair.includes('JPY') ? 3 : 5)}</span></div>`);
+                };
+                pushRow('EUR/USD', 1 / rates.EUR);
+                pushRow('GBP/USD', 1 / rates.GBP);
+                pushRow('USD/JPY', rates.JPY);
+                pushRow('USD/CHF', rates.CHF);
+                pushRow('AUD/USD', 1 / rates.AUD);
+                pushRow('USD/CAD', rates.CAD);
+                grid.innerHTML = rows.join('');
+                const provider = (data.provider || 'feed').replace('_', ' ');
+                const updated = data.updatedAt ? new Date(data.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : 'now';
+                meta.innerText = `Base USD · ${provider} · ${updated}`;
+                pageHealth.fx = true;
+            } catch {
+                meta.innerText = 'FX feed unavailable, retrying...';
+                pageHealth.fx = false;
+            }
+            updatePageScore();
+        }
+
+        async function fetchMarketSnapshot() {
+            const grid = document.getElementById('stock-grid');
+            const meta = document.getElementById('stock-meta');
+            try {
+                const res = await fetch('market_snapshot.php?symbols=SPY,QQQ,DIA,GLD,USO,EURUSD');
+                if (!res.ok) throw new Error('STOCK_HTTP');
+                const data = await res.json();
+                if (data.status !== 'ok' || !Array.isArray(data.data)) throw new Error('STOCK_DATA');
+                if (!data.data.length) throw new Error('STOCK_EMPTY');
+                const rows = data.data.map(item => {
+                    const sym = item.symbol || 'UNK';
+                    const price = Number(item.price || 0);
+                    const change = item.changePct;
+                    const prev = stockState.last[sym];
+                    let cls = '';
+                    if (typeof prev === 'number') {
+                        if (price > prev) cls = 'up';
+                        if (price < prev) cls = 'down';
+                    }
+                    stockState.last[sym] = price;
+                    const chClass = typeof change === 'number' ? (change >= 0 ? 'up' : 'down') : '';
+                    const chText = typeof change === 'number' ? `${change >= 0 ? '+' : ''}${change.toFixed(2)}%` : '--';
+                    return `<div class="stock-row"><span class="stock-symbol">${sym}</span><span><span class="stock-price ${cls}">${price.toFixed(price > 100 ? 2 : 4)}</span><span class="stock-change ${chClass}">${chText}</span></span></div>`;
+                });
+                grid.innerHTML = rows.join('');
+                const provider = (data.provider || 'feed').replace('_', ' ');
+                const updated = data.updatedAt ? new Date(data.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : 'now';
+                meta.innerText = `${provider} · ${updated}`;
+                pageHealth.stocks = true;
+            } catch {
+                meta.innerText = 'Market feed unavailable, retrying...';
+                pageHealth.stocks = false;
+            }
+            updatePageScore();
+        }
+
+        async function fetchPublicSignals() {
+            const grid = document.getElementById('signal-grid');
+            const meta = document.getElementById('signal-meta');
+            try {
+                const res = await fetch('public_signals.php');
+                if (!res.ok) throw new Error('SIGNAL_HTTP');
+                const data = await res.json();
+                if (data.status !== 'ok' || !Array.isArray(data.signals)) throw new Error('SIGNAL_DATA');
+                const rows = data.signals.slice(0, 8).map(sig => {
+                    const name = sig.name || 'Signal';
+                    let val = '--';
+                    if (typeof sig.value === 'number') {
+                        if (Math.abs(sig.value) > 1000) val = sig.value.toLocaleString(undefined, { maximumFractionDigits: 2 });
+                        else val = sig.value.toFixed(Math.abs(sig.value) < 10 ? 3 : 2);
+                    }
+                    if (sig.label) val = `${val} ${sig.label}`;
+                    return `<div class="signal-row"><span class="signal-name">${name}</span><span class="signal-value">${val}</span></div>`;
+                });
+                grid.innerHTML = rows.join('');
+                const updated = data.updatedAt ? new Date(data.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : 'now';
+                meta.innerText = `multi-feed · ${updated}`;
+                pageHealth.signals = rows.length > 0;
+            } catch {
+                meta.innerText = 'Public signals unavailable, retrying...';
+                pageHealth.signals = false;
+            }
+            updatePageScore();
+        }
+
+        async function fetchAiModelInputs() {
+            const meta = document.getElementById('ai-input-meta');
+            const grid = document.getElementById('ai-input-grid');
+            try {
+                const res = await fetch('ai_model_inputs.php');
+                if (!res.ok) throw new Error('AI_HTTP');
+                const data = await res.json();
+                if (data.status !== 'ok' || !data.features) throw new Error('AI_DATA');
+                const f = data.features;
+                const sentiment = Number(f.news_sentiment_score || 0);
+                const sentLbl = sentiment > 2 ? 'Bullish' : sentiment < -2 ? 'Bearish' : 'Neutral';
+                const rows = [
+                    ['EURUSD Spot', typeof f.eurusd_spot === 'number' ? f.eurusd_spot.toFixed(5) : '--'],
+                    ['1D Momentum', typeof f.eurusd_1d_momentum_pct === 'number' ? `${f.eurusd_1d_momentum_pct >= 0 ? '+' : ''}${f.eurusd_1d_momentum_pct.toFixed(3)}%` : '--'],
+                    ['10D Volatility', typeof f.eurusd_10d_volatility_pct === 'number' ? `${f.eurusd_10d_volatility_pct.toFixed(3)}%` : '--'],
+                    ['News Sentiment', `${sentiment} ${sentLbl}`],
+                    ['Headline Count', `${f.news_headline_count || 0} + ${f.finnhub_headline_count || 0}`]
+                ];
+                grid.innerHTML = rows.map(([k, v]) => `<div class="ai-input-row"><span class="ai-input-k">${k}</span><span class="ai-input-v">${v}</span></div>`).join('');
+                const src = Array.isArray(data.sources) && data.sources.length ? data.sources.join(', ') : 'fallback';
+                const updated = data.updatedAt ? new Date(data.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : 'now';
+                meta.innerText = `${src} · ${updated}`;
+                pageHealth.ai = true;
+            } catch {
+                meta.innerText = 'AI input feeds unavailable, retrying...';
+                pageHealth.ai = false;
+            }
+            updatePageScore();
         }
 
         function filterRegion(region) {
@@ -1989,7 +2224,7 @@
             document.getElementById('stat-nuke').innerText = nuclearSites.length;
             document.getElementById('stat-chokepoints').innerText = chokepoints.length;
             document.getElementById('stat-cables').innerText = cableNodes.length;
-            document.getElementById('stat-ports').innerText = 120;
+            document.getElementById('stat-ports').innerText = '--';
         }
 
         function changeChannel(sourceId, btn) {
@@ -2068,16 +2303,25 @@
             renderCatalysts();
             updateAlertMatrix();
             updateChokepointPressure();
+            updatePageScore();
             fetchEarthquakes();
             fetchGDACS();
             fetchFlights();
             fetchNews();
             loadMiniFeeds();
+            fetchForexRates();
+            fetchMarketSnapshot();
+            fetchPublicSignals();
+            fetchAiModelInputs();
             setInterval(fetchFlights, 180000);
             setInterval(fetchGDACS, 900000);
             setInterval(fetchEarthquakes, 600000);
             setInterval(fetchNews, 240000);
             setInterval(loadMiniFeeds, 300000);
+            setInterval(fetchForexRates, 60000);
+            setInterval(fetchMarketSnapshot, 60000);
+            setInterval(fetchPublicSignals, 90000);
+            setInterval(fetchAiModelInputs, 120000);
             setInterval(updateSessionClock, 1000);
             setInterval(decayImpact, 45000);
             setInterval(updateChokepointPressure, 30000);
