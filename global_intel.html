@@ -482,6 +482,82 @@
         .region-source { font-size: 0.6rem; color: var(--primary); font-weight: 700; margin-bottom: 2px; }
         .region-title { font-size: 0.75rem; color: #d1d4dc; line-height: 1.3; }
         .region-title:hover { color: #fff; text-decoration: underline; cursor: pointer; }
+        .gdelt-region-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+        .gdelt-region-cell {
+            background: #0a0e17;
+            border: 1px solid #2a2e39;
+            border-radius: 4px;
+            padding: 6px;
+            min-height: 112px;
+        }
+        .gdelt-region-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 4px;
+        }
+        .gdelt-region-name {
+            font-size: 0.62rem;
+            color: #d1d4dc;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+        .gdelt-region-count {
+            font-size: 0.58rem;
+            color: #26a69a;
+            border: 1px solid rgba(38, 166, 154, 0.35);
+            border-radius: 999px;
+            padding: 1px 6px;
+            font-weight: 700;
+        }
+        .gdelt-region-list {
+            display: grid;
+            gap: 4px;
+        }
+        .gdelt-row {
+            border-top: 1px solid #1e222d;
+            padding-top: 4px;
+        }
+        .gdelt-row:first-child {
+            border-top: none;
+            padding-top: 0;
+        }
+        .gdelt-meta {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 2px;
+            font-size: 0.52rem;
+            color: #787b86;
+        }
+        .gdelt-tag {
+            border: 1px solid #2a2e39;
+            border-radius: 2px;
+            padding: 0 4px;
+            color: #d1d4dc;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            font-weight: 700;
+        }
+        .gdelt-tag.conflict { color: #ef5350; border-color: rgba(239, 83, 80, 0.4); }
+        .gdelt-tag.economic { color: #ffcf22; border-color: rgba(255, 207, 34, 0.4); }
+        .gdelt-tag.infrastructure { color: #64b5f6; border-color: rgba(100, 181, 246, 0.4); }
+        .gdelt-tag.crime { color: #ff7043; border-color: rgba(255, 112, 67, 0.4); }
+        .gdelt-tag.climate { color: #81c784; border-color: rgba(129, 199, 132, 0.4); }
+        .gdelt-title-link {
+            color: #d1d4dc;
+            text-decoration: none;
+            font-size: 0.66rem;
+            line-height: 1.25;
+            display: block;
+        }
+        .gdelt-title-link:hover { color: #fff; text-decoration: underline; }
 
         /* Infrastructure Stats */
         .infra-grid {
@@ -1524,6 +1600,17 @@
             </div>
             <div class="dash-card">
                 <div class="dash-header">
+                    <span><i class="fas fa-th-large"></i> GDELT World Feed Grid</span>
+                    <span class="dash-badge" id="gdelt-grid-status">LIVE</span>
+                </div>
+                <div class="dash-content">
+                    <div class="gdelt-region-grid" id="gdelt-region-grid">
+                        <div class="gdelt-region-cell"><div class="gdelt-region-name">Loading</div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="dash-card">
+                <div class="dash-header">
                     <span><i class="fas fa-clock"></i> Market Sessions</span>
                     <span class="dash-badge" id="session-volatility">NORMAL</span>
                 </div>
@@ -1992,7 +2079,8 @@
             conflictEvents: 0,
             climateEvents: 0,
             displacementEvents: 0,
-            naturalEvents: 0
+            naturalEvents: 0,
+            gdeltSignalApps: 0
         };
         const fxState = { last: {} };
         const stockState = { last: {} };
@@ -2012,7 +2100,9 @@
             gdeltMacro: false,
             cyberMap: false,
             thematicMap: false,
-            eonet: false
+            eonet: false,
+            gdeltRegional: false,
+            gdeltApps: false
         };
 
         function clamp(n, min = 0, max = 100) { return Math.max(min, Math.min(max, n)); }
@@ -2045,6 +2135,7 @@
             fetchAdvancedThematicLayers();
             fetchEonetLayers();
             fetchOpsNewsApps();
+            fetchGdeltRegionalGrid();
         }
         function readSavedViews() {
             try {
@@ -2756,30 +2847,34 @@
             const host = document.getElementById('ops-news-grid');
             if (!host) return;
             const apps = [
-                { name: 'Iran Attacks', topic: 'iran' },
-                { name: 'Intel Hotspots', topic: 'geopol' },
-                { name: 'Conflict', topic: 'military' },
-                { name: 'Protests', topic: 'protests' },
-                { name: 'Displacement', topic: 'humanitarian' },
-                { name: 'Climate', topic: 'weather' },
-                { name: 'Cyber', topic: 'cyber' },
-                { name: 'Outages', topic: 'outages' },
-                { name: 'Shipping', topic: 'shipping' },
-                { name: 'Aviation', topic: 'aviation' },
-                { name: 'Economy', topic: 'economy' },
-                { name: 'Minerals', topic: 'minerals' }
+                { name: 'Iran/Levant', query: '(iran OR israel OR gaza OR lebanon OR houthi) AND (strike OR missile OR drone OR ceasefire)' },
+                { name: 'Conflict', query: 'armed conflict OR offensive OR shelling OR military escalation OR sanctions' },
+                { name: 'Protests', query: 'protest OR unrest OR demonstration OR riot OR labor strike' },
+                { name: 'Displacement', query: 'displacement OR refugee OR evacuation OR humanitarian corridor' },
+                { name: 'Shipping', query: 'shipping disruption OR vessel reroute OR red sea OR canal traffic' },
+                { name: 'Aviation', query: 'airspace closure OR airline disruption OR airport strike OR flight suspension' },
+                { name: 'Energy', query: 'oil supply OR gas pipeline OR opec OR refinery outage OR lng terminal' },
+                { name: 'Macro', query: 'inflation OR central bank OR interest rates OR recession OR bond yields' },
+                { name: 'Cyber', query: 'cyberattack OR ransomware OR data breach OR malware campaign' },
+                { name: 'Outages', query: 'internet outage OR telecom outage OR cloud disruption OR power grid outage' },
+                { name: 'Infrastructure', query: 'critical infrastructure OR undersea cable OR port congestion OR rail disruption' },
+                { name: 'Minerals', query: 'critical minerals OR lithium OR copper mine OR rare earth supply' }
             ];
             const result = await Promise.all(apps.map(async app => {
-                const items = (await fetchIntelTopic(app.topic, 6)).filter(item => isWithinRange(item.pubDate || item.date || item.timestamp || ''));
+                const items = await fetchGdeltStream(app.query, 8, 240);
                 const top = items[0] || null;
                 return {
                     name: app.name,
                     count: items.length,
                     title: top?.title || 'No live headline',
-                    source: top?.source || 'standby'
+                    source: top?.source || 'standby',
+                    tag: classifyGdeltTag(top?.title || '')
                 };
             }));
-            host.innerHTML = result.map(r => `<div class="ops-news-app"><div class="k">${r.name} · ${r.count}</div><div class="v">${r.title}</div><div class="m">${r.source}</div></div>`).join('');
+            host.innerHTML = result.map(r => `<div class="ops-news-app"><div class="k">${r.name} · ${r.count}</div><div class="v">${r.title}</div><div class="m">${r.source} · ${r.tag}</div></div>`).join('');
+            liveMetrics.gdeltSignalApps = result.reduce((sum, row) => sum + row.count, 0);
+            pageHealth.gdeltApps = result.some(r => r.count > 0);
+            updatePageScore();
         }
 
         function solarSubpoint(date) {
@@ -3128,6 +3223,69 @@
                 L.marker([ev.lat, ev.lng], { icon }).addTo(layer).bindPopup(`<b>${ev.name}</b><br>${ev.title}${link}`);
             });
             return data.events.length;
+        }
+        async function fetchGdeltStream(query, limit = 10, timespan = 180) {
+            try {
+                const q = encodeURIComponent(query);
+                const res = await fetch(`gdelt_events.php?query=${q}&timespan=${timespan}&limit=${limit}`);
+                if (!res.ok) return [];
+                const data = await res.json();
+                if (data.status !== 'ok' || !Array.isArray(data.events)) return [];
+                return data.events.filter(ev => isWithinRange(ev.date || ev.publishedAt || ev.updatedAt || '') || currentTimeRange === 'all');
+            } catch {
+                return [];
+            }
+        }
+        function classifyGdeltTag(title) {
+            const t = normalizeText(title);
+            if (/(strike|missile|drone|war|attack|military|offensive|shelling|conflict|sanction)/.test(t)) return 'CONFLICT';
+            if (/(inflation|rates|recession|bond|gdp|jobs|bank|oil|gas|gold|market)/.test(t)) return 'ECONOMIC';
+            if (/(pipeline|port|airport|shipping|canal|grid|telecom|data center|cable|infrastructure)/.test(t)) return 'INFRASTRUCTURE';
+            if (/(crime|court|arrest|violence|shooting|kidnap|smuggling)/.test(t)) return 'CRIME';
+            if (/(flood|quake|wildfire|storm|hurricane|drought|heatwave|climate|cyclone)/.test(t)) return 'CLIMATE';
+            return 'ALERT';
+        }
+        function tagClassFromLabel(label) {
+            const low = (label || '').toLowerCase();
+            if (low === 'conflict') return 'conflict';
+            if (low === 'economic') return 'economic';
+            if (low === 'infrastructure') return 'infrastructure';
+            if (low === 'crime') return 'crime';
+            if (low === 'climate') return 'climate';
+            return '';
+        }
+        async function fetchGdeltRegionalGrid() {
+            const host = document.getElementById('gdelt-region-grid');
+            const badge = document.getElementById('gdelt-grid-status');
+            if (!host || !badge) return;
+            const sections = [
+                { name: 'World News', query: 'global OR geopolitics OR conflict OR sanctions OR diplomatic talks' },
+                { name: 'United States', query: '(united states OR washington OR pentagon OR fed OR wall street) AND (policy OR rates OR conflict OR infrastructure)' },
+                { name: 'Europe', query: '(europe OR eu OR germany OR france OR uk OR brussels) AND (security OR inflation OR strike OR sanctions)' },
+                { name: 'Middle East', query: '(iran OR israel OR gaza OR saudi OR uae OR qatar OR red sea) AND (strike OR diplomacy OR oil OR shipping)' },
+                { name: 'Africa', query: '(africa OR nigeria OR ethiopia OR sudan OR egypt OR sahel) AND (infrastructure OR conflict OR elections OR ports)' },
+                { name: 'Asia-Pacific', query: '(china OR japan OR korea OR taiwan OR philippines OR south china sea) AND (military OR chip OR trade OR shipping)' },
+                { name: 'Latin America', query: '(latin america OR brazil OR mexico OR colombia OR argentina OR chile) AND (elections OR violence OR trade OR energy)' },
+                { name: 'Infrastructure Cascade', query: 'undersea cable OR power grid OR pipeline OR port congestion OR airport disruption OR telecom outage' }
+            ];
+            const packs = await Promise.all(sections.map(async section => ({ ...section, items: await fetchGdeltStream(section.query, 6, 240) })));
+            const anyLive = packs.some(p => p.items.length);
+            const total = packs.reduce((sum, p) => sum + p.items.length, 0);
+            host.innerHTML = packs.map(section => {
+                const top = section.items.slice(0, 2);
+                const rows = top.length ? top.map(item => {
+                    const tag = classifyGdeltTag(item.title || '');
+                    const klass = tagClassFromLabel(tag);
+                    const source = item.source || 'GDELT';
+                    const link = item.url || '#';
+                    const title = (item.title || 'Untitled').replace(/"/g, '&quot;');
+                    return `<div class="gdelt-row"><div class="gdelt-meta"><span>${source}</span><span class="gdelt-tag ${klass}">${tag}</span></div><a class="gdelt-title-link" href="${link}" target="_blank">${title}</a></div>`;
+                }).join('') : `<div class="gdelt-row"><div class="gdelt-meta"><span>standby</span><span class="gdelt-tag">LIVE</span></div><span class="gdelt-title-link">No current headlines</span></div>`;
+                return `<div class="gdelt-region-cell"><div class="gdelt-region-head"><span class="gdelt-region-name">${section.name}</span><span class="gdelt-region-count">${section.items.length}</span></div><div class="gdelt-region-list">${rows}</div></div>`;
+            }).join('');
+            badge.innerText = anyLive ? `LIVE ${total}` : 'STANDBY';
+            pageHealth.gdeltRegional = anyLive;
+            updatePageScore();
         }
 
         async function fetchAdvancedThematicLayers() {
@@ -3639,6 +3797,7 @@
             fetchAdvancedThematicLayers();
             fetchEonetLayers();
             fetchOpsNewsApps();
+            fetchGdeltRegionalGrid();
             updateDayNightOverlay();
             loadMiniFeeds();
             fetchForexRates();
@@ -3656,6 +3815,7 @@
             setInterval(fetchAdvancedThematicLayers, 360000);
             setInterval(fetchEonetLayers, 360000);
             setInterval(fetchOpsNewsApps, 180000);
+            setInterval(fetchGdeltRegionalGrid, 300000);
             setInterval(updateDayNightOverlay, 60000);
             setInterval(loadMiniFeeds, 300000);
             setInterval(fetchForexRates, 60000);
