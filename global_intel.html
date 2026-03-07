@@ -646,6 +646,48 @@
             text-transform: uppercase;
             letter-spacing: 0.6px;
         }
+        .dislocation-score {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 800;
+            color: #fff;
+            line-height: 1;
+            margin: 4px 0 2px;
+        }
+        .dislocation-meta {
+            font-size: 0.64rem;
+            color: #9aa0ad;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        .dislocation-regime {
+            font-size: 0.66rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            text-align: center;
+            margin-bottom: 6px;
+        }
+        .dislocation-regime.low { color: #26a69a; }
+        .dislocation-regime.mid { color: #ffcf22; }
+        .dislocation-regime.high { color: #ef5350; }
+        .dislocation-breakdown {
+            display: grid;
+            gap: 4px;
+            margin-top: 6px;
+        }
+        .dislocation-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.62rem;
+            color: #c6cad3;
+            background: #131722;
+            border: 1px solid #2a2e39;
+            border-radius: 4px;
+            padding: 4px 6px;
+        }
 
         /* Bottom Panel (Webcams + Pizza) */
         .bottom-panel {
@@ -705,6 +747,9 @@
             color: #d1d4dc !important;
             border-radius: 4px !important;
             padding: 8px !important;
+            max-height: 60vh;
+            overflow-y: auto;
+            min-width: 260px;
         }
         .leaflet-control-layers-separator { border-top-color: #434651 !important; }
         .leaflet-control-layers-base label, .leaflet-control-layers-overlays label {
@@ -787,6 +832,59 @@
         .advisor-row .bias.sell { color: #ef5350; font-weight: 700; }
         .econ-widget-wrap { height: 250px; width: 100%; }
         .alert-details { margin-top: 8px; display: grid; gap: 5px; max-height: 130px; overflow-y: auto; }
+        .ops-app-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+        .ops-app {
+            background: #0f1420;
+            border: 1px solid #2a2e39;
+            border-radius: 4px;
+            padding: 6px;
+            min-height: 54px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .ops-app .k { font-size: 0.58rem; color: #9aa0ad; text-transform: uppercase; letter-spacing: 0.6px; }
+        .ops-app .v { font-size: 0.9rem; color: #fff; font-weight: 800; line-height: 1.1; }
+        .ops-app .m { font-size: 0.56rem; color: #787b86; }
+        .ops-news-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+        .ops-news-app {
+            background: #0f1420;
+            border: 1px solid #2a2e39;
+            border-radius: 4px;
+            padding: 6px;
+            min-height: 68px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 4px;
+        }
+        .ops-news-app .k { font-size: 0.56rem; color: #9aa0ad; text-transform: uppercase; letter-spacing: 0.6px; }
+        .ops-news-app .v { font-size: 0.63rem; color: #d1d4dc; line-height: 1.35; }
+        .ops-news-app .m { font-size: 0.54rem; color: #787b86; }
+        .layer-presets {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            max-width: 55%;
+        }
+        .layer-preset-btn {
+            background: rgba(15, 20, 32, 0.85);
+            border: 1px solid #2a2e39;
+            color: #d1d4dc;
+            border-radius: 999px;
+            padding: 4px 8px;
+            font-size: 0.62rem;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+        }
+        .cii-grid { display: grid; gap: 6px; }
+        .cii-score { font-size: 1.6rem; font-weight: 800; color: #fff; line-height: 1; text-align: center; }
+        .cii-meta { font-size: 0.62rem; color: #787b86; text-transform: uppercase; letter-spacing: 0.6px; text-align: center; }
+        .cii-row { display: flex; justify-content: space-between; font-size: 0.64rem; color: #c6cad3; background: #131722; border: 1px solid #2a2e39; border-radius: 4px; padding: 5px 6px; }
         .alert-details .row { background: #131722; border: 1px solid #2a2e39; border-radius: 4px; padding: 6px 8px; font-size: .66rem; line-height: 1.3; }
         .alert-details .row.high { border-left: 3px solid #ef5350; }
         .alert-details .row.medium { border-left: 3px solid #ffcf22; }
@@ -1080,6 +1178,13 @@
         <!-- Main Map -->
         <div class="map-wrapper">
             <div id="map"></div>
+            <div class="layer-presets">
+                <button class="layer-preset-btn" onclick="applyLayerPreset('global')">Global</button>
+                <button class="layer-preset-btn" onclick="applyLayerPreset('conflict')">Conflict</button>
+                <button class="layer-preset-btn" onclick="applyLayerPreset('infra')">Infrastructure</button>
+                <button class="layer-preset-btn" onclick="applyLayerPreset('climate')">Climate</button>
+                <button class="layer-preset-btn" onclick="applyLayerPreset('market')">Market</button>
+            </div>
             
             <!-- Browser Interface -->
             <div class="browser-toolbar" id="browser-toolbar">
@@ -1277,6 +1382,51 @@
                     </script>
                 </div>
             </div>
+            <div class="dash-card">
+                <div class="dash-header">
+                    <span><i class="fas fa-th"></i> Ops Micro Feeds</span>
+                    <span class="dash-badge">LIVE</span>
+                </div>
+                <div class="dash-content">
+                    <div class="ops-app-grid" id="ops-app-grid">
+                        <div class="ops-app"><div class="k">Protests</div><div class="v">--</div><div class="m">Loading</div></div>
+                        <div class="ops-app"><div class="k">Conflict</div><div class="v">--</div><div class="m">Loading</div></div>
+                        <div class="ops-app"><div class="k">Displacement</div><div class="v">--</div><div class="m">Loading</div></div>
+                        <div class="ops-app"><div class="k">Climate</div><div class="v">--</div><div class="m">Loading</div></div>
+                        <div class="ops-app"><div class="k">Cyber/Outage</div><div class="v">--</div><div class="m">Loading</div></div>
+                        <div class="ops-app"><div class="k">Natural/Fires</div><div class="v">--</div><div class="m">Loading</div></div>
+                        <div class="ops-app"><div class="k">GPS Jamming</div><div class="v">--</div><div class="m">Loading</div></div>
+                        <div class="ops-app"><div class="k">Macro Pulse</div><div class="v">--</div><div class="m">Loading</div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="dash-card">
+                <div class="dash-header">
+                    <span><i class="fas fa-stream"></i> Ops News Apps</span>
+                    <span class="dash-badge">LIVE</span>
+                </div>
+                <div class="dash-content">
+                    <div class="ops-news-grid" id="ops-news-grid">
+                        <div class="ops-news-app"><div class="k">Loading</div><div class="v">Connecting to feeds...</div><div class="m">standby</div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="dash-card">
+                <div class="dash-header">
+                    <span><i class="fas fa-globe"></i> CII Instability Pulse</span>
+                    <span class="dash-badge">LIVE</span>
+                </div>
+                <div class="dash-content">
+                    <div class="cii-grid">
+                        <div class="cii-score" id="cii-global">--</div>
+                        <div class="cii-meta" id="cii-meta">Building regional instability matrix</div>
+                        <div class="cii-row"><span>Middle East</span><span id="cii-me">--</span></div>
+                        <div class="cii-row"><span>Europe</span><span id="cii-eu">--</span></div>
+                        <div class="cii-row"><span>United States</span><span id="cii-us">--</span></div>
+                        <div class="cii-row"><span>Asia</span><span id="cii-asia">--</span></div>
+                    </div>
+                </div>
+            </div>
         </aside>
         <div class="bottom-panel">
             <div class="bottom-card">
@@ -1380,6 +1530,20 @@
                     <div class="heat-updated" id="heat-updated">Updated --:--</div>
                 </div>
             </div>
+            <div class="bottom-card">
+                <h4>Market Dislocation Score</h4>
+                <div class="dislocation-score" id="dislocation-value">--</div>
+                <div class="dislocation-regime" id="dislocation-regime">initializing</div>
+                <div class="dislocation-meta" id="dislocation-meta">Combines real-time macro, event, and cross-asset stress inputs.</div>
+                <div class="dislocation-breakdown">
+                    <div class="dislocation-row"><span>Equity Drawdown</span><span id="disl-eq">0</span></div>
+                    <div class="dislocation-row"><span>Macro Shock</span><span id="disl-macro">0</span></div>
+                    <div class="dislocation-row"><span>Disaster / Quake</span><span id="disl-disaster">0</span></div>
+                    <div class="dislocation-row"><span>Cyber / Shipping</span><span id="disl-cyber">0</span></div>
+                    <div class="dislocation-row"><span>Live Headlines</span><span id="disl-headlines">0</span></div>
+                </div>
+                <div class="heat-updated" id="disl-updated">Updated --:--</div>
+            </div>
         </div>
         <section class="intel-mosaic">
             <div class="mini-feed-card">
@@ -1451,24 +1615,64 @@
             hotspots: L.layerGroup().addTo(map),
             newsintel: L.layerGroup().addTo(map),
             gdelt: L.layerGroup().addTo(map),
+            gdeltMacro: L.layerGroup().addTo(map),
+            cyberAlerts: L.layerGroup().addTo(map),
+            iranAttacks: L.layerGroup().addTo(map),
+            protests: L.layerGroup().addTo(map),
+            armedConflict: L.layerGroup().addTo(map),
+            displacement: L.layerGroup().addTo(map),
+            climate: L.layerGroup().addTo(map),
+            militaryOps: L.layerGroup().addTo(map),
+            shipTraffic: L.layerGroup().addTo(map),
+            tradeRoutesLive: L.layerGroup().addTo(map),
+            economicCentersLive: L.layerGroup().addTo(map),
+            mineralsLive: L.layerGroup().addTo(map),
+            gpsJamming: L.layerGroup().addTo(map),
+            ciiInstability: L.layerGroup().addTo(map),
+            naturalEvents: L.layerGroup().addTo(map),
+            fires: L.layerGroup().addTo(map),
+            dayNight: L.layerGroup().addTo(map),
             nuclear: L.layerGroup(),
-            chokepoints: L.layerGroup().addTo(map),
-            cables: L.layerGroup().addTo(map),
+            chokepoints: L.layerGroup(),
+            cables: L.layerGroup(),
             bases: L.layerGroup(),
             pipelines: L.layerGroup()
         };
 
         const overlayMaps = {
-            "Live Flights": layers.flights,
-            "Conflict & Disaster": layers.hotspots,
-            "Intel Headlines": layers.newsintel,
+            "Iran Attacks (Live)": layers.iranAttacks,
+            "Intel Hotspots (Live)": layers.newsintel,
+            "Conflict Zones (Live)": layers.armedConflict,
+            "Military Activity (Live)": layers.militaryOps,
+            "Ship Traffic Signals (Live)": layers.shipTraffic,
+            "Trade Routes Signals (Live)": layers.tradeRoutesLive,
+            "Protests (Live)": layers.protests,
+            "Armed Conflict Events (Live)": layers.armedConflict,
+            "Displacement Flows (Live)": layers.displacement,
+            "Climate Anomalies (Live)": layers.climate,
+            "Weather Alerts (GDACS)": layers.hotspots,
+            "Internet Outages (Live)": layers.cyberAlerts,
+            "Cyber Threats (Live)": layers.cyberAlerts,
+            "Natural Events (EONET)": layers.naturalEvents,
+            "Fires (EONET)": layers.fires,
+            "Economic Centers Signals (Live)": layers.economicCentersLive,
+            "Critical Minerals Signals (Live)": layers.mineralsLive,
+            "GPS Jamming Signals (Live)": layers.gpsJamming,
+            "CII Instability (Live)": layers.ciiInstability,
+            "Day/Night Terminator": layers.dayNight,
+            "Aviation (Live)": layers.flights,
+            "Live Flights (Aviation)": layers.flights,
+            "GDACS Disaster Alerts": layers.hotspots,
+            "Intel Headlines (Multi-source)": layers.newsintel,
             "GDELT Geo Events": layers.gdelt,
-            "Major Quakes": layers.quakes,
-            "Strategic Chokepoints": layers.chokepoints,
-            "Undersea Cable Hubs": layers.cables,
-            "Military Bases": layers.bases,
-            "Pipelines": layers.pipelines,
-            "Nuclear Sites": layers.nuclear
+            "GDELT Macro Pulse": layers.gdeltMacro,
+            "Cyber & Outage Alerts": layers.cyberAlerts,
+            "USGS Major Quakes": layers.quakes,
+            "Reference: Strategic Chokepoints": layers.chokepoints,
+            "Reference: Undersea Cable Hubs": layers.cables,
+            "Reference: Military Bases": layers.bases,
+            "Reference: Pipelines": layers.pipelines,
+            "Reference: Nuclear Sites": layers.nuclear
         };
         L.control.layers(null, overlayMaps, { position: 'bottomright' }).addTo(map);
 
@@ -1552,7 +1756,14 @@
             severeDisasters: 0,
             newsHeadlines: 0,
             cyberEvents: 0,
-            shippingEvents: 0
+            shippingEvents: 0,
+            gdeltEvents: 0,
+            gdeltMacroEvents: 0,
+            protestsEvents: 0,
+            conflictEvents: 0,
+            climateEvents: 0,
+            displacementEvents: 0,
+            naturalEvents: 0
         };
         const fxState = { last: {} };
         const stockState = { last: {} };
@@ -1568,7 +1779,11 @@
             signals: false,
             ai: false,
             mapIntel: false,
-            gdelt: false
+            gdelt: false,
+            gdeltMacro: false,
+            cyberMap: false,
+            thematicMap: false,
+            eonet: false
         };
 
         function clamp(n, min = 0, max = 100) { return Math.max(min, Math.min(max, n)); }
@@ -1829,15 +2044,21 @@
         }
 
         function updateRiskGauge() {
+            const flightStress = liveMetrics.flights <= 0 ? 10 : (liveMetrics.flights < 20 ? 6 : 0);
             const pressure = clamp(
                 Math.round(
-                    impactState.score * 0.45 +
-                    Math.min(liveMetrics.flights, 80) * 0.2 +
+                    impactState.score * 0.4 +
+                    flightStress +
                     Math.min(liveMetrics.majorQuakes * 8, 40) +
                     Math.min(liveMetrics.severeDisasters * 10, 35) +
-                    Math.min(liveMetrics.newsHeadlines * 0.6, 25) +
+                    Math.min(liveMetrics.newsHeadlines * 0.45, 20) +
                     Math.min(liveMetrics.cyberEvents * 2, 20) +
-                    Math.min(liveMetrics.shippingEvents * 2, 20)
+                    Math.min(liveMetrics.shippingEvents * 2, 20) +
+                    Math.min(liveMetrics.gdeltMacroEvents * 0.35, 15) +
+                    Math.min(liveMetrics.conflictEvents * 0.18, 12) +
+                    Math.min(liveMetrics.protestsEvents * 0.08, 8) +
+                    Math.min(liveMetrics.climateEvents * 0.12, 8) +
+                    Math.min(liveMetrics.naturalEvents * 0.16, 10)
                 )
             );
             const fill = document.getElementById('pizza-meter-fill');
@@ -1856,7 +2077,7 @@
             updated.innerText = `Updated ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`;
             if (pressure < 40) {
                 value.style.color = '#26a69a';
-                summary.innerText = `Calm regime · Flights ${liveMetrics.flights} · Disasters ${liveMetrics.severeDisasters}`;
+                summary.innerText = `Calm regime · Macro shocks ${liveMetrics.gdeltMacroEvents} · Disasters ${liveMetrics.severeDisasters}`;
             } else if (pressure < 70) {
                 value.style.color = '#ffcf22';
                 summary.innerText = `Balanced risk · Headlines ${liveMetrics.newsHeadlines} · Shipping ${liveMetrics.shippingEvents}`;
@@ -1864,6 +2085,176 @@
                 value.style.color = '#ef5350';
                 summary.innerText = `Risk-off regime · Cyber ${liveMetrics.cyberEvents} · Quakes ${liveMetrics.majorQuakes}`;
             }
+            updateDislocationScore();
+            updateOpsMicroFeeds();
+            updateCiiPulse();
+        }
+
+        function updateDislocationScore() {
+            const valEl = document.getElementById('dislocation-value');
+            const regimeEl = document.getElementById('dislocation-regime');
+            if (!valEl || !regimeEl) return;
+            const equityRows = (marketState.rows || []).filter(r => ['SPY', 'QQQ', 'DIA'].includes((r.symbol || '').toUpperCase()) && typeof r.changePct === 'number');
+            const eqAvg = equityRows.length ? equityRows.reduce((s, r) => s + r.changePct, 0) / equityRows.length : 0;
+            const eqStress = clamp(Math.round(Math.max(0, -eqAvg) * 8), 0, 30);
+            const macroShock = clamp(Math.round(liveMetrics.gdeltMacroEvents * 0.4 + liveMetrics.gdeltEvents * 0.15), 0, 25);
+            const disasterShock = clamp(Math.round(liveMetrics.majorQuakes * 2 + liveMetrics.severeDisasters * 5), 0, 25);
+            const cyberShipping = clamp(Math.round(liveMetrics.cyberEvents * 1.5 + liveMetrics.shippingEvents * 1.2), 0, 20);
+            const headlineFlow = clamp(Math.round(liveMetrics.newsHeadlines * 0.12), 0, 15);
+            const score = clamp(eqStress + macroShock + disasterShock + cyberShipping + headlineFlow, 0, 100);
+            valEl.innerText = String(score);
+            document.getElementById('disl-eq').innerText = String(eqStress);
+            document.getElementById('disl-macro').innerText = String(macroShock);
+            document.getElementById('disl-disaster').innerText = String(disasterShock);
+            document.getElementById('disl-cyber').innerText = String(cyberShipping);
+            document.getElementById('disl-headlines').innerText = String(headlineFlow);
+            document.getElementById('disl-updated').innerText = `Updated ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`;
+            if (score < 35) {
+                regimeEl.className = 'dislocation-regime low';
+                regimeEl.innerText = 'Low Dislocation · Trend Regime';
+                document.getElementById('dislocation-meta').innerText = 'Cross-asset stress is contained. Momentum and carry setups tend to perform better.';
+            } else if (score < 65) {
+                regimeEl.className = 'dislocation-regime mid';
+                regimeEl.innerText = 'Moderate Dislocation · Selective Risk';
+                document.getElementById('dislocation-meta').innerText = 'Macro/event noise is elevated. Prefer tighter risk controls and selective positioning.';
+            } else {
+                regimeEl.className = 'dislocation-regime high';
+                regimeEl.innerText = 'High Dislocation · Defensive Bias';
+                document.getElementById('dislocation-meta').innerText = 'Shock conditions are active. Defensive assets and reduced leverage are favored.';
+            }
+        }
+
+        function updateOpsMicroFeeds() {
+            const host = document.getElementById('ops-app-grid');
+            if (!host) return;
+            const packs = [
+                { k: 'Protests', v: liveMetrics.protestsEvents, m: 'GDELT live events' },
+                { k: 'Conflict', v: liveMetrics.conflictEvents, m: 'GDELT live events' },
+                { k: 'Displacement', v: liveMetrics.displacementEvents, m: 'GDELT live events' },
+                { k: 'Climate', v: liveMetrics.climateEvents, m: 'GDELT climate signals' },
+                { k: 'Cyber/Outage', v: liveMetrics.cyberEvents, m: 'Intel topic map' },
+                { k: 'Natural/Fires', v: liveMetrics.naturalEvents, m: 'NASA EONET' },
+                { k: 'GPS Jamming', v: Math.round((liveMetrics.cyberEvents * 0.6) + (liveMetrics.conflictEvents * 0.08)), m: 'GDELT + cyber proxy' },
+                { k: 'Macro Pulse', v: liveMetrics.gdeltMacroEvents, m: 'GDELT macro query' }
+            ];
+            host.innerHTML = packs.map(p => `<div class="ops-app"><div class="k">${p.k}</div><div class="v">${p.v}</div><div class="m">${p.m}</div></div>`).join('');
+        }
+
+        function updateCiiPulse() {
+            const g = document.getElementById('cii-global');
+            if (!g) return;
+            const pressure = Number(document.getElementById('pizza-value')?.innerText || 0);
+            const dislocation = Number(document.getElementById('dislocation-value')?.innerText || 0);
+            const global = clamp(Math.round((pressure * 0.45) + (dislocation * 0.25) + (liveMetrics.conflictEvents * 0.08) + (liveMetrics.cyberEvents * 0.7) + (liveMetrics.majorQuakes * 1.2) + (liveMetrics.climateEvents * 0.25)), 0, 100);
+            g.innerText = String(global);
+            const scoreByRegion = { ME: 0, EU: 0, US: 0, ASIA: 0 };
+            allRegionalItems.slice(0, 80).forEach(item => {
+                if (!scoreByRegion[item.region]) return;
+                let w = 1.2;
+                if (item.source === 'GEOPOL') w = 2.2;
+                if (item.source === 'CYBER') w = 1.8;
+                if (item.source === 'SHIPPING') w = 1.5;
+                if (item.source === 'MACRO') w = 1.3;
+                scoreByRegion[item.region] += w;
+            });
+            const me = clamp(Math.round(scoreByRegion.ME * 2.4 + (liveMetrics.conflictEvents * 0.5)), 0, 100);
+            const eu = clamp(Math.round(scoreByRegion.EU * 2.2 + (liveMetrics.gdeltMacroEvents * 0.2)), 0, 100);
+            const us = clamp(Math.round(scoreByRegion.US * 2.0 + (liveMetrics.cyberEvents * 0.6)), 0, 100);
+            const asia = clamp(Math.round(scoreByRegion.ASIA * 2.1 + (liveMetrics.shippingEvents * 0.4)), 0, 100);
+            document.getElementById('cii-me').innerText = String(me);
+            document.getElementById('cii-eu').innerText = String(eu);
+            document.getElementById('cii-us').innerText = String(us);
+            document.getElementById('cii-asia').innerText = String(asia);
+            const meta = document.getElementById('cii-meta');
+            if (global >= 70) meta.innerText = 'High instability regime · defensive posture';
+            else if (global >= 45) meta.innerText = 'Elevated instability · selective risk';
+            else meta.innerText = 'Low instability · trend continuation';
+        }
+
+        async function fetchOpsNewsApps() {
+            const host = document.getElementById('ops-news-grid');
+            if (!host) return;
+            const apps = [
+                { name: 'Iran Attacks', topic: 'iran' },
+                { name: 'Intel Hotspots', topic: 'geopol' },
+                { name: 'Conflict', topic: 'military' },
+                { name: 'Protests', topic: 'protests' },
+                { name: 'Displacement', topic: 'humanitarian' },
+                { name: 'Climate', topic: 'weather' },
+                { name: 'Cyber', topic: 'cyber' },
+                { name: 'Outages', topic: 'outages' },
+                { name: 'Shipping', topic: 'shipping' },
+                { name: 'Aviation', topic: 'aviation' },
+                { name: 'Economy', topic: 'economy' },
+                { name: 'Minerals', topic: 'minerals' }
+            ];
+            const result = await Promise.all(apps.map(async app => {
+                const items = await fetchIntelTopic(app.topic, 3);
+                const top = items[0] || null;
+                return {
+                    name: app.name,
+                    count: items.length,
+                    title: top?.title || 'No live headline',
+                    source: top?.source || 'standby'
+                };
+            }));
+            host.innerHTML = result.map(r => `<div class="ops-news-app"><div class="k">${r.name} · ${r.count}</div><div class="v">${r.title}</div><div class="m">${r.source}</div></div>`).join('');
+        }
+
+        function solarSubpoint(date) {
+            const rad = Math.PI / 180;
+            const start = new Date(Date.UTC(date.getUTCFullYear(), 0, 0));
+            const day = Math.floor((date - start) / 86400000);
+            const mins = date.getUTCHours() * 60 + date.getUTCMinutes() + date.getUTCSeconds() / 60;
+            const gamma = (2 * Math.PI / 365) * (day - 1 + ((date.getUTCHours() - 12) / 24));
+            const eq = 229.18 * (0.000075 + 0.001868 * Math.cos(gamma) - 0.032077 * Math.sin(gamma) - 0.014615 * Math.cos(2 * gamma) - 0.040849 * Math.sin(2 * gamma));
+            const decl = 0.006918 - 0.399912 * Math.cos(gamma) + 0.070257 * Math.sin(gamma) - 0.006758 * Math.cos(2 * gamma) + 0.000907 * Math.sin(2 * gamma) - 0.002697 * Math.cos(3 * gamma) + 0.00148 * Math.sin(3 * gamma);
+            let lon = (720 - mins - eq) / 4;
+            while (lon > 180) lon -= 360;
+            while (lon < -180) lon += 360;
+            return { lat: decl / rad, lon };
+        }
+
+        function destinationPoint(lat, lon, bearingDeg, distanceKm) {
+            const R = 6371;
+            const b = bearingDeg * Math.PI / 180;
+            const d = distanceKm / R;
+            const lat1 = lat * Math.PI / 180;
+            const lon1 = lon * Math.PI / 180;
+            const lat2 = Math.asin(Math.sin(lat1) * Math.cos(d) + Math.cos(lat1) * Math.sin(d) * Math.cos(b));
+            const lon2 = lon1 + Math.atan2(Math.sin(b) * Math.sin(d) * Math.cos(lat1), Math.cos(d) - Math.sin(lat1) * Math.sin(lat2));
+            return [lat2 * 180 / Math.PI, ((lon2 * 180 / Math.PI + 540) % 360) - 180];
+        }
+
+        function updateDayNightOverlay() {
+            layers.dayNight.clearLayers();
+            const sun = solarSubpoint(new Date());
+            const daylight = [];
+            for (let brg = 0; brg <= 360; brg += 2) daylight.push(destinationPoint(sun.lat, sun.lon, brg, 10007.5));
+            const world = [[-89.9, -180], [-89.9, 180], [89.9, 180], [89.9, -180]];
+            L.polygon([world, daylight], {
+                stroke: false,
+                fillColor: '#000000',
+                fillOpacity: 0.33,
+                interactive: false
+            }).addTo(layers.dayNight);
+        }
+
+        function applyLayerPreset(preset) {
+            const hideAll = [
+                layers.iranAttacks, layers.newsintel, layers.armedConflict, layers.militaryOps, layers.shipTraffic,
+                layers.tradeRoutesLive, layers.protests, layers.displacement, layers.climate, layers.hotspots,
+                layers.cyberAlerts, layers.naturalEvents, layers.fires, layers.economicCentersLive, layers.mineralsLive,
+                layers.gpsJamming, layers.ciiInstability, layers.flights, layers.gdelt, layers.gdeltMacro, layers.quakes,
+                layers.dayNight, layers.cables, layers.chokepoints, layers.bases, layers.pipelines, layers.nuclear
+            ];
+            hideAll.forEach(layer => map.removeLayer(layer));
+            const add = (arr) => arr.forEach(layer => layer.addTo(map));
+            if (preset === 'conflict') add([layers.iranAttacks, layers.armedConflict, layers.protests, layers.displacement, layers.newsintel, layers.gdelt, layers.dayNight]);
+            else if (preset === 'infra') add([layers.shipTraffic, layers.tradeRoutesLive, layers.ciiInstability, layers.cyberAlerts, layers.chokepoints, layers.cables, layers.pipelines, layers.bases, layers.nuclear, layers.dayNight]);
+            else if (preset === 'climate') add([layers.hotspots, layers.naturalEvents, layers.fires, layers.climate, layers.quakes, layers.dayNight]);
+            else if (preset === 'market') add([layers.gdeltMacro, layers.economicCentersLive, layers.mineralsLive, layers.newsintel, layers.dayNight]);
+            else add([layers.iranAttacks, layers.newsintel, layers.hotspots, layers.gdelt, layers.gdeltMacro, layers.cyberAlerts, layers.naturalEvents, layers.fires, layers.flights, layers.dayNight]);
         }
 
         function updateSessionClock() {
@@ -2117,6 +2508,116 @@
             updateInfraReferences();
         }
 
+        async function fetchCyberAlertsLayer() {
+            try {
+                const [cyberItems, outageItems] = await Promise.all([
+                    fetchIntelTopic('cyber', 10),
+                    fetchIntelTopic('outages', 10)
+                ]);
+                const items = [...cyberItems, ...outageItems];
+                layers.cyberAlerts.clearLayers();
+                items.slice(0, 20).forEach(item => {
+                    const point = locateHeadline(item.title || '');
+                    const src = item.source || 'live wire';
+                    L.marker(point, { icon: icons.cable }).addTo(layers.cyberAlerts).bindPopup(`<b>Cyber/Outage</b><br>${item.title || 'Untitled'}<br>${src}`);
+                });
+                pageHealth.cyberMap = items.length > 0;
+            } catch {
+                layers.cyberAlerts.clearLayers();
+                pageHealth.cyberMap = false;
+            }
+            updatePageScore();
+        }
+
+        async function fetchGdeltThemeLayer(layer, query, icon, limit = 40) {
+            const q = encodeURIComponent(query);
+            const res = await fetch(`gdelt_events.php?query=${q}&timespan=180&limit=${limit}`);
+            if (!res.ok) throw new Error('GDELT_THEME_HTTP');
+            const data = await res.json();
+            if (data.status !== 'ok' || !Array.isArray(data.events) || !data.events.length) throw new Error('GDELT_THEME_DATA');
+            layer.clearLayers();
+            data.events.slice(0, limit).forEach(ev => {
+                const link = ev.url ? `<br><a href="${ev.url}" target="_blank">Open source</a>` : '';
+                L.marker([ev.lat, ev.lng], { icon }).addTo(layer).bindPopup(`<b>${ev.name}</b><br>${ev.title}${link}`);
+            });
+            return data.events.length;
+        }
+
+        async function fetchAdvancedThematicLayers() {
+            const jobs = [
+                { layer: layers.iranAttacks, query: 'iran AND (missile OR strike OR attack OR drone)', icon: icons.conflict, metric: 'conflictEvents' },
+                { layer: layers.protests, query: 'protest OR unrest OR riot OR demonstration', icon: icons.conflict, metric: 'protestsEvents' },
+                { layer: layers.armedConflict, query: 'armed conflict OR airstrike OR shelling OR offensive', icon: icons.conflict, metric: 'conflictEvents' },
+                { layer: layers.displacement, query: 'displacement OR refugee OR evacuee OR humanitarian corridor', icon: icons.naval, metric: 'displacementEvents' },
+                { layer: layers.climate, query: 'climate anomaly OR heatwave OR drought OR flood OR el nino', icon: icons.fire, metric: 'climateEvents' },
+                { layer: layers.militaryOps, query: 'military exercise OR bomber OR naval drill OR deployment', icon: icons.base, metric: 'conflictEvents' },
+                { layer: layers.shipTraffic, query: 'shipping disruption OR vessel traffic OR port congestion OR red sea shipping', icon: icons.naval, metric: 'shippingEvents' },
+                { layer: layers.tradeRoutesLive, query: 'trade route OR canal closure OR maritime chokepoint', icon: icons.lock, metric: 'shippingEvents' },
+                { layer: layers.economicCentersLive, query: 'financial center OR stock exchange OR sovereign bond market', icon: icons.econ, metric: 'gdeltMacroEvents' },
+                { layer: layers.mineralsLive, query: 'critical minerals OR lithium OR copper mine OR rare earths', icon: icons.econ, metric: 'gdeltMacroEvents' },
+                { layer: layers.gpsJamming, query: 'gps jamming OR gnss spoofing OR navigation interference', icon: icons.cable, metric: 'cyberEvents' },
+                { layer: layers.ciiInstability, query: 'critical infrastructure outage OR power grid failure OR telecom disruption', icon: icons.cable, metric: 'cyberEvents' }
+            ];
+            const counts = await Promise.all(jobs.map(async job => {
+                try {
+                    const n = await fetchGdeltThemeLayer(job.layer, job.query, job.icon, 35);
+                    return { metric: job.metric, count: n, ok: true };
+                } catch {
+                    job.layer.clearLayers();
+                    return { metric: job.metric, count: 0, ok: false };
+                }
+            }));
+            liveMetrics.protestsEvents = counts.filter(x => x.metric === 'protestsEvents').reduce((s, x) => s + x.count, 0);
+            liveMetrics.conflictEvents = counts.filter(x => x.metric === 'conflictEvents').reduce((s, x) => s + x.count, 0);
+            liveMetrics.displacementEvents = counts.filter(x => x.metric === 'displacementEvents').reduce((s, x) => s + x.count, 0);
+            liveMetrics.climateEvents = counts.filter(x => x.metric === 'climateEvents').reduce((s, x) => s + x.count, 0);
+            pageHealth.thematicMap = counts.some(x => x.ok);
+            updateRiskGauge();
+            updatePageScore();
+        }
+
+        async function fetchEonetLayers() {
+            try {
+                const res = await fetch('https://eonet.gsfc.nasa.gov/api/v3/events?status=open&limit=200');
+                if (!res.ok) throw new Error('EONET_HTTP');
+                const data = await res.json();
+                const events = Array.isArray(data.events) ? data.events : [];
+                layers.naturalEvents.clearLayers();
+                layers.fires.clearLayers();
+                let naturalCount = 0;
+                let fireCount = 0;
+                events.forEach(ev => {
+                    const geo = Array.isArray(ev.geometry) ? ev.geometry : [];
+                    const cats = Array.isArray(ev.categories) ? ev.categories.map(c => (c.title || '').toLowerCase()) : [];
+                    const latestPoint = geo.slice().reverse().find(g => g.type === 'Point' && Array.isArray(g.coordinates) && g.coordinates.length >= 2);
+                    if (!latestPoint) return;
+                    const lat = latestPoint.coordinates[1];
+                    const lng = latestPoint.coordinates[0];
+                    const isFire = cats.some(c => c.includes('wildfire'));
+                    const isNatural = cats.some(c => /(severe storms|volcanoes|earthquakes|drought|floods|landslides|sea and lake ice|dust and haze|temperature extremes)/.test(c));
+                    const link = ev.sources && ev.sources[0] && ev.sources[0].url ? ev.sources[0].url : '';
+                    const popup = `<b>${ev.title || 'EONET Event'}</b><br>${(ev.categories || []).map(c => c.title).join(', ')}${link ? `<br><a href="${link}" target="_blank">Open source</a>` : ''}`;
+                    if (isFire) {
+                        L.marker([lat, lng], { icon: icons.fire }).addTo(layers.fires).bindPopup(popup);
+                        fireCount++;
+                    }
+                    if (isNatural || isFire) {
+                        L.marker([lat, lng], { icon: isFire ? icons.fire : icons.quake }).addTo(layers.naturalEvents).bindPopup(popup);
+                        naturalCount++;
+                    }
+                });
+                liveMetrics.naturalEvents = naturalCount;
+                pageHealth.eonet = naturalCount > 0 || fireCount > 0;
+            } catch {
+                layers.naturalEvents.clearLayers();
+                layers.fires.clearLayers();
+                liveMetrics.naturalEvents = 0;
+                pageHealth.eonet = false;
+            }
+            updateRiskGauge();
+            updatePageScore();
+        }
+
         function renderMiniFeed(targetId, metaId, items, fallbackLink) {
             const target = document.getElementById(targetId);
             const meta = document.getElementById(metaId);
@@ -2360,6 +2861,7 @@
                     L.marker([ev.lat, ev.lng], { icon: icons.conflict }).addTo(layers.gdelt).bindPopup(`<b>${ev.name}</b><br>${ev.title}${link}`);
                 });
                 pageHealth.gdelt = true;
+                liveMetrics.gdeltEvents = data.events.length;
             } catch {
                 try {
                     const query = encodeURIComponent('"forex" OR "oil" OR "shipping" OR "sanctions"');
@@ -2379,13 +2881,39 @@
                         L.marker([lat, lng], { icon: icons.conflict }).addTo(layers.gdelt).bindPopup(`<b>${name}</b><br>${title}`);
                     });
                     pageHealth.gdelt = true;
+                    liveMetrics.gdeltEvents = features.length;
                 } catch {
                     layers.gdelt.clearLayers();
                     pageHealth.gdelt = false;
+                    liveMetrics.gdeltEvents = 0;
                 }
             }
+            updateRiskGauge();
             updatePageScore();
             updateInfraReferences();
+        }
+
+        async function fetchGdeltMacroPulse() {
+            try {
+                const query = encodeURIComponent('inflation OR central bank OR rates OR recession OR cpi OR jobs OR bond yields');
+                const res = await fetch(`gdelt_events.php?query=${query}&timespan=180&limit=60`);
+                if (!res.ok) throw new Error('GDELT_MACRO_HTTP');
+                const data = await res.json();
+                if (data.status !== 'ok' || !Array.isArray(data.events) || !data.events.length) throw new Error('GDELT_MACRO_DATA');
+                layers.gdeltMacro.clearLayers();
+                data.events.slice(0, 60).forEach(ev => {
+                    const link = ev.url ? `<br><a href="${ev.url}" target="_blank">Open source</a>` : '';
+                    L.marker([ev.lat, ev.lng], { icon: icons.econ }).addTo(layers.gdeltMacro).bindPopup(`<b>${ev.name}</b><br>${ev.title}${link}`);
+                });
+                liveMetrics.gdeltMacroEvents = data.events.length;
+                pageHealth.gdeltMacro = true;
+            } catch {
+                layers.gdeltMacro.clearLayers();
+                liveMetrics.gdeltMacroEvents = 0;
+                pageHealth.gdeltMacro = false;
+            }
+            updateRiskGauge();
+            updatePageScore();
         }
 
         function updateAiAdvisor() {
@@ -2508,6 +3036,12 @@
             fetchFlights();
             fetchNews();
             fetchGdeltEvents();
+            fetchGdeltMacroPulse();
+            fetchCyberAlertsLayer();
+            fetchAdvancedThematicLayers();
+            fetchEonetLayers();
+            fetchOpsNewsApps();
+            updateDayNightOverlay();
             loadMiniFeeds();
             fetchForexRates();
             fetchMarketSnapshot();
@@ -2519,6 +3053,12 @@
             setInterval(fetchEarthquakes, 600000);
             setInterval(fetchNews, 240000);
             setInterval(fetchGdeltEvents, 300000);
+            setInterval(fetchGdeltMacroPulse, 300000);
+            setInterval(fetchCyberAlertsLayer, 300000);
+            setInterval(fetchAdvancedThematicLayers, 360000);
+            setInterval(fetchEonetLayers, 360000);
+            setInterval(fetchOpsNewsApps, 180000);
+            setInterval(updateDayNightOverlay, 60000);
             setInterval(loadMiniFeeds, 300000);
             setInterval(fetchForexRates, 60000);
             setInterval(fetchMarketSnapshot, 60000);
@@ -2527,6 +3067,7 @@
             setInterval(updateSessionClock, 1000);
             setInterval(decayImpact, 45000);
             setInterval(updateChokepointPressure, 30000);
+            applyLayerPreset('global');
         }
 
         function initializeRightPanel() {
