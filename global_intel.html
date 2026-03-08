@@ -712,6 +712,20 @@
             margin-top: -20px;
         }
         .meter-label { font-size: 0.7rem; color: #787b86; text-transform: uppercase; letter-spacing: 1px; }
+        .score-pill {
+            margin-top: 6px;
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 0.7px;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 999px;
+            border: 1px solid #2a2e39;
+            background: #131722;
+        }
+        .score-pill.low { color: #26a69a; border-color: rgba(38, 166, 154, 0.4); background: rgba(38, 166, 154, 0.1); }
+        .score-pill.mid { color: #ffcf22; border-color: rgba(255, 207, 34, 0.4); background: rgba(255, 207, 34, 0.1); }
+        .score-pill.high { color: #ef5350; border-color: rgba(239, 83, 80, 0.45); background: rgba(239, 83, 80, 0.12); }
         .heat-explain {
             font-size: 0.62rem;
             color: #9aa0ad;
@@ -720,6 +734,41 @@
             max-width: 220px;
             line-height: 1.35;
         }
+        .heat-summary-line {
+            margin-top: 5px;
+            font-size: 0.62rem;
+            color: #b2b5be;
+            text-align: center;
+            max-width: 250px;
+            line-height: 1.35;
+        }
+        .score-legend {
+            margin-top: 8px;
+            width: 100%;
+            display: grid;
+            gap: 5px;
+        }
+        .score-legend-row {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            background: #131722;
+            border: 1px solid #2a2e39;
+            border-radius: 4px;
+            padding: 4px 6px;
+            font-size: 0.6rem;
+            color: #c6cad3;
+            line-height: 1.25;
+        }
+        .score-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex: 0 0 8px;
+        }
+        .score-dot.low { background: #26a69a; }
+        .score-dot.mid { background: #ffcf22; }
+        .score-dot.high { background: #ef5350; }
         .heat-breakdown {
             margin-top: 8px;
             width: 100%;
@@ -758,6 +807,30 @@
             color: #9aa0ad;
             text-align: center;
             margin-bottom: 8px;
+        }
+        .dislocation-guide {
+            margin: 4px 0 8px;
+            width: 100%;
+            background: linear-gradient(90deg, rgba(38,166,154,0.16) 0%, rgba(255,207,34,0.16) 50%, rgba(239,83,80,0.16) 100%);
+            border: 1px solid #2a2e39;
+            border-radius: 6px;
+            padding: 6px 8px;
+            display: grid;
+            gap: 4px;
+        }
+        .dislocation-guide-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.6rem;
+            color: #d1d4dc;
+            line-height: 1.2;
+        }
+        .dislocation-context {
+            margin-top: 6px;
+            font-size: 0.62rem;
+            color: #b2b5be;
+            text-align: center;
+            line-height: 1.35;
         }
         .dislocation-regime {
             font-size: 0.66rem;
@@ -958,6 +1031,115 @@
         .ops-news-app .k { font-size: 0.56rem; color: #9aa0ad; text-transform: uppercase; letter-spacing: 0.6px; }
         .ops-news-app .v { font-size: 0.63rem; color: #d1d4dc; line-height: 1.35; }
         .ops-news-app .m { font-size: 0.54rem; color: #787b86; }
+        .product-carousel-wrap {
+            grid-column: 1 / -1;
+            grid-row: 8 / 9;
+            background: #0f1420;
+            border-top: 1px solid #2a2e39;
+            border-bottom: 1px solid #2a2e39;
+            padding: 14px 12px 12px;
+        }
+        .product-carousel-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            gap: 8px;
+        }
+        .product-carousel-title {
+            font-size: 0.78rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            color: #d1d4dc;
+        }
+        .product-carousel-sub {
+            font-size: 0.64rem;
+            color: #8b92a2;
+            margin-top: 2px;
+        }
+        .product-carousel-controls {
+            display: flex;
+            gap: 6px;
+        }
+        .product-carousel-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid #2a2e39;
+            background: #131722;
+            color: #d1d4dc;
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .product-carousel-btn:hover {
+            border-color: #3a4255;
+            background: #1a2130;
+        }
+        .product-carousel {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+            padding-bottom: 4px;
+        }
+        .product-slide {
+            min-width: 260px;
+            max-width: 260px;
+            background: #131722;
+            border: 1px solid #2a2e39;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+            flex: 0 0 auto;
+        }
+        .product-slide:hover {
+            transform: translateY(-3px);
+            border-color: #3a4255;
+        }
+        .product-slide img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            display: block;
+            background: #0a0e17;
+        }
+        .product-slide-body {
+            padding: 9px 10px 10px;
+            display: grid;
+            gap: 6px;
+        }
+        .product-slide-tag {
+            display: inline-flex;
+            width: fit-content;
+            font-size: 0.55rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #8ea6ff;
+            border: 1px solid #2a2e39;
+            border-radius: 999px;
+            padding: 2px 6px;
+            background: #101729;
+        }
+        .product-slide-name {
+            font-size: 0.72rem;
+            color: #fff;
+            font-weight: 700;
+            line-height: 1.25;
+        }
+        .product-slide-cta {
+            font-size: 0.62rem;
+            color: #9aa0ad;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
         .layer-presets {
             position: absolute;
             top: 10px;
@@ -1277,6 +1459,9 @@
                 grid-row: 7 / 8;
                 grid-template-columns: repeat(2, minmax(220px, 1fr));
             }
+            .product-carousel-wrap {
+                grid-row: 8 / 9;
+            }
             .layout-controls {
                 gap: 6px;
             }
@@ -1338,6 +1523,13 @@
             }
             .gdelt-region-grid {
                 grid-template-columns: 1fr;
+            }
+            .product-slide {
+                min-width: 220px;
+                max-width: 220px;
+            }
+            .product-slide img {
+                height: 120px;
             }
             .gdelt-region-cell {
                 min-height: 96px;
@@ -1403,6 +1595,16 @@
             }
             .map-tools {
                 max-width: calc(100% - 12px);
+            }
+            .product-carousel-wrap {
+                padding: 12px 8px 10px;
+            }
+            .product-carousel-title {
+                font-size: 0.72rem;
+            }
+            .product-slide {
+                min-width: 200px;
+                max-width: 200px;
             }
             .sidebar-left {
                 max-height: 40vh;
@@ -1855,7 +2057,14 @@
                     </div>
                     <div class="meter-label">MULTI-FACTOR RISK HEAT</div>
                     <div style="font-size: 0.65rem; color: #787b86; margin-top: 4px;" id="risk-summary">Calculating...</div>
+                    <div class="score-pill mid" id="heat-regime-pill">Regime loading</div>
+                    <div class="heat-summary-line" id="heat-driver-line">Waiting for dominant risk driver...</div>
                     <div class="heat-explain">Weights live geopolitical pressure, transport disruption, cyber risk, seismic impact, and headline volume into a single 0-100 trader risk regime score.</div>
+                    <div class="score-legend">
+                        <div class="score-legend-row"><span class="score-dot low"></span><span><strong>0-39 Calm</strong> · Trend and carry conditions usually cleaner.</span></div>
+                        <div class="score-legend-row"><span class="score-dot mid"></span><span><strong>40-69 Mixed</strong> · Expect headline whipsaws and selective setups.</span></div>
+                        <div class="score-legend-row"><span class="score-dot high"></span><span><strong>70-100 Risk-Off</strong> · Higher shock probability, reduce leverage.</span></div>
+                    </div>
                     <div class="heat-breakdown">
                         <div class="heat-row"><span>Flights</span><span id="heat-flights">0</span></div>
                         <div class="heat-row"><span>Major Quakes</span><span id="heat-quakes">0</span></div>
@@ -1872,6 +2081,11 @@
                 <div class="dislocation-score" id="dislocation-value">--</div>
                 <div class="dislocation-regime" id="dislocation-regime">initializing</div>
                 <div class="dislocation-meta" id="dislocation-meta">Combines real-time macro, event, and cross-asset stress inputs.</div>
+                <div class="dislocation-guide">
+                    <div class="dislocation-guide-row"><span><strong>0-34</strong> Ordered</span><span>Trends hold better</span></div>
+                    <div class="dislocation-guide-row"><span><strong>35-64</strong> Transition</span><span>Frequent reversals</span></div>
+                    <div class="dislocation-guide-row"><span><strong>65-100</strong> Dislocated</span><span>Shock-driven pricing</span></div>
+                </div>
                 <div class="dislocation-breakdown">
                     <div class="dislocation-row"><span>Equity Drawdown</span><span id="disl-eq">0</span></div>
                     <div class="dislocation-row"><span>Macro Shock</span><span id="disl-macro">0</span></div>
@@ -1879,6 +2093,7 @@
                     <div class="dislocation-row"><span>Cyber / Shipping</span><span id="disl-cyber">0</span></div>
                     <div class="dislocation-row"><span>Live Headlines</span><span id="disl-headlines">0</span></div>
                 </div>
+                <div class="dislocation-context" id="dislocation-context">Waiting for top dislocation driver...</div>
                 <div class="heat-updated" id="disl-updated">Updated --:--</div>
             </div>
         </div>
@@ -1930,6 +2145,148 @@
             <div class="mini-feed-card">
                 <div class="mini-feed-head"><span>Protests & Unrest</span><span class="mini-feed-meta" id="meta-protests">loading</span></div>
                 <ul class="mini-feed-list" id="feed-protests"><li>Loading latest updates...</li></ul>
+            </div>
+        </section>
+        <section class="product-carousel-wrap">
+            <div class="product-carousel-head">
+                <div>
+                    <div class="product-carousel-title">MQL5 + TradingView Product Previews</div>
+                    <div class="product-carousel-sub">Auto-rotating links to all MQL5 listings and TradingView product pages</div>
+                </div>
+                <div class="product-carousel-controls">
+                    <button class="product-carousel-btn" onclick="scrollProductCarousel(-1)"><i class="fas fa-chevron-left"></i></button>
+                    <button class="product-carousel-btn" onclick="scrollProductCarousel(1)"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+            <div class="product-carousel" id="product-carousel">
+                <a class="product-slide" href="https://www.mql5.com/en/market/product/164997?source=Site+Profile+Seller" target="_blank" rel="noopener">
+                    <img src="https://c.mql5.com/31/1722/market-maker-dashboard-by-g-labs-logo-200x200-7861.png" alt="BTMM State Engine Pro">
+                    <div class="product-slide-body">
+                        <span class="product-slide-tag">MQL5</span>
+                        <div class="product-slide-name">BTMM State Engine Pro</div>
+                        <div class="product-slide-cta"><i class="fas fa-arrow-right"></i>Preview on MQL5</div>
+                    </div>
+                </a>
+                <a class="product-slide" href="https://www.mql5.com/en/market/product/58535?source=Site+Profile+Seller" target="_blank" rel="noopener">
+                    <img src="https://c.mql5.com/31/1722/market-maker-dashboard-by-g-labs-logo-200x200-7861.png" alt="Market Maker Dashboard by G Labs">
+                    <div class="product-slide-body">
+                        <span class="product-slide-tag">MQL5</span>
+                        <div class="product-slide-name">Market Maker Dashboard</div>
+                        <div class="product-slide-cta"><i class="fas fa-arrow-right"></i>Preview on MQL5</div>
+                    </div>
+                </a>
+                <a class="product-slide" href="https://www.mql5.com/en/market/product/60291?source=Site+Profile+Seller" target="_blank" rel="noopener">
+                    <img src="https://c.mql5.com/31/1722/g-cash-ic-breaker-order-blocks-logo-200x200-3769.png" alt="G Cash IC Breaker Order Blocks">
+                    <div class="product-slide-body">
+                        <span class="product-slide-tag">MQL5</span>
+                        <div class="product-slide-name">G Cash IC Breaker Order Blocks</div>
+                        <div class="product-slide-cta"><i class="fas fa-arrow-right"></i>Preview on MQL5</div>
+                    </div>
+                </a>
+                <a class="product-slide" href="https://www.mql5.com/en/market/product/73601?source=Site+Profile+Seller" target="_blank" rel="noopener">
+                    <img src="https://c.mql5.com/31/1722/g-labs-trade-manager-logo-200x200-6690.png" alt="G Labs Trade Manager">
+                    <div class="product-slide-body">
+                        <span class="product-slide-tag">MQL5</span>
+                        <div class="product-slide-name">G Labs Trade Manager</div>
+                        <div class="product-slide-cta"><i class="fas fa-arrow-right"></i>Preview on MQL5</div>
+                    </div>
+                </a>
+                <a class="product-slide" href="https://www.mql5.com/en/market/product/126448?source=Site+Profile+Seller" target="_blank" rel="noopener">
+                    <img src="https://c.mql5.com/31/1722/market-maker-dashboard-by-g-labs-mt5-logo-200x200-3327.png" alt="Market Maker Dashboard MT5">
+                    <div class="product-slide-body">
+                        <span class="product-slide-tag">MQL5</span>
+                        <div class="product-slide-name">Market Maker Dashboard MT5</div>
+                        <div class="product-slide-cta"><i class="fas fa-arrow-right"></i>Preview on MQL5</div>
+                    </div>
+                </a>
+                <a class="product-slide" href="https://www.mql5.com/en/market/product/161045?source=Site+Profile+Seller" target="_blank" rel="noopener">
+                    <img src="https://c.mql5.com/31/1724/connix-mt5-logo-200x200-7110.png" alt="Connix MT5">
+                    <div class="product-slide-body">
+                        <span class="product-slide-tag">MQL5</span>
+                        <div class="product-slide-name">Connix MT5</div>
+                        <div class="product-slide-cta"><i class="fas fa-arrow-right"></i>Preview on MQL5</div>
+                    </div>
+                </a>
+                <a class="product-slide" href="https://www.mql5.com/en/market/product/161073?source=Site+Profile+Seller" target="_blank" rel="noopener">
+                    <img src="https://c.mql5.com/31/1727/magic-lines-mt5-logo-200x200-2681.png" alt="Magic Lines MT5">
+                    <div class="product-slide-body">
+                        <span class="product-slide-tag">MQL5</span>
+                        <div class="product-slide-name">Magic Lines MT5</div>
+                        <div class="product-slide-cta"><i class="fas fa-arrow-right"></i>Preview on MQL5</div>
+                    </div>
+                </a>
+                <a class="product-slide" href="https://www.mql5.com/en/market/product/165678?source=Site+Profile+Seller" target="_blank" rel="noopener">
+                    <img src="https://c.mql5.com/31/1809/smart-market-structure-toolkit-logo-200x200-8645.png" alt="Smart Market Structure Toolkit">
+                    <div class="product-slide-body">
+                        <span class="product-slide-tag">MQL5</span>
+                        <div class="product-slide-name">Smart Market Structure Toolkit</div>
+                        <div class="product-slide-cta"><i class="fas fa-arrow-right"></i>Preview on MQL5</div>
+                    </div>
+                </a>
+                <a class="product-slide" href="https://www.mql5.com/en/market/product/160951?source=Site+Profile+Seller" target="_blank" rel="noopener">
+                    <img src="https://c.mql5.com/31/1722/advanced-market-maker-dashboard-by-g-labs-mt5-logo-200x200-6112.png" alt="Advanced Market Maker Dashboard MT5">
+                    <div class="product-slide-body">
+                        <span class="product-slide-tag">MQL5</span>
+                        <div class="product-slide-name">Advanced Market Maker Dashboard MT5</div>
+                        <div class="product-slide-cta"><i class="fas fa-arrow-right"></i>Preview on MQL5</div>
+                    </div>
+                </a>
+                <a class="product-slide" href="tradingview.html#tv-btmm-state-engine-pro" target="_blank" rel="noopener">
+                    <img src="assets/images/btmm-state-engine-pro-lifetime.png" alt="BTMM State Engine Pro TradingView">
+                    <div class="product-slide-body">
+                        <span class="product-slide-tag">TradingView</span>
+                        <div class="product-slide-name">BTMM State Engine Pro Multi Asset + Deluxe</div>
+                        <div class="product-slide-cta"><i class="fas fa-arrow-right"></i>Open TradingView product</div>
+                    </div>
+                </a>
+                <a class="product-slide" href="tradingview.html#tv-magic-lines-single" target="_blank" rel="noopener">
+                    <img src="assets/images/magic-lines-single.png" alt="Magic Lines Single Asset TradingView">
+                    <div class="product-slide-body">
+                        <span class="product-slide-tag">TradingView</span>
+                        <div class="product-slide-name">Magic Lines Single Asset</div>
+                        <div class="product-slide-cta"><i class="fas fa-arrow-right"></i>Open TradingView product</div>
+                    </div>
+                </a>
+                <a class="product-slide" href="tradingview.html#tv-magic-lines-deluxe" target="_blank" rel="noopener">
+                    <img src="assets/images/magic-lines-deluxe.png" alt="Magic Lines Deluxe Package TradingView">
+                    <div class="product-slide-body">
+                        <span class="product-slide-tag">TradingView</span>
+                        <div class="product-slide-name">Magic Lines Deluxe Package</div>
+                        <div class="product-slide-cta"><i class="fas fa-arrow-right"></i>Open TradingView product</div>
+                    </div>
+                </a>
+                <a class="product-slide" href="tradingview.html#tv-connix-single" target="_blank" rel="noopener">
+                    <img src="assets/images/connix-smart-trading-single.png" alt="Connix Smart Trading Single TradingView">
+                    <div class="product-slide-body">
+                        <span class="product-slide-tag">TradingView</span>
+                        <div class="product-slide-name">Connix Smart Trading Single Asset</div>
+                        <div class="product-slide-cta"><i class="fas fa-arrow-right"></i>Open TradingView product</div>
+                    </div>
+                </a>
+                <a class="product-slide" href="tradingview.html#tv-connix-deluxe" target="_blank" rel="noopener">
+                    <img src="assets/images/connix-deluxe-package.png" alt="Connix Deluxe Package TradingView">
+                    <div class="product-slide-body">
+                        <span class="product-slide-tag">TradingView</span>
+                        <div class="product-slide-name">Connix Deluxe Package</div>
+                        <div class="product-slide-cta"><i class="fas fa-arrow-right"></i>Open TradingView product</div>
+                    </div>
+                </a>
+                <a class="product-slide" href="tradingview.html#tv-market-maker-single" target="_blank" rel="noopener">
+                    <img src="assets/images/market-maker-single-asset.png" alt="Market Maker Single Asset TradingView">
+                    <div class="product-slide-body">
+                        <span class="product-slide-tag">TradingView</span>
+                        <div class="product-slide-name">Market Maker Single Asset</div>
+                        <div class="product-slide-cta"><i class="fas fa-arrow-right"></i>Open TradingView product</div>
+                    </div>
+                </a>
+                <a class="product-slide" href="tradingview.html#tv-market-maker-deluxe" target="_blank" rel="noopener">
+                    <img src="assets/images/deluxe-market-maker-package-new.png" alt="Market Maker Deluxe Package TradingView">
+                    <div class="product-slide-body">
+                        <span class="product-slide-tag">TradingView</span>
+                        <div class="product-slide-name">Market Maker Deluxe Package</div>
+                        <div class="product-slide-cta"><i class="fas fa-arrow-right"></i>Open TradingView product</div>
+                    </div>
+                </a>
             </div>
         </section>
     </div>
@@ -2819,45 +3176,69 @@
 
         function updateRiskGauge() {
             const flightStress = liveMetrics.flights <= 0 ? 10 : (liveMetrics.flights < 20 ? 6 : 0);
-            const pressure = clamp(
-                Math.round(
-                    impactState.score * 0.4 +
-                    flightStress +
-                    Math.min(liveMetrics.majorQuakes * 8, 40) +
-                    Math.min(liveMetrics.severeDisasters * 10, 35) +
-                    Math.min(liveMetrics.newsHeadlines * 0.45, 20) +
-                    Math.min(liveMetrics.cyberEvents * 2, 20) +
-                    Math.min(liveMetrics.shippingEvents * 2, 20) +
-                    Math.min(liveMetrics.gdeltMacroEvents * 0.35, 15) +
-                    Math.min(liveMetrics.conflictEvents * 0.18, 12) +
-                    Math.min(liveMetrics.protestsEvents * 0.08, 8) +
-                    Math.min(liveMetrics.climateEvents * 0.12, 8) +
-                    Math.min(liveMetrics.naturalEvents * 0.16, 10)
-                )
-            );
+            const parts = {
+                baseline: Math.round(impactState.score * 0.4),
+                flights: Math.round(flightStress),
+                quakes: Math.round(Math.min(liveMetrics.majorQuakes * 8, 40)),
+                disasters: Math.round(Math.min(liveMetrics.severeDisasters * 10, 35)),
+                headlines: Math.round(Math.min(liveMetrics.newsHeadlines * 0.45, 20)),
+                cyber: Math.round(Math.min(liveMetrics.cyberEvents * 2, 20)),
+                shipping: Math.round(Math.min(liveMetrics.shippingEvents * 2, 20)),
+                macro: Math.round(Math.min(liveMetrics.gdeltMacroEvents * 0.35, 15)),
+                conflict: Math.round(Math.min(liveMetrics.conflictEvents * 0.18, 12)),
+                protests: Math.round(Math.min(liveMetrics.protestsEvents * 0.08, 8)),
+                climate: Math.round(Math.min(liveMetrics.climateEvents * 0.12, 8)),
+                natural: Math.round(Math.min(liveMetrics.naturalEvents * 0.16, 10))
+            };
+            const pressure = clamp(parts.baseline + parts.flights + parts.quakes + parts.disasters + parts.headlines + parts.cyber + parts.shipping + parts.macro + parts.conflict + parts.protests + parts.climate + parts.natural);
             const fill = document.getElementById('pizza-meter-fill');
             const value = document.getElementById('pizza-value');
             const summary = document.getElementById('risk-summary');
             const updated = document.getElementById('heat-updated');
+            const regimePill = document.getElementById('heat-regime-pill');
+            const driverLine = document.getElementById('heat-driver-line');
             const rotation = (pressure / 100) * 180 - 90;
             fill.style.transform = `rotate(${rotation}deg)`;
             value.innerText = pressure;
-            document.getElementById('heat-flights').innerText = liveMetrics.flights;
-            document.getElementById('heat-quakes').innerText = liveMetrics.majorQuakes;
-            document.getElementById('heat-disasters').innerText = liveMetrics.severeDisasters;
-            document.getElementById('heat-cyber').innerText = liveMetrics.cyberEvents;
-            document.getElementById('heat-shipping').innerText = liveMetrics.shippingEvents;
-            document.getElementById('heat-headlines').innerText = liveMetrics.newsHeadlines;
+            document.getElementById('heat-flights').innerText = `${liveMetrics.flights} · +${parts.flights}`;
+            document.getElementById('heat-quakes').innerText = `${liveMetrics.majorQuakes} · +${parts.quakes}`;
+            document.getElementById('heat-disasters').innerText = `${liveMetrics.severeDisasters} · +${parts.disasters}`;
+            document.getElementById('heat-cyber').innerText = `${liveMetrics.cyberEvents} · +${parts.cyber}`;
+            document.getElementById('heat-shipping').innerText = `${liveMetrics.shippingEvents} · +${parts.shipping}`;
+            document.getElementById('heat-headlines').innerText = `${liveMetrics.newsHeadlines} · +${parts.headlines}`;
             updated.innerText = `Updated ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`;
+            const dominant = Object.entries({
+                Baseline: parts.baseline,
+                Flights: parts.flights,
+                Quakes: parts.quakes,
+                Disasters: parts.disasters,
+                Headlines: parts.headlines,
+                Cyber: parts.cyber,
+                Shipping: parts.shipping,
+                Macro: parts.macro
+            }).sort((a, b) => b[1] - a[1])[0];
+            if (driverLine) driverLine.innerText = `Top driver: ${dominant[0]} (+${dominant[1]} pts of ${pressure})`;
             if (pressure < 40) {
                 value.style.color = '#26a69a';
                 summary.innerText = `Calm regime · Macro shocks ${liveMetrics.gdeltMacroEvents} · Disasters ${liveMetrics.severeDisasters}`;
+                if (regimePill) {
+                    regimePill.className = 'score-pill low';
+                    regimePill.innerText = '0-39 Calm Market Regime';
+                }
             } else if (pressure < 70) {
                 value.style.color = '#ffcf22';
                 summary.innerText = `Balanced risk · Headlines ${liveMetrics.newsHeadlines} · Shipping ${liveMetrics.shippingEvents}`;
+                if (regimePill) {
+                    regimePill.className = 'score-pill mid';
+                    regimePill.innerText = '40-69 Mixed Risk Regime';
+                }
             } else {
                 value.style.color = '#ef5350';
                 summary.innerText = `Risk-off regime · Cyber ${liveMetrics.cyberEvents} · Quakes ${liveMetrics.majorQuakes}`;
+                if (regimePill) {
+                    regimePill.className = 'score-pill high';
+                    regimePill.innerText = '70-100 Risk-Off Regime';
+                }
             }
             updateDislocationScore();
             updateOpsMicroFeeds();
@@ -2876,25 +3257,34 @@
             const cyberShipping = clamp(Math.round(liveMetrics.cyberEvents * 1.5 + liveMetrics.shippingEvents * 1.2), 0, 20);
             const headlineFlow = clamp(Math.round(liveMetrics.newsHeadlines * 0.12), 0, 15);
             const score = clamp(eqStress + macroShock + disasterShock + cyberShipping + headlineFlow, 0, 100);
+            const breakdown = [
+                ['Equity Drawdown', eqStress],
+                ['Macro Shock', macroShock],
+                ['Disaster / Quake', disasterShock],
+                ['Cyber / Shipping', cyberShipping],
+                ['Live Headlines', headlineFlow]
+            ].sort((a, b) => b[1] - a[1]);
+            const top = breakdown[0];
             valEl.innerText = String(score);
             document.getElementById('disl-eq').innerText = String(eqStress);
             document.getElementById('disl-macro').innerText = String(macroShock);
             document.getElementById('disl-disaster').innerText = String(disasterShock);
             document.getElementById('disl-cyber').innerText = String(cyberShipping);
             document.getElementById('disl-headlines').innerText = String(headlineFlow);
+            document.getElementById('dislocation-context').innerText = `Primary dislocation source: ${top[0]} (+${top[1]} points).`;
             document.getElementById('disl-updated').innerText = `Updated ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`;
             if (score < 35) {
                 regimeEl.className = 'dislocation-regime low';
                 regimeEl.innerText = 'Low Dislocation · Trend Regime';
-                document.getElementById('dislocation-meta').innerText = 'Cross-asset stress is contained. Momentum and carry setups tend to perform better.';
+                document.getElementById('dislocation-meta').innerText = 'Score meaning: markets are mostly synchronized, with lower forced repricing across assets.';
             } else if (score < 65) {
                 regimeEl.className = 'dislocation-regime mid';
                 regimeEl.innerText = 'Moderate Dislocation · Selective Risk';
-                document.getElementById('dislocation-meta').innerText = 'Macro/event noise is elevated. Prefer tighter risk controls and selective positioning.';
+                document.getElementById('dislocation-meta').innerText = 'Score meaning: correlations become unstable and regime shifts are more frequent.';
             } else {
                 regimeEl.className = 'dislocation-regime high';
                 regimeEl.innerText = 'High Dislocation · Defensive Bias';
-                document.getElementById('dislocation-meta').innerText = 'Shock conditions are active. Defensive assets and reduced leverage are favored.';
+                document.getElementById('dislocation-meta').innerText = 'Score meaning: cross-asset repricing is disorderly, so risk control takes priority.';
             }
         }
 
@@ -3819,6 +4209,60 @@
             setTimeout(() => map.invalidateSize(), 100);
         }
 
+        let productCarouselTicker = null;
+        let productCarouselResumeTimer = null;
+
+        function scrollProductCarousel(direction) {
+            const scroller = document.getElementById('product-carousel');
+            if (!scroller) return;
+            pauseProductCarouselAutoScroll(3500);
+            scroller.scrollBy({ left: direction * 300, behavior: 'smooth' });
+        }
+
+        function pauseProductCarouselAutoScroll(resumeAfterMs = 0) {
+            if (productCarouselTicker) {
+                clearInterval(productCarouselTicker);
+                productCarouselTicker = null;
+            }
+            if (productCarouselResumeTimer) {
+                clearTimeout(productCarouselResumeTimer);
+                productCarouselResumeTimer = null;
+            }
+            if (resumeAfterMs > 0) {
+                productCarouselResumeTimer = setTimeout(() => {
+                    initializeProductCarouselAutoScroll();
+                }, resumeAfterMs);
+            }
+        }
+
+        function initializeProductCarouselAutoScroll() {
+            const scroller = document.getElementById('product-carousel');
+            if (!scroller) return;
+            if (productCarouselTicker) return;
+            const start = () => {
+                if (productCarouselTicker) return;
+                productCarouselTicker = setInterval(() => {
+                    const maxScroll = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
+                    if (maxScroll <= 0) return;
+                    if (scroller.scrollLeft >= maxScroll - 1) {
+                        scroller.scrollTo({ left: 0, behavior: 'auto' });
+                        return;
+                    }
+                    scroller.scrollLeft += 1;
+                }, 22);
+            };
+            const stop = () => pauseProductCarouselAutoScroll();
+            if (!scroller.dataset.autoscrollBound) {
+                scroller.addEventListener('mouseenter', stop);
+                scroller.addEventListener('mouseleave', start);
+                scroller.addEventListener('touchstart', stop, { passive: true });
+                scroller.addEventListener('touchend', () => pauseProductCarouselAutoScroll(2200), { passive: true });
+                scroller.addEventListener('wheel', () => pauseProductCarouselAutoScroll(2200), { passive: true });
+                scroller.dataset.autoscrollBound = '1';
+            }
+            start();
+        }
+
         function toggleSidebar(side) {
             const container = document.querySelector('.container');
             if (side === 'left') container.classList.toggle('left-collapsed');
@@ -3868,6 +4312,7 @@
         function initializeDashboard() {
             initializeRightPanel();
             initializeMapSizing();
+            initializeProductCarouselAutoScroll();
             renderLayerGroupPanel();
             const packInput = document.getElementById('view-pack-file');
             if (packInput && !packInput.dataset.bound) {
