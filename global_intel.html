@@ -242,6 +242,7 @@
             overflow: hidden;
             min-height: 0;
             height: 100%;
+            width: 100%;
             touch-action: none;
         }
         #map {
@@ -249,6 +250,12 @@
             inset: 0;
             width: 100%;
             height: 100%;
+            min-width: 100%;
+            min-height: 100%;
+        }
+        #map.leaflet-container {
+            width: 100% !important;
+            height: 100% !important;
         }
         /* Browser Toolbar (Address Bar Style) */
         .browser-toolbar {
@@ -2141,6 +2148,7 @@
         const fxState = { last: {} };
         const stockState = { last: {} };
         const marketState = { rows: [] };
+        const marketSnapshotCacheKey = 'glabs_market_snapshot_cache_v1';
         const pageHealth = {
             news: false,
             mini: false,
@@ -2177,6 +2185,43 @@
             const t = dateValue instanceof Date ? dateValue.getTime() : new Date(dateValue).getTime();
             if (!Number.isFinite(t)) return false;
             return (Date.now() - t) <= timeRangeToMs(range);
+        }
+        function saveMarketSnapshotCache(rows, provider = 'feed') {
+            try {
+                localStorage.setItem(marketSnapshotCacheKey, JSON.stringify({
+                    rows,
+                    provider,
+                    updatedAt: Date.now()
+                }));
+            } catch {}
+        }
+        function loadMarketSnapshotCache() {
+            try {
+                const raw = localStorage.getItem(marketSnapshotCacheKey);
+                if (!raw) return null;
+                const parsed = JSON.parse(raw);
+                if (!parsed || !Array.isArray(parsed.rows) || !parsed.rows.length) return null;
+                return parsed;
+            } catch {
+                return null;
+            }
+        }
+        function renderMarketRows(grid, rows, trackTrend = true) {
+            grid.innerHTML = rows.map(item => {
+                const sym = item.symbol || 'UNK';
+                const price = Number(item.price || 0);
+                const change = item.changePct;
+                const prev = stockState.last[sym];
+                let cls = '';
+                if (trackTrend && typeof prev === 'number') {
+                    if (price > prev) cls = 'up';
+                    if (price < prev) cls = 'down';
+                }
+                stockState.last[sym] = price;
+                const chClass = typeof change === 'number' ? (change >= 0 ? 'up' : 'down') : '';
+                const chText = typeof change === 'number' ? `${change >= 0 ? '+' : ''}${change.toFixed(2)}%` : '--';
+                return `<div class="stock-row"><span class="stock-symbol">${sym}</span><span><span class="stock-price ${cls}">${price.toFixed(price > 100 ? 2 : 4)}</span><span class="stock-change ${chClass}">${chText}</span></span></div>`;
+            }).join('');
         }
         function activeLayerKeys() {
             return Object.entries(overlayMaps).filter(([, layer]) => map.hasLayer(layer)).map(([name]) => name);
@@ -3526,25 +3571,11 @@
                 if (data.status !== 'ok' || !Array.isArray(data.data)) throw new Error('STOCK_DATA');
                 if (!data.data.length) throw new Error('STOCK_EMPTY');
                 marketState.rows = data.data;
-                const rows = data.data.map(item => {
-                    const sym = item.symbol || 'UNK';
-                    const price = Number(item.price || 0);
-                    const change = item.changePct;
-                    const prev = stockState.last[sym];
-                    let cls = '';
-                    if (typeof prev === 'number') {
-                        if (price > prev) cls = 'up';
-                        if (price < prev) cls = 'down';
-                    }
-                    stockState.last[sym] = price;
-                    const chClass = typeof change === 'number' ? (change >= 0 ? 'up' : 'down') : '';
-                    const chText = typeof change === 'number' ? `${change >= 0 ? '+' : ''}${change.toFixed(2)}%` : '--';
-                    return `<div class="stock-row"><span class="stock-symbol">${sym}</span><span><span class="stock-price ${cls}">${price.toFixed(price > 100 ? 2 : 4)}</span><span class="stock-change ${chClass}">${chText}</span></span></div>`;
-                });
-                grid.innerHTML = rows.join('');
+                renderMarketRows(grid, data.data, true);
                 const provider = (data.provider || 'feed').replace('_', ' ');
                 const updated = data.updatedAt ? new Date(data.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : 'now';
                 meta.innerText = `${provider} · ${updated}`;
+                saveMarketSnapshotCache(data.data, provider);
                 pageHealth.stocks = true;
             } catch {
                 try {
@@ -3563,19 +3594,24 @@
                     }
                     if (!rows.length) throw new Error('YAHOO_EMPTY');
                     marketState.rows = rows;
-                    grid.innerHTML = rows.map(item => {
-                        const price = Number(item.price || 0);
-                        const change = item.changePct;
-                        const chClass = typeof change === 'number' ? (change >= 0 ? 'up' : 'down') : '';
-                        const chText = typeof change === 'number' ? `${change >= 0 ? '+' : ''}${change.toFixed(2)}%` : '--';
-                        return `<div class="stock-row"><span class="stock-symbol">${item.symbol}</span><span><span class="stock-price">${price.toFixed(price > 100 ? 2 : 4)}</span><span class="stock-change ${chClass}">${chText}</span></span></div>`;
-                    }).join('');
+                    renderMarketRows(grid, rows, false);
                     meta.innerText = `yahoo + frankfurter direct · ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`;
+                    saveMarketSnapshotCache(rows, 'yahoo + frankfurter direct');
                     pageHealth.stocks = true;
                 } catch {
-                    meta.innerText = 'Market feed unavailable, retrying...';
-                    pageHealth.stocks = false;
-                    marketState.rows = [];
+                    const cached = loadMarketSnapshotCache();
+                    if (cached && cached.rows.length) {
+                        marketState.rows = cached.rows;
+                        renderMarketRows(grid, cached.rows, false);
+                        const isWeekend = [0, 6].includes(new Date().getDay());
+                        const cachedAt = cached.updatedAt ? new Date(cached.updatedAt).toLocaleString([], { month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' }) : 'recent';
+                        meta.innerText = isWeekend ? `Weekend market close · last snapshot ${cachedAt}` : `Live market delayed · using cached snapshot ${cachedAt}`;
+                        pageHealth.stocks = true;
+                    } else {
+                        meta.innerText = 'Market feed unavailable, retrying...';
+                        pageHealth.stocks = false;
+                        marketState.rows = [];
+                    }
                 }
             }
             updatePageScore();
@@ -3797,9 +3833,15 @@
                 const ro = new ResizeObserver(() => map.invalidateSize());
                 ro.observe(mapWrapper);
             }
+            const nudge = () => {
+                map.invalidateSize();
+                requestAnimationFrame(() => map.invalidateSize());
+            };
             window.addEventListener('resize', () => map.invalidateSize());
+            window.addEventListener('orientationchange', nudge);
             setTimeout(() => map.invalidateSize(), 200);
             setTimeout(() => map.invalidateSize(), 1200);
+            setTimeout(nudge, 2200);
         }
 
         function decayImpact() {
@@ -3897,6 +3939,7 @@
                     const isOpen = card.classList.contains('expanded');
                     cards.forEach(c => c.classList.remove('expanded'));
                     if (!isOpen) card.classList.add('expanded');
+                    setTimeout(() => map.invalidateSize(), 80);
                 };
             });
         }
