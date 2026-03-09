@@ -357,6 +357,32 @@
             padding: 10px;
             gap: 10px;
         }
+        .sidebar-quick-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            position: sticky;
+            top: 0;
+            z-index: 3;
+            background: #0a0e17;
+            padding-bottom: 6px;
+        }
+        .quick-nav-btn {
+            background: #1e222d;
+            border: 1px solid #2a2e39;
+            color: #c6cad3;
+            border-radius: 999px;
+            padding: 4px 8px;
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            cursor: pointer;
+        }
+        .quick-nav-btn:hover {
+            color: #fff;
+            border-color: #3a4255;
+            background: #26304a;
+        }
         .sidebar-right .dash-card:last-child .dash-content {
             max-height: 240px;
         }
@@ -384,7 +410,7 @@
             padding: 8px 12px;
             background: #1e222d;
             border-bottom: 1px solid #2a2e39;
-            font-size: 0.75rem;
+            font-size: 0.79rem;
             font-weight: 800;
             color: #b2b5be;
             display: flex;
@@ -417,8 +443,9 @@
         }
         .dash-content {
             padding: 10px;
-            font-size: 0.8rem;
-            max-height: 320px;
+            font-size: 0.82rem;
+            line-height: 1.45;
+            max-height: 340px;
             overflow-y: auto;
         }
 
@@ -978,7 +1005,7 @@
         .fx-rate.down { color: #ef5350; }
         .stock-meta { font-size: .62rem; color: #787b86; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .5px; }
         .stock-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-        .stock-row { background: #131722; border: 1px solid #2a2e39; border-radius: 4px; padding: 6px 8px; display: flex; justify-content: space-between; align-items: center; font-size: .68rem; }
+        .stock-row { background: #131722; border: 1px solid #2a2e39; border-radius: 4px; padding: 7px 9px; display: flex; justify-content: space-between; align-items: center; font-size: .75rem; }
         .stock-symbol { color: #b2b5be; font-weight: 700; }
         .stock-price { color: #fff; font-weight: 700; }
         .stock-change { font-size: .62rem; font-weight: 700; margin-left: 6px; }
@@ -1002,35 +1029,41 @@
         .advisor-row .bias.sell { color: #ef5350; font-weight: 700; }
         .econ-widget-wrap { height: 250px; width: 100%; }
         .alert-details { margin-top: 8px; display: grid; gap: 5px; max-height: 130px; overflow-y: auto; }
-        .ops-app-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+        .ops-app-grid { display: grid; grid-template-columns: repeat(2, minmax(130px, 1fr)); gap: 8px; }
         .ops-app {
             background: #0f1420;
             border: 1px solid #2a2e39;
             border-radius: 4px;
-            padding: 6px;
-            min-height: 54px;
+            padding: 7px;
+            min-height: 60px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
         }
-        .ops-app .k { font-size: 0.58rem; color: #9aa0ad; text-transform: uppercase; letter-spacing: 0.6px; }
-        .ops-app .v { font-size: 0.9rem; color: #fff; font-weight: 800; line-height: 1.1; }
-        .ops-app .m { font-size: 0.56rem; color: #787b86; }
-        .ops-news-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+        .ops-app .k { font-size: 0.62rem; color: #aab0bc; text-transform: uppercase; letter-spacing: 0.5px; }
+        .ops-app .v { font-size: 1.05rem; color: #fff; font-weight: 800; line-height: 1.1; }
+        .ops-app .m { font-size: 0.61rem; color: #8b92a2; }
+        .ops-app.live { border-color: rgba(38, 166, 154, 0.35); }
+        .ops-app.quiet { border-color: rgba(255, 207, 34, 0.35); }
+        .ops-app.offline { border-color: rgba(239, 83, 80, 0.35); }
+        .ops-news-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .ops-news-app {
             background: #0f1420;
             border: 1px solid #2a2e39;
             border-radius: 4px;
-            padding: 6px;
-            min-height: 68px;
+            padding: 8px;
+            min-height: 78px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             gap: 4px;
         }
-        .ops-news-app .k { font-size: 0.56rem; color: #9aa0ad; text-transform: uppercase; letter-spacing: 0.6px; }
-        .ops-news-app .v { font-size: 0.63rem; color: #d1d4dc; line-height: 1.35; }
-        .ops-news-app .m { font-size: 0.54rem; color: #787b86; }
+        .ops-news-app .k { font-size: 0.62rem; color: #aab0bc; text-transform: uppercase; letter-spacing: 0.5px; }
+        .ops-news-app .v { font-size: 0.69rem; color: #d1d4dc; line-height: 1.4; }
+        .ops-news-app .m { font-size: 0.6rem; color: #8b92a2; }
+        .ops-news-app.live { border-color: rgba(38, 166, 154, 0.35); }
+        .ops-news-app.quiet { border-color: rgba(255, 207, 34, 0.35); }
+        .ops-news-app.offline { border-color: rgba(239, 83, 80, 0.35); }
         .product-carousel-wrap {
             grid-column: 1 / -1;
             grid-row: 8 / 9;
@@ -1523,6 +1556,9 @@
             .ops-news-grid {
                 grid-template-columns: 1fr;
             }
+            .ops-app-grid {
+                grid-template-columns: 1fr 1fr;
+            }
             .gdelt-region-grid {
                 grid-template-columns: 1fr;
             }
@@ -1539,6 +1575,10 @@
             .sidebar-right {
                 padding: 8px;
                 gap: 8px;
+            }
+            .sidebar-quick-nav {
+                position: static;
+                padding-bottom: 2px;
             }
             .layer-presets,
             .map-tools,
@@ -1743,7 +1783,15 @@
 
         
         <aside class="sidebar-right">
-            <div class="dash-card">
+            <div class="sidebar-quick-nav">
+                <button class="quick-nav-btn" onclick="scrollToDashCard('dash-live-news')">Live News</button>
+                <button class="quick-nav-btn" onclick="scrollToDashCard('dash-regional')">Regional Feed</button>
+                <button class="quick-nav-btn" onclick="scrollToDashCard('dash-ops-micro')">Ops Micro</button>
+                <button class="quick-nav-btn" onclick="scrollToDashCard('dash-ops-news')">Ops Apps</button>
+                <button class="quick-nav-btn" onclick="setAllDashCards(true)">Expand All</button>
+                <button class="quick-nav-btn" onclick="setAllDashCards(false)">Collapse</button>
+            </div>
+            <div class="dash-card" id="dash-live-news">
                 <div class="dash-header">
                     <span><i class="fas fa-video"></i> Live Global News</span>
                     <span class="dash-badge">LIVE</span>
@@ -1757,7 +1805,7 @@
                     <button class="channel-btn" onclick="changeChannel('iEpJwprxDdk', this)">BLOOMBERG</button>
                 </div>
             </div>
-            <div class="dash-card">
+            <div class="dash-card" id="dash-market-impact">
                 <div class="dash-header">
                     <span><i class="fas fa-bolt"></i> Market Impact Radar</span>
                     <span class="dash-badge" id="impact-trend">STABLE</span>
@@ -1793,7 +1841,7 @@
                     </div>
                 </div>
             </div>
-            <div class="dash-card">
+            <div class="dash-card" id="dash-regional">
                 <div class="dash-header">
                     <span><i class="fas fa-compass"></i> Asset Bias Engine</span>
                     <span class="dash-badge">LIVE</span>
@@ -1802,7 +1850,7 @@
                     <div class="asset-bias-list" id="asset-bias-list"></div>
                 </div>
             </div>
-            <div class="dash-card">
+            <div class="dash-card" id="dash-ops-micro">
                 <div class="dash-header">
                     <span><i class="fas fa-network-wired"></i> Strategic Flows</span>
                     <span class="dash-badge" id="chokepoint-pressure">WATCH</span>
@@ -1829,7 +1877,7 @@
                     <div class="infra-sources" id="infra-sources"></div>
                 </div>
             </div>
-            <div class="dash-card">
+            <div class="dash-card" id="dash-ops-news">
                 <div class="dash-header">
                     <span><i class="fas fa-calendar-alt"></i> Economic Calendar</span>
                     <span class="dash-badge">LIVE</span>
@@ -2533,6 +2581,59 @@
         function signed(n) { return `${n > 0 ? '+' : ''}${n}`; }
         function getSeverity(delta) { if (delta >= 10) return 'high'; if (delta >= 5) return 'medium'; return 'low'; }
         function normalizeText(text) { return (text || '').toLowerCase(); }
+        function isFeedEventInRange(ev) {
+            const stamp = ev?.date || ev?.publishedAt || ev?.updatedAt || ev?.seenAt || '';
+            if (!stamp) return true;
+            return currentTimeRange === 'all' || isWithinRange(stamp);
+        }
+        function parseStooqCsvClient(csv) {
+            if (!csv || typeof csv !== 'string') return [];
+            const lines = csv.trim().split(/\r?\n/);
+            if (lines.length < 2) return [];
+            const cols = lines[0].split(',');
+            const iSymbol = cols.indexOf('Symbol');
+            const iClose = cols.indexOf('Close');
+            const iOpen = cols.indexOf('Open');
+            if (iSymbol < 0 || iClose < 0 || iOpen < 0) return [];
+            return lines.slice(1).map(line => {
+                const p = line.split(',');
+                const symbol = (p[iSymbol] || '').toUpperCase().replace('.US', '');
+                const close = Number(p[iClose]);
+                const open = Number(p[iOpen]);
+                if (!symbol || !Number.isFinite(close)) return null;
+                const changePct = Number.isFinite(open) && open > 0 ? ((close - open) / open) * 100 : null;
+                return { symbol, price: close, changePct };
+            }).filter(Boolean);
+        }
+        async function fetchAllOriginsJson(url) {
+            const proxied = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+            const res = await fetch(proxied);
+            if (!res.ok) throw new Error('ALLORIGINS_HTTP');
+            return await res.json();
+        }
+        async function fetchAllOriginsText(url) {
+            const proxied = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+            const res = await fetch(proxied);
+            if (!res.ok) throw new Error('ALLORIGINS_HTTP');
+            return await res.text();
+        }
+        function mapGdeltGeoFeatures(geo) {
+            const features = geo?.features || [];
+            return features.map(feature => {
+                const coords = feature?.geometry?.coordinates;
+                if (!Array.isArray(coords) || coords.length < 2) return null;
+                const props = feature?.properties || {};
+                return {
+                    lat: Number(coords[1]),
+                    lng: Number(coords[0]),
+                    name: props.name || props.location || 'Location',
+                    title: props.title || props.allnames || 'GDELT Event',
+                    url: props.url || '',
+                    source: 'gdelt',
+                    updatedAt: new Date().toISOString()
+                };
+            }).filter(ev => Number.isFinite(ev.lat) && Number.isFinite(ev.lng));
+        }
         function timeRangeToMs(range = currentTimeRange) {
             if (range === '1h') return 3600000;
             if (range === '6h') return 21600000;
@@ -3293,6 +3394,7 @@
         function updateOpsMicroFeeds() {
             const host = document.getElementById('ops-app-grid');
             if (!host) return;
+            const feedOnline = pageHealth.gdelt || pageHealth.gdeltMacro || pageHealth.gdeltApps || pageHealth.thematicMap;
             const packs = [
                 { k: 'Protests', v: liveMetrics.protestsEvents, m: 'GDELT live events' },
                 { k: 'Conflict', v: liveMetrics.conflictEvents, m: 'GDELT live events' },
@@ -3303,7 +3405,11 @@
                 { k: 'GPS Jamming', v: Math.round((liveMetrics.cyberEvents * 0.6) + (liveMetrics.conflictEvents * 0.08)), m: 'GDELT + cyber proxy' },
                 { k: 'Macro Pulse', v: liveMetrics.gdeltMacroEvents, m: 'GDELT macro query' }
             ];
-            host.innerHTML = packs.map(p => `<div class="ops-app"><div class="k">${p.k}</div><div class="v">${p.v}</div><div class="m">${p.m}</div></div>`).join('');
+            host.innerHTML = packs.map(p => {
+                const klass = p.v > 0 ? 'live' : (feedOnline ? 'quiet' : 'offline');
+                const note = p.v > 0 ? p.m : (feedOnline ? `No fresh hits · ${p.m}` : 'Feed retrying via direct sources');
+                return `<div class="ops-app ${klass}"><div class="k">${p.k}</div><div class="v">${p.v}</div><div class="m">${note}</div></div>`;
+            }).join('');
         }
 
         function updateCiiPulse() {
@@ -3365,7 +3471,12 @@
                     tag: classifyGdeltTag(top?.title || '')
                 };
             }));
-            host.innerHTML = result.map(r => `<div class="ops-news-app"><div class="k">${r.name} · ${r.count}</div><div class="v">${r.title}</div><div class="m">${r.source} · ${r.tag}</div></div>`).join('');
+            const liveCount = result.filter(r => r.count > 0).length;
+            host.innerHTML = result.map(r => {
+                const klass = r.count > 0 ? 'live' : (liveCount ? 'quiet' : 'offline');
+                const source = r.source === 'standby' ? (liveCount ? 'standby' : 'source retrying') : r.source;
+                return `<div class="ops-news-app ${klass}"><div class="k">${r.name} · ${r.count}</div><div class="v">${r.title}</div><div class="m">${source} · ${r.tag}</div></div>`;
+            }).join('');
             liveMetrics.gdeltSignalApps = result.reduce((sum, row) => sum + row.count, 0);
             pageHealth.gdeltApps = result.some(r => r.count > 0);
             updatePageScore();
@@ -3706,29 +3817,40 @@
         }
 
         async function fetchGdeltThemeLayer(layer, query, icon, limit = 40) {
-            const q = encodeURIComponent(query);
-            const res = await fetch(`gdelt_events.php?query=${q}&timespan=180&limit=${limit}`);
-            if (!res.ok) throw new Error('GDELT_THEME_HTTP');
-            const data = await res.json();
-            if (data.status !== 'ok' || !Array.isArray(data.events) || !data.events.length) throw new Error('GDELT_THEME_DATA');
+            const dataEvents = await fetchGdeltStream(query, limit, 180);
+            if (!dataEvents.length) throw new Error('GDELT_THEME_DATA');
             layer.clearLayers();
-            data.events.filter(ev => isWithinRange(ev.date || ev.publishedAt || ev.updatedAt || '') || currentTimeRange === 'all').slice(0, limit).forEach(ev => {
+            dataEvents.filter(isFeedEventInRange).slice(0, limit).forEach(ev => {
                 const link = ev.url ? `<br><a href="${ev.url}" target="_blank">Open source</a>` : '';
                 L.marker([ev.lat, ev.lng], { icon }).addTo(layer).bindPopup(`<b>${ev.name}</b><br>${ev.title}${link}`);
             });
-            return data.events.length;
+            return dataEvents.length;
         }
         async function fetchGdeltStream(query, limit = 10, timespan = 180) {
+            const q = encodeURIComponent(query);
             try {
-                const q = encodeURIComponent(query);
                 const res = await fetch(`gdelt_events.php?query=${q}&timespan=${timespan}&limit=${limit}`);
-                if (!res.ok) return [];
+                if (!res.ok) throw new Error('GDELT_PROXY_HTTP');
                 const data = await res.json();
-                if (data.status !== 'ok' || !Array.isArray(data.events)) return [];
-                return data.events.filter(ev => isWithinRange(ev.date || ev.publishedAt || ev.updatedAt || '') || currentTimeRange === 'all');
+                if (data.status !== 'ok' || !Array.isArray(data.events)) throw new Error('GDELT_PROXY_DATA');
+                const filtered = data.events.filter(isFeedEventInRange);
+                if (filtered.length) return filtered;
+            } catch {}
+            try {
+                const direct = await fetch(`https://api.gdeltproject.org/api/v1/gkg_geojson?QUERY=${q}&TIMESPAN=${timespan}&MAXROWS=${limit}`);
+                if (!direct.ok) throw new Error('GDELT_DIRECT_HTTP');
+                const geo = await direct.json();
+                const mapped = mapGdeltGeoFeatures(geo).filter(isFeedEventInRange);
+                if (mapped.length) return mapped;
             } catch {
-                return [];
             }
+            try {
+                const geo = await fetchAllOriginsJson(`https://api.gdeltproject.org/api/v1/gkg_geojson?QUERY=${q}&TIMESPAN=${timespan}&MAXROWS=${limit}`);
+                const mapped = mapGdeltGeoFeatures(geo).filter(isFeedEventInRange);
+                if (mapped.length) return mapped;
+            } catch {
+            }
+            return [];
         }
         function classifyGdeltTag(title) {
             const t = normalizeText(title);
@@ -3992,18 +4114,41 @@
                     saveMarketSnapshotCache(rows, 'yahoo + frankfurter direct');
                     pageHealth.stocks = true;
                 } catch {
-                    const cached = loadMarketSnapshotCache();
-                    if (cached && cached.rows.length) {
-                        marketState.rows = cached.rows;
-                        renderMarketRows(grid, cached.rows, false);
-                        const isWeekend = [0, 6].includes(new Date().getDay());
-                        const cachedAt = cached.updatedAt ? new Date(cached.updatedAt).toLocaleString([], { month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' }) : 'recent';
-                        meta.innerText = isWeekend ? `Weekend market close · last snapshot ${cachedAt}` : `Live market delayed · using cached snapshot ${cachedAt}`;
+                    try {
+                        const y = await fetchAllOriginsJson('https://query1.finance.yahoo.com/v7/finance/quote?symbols=SPY,QQQ,DIA,GLD,USO');
+                        const rows = (y.quoteResponse?.result || []).map(item => ({
+                            symbol: item.symbol,
+                            price: item.regularMarketPrice,
+                            changePct: item.regularMarketChangePercent
+                        })).filter(r => typeof r.price === 'number');
+                        if (!rows.length) {
+                            const csv = await fetchAllOriginsText('https://stooq.com/q/l/?s=spy.us,qqq.us,dia.us,gld.us,uso.us&f=sd2t2ohlcv&h&e=csv');
+                            rows.push(...parseStooqCsvClient(csv));
+                        }
+                        try {
+                            const fxJson = await fetchAllOriginsJson('https://api.frankfurter.app/latest?from=EUR&to=USD');
+                            if (fxJson?.rates?.USD) rows.push({ symbol: 'EURUSD', price: Number(fxJson.rates.USD), changePct: null });
+                        } catch {}
+                        if (!rows.length) throw new Error('ALLORIGINS_EMPTY');
+                        marketState.rows = rows;
+                        renderMarketRows(grid, rows, false);
+                        meta.innerText = `direct backup feed · ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`;
+                        saveMarketSnapshotCache(rows, 'direct backup feed');
                         pageHealth.stocks = true;
-                    } else {
-                        meta.innerText = 'Market feed unavailable, retrying...';
-                        pageHealth.stocks = false;
-                        marketState.rows = [];
+                    } catch {
+                        const cached = loadMarketSnapshotCache();
+                        if (cached && cached.rows.length) {
+                            marketState.rows = cached.rows;
+                            renderMarketRows(grid, cached.rows, false);
+                            const isWeekend = [0, 6].includes(new Date().getDay());
+                            const cachedAt = cached.updatedAt ? new Date(cached.updatedAt).toLocaleString([], { month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' }) : 'recent';
+                            meta.innerText = isWeekend ? `Weekend market close · last snapshot ${cachedAt}` : `Live market delayed · using cached snapshot ${cachedAt}`;
+                            pageHealth.stocks = true;
+                        } else {
+                            meta.innerText = 'Market feed unavailable, retrying multi-source...';
+                            pageHealth.stocks = false;
+                            marketState.rows = [];
+                        }
                     }
                 }
             }
@@ -4386,17 +4531,30 @@
             else { syncLayerTogglePanel(); updateMapUrlState(); }
         }
 
+        function scrollToDashCard(cardId) {
+            const card = document.getElementById(cardId);
+            if (!card) return;
+            card.classList.add('expanded');
+            card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function setAllDashCards(expanded) {
+            document.querySelectorAll('.sidebar-right .dash-card').forEach(card => {
+                card.classList.toggle('expanded', expanded);
+            });
+            setTimeout(() => map.invalidateSize(), 100);
+        }
+
         function initializeRightPanel() {
             const cards = Array.from(document.querySelectorAll('.sidebar-right .dash-card'));
+            const priorityIds = new Set(['dash-live-news', 'dash-market-impact', 'dash-regional', 'dash-ops-micro', 'dash-ops-news']);
             cards.forEach((card, idx) => {
-                if (idx === 0) card.classList.add('expanded');
+                if (priorityIds.has(card.id) || idx === 0) card.classList.add('expanded');
                 else card.classList.remove('expanded');
                 const header = card.querySelector('.dash-header');
                 if (!header) return;
                 header.onclick = () => {
-                    const isOpen = card.classList.contains('expanded');
-                    cards.forEach(c => c.classList.remove('expanded'));
-                    if (!isOpen) card.classList.add('expanded');
+                    card.classList.toggle('expanded');
                     setTimeout(() => map.invalidateSize(), 80);
                 };
             });

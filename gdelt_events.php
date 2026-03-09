@@ -49,13 +49,16 @@ if ($data && isset($data['features']) && is_array($data['features'])) {
         $name = $prop['name'] ?? ($prop['location'] ?? 'Location');
         $title = $prop['title'] ?? ($prop['allnames'] ?? 'GDELT Event');
         $urlRef = $prop['url'] ?? '';
+        $eventDate = $prop['date'] ?? ($prop['seendate'] ?? ($prop['datetime'] ?? gmdate('c')));
         $events[] = [
             'lat' => floatval($coords[1]),
             'lng' => floatval($coords[0]),
             'name' => strval($name),
             'title' => strval($title),
             'url' => strval($urlRef),
-            'source' => 'gdelt'
+            'source' => 'gdelt',
+            'updatedAt' => gmdate('c'),
+            'date' => strval($eventDate)
         ];
     }
 }
