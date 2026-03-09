@@ -351,8 +351,9 @@
             grid-row: 3 / 4;
             background: #0a0e17; /* Darker background for dashboard feel */
             border-left: 1px solid #2a2e39;
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            align-content: start;
             overflow-y: auto;
             padding: 10px;
             gap: 10px;
@@ -366,6 +367,7 @@
             z-index: 3;
             background: #0a0e17;
             padding-bottom: 6px;
+            grid-column: 1 / -1;
         }
         .quick-nav-btn {
             background: #1e222d;
@@ -384,7 +386,7 @@
             background: #26304a;
         }
         .sidebar-right .dash-card:last-child .dash-content {
-            max-height: 240px;
+            max-height: none;
         }
 
         /* Dashboard Cards */
@@ -397,15 +399,7 @@
             flex-direction: column;
             transition: border-color 0.2s ease;
         }
-        .dash-card > :not(.dash-header) {
-            display: none;
-        }
-        .dash-card.expanded > :not(.dash-header) {
-            display: block;
-        }
-        .dash-card.expanded {
-            border-color: #3a4255;
-        }
+        .dash-card { border-color: #3a4255; }
         .dash-header {
             padding: 8px 12px;
             background: #1e222d;
@@ -418,20 +412,9 @@
             align-items: center;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            cursor: pointer;
+            cursor: default;
             user-select: none;
             position: relative;
-        }
-        .dash-header::after {
-            content: '+';
-            font-size: 0.9rem;
-            color: #b2b5be;
-            margin-left: 10px;
-            font-weight: 800;
-        }
-        .dash-card.expanded .dash-header::after {
-            content: '−';
-            color: #fff;
         }
         .dash-badge {
             background: rgba(38, 166, 154, 0.2);
@@ -445,8 +428,8 @@
             padding: 10px;
             font-size: 0.82rem;
             line-height: 1.45;
-            max-height: 340px;
-            overflow-y: auto;
+            max-height: none;
+            overflow: visible;
         }
 
         /* Gauge Widget */
@@ -1476,6 +1459,7 @@
                 border-left: none;
                 border-top: 1px solid #2a2e39;
                 max-height: none;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
             }
             .bottom-panel {
                 grid-column: 1 / -1;
@@ -1575,6 +1559,7 @@
             .sidebar-right {
                 padding: 8px;
                 gap: 8px;
+                grid-template-columns: 1fr;
             }
             .sidebar-quick-nav {
                 position: static;
@@ -1788,8 +1773,7 @@
                 <button class="quick-nav-btn" onclick="scrollToDashCard('dash-regional')">Regional Feed</button>
                 <button class="quick-nav-btn" onclick="scrollToDashCard('dash-ops-micro')">Ops Micro</button>
                 <button class="quick-nav-btn" onclick="scrollToDashCard('dash-ops-news')">Ops Apps</button>
-                <button class="quick-nav-btn" onclick="setAllDashCards(true)">Expand All</button>
-                <button class="quick-nav-btn" onclick="setAllDashCards(false)">Collapse</button>
+                <button class="quick-nav-btn" onclick="scrollRightDashboardTop()">Back To Top</button>
             </div>
             <div class="dash-card" id="dash-live-news">
                 <div class="dash-header">
@@ -4534,29 +4518,21 @@
         function scrollToDashCard(cardId) {
             const card = document.getElementById(cardId);
             if (!card) return;
-            card.classList.add('expanded');
             card.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
-        function setAllDashCards(expanded) {
-            document.querySelectorAll('.sidebar-right .dash-card').forEach(card => {
-                card.classList.toggle('expanded', expanded);
-            });
-            setTimeout(() => map.invalidateSize(), 100);
+        function scrollRightDashboardTop() {
+            const panel = document.querySelector('.sidebar-right');
+            if (!panel) return;
+            panel.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function initializeRightPanel() {
             const cards = Array.from(document.querySelectorAll('.sidebar-right .dash-card'));
-            const priorityIds = new Set(['dash-live-news', 'dash-market-impact', 'dash-regional', 'dash-ops-micro', 'dash-ops-news']);
-            cards.forEach((card, idx) => {
-                if (priorityIds.has(card.id) || idx === 0) card.classList.add('expanded');
-                else card.classList.remove('expanded');
+            cards.forEach(card => {
                 const header = card.querySelector('.dash-header');
                 if (!header) return;
-                header.onclick = () => {
-                    card.classList.toggle('expanded');
-                    setTimeout(() => map.invalidateSize(), 80);
-                };
+                header.onclick = null;
             });
         }
 
