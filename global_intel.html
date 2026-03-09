@@ -885,10 +885,11 @@
             grid-row: 4 / 5;
             background: #131722;
             border-top: 1px solid #2a2e39;
-            display: flex;
-            overflow-x: auto;
+            display: grid;
+            grid-template-columns: repeat(4, minmax(260px, 1fr));
+            overflow-x: hidden;
             overflow-y: auto;
-            align-items: flex-start;
+            align-items: stretch;
             padding: 10px;
             gap: 10px;
         }
@@ -980,6 +981,24 @@
         .session-status.closed { color: #787b86; }
         .session-status.opens-soon { color: #ffcf22; }
         .bottom-panel { gap: 10px; padding: 10px; align-items: stretch; }
+        .widget-rows {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+        .widget-rows .dash-card {
+            width: 100%;
+        }
+        .widget-rows .dash-content {
+            max-height: none;
+        }
+        .widget-rows .ops-news-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .widget-rows .ops-app-grid {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
         .bottom-card { min-width: 300px; background: #0f1420; border: 1px solid #2a2e39; border-radius: 6px; padding: 10px; display: flex; flex-direction: column; }
         .bottom-card h4 { margin: 0 0 8px; font-size: .8rem; color: #b2b5be; text-transform: uppercase; letter-spacing: .6px; }
         .bottom-card.ops-heat-card { min-width: 360px; max-width: 420px; }
@@ -2011,6 +2030,7 @@
             </div>
         </aside>
         <div class="bottom-panel">
+            <div class="widget-rows" id="widget-rows"></div>
             <div class="bottom-card">
                 <h4>Execution Intel Links</h4>
                 <div class="action-links">
@@ -4545,6 +4565,28 @@
             });
         }
 
+        function mountWidgetRows() {
+            const host = document.getElementById('widget-rows');
+            if (!host) return;
+            const orderedIds = [
+                'dash-ops-news',
+                'dash-ops-micro',
+                'dash-regional-intel',
+                'dash-market-impact',
+                'dash-regional',
+                'dash-markets-widget',
+                'dash-econ-calendar',
+                'dash-gdelt-grid',
+                'dash-sessions',
+                'dash-cii'
+            ];
+            orderedIds.forEach(id => {
+                const card = document.getElementById(id);
+                if (card) host.appendChild(card);
+            });
+        }
+
+        mountWidgetRows();
         initializeDashboard();
     </script>
 </body>
