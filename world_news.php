@@ -2,6 +2,8 @@
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: public, max-age=300');
 header('Access-Control-Allow-Origin: *');
+error_reporting(0);
+ini_set('display_errors', 0);
 
 $category = isset($_GET['cat']) ? trim($_GET['cat']) : 'all';
 

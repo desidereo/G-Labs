@@ -266,7 +266,7 @@
                 <button class="vid-btn" onclick="setVideo('nasa',this)">NASA TV</button>
             </div>
             <div class="vid-grid">
-                <div class="vid-item"><div class="vid-label">AL JAZEERA LIVE</div><iframe id="main-vid" src="https://www.youtube.com/embed/gCNeDWCI0vo?autoplay=1&mute=1" allow="autoplay"></iframe></div>
+                <div class="vid-item"><div class="vid-label">AL JAZEERA LIVE</div><iframe id="main-vid" src="https://www.youtube.com/embed/gCNeDWCI0vo?autoplay=1&mute=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen title="Live stream"></iframe></div>
                 <div class="vid-item"><div class="vid-label">KYIV, UKRAINE</div><iframe src="https://www.youtube.com/embed/V0I5eglJMKE?autoplay=1&mute=1&controls=0" allow="autoplay"></iframe></div>
                 <div class="vid-item"><div class="vid-label">TOKYO, JAPAN</div><iframe src="https://www.youtube.com/embed/F8MN0o6rs9A?autoplay=1&mute=1&controls=0" allow="autoplay"></iframe></div>
             </div>
@@ -288,11 +288,13 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
 const $ = id => document.getElementById(id);
-function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function esc(s){if(s==null)return'';const d=document.createElement('div');d.textContent=s;return d.innerHTML}
 function fmtNum(n,d=2){return typeof n==='number'?n.toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d}):n}
 function fmtBig(n){if(n>=1e12)return(n/1e12).toFixed(1)+'T';if(n>=1e9)return(n/1e9).toFixed(1)+'B';if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n>=1e3)return(n/1e3).toFixed(1)+'K';return n}
 function chgClass(v){return v>=0?'ms-up':'ms-down'}
 function chgStr(v){if(v==null)return'--';return(v>=0?'+':'')+v.toFixed(2)+'%'}
+var API_BASE = '';
+function apiUrl(path){return (API_BASE || '') + path;}
 
 // === MAP ===
 const map=L.map('map',{zoomControl:false,attributionControl:false}).setView([20,0],2);
@@ -339,7 +341,7 @@ async function fetchEonet(){
 // === GDACS ===
 async function fetchGDACS(){
     try{
-        const r=await fetch('gdacs_proxy.php');const j=await r.json();layers.gdacs.clearLayers();
+        const r=await fetch(apiUrl('gdacs_proxy.php'));const j=await r.json();layers.gdacs.clearLayers();
         if(j.status!=='ok'||!j.events)return;
         j.events.forEach(ev=>{
             if(ev.lat==null||ev.lng==null)return;
@@ -363,56 +365,72 @@ function switchTab(tab,el){
     currentTab=tab;
     document.querySelectorAll('.panel-tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===tab));
     const filters=$('feed-filters');
-    filters.style.display=tab==='intel'?'flex':'none';
+    if(filters)filters.style.display=tab==='intel'?'flex':'none';
     if(tab==='intel')fetchGdelt();
     else fetchNewsFeed(tab);
 }
 async function fetchGdelt(){
     const el=$('feed-list');
+    if(!el)return;
+    let tickers=[];gdeltTitles=[];
     try{
-        const r=await fetch('gdelt_events.php?preset='+encodeURIComponent(gdeltPreset)+'&limit=40');
-        const j=await r.json();const data=j.events||[];
-        if(!data.length)throw new Error('empty');
-        layers.intel.clearLayers();let html='';const tickers=[];gdeltTitles=[];
-        data.slice(0,30).forEach(item=>{
-            const t=(item.title||'').toLowerCase();
-            let tag='tag-intel',label='INTEL';
-            if(t.match(/war|attack|military|conflict|strike|bomb|missile/)){tag='tag-conflict';label='CONFLICT'}
-            else if(t.match(/stock|market|fed|rate|inflation|gdp|earnings/)){tag='tag-market';label='MARKET'}
-            else if(t.match(/oil|gas|gold|opec|crude|commodity/)){tag='tag-energy';label='ENERGY'}
-            else if(t.match(/crypto|bitcoin|ethereum|btc/)){tag='tag-crypto';label='CRYPTO'}
-            tickers.push(item.title);gdeltTitles.push(item.title);
-            if(item.lat&&item.lng){
-                const mc=tag==='tag-conflict'?'#ef5350':tag==='tag-market'?'#2962ff':tag==='tag-energy'?'#ffcf22':'#ff7043';
-                L.circleMarker([item.lat,item.lng],{radius:4,fillColor:mc,color:'#000',weight:1,fillOpacity:.8}).bindPopup(`<b>${esc(item.title)}</b>`).addTo(layers.intel);
-            }
-            const time=item.date?new Date(item.date).toLocaleTimeString():'LIVE';
-            const link=item.url?`<a href="${item.url}" target="_blank" rel="noopener">${esc(item.title)}</a>`:esc(item.title);
-            html+=`<div class="feed-item"><div class="feed-meta"><span class="feed-tag ${tag}">${label}</span><span>${time}</span></div><div class="feed-title">${link}</div></div>`;
-        });
-        el.innerHTML=html||'<div style="padding:20px;text-align:center;color:var(--dim)">No events.</div>';
-        updateTicker(tickers);
-        buildAiBrief(gdeltTitles);
+        const r=await fetch(apiUrl('gdelt_events.php?preset='+encodeURIComponent(gdeltPreset)+'&limit=40'));
+        let j;
+        try{j=await r.json()}catch(_){j={events:[]};}
+        if(!r.ok)throw new Error(r.status);
+        const data=Array.isArray(j.events)?j.events:[];
+        layers.intel.clearLayers();
+        let html='';
+        if(data.length){
+            data.slice(0,30).forEach(item=>{
+                const t=(item.title||'').toLowerCase();
+                let tag='tag-intel',label='INTEL';
+                if(t.match(/war|attack|military|conflict|strike|bomb|missile/)){tag='tag-conflict';label='CONFLICT'}
+                else if(t.match(/stock|market|fed|rate|inflation|gdp|earnings/)){tag='tag-market';label='MARKET'}
+                else if(t.match(/oil|gas|gold|opec|crude|commodity/)){tag='tag-energy';label='ENERGY'}
+                else if(t.match(/crypto|bitcoin|ethereum|btc/)){tag='tag-crypto';label='CRYPTO'}
+                tickers.push(item.title);gdeltTitles.push(item.title);
+                if(item.lat&&item.lng){
+                    const mc=tag==='tag-conflict'?'#ef5350':tag==='tag-market'?'#2962ff':tag==='tag-energy'?'#ffcf22':'#ff7043';
+                    L.circleMarker([item.lat,item.lng],{radius:4,fillColor:mc,color:'#000',weight:1,fillOpacity:.8}).bindPopup(`<b>${esc(item.title)}</b>`).addTo(layers.intel);
+                }
+                const time=item.date?new Date(item.date).toLocaleTimeString():'LIVE';
+                const link=item.url?`<a href="${item.url}" target="_blank" rel="noopener">${esc(item.title)}</a>`:esc(item.title);
+                html+=`<div class="feed-item"><div class="feed-meta"><span class="feed-tag ${tag}">${label}</span><span>${time}</span></div><div class="feed-title">${link}</div></div>`;
+            });
+            el.innerHTML=html;
+        }else{
+            el.innerHTML='<div style="padding:20px;text-align:center;color:var(--dim)">No GDELT events for this filter. Try another preset or check back later.</div>';
+        }
     }catch(e){
-        el.innerHTML='<div style="padding:20px;text-align:center;color:var(--dim)">Feed loading...</div>';
-        updateTicker([]);
+        console.warn('GDELT:',e);
+        el.innerHTML='<div style="padding:20px;text-align:center;color:var(--dim)">Intel feed temporarily unavailable. Retrying...</div>';
     }
+    updateTicker(tickers.length?tickers:['Monitoring global event streams. GDELT feed connecting…']);
+    buildAiBrief(gdeltTitles.length?gdeltTitles:null);
 }
 async function fetchNewsFeed(cat){
     const el=$('feed-list');
+    if(!el)return;
     el.innerHTML='<div style="padding:20px;text-align:center;color:var(--dim)">Loading...</div>';
     try{
-        const r=await fetch('world_news.php?cat='+encodeURIComponent(cat));
+        const r=await fetch(apiUrl('world_news.php?cat='+encodeURIComponent(cat)));
+        if(!r.ok)throw new Error(r.status);
         const j=await r.json();
-        if(j.status==='ok'&&j.items&&j.items.length){
+        if(j.status==='ok'&&Array.isArray(j.items)&&j.items.length){
             el.innerHTML=j.items.slice(0,25).map(n=>{
                 const link=n.url?`<a href="${n.url}" target="_blank" rel="noopener">${esc(n.title)}</a>`:esc(n.title);
                 const src=esc(n.source);
-                const desc=n.desc?`<div class="feed-desc">${esc(n.desc)}</div>`:'';
+                const desc=(n.desc)?`<div class="feed-desc">${esc(n.desc)}</div>`:'';
                 return`<div class="feed-item"><div class="feed-meta"><span class="feed-tag tag-market">${src}</span></div><div class="feed-title">${link}</div>${desc}</div>`;
             }).join('');
-        }else el.innerHTML='<div style="padding:20px;text-align:center;color:var(--dim)">No items.</div>';
-    }catch(e){el.innerHTML='<div style="padding:20px;text-align:center;color:var(--dim)">Requires PHP server.</div>'}
+        }else{
+            el.innerHTML='<div style="padding:20px;text-align:center;color:var(--dim)">No news items for this category. Try again shortly.</div>';
+        }
+    }catch(e){
+        console.warn('News feed:',e);
+        el.innerHTML='<div style="padding:20px;text-align:center;color:var(--dim)">News feed unavailable. Ensure PHP is running (e.g. cPanel).</div>';
+    }
 }
 
 // === TICKER ===
@@ -420,14 +438,15 @@ function updateTicker(titles){
     const c=document.querySelector('.ticker-bar');if(!c)return;
     const old=$('ticker-content');if(old)old.remove();
     const el=document.createElement('div');el.className='ticker-content';el.id='ticker-content';
-    el.textContent=titles.length?titles.slice(0,20).join('  \u2022  '):'MONITORING GLOBAL EVENT STREAMS...';
+    const text=Array.isArray(titles)&&titles.length?titles.slice(0,20).join('  \u2022  '):'MONITORING GLOBAL EVENT STREAMS... SYSTEM NOMINAL...';
+    el.textContent=text;
     c.appendChild(el);
 }
 
 // === CRYPTO ===
 async function fetchCrypto(){
     try{
-        const r=await fetch('crypto_prices.php');const j=await r.json();
+        const r=await fetch(apiUrl('crypto_prices.php'));const j=await r.json();
         if(j.status!=='ok'||!j.coins||!j.coins.length)throw new Error('no data');
         let html='';
         j.coins.forEach(c=>{
@@ -443,7 +462,7 @@ async function fetchCrypto(){
 // === FOREX ===
 async function fetchForex(){
     try{
-        const r=await fetch('forex_proxy.php');const j=await r.json();
+        const r=await fetch(apiUrl('forex_proxy.php'));const j=await r.json();
         if(j.status!=='ok'||!j.pairs||!j.pairs.length)throw new Error('no data');
         let html='';
         j.pairs.forEach(p=>{
@@ -466,7 +485,7 @@ async function fetchMarkets(){
         addToStrip(data.slice(0,3).map(t=>({sym:t.symbol,price:fmtNum(t.price,2),chg:t.changePct})));
     };
     try{
-        const r=await fetch('market_snapshot.php?symbols=SPY,QQQ,DIA,GLD,USO,IWM');
+        const r=await fetch(apiUrl('market_snapshot.php?symbols=SPY,QQQ,DIA,GLD,USO,IWM'));
         const j=await r.json();
         if(j.status==='ok'&&j.data&&j.data.length){render(j.data);if(upd)upd.textContent='Updated '+new Date().toLocaleTimeString()}
         else{render(mock);if(upd)upd.textContent='Demo'}
@@ -476,7 +495,7 @@ async function fetchMarkets(){
 // === POLYMARKET ===
 async function fetchPolymarket(){
     try{
-        const r=await fetch('polymarket_proxy.php');const j=await r.json();
+        const r=await fetch(apiUrl('polymarket_proxy.php'));const j=await r.json();
         if(j.status!=='ok'||!j.markets||!j.markets.length)throw new Error('no data');
         let html='';
         j.markets.slice(0,8).forEach(m=>{
@@ -492,7 +511,7 @@ async function fetchPolymarket(){
 async function fetchFearGreed(){
     try{
         let j;
-        try{const r=await fetch('fear_greed.php');j=await r.json()}
+        try{const r=await fetch(apiUrl('fear_greed.php'));j=await r.json()}
         catch(_){const r2=await fetch('https://api.alternative.me/fng/?limit=1');const raw=await r2.json();j=raw.data&&raw.data[0]?{status:'ok',value:parseInt(raw.data[0].value),classification:raw.data[0].value_classification}:null}
         if(j&&j.status==='ok'&&j.value!=null){
             $('fg-val').textContent=j.value;
@@ -504,33 +523,48 @@ async function fetchFearGreed(){
 
 // === WORLD NEWS ===
 async function fetchWorldNews(){
+    const el=$('worldnews-body');if(!el)return;
     try{
-        const r=await fetch('world_news.php?cat=world');const j=await r.json();
-        if(j.status==='ok'&&j.items&&j.items.length){
-            $('worldnews-body').innerHTML=j.items.slice(0,12).map(n=>{
+        const r=await fetch(apiUrl('world_news.php?cat=world'));
+        if(!r.ok)throw new Error(r.status);
+        const j=await r.json();
+        if(j.status==='ok'&&Array.isArray(j.items)&&j.items.length){
+            el.innerHTML=j.items.slice(0,12).map(n=>{
                 const link=n.url?`<a href="${n.url}" target="_blank" rel="noopener">${esc(n.title)}</a>`:esc(n.title);
                 const colors={'Reuters':'#ff6600','BBC World':'#bb1919','AP News':'#d32f2f','Al Jazeera':'#d4a843','NPR':'#1a8fe3','DW News':'#0078d4','France 24':'#0055a4','The Guardian':'#005689'};
                 const sc=colors[n.source]||'var(--blue)';
                 return`<div class="news-item"><div class="news-src" style="color:${sc}">${esc(n.source)}</div><div class="news-title">${link}</div></div>`;
             }).join('');
+        }else{
+            el.innerHTML='<div style="padding:12px;color:var(--dim)">No world news items. Try again shortly.</div>';
         }
-    }catch(e){$('worldnews-body').innerHTML='<div style="padding:12px;color:var(--dim)">Requires PHP server.</div>'}
+    }catch(e){
+        console.warn('World news:',e);
+        el.innerHTML='<div style="padding:12px;color:var(--dim)">World news unavailable. Ensure PHP is running (e.g. cPanel).</div>';
+    }
 }
 async function fetchMarketNews(){
+    const el=$('marketnews-body');if(!el)return;
     try{
-        const r=await fetch('world_news.php?cat=markets');const j=await r.json();
-        if(j.status==='ok'&&j.items&&j.items.length){
-            $('marketnews-body').innerHTML=j.items.slice(0,12).map(n=>{
+        const r=await fetch(apiUrl('world_news.php?cat=markets'));
+        if(!r.ok)throw new Error(r.status);
+        const j=await r.json();
+        if(j.status==='ok'&&Array.isArray(j.items)&&j.items.length){
+            el.innerHTML=j.items.slice(0,12).map(n=>{
                 const link=n.url?`<a href="${n.url}" target="_blank" rel="noopener">${esc(n.title)}</a>`:esc(n.title);
                 return`<div class="news-item"><div class="news-src" style="color:var(--green)">${esc(n.source)}</div><div class="news-title">${link}</div></div>`;
             }).join('');
-        }
-    }catch(e){$('marketnews-body').innerHTML='<div style="padding:12px;color:var(--dim)">Requires PHP server.</div>'}
+        }else el.innerHTML='<div style="padding:12px;color:var(--dim)">No market news.</div>';
+    }catch(e){el.innerHTML='<div style="padding:12px;color:var(--dim)">Market news unavailable.</div>';}
 }
 
 // === AI BRIEF ===
 function buildAiBrief(titles){
-    const el=$('ai-brief');if(!el||!titles.length)return;
+    const el=$('ai-brief');if(!el)return;
+    if(!titles||!Array.isArray(titles)||!titles.length){
+        el.innerHTML='<strong style="color:var(--white)">Status:</strong> Waiting for headline data. GDELT intel or World tab will feed this brief.';
+        return;
+    }
     const themes={'Fed/Rates':/\b(fed|federal reserve|rate|inflation|powell|monetary|treasury|yield)\b/i,'Markets':/\b(stock|market|trading|earnings|revenue|ipo|equity|rally|selloff|nasdaq|s&p|dow)\b/i,'Energy':/\b(oil|opec|brent|wti|crude|energy|gas|lng|pipeline)\b/i,'Conflict':/\b(war|attack|military|conflict|sanctions|nato|missile|strike|bomb|troops)\b/i,'Central Banks':/\b(ecb|central bank|boj|boe|pboc|euro|dollar|currency|forex)\b/i,'Trade':/\b(trade|tariff|china|export|import|supply chain|wto)\b/i,'Crypto':/\b(bitcoin|crypto|ethereum|btc|eth|blockchain|defi|stablecoin)\b/i,'Tech':/\b(ai|artificial intelligence|chip|semiconductor|nvidia|apple|google|meta|microsoft)\b/i};
     const counts={};
     titles.forEach(title=>{for(const[theme,rx]of Object.entries(themes)){if(rx.test(title))counts[theme]=(counts[theme]||0)+1}});
