@@ -2,7 +2,16 @@
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 
-$query = isset($_GET['query']) ? trim($_GET['query']) : 'forex OR oil OR shipping OR sanctions OR conflict';
+// Preset queries for traders: ?preset=default|markets|commodities|earnings|conflict
+$presets = [
+    'default' => 'forex OR oil OR shipping OR sanctions OR conflict',
+    'markets' => 'Fed OR ECB OR central bank OR interest rate OR inflation OR GDP OR stock market',
+    'commodities' => 'oil OR gas OR gold OR copper OR wheat OR commodity OR OPEC',
+    'earnings' => 'earnings OR revenue OR profit OR stock OR IPO',
+    'conflict' => 'war OR attack OR military OR conflict OR sanctions'
+];
+$preset = isset($_GET['preset']) ? trim($_GET['preset']) : '';
+$query = isset($_GET['query']) ? trim($_GET['query']) : (isset($presets[$preset]) ? $presets[$preset] : $presets['default']);
 $timespan = isset($_GET['timespan']) ? intval($_GET['timespan']) : 120;
 $timespan = max(15, min($timespan, 720));
 $maxRows = isset($_GET['limit']) ? intval($_GET['limit']) : 60;

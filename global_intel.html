@@ -103,6 +103,20 @@
             animation: ticker 120s linear infinite;
         }
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+        .fear-greed-strip {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 15px;
+            background: #0a0e17;
+            border-bottom: 1px solid #2a2e39;
+            font-size: 0.75rem;
+        }
+        .fg-label { color: #787b86; }
+        .fg-value { font-weight: 800; color: #fff; min-width: 24px; }
+        .fg-class { color: #b2b5be; }
+        .fg-bar { flex: 1; max-width: 120px; height: 6px; background: #2a2e39; border-radius: 3px; overflow: hidden; }
+        .fg-fill { height: 100%; border-radius: 3px; width: 50%; transition: width 0.5s; background: linear-gradient(90deg, #ef5350, #ffcf22, #26a69a); }
 
         /* Top Section: Map + Feed */
         .top-section {
@@ -287,6 +301,13 @@
                 MONITORING GLOBAL EVENT STREAMS... SYSTEM NOMINAL...
             </div>
         </div>
+        <!-- Fear & Greed strip (free: alternative.me) -->
+        <div class="fear-greed-strip" id="fear-greed-strip">
+            <span class="fg-label">Crypto Fear & Greed:</span>
+            <span class="fg-value" id="fg-value">--</span>
+            <span class="fg-class" id="fg-class">Loading...</span>
+            <div class="fg-bar"><div class="fg-fill" id="fg-fill"></div></div>
+        </div>
 
         <!-- Top Section -->
         <div class="top-section">
@@ -297,10 +318,10 @@
                     <span style="color:var(--danger); font-size:0.7rem;">● LIVE</span>
                 </div>
                 <div class="intel-filters">
-                    <button class="intel-filter active" onclick="filterFeed('all')">ALL</button>
-                    <button class="intel-filter" onclick="filterFeed('conflict')">CONFLICT</button>
-                    <button class="intel-filter" onclick="filterFeed('cyber')">CYBER</button>
-                    <button class="intel-filter" onclick="filterFeed('alert')">ALERTS</button>
+                    <button class="intel-filter active" data-preset="default" onclick="filterFeed('default')">ALL</button>
+                    <button class="intel-filter" data-preset="markets" onclick="filterFeed('markets')">MARKETS</button>
+                    <button class="intel-filter" data-preset="commodities" onclick="filterFeed('commodities')">COMMODITIES</button>
+                    <button class="intel-filter" data-preset="conflict" onclick="filterFeed('conflict')">CONFLICT</button>
                 </div>
                 <div id="intel-feed">
                     <div style="padding:20px; text-align:center; color:#787b86;">Initializing Feed...</div>
@@ -315,18 +336,37 @@
 
         <!-- Dashboard Grid (The Big Overhaul) -->
         <div class="dashboard-grid">
-            
-            <!-- 1. Global Surveillance (Full Width) -->
+            <!-- First row: Market + Ops News for traders -->
+            <div class="dash-card">
+                <div class="dash-header">
+                    <span><i class="fas fa-chart-line"></i> MARKET SNAPSHOT</span>
+                    <span id="market-updated" style="font-size:0.6rem; color:#787b86;">--</span>
+                </div>
+                <div class="dash-content" id="market-list"></div>
+            </div>
+            <div class="dash-card">
+                <div class="dash-header">
+                    <span><i class="fas fa-newspaper"></i> OPS NEWS WIRE</span>
+                </div>
+                <div class="dash-content" id="ops-news-list"></div>
+            </div>
+            <div class="dash-card">
+                <div class="dash-header">
+                    <span><i class="fas fa-globe"></i> WORLD NEWS</span>
+                </div>
+                <div class="dash-content" id="world-news-list"></div>
+            </div>
+            <!-- Global Surveillance (Full Width) -->
             <div class="dash-card span-full">
                 <div class="dash-header">
                     <span><i class="fas fa-video"></i> GLOBAL SURVEILLANCE MATRIX</span>
                     <span style="font-size:0.65rem; color:#26a69a; border:1px solid rgba(38,166,154,0.3); padding:2px 6px; border-radius:3px;">LIVE FEEDS</span>
                 </div>
                 <div class="video-controls">
-                    <button class="channel-btn active" onclick="setVideo('aljazeera')">AL JAZEERA</button>
-                    <button class="channel-btn" onclick="setVideo('dw')">DW NEWS</button>
-                    <button class="channel-btn" onclick="setVideo('france24')">FRANCE 24</button>
-                    <button class="channel-btn" onclick="setVideo('nasa')">NASA TV</button>
+                    <button class="channel-btn active" onclick="setVideo('aljazeera', this)">AL JAZEERA</button>
+                    <button class="channel-btn" onclick="setVideo('dw', this)">DW NEWS</button>
+                    <button class="channel-btn" onclick="setVideo('france24', this)">FRANCE 24</button>
+                    <button class="channel-btn" onclick="setVideo('nasa', this)">NASA TV</button>
                 </div>
                 <div class="webcam-grid">
                     <div class="webcam-item">
@@ -368,35 +408,11 @@
                     </div>
                     <div style="font-size:0.6rem; color:#ffcf22; font-weight:700;">ELEVATED</div>
                 </div>
-                <div class="ai-hud-content">
-                    <div class="ai-insight">
-                        <strong style="color:#fff;">Geopolitical Strain:</strong> Conflict zones showing increased kinetic activity. Energy markets pricing in supply disruption risks.
-                    </div>
-                    <div class="ai-insight">
-                        <strong style="color:#fff;">Market Dislocation:</strong> Divergence between equity resilience and bond yield spikes suggests pending volatility event.
-                    </div>
+                <div class="ai-hud-content" id="ai-brief-content">
+                    <div class="ai-insight" id="ai-brief-text">Loading AI brief from headlines...</div>
                 </div>
             </div>
 
-            <!-- 3. Market Snapshot -->
-            <div class="dash-card">
-                <div class="dash-header">
-                    <span><i class="fas fa-chart-line"></i> MARKET SNAPSHOT</span>
-                </div>
-                <div class="dash-content" id="market-list">
-                    <!-- JS Injected -->
-                </div>
-            </div>
-
-            <!-- 4. Ops News -->
-            <div class="dash-card">
-                <div class="dash-header">
-                    <span><i class="fas fa-newspaper"></i> OPS NEWS WIRE</span>
-                </div>
-                <div class="dash-content" id="ops-news-list">
-                    <!-- JS Injected -->
-                </div>
-            </div>
 
             <!-- 5. Algo Store (Full Width) -->
             <div class="dash-card span-full" style="min-height:auto;">
@@ -415,32 +431,39 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     
     <script>
-        // --- Map Setup ---
+        // --- Map Setup (free tiles: CARTO + OpenStreetMap) ---
         const map = L.map('map', { zoomControl: false, attributionControl: false }).setView([20, 0], 2);
         
-        // Dark Matter Tiles (Pro Look)
-        const darkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; CARTO',
-            subdomains: 'abcd',
-            maxZoom: 19
-        }).addTo(map);
+        const baseLayers = {
+            'Dark (CARTO)': L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; CARTO',
+                subdomains: 'abcd',
+                maxZoom: 19
+            }),
+            'OpenStreetMap': L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap',
+                maxZoom: 19
+            })
+        };
+        baseLayers['Dark (CARTO)'].addTo(map);
 
         L.control.zoom({ position: 'topright' }).addTo(map);
 
-        // Layers
         const layers = {
             earthquakes: L.layerGroup().addTo(map),
             volcanoes: L.layerGroup(),
-            conflict: L.layerGroup().addTo(map)
+            conflict: L.layerGroup().addTo(map),
+            gdacs: L.layerGroup().addTo(map)
         };
 
         const overlayMaps = {
             "Earthquakes (USGS)": layers.earthquakes,
             "Volcanoes (EONET)": layers.volcanoes,
+            "Disasters (GDACS)": layers.gdacs,
             "Conflict Zones": layers.conflict
         };
 
-        L.control.layers(null, overlayMaps, { position: 'topleft' }).addTo(map);
+        L.control.layers(baseLayers, overlayMaps, { position: 'topleft' }).addTo(map);
 
         // --- Data Fetching ---
 
@@ -520,27 +543,75 @@
             } catch (e) { console.error("EONET Error", e); }
         }
 
-        // 3. GDELT (Simulated/Proxy)
+        // 2b. GDACS disasters (free API - GeoJSON or results array)
+        async function fetchGDACS() {
+            try {
+                const res = await fetch('https://www.gdacs.org/gdacsapi/api/events/geteventlist/SEARCH');
+                const data = await res.json();
+                layers.gdacs.clearLayers();
+                let list = data && (Array.isArray(data.results) ? data.results : data.features);
+                if (!list || !list.length) return;
+                list.slice(0, 30).forEach(ev => {
+                    let lat, lng, name, type, severity;
+                    if (ev.geometry && ev.geometry.coordinates) {
+                        const c = ev.geometry.coordinates;
+                        lng = c[0]; lat = c[1];
+                        name = (ev.properties && ev.properties.name) || ev.eventname || 'Event';
+                        type = (ev.properties && ev.properties.eventtype) || ev.eventtype || '';
+                        severity = (ev.properties && ev.properties.alertlevel) || ev.alertlevel || '';
+                    } else {
+                        lat = ev.latitude; lng = ev.longitude;
+                        name = ev.eventname || 'Event';
+                        type = ev.eventtype || '';
+                        severity = ev.alertlevel || ev.severity || '';
+                    }
+                    if (lat == null || lng == null) return;
+                    let color = '#ffcf22';
+                    const s = String(severity).toLowerCase();
+                    if (s === 'red') color = '#ef5350';
+                    else if (s === 'orange') color = '#ff7043';
+                    L.circleMarker([lat, lng], {
+                        radius: 5,
+                        fillColor: color,
+                        color: '#000',
+                        weight: 1,
+                        fillOpacity: 0.8
+                    }).bindPopup(`<b>${name}</b><br>${type}`).addTo(layers.gdacs);
+                });
+            } catch (e) { console.error("GDACS Error", e); }
+        }
+
+        let currentGdeltPreset = 'default';
+        function filterFeed(preset) {
+            currentGdeltPreset = preset || 'default';
+            document.querySelectorAll('.intel-filter').forEach(b => {
+                b.classList.toggle('active', (b.getAttribute('data-preset') || b.dataset.preset) === currentGdeltPreset);
+            });
+            fetchGdelt();
+        }
+
+        // 3. GDELT with presets; drives Intel feed, ticker, Ops News
         async function fetchGdelt() {
             const feed = document.getElementById('intel-feed');
+            const tickerEl = document.getElementById('ticker-content');
+            const opsEl = document.getElementById('ops-news-list');
             try {
-                // Fetching from local proxy if available, else mocking for demo stability
-                const res = await fetch('gdelt_events.php');
+                const res = await fetch('gdelt_events.php?preset=' + encodeURIComponent(currentGdeltPreset) + '&limit=40');
                 const json = await res.json();
-                
-                // Handle PHP wrapper or direct array
-                const data = json.events || json;
-                
-                if(!data || !Array.isArray(data) || data.length === 0) throw new Error("No data");
-                
+                const data = json.events || [];
+                if (!Array.isArray(data) || data.length === 0) throw new Error("No data");
+
+                layers.conflict.clearLayers();
                 let html = '';
-                data.slice(0, 20).forEach(item => {
-                     let tagClass = 'tag-tech';
-                     const t = item.title.toLowerCase();
-                     if(t.includes('war') || t.includes('attack') || t.includes('military')) tagClass = 'tag-conflict';
-                     
-                     // Add to Map (Conflict Layer)
-                     if(item.lat && item.lng && tagClass === 'tag-conflict') {
+                const titlesForTicker = [];
+                const opsItems = [];
+                data.slice(0, 25).forEach(item => {
+                    let tagClass = 'tag-tech';
+                    const t = (item.title || '').toLowerCase();
+                    if (t.includes('war') || t.includes('attack') || t.includes('military') || t.includes('conflict')) tagClass = 'tag-conflict';
+                    titlesForTicker.push(item.title);
+                    if (opsItems.length < 8) opsItems.push(item);
+                    if (item.lat && item.lng && tagClass === 'tag-conflict') {
                         L.circleMarker([item.lat, item.lng], {
                             radius: 4,
                             fillColor: '#ef5350',
@@ -549,84 +620,133 @@
                             opacity: 1,
                             fillOpacity: 0.8
                         }).bindPopup(`<b>${item.title}</b><br>${new Date(item.date).toLocaleString()}`).addTo(layers.conflict);
-                     }
-
-                     html += `
-                        <div class="intel-item" onclick="map.flyTo([${item.lat || 0}, ${item.lng || 0}], 6)">
-                            <div class="intel-meta">
-                                <span class="intel-tag ${tagClass}">INTEL</span>
-                                <span>${item.date ? new Date(item.date).toLocaleTimeString() : 'LIVE'}</span>
-                            </div>
-                            <div class="intel-title">${item.title}</div>
-                        </div>
-                     `;
+                    }
+                    const dateStr = item.date ? new Date(item.date).toLocaleTimeString() : 'LIVE';
+                    const link = item.url ? `<a href="${item.url}" target="_blank" rel="noopener" style="color:#d1d4dc; text-decoration:none;">${escapeHtml(item.title)}</a>` : escapeHtml(item.title);
+                    html += `<div class="intel-item" onclick="map.flyTo([${item.lat || 0}, ${item.lng || 0}], 6)">
+                        <div class="intel-meta"><span class="intel-tag ${tagClass}">INTEL</span><span>${dateStr}</span></div>
+                        <div class="intel-title">${link}</div>
+                    </div>`;
                 });
-                feed.innerHTML = html;
-            } catch(e) {
-                // Fallback Content
-                feed.innerHTML = `
-                    <div class="intel-item">
-                        <div class="intel-meta"><span class="intel-tag tag-conflict">CONFLICT</span><span>LIVE</span></div>
-                        <div class="intel-title">Regional tensions escalate in Eastern Europe as diplomatic talks stall.</div>
-                    </div>
-                    <div class="intel-item">
-                        <div class="intel-meta"><span class="intel-tag tag-tech">CYBER</span><span>10m ago</span></div>
-                        <div class="intel-title">Major ISP outage reported across North America. Cyberattack suspected.</div>
-                    </div>
-                    <div class="intel-item">
-                        <div class="intel-meta"><span class="intel-tag tag-conflict">ALERT</span><span>24m ago</span></div>
-                        <div class="intel-title">Naval maneuvers detected in South China Sea.</div>
-                    </div>
-                `;
+                feed.innerHTML = html || '<div class="intel-item"><div class="intel-title">No events for this filter.</div></div>';
+                if (tickerEl) tickerEl.textContent = titlesForTicker.slice(0, 15).join('  |  ') || 'Monitoring global event streams...';
+                if (opsEl) {
+                    opsEl.innerHTML = opsItems.map(n => {
+                        const time = n.date ? new Date(n.date).toLocaleTimeString() : 'LIVE';
+                        const title = escapeHtml(n.title);
+                        const url = n.url ? `href="${n.url}" target="_blank" rel="noopener"` : '';
+                        return `<div style="padding:8px 0; border-bottom:1px solid #2a2e39;">
+                            <div style="font-size:0.6rem; color:#2962ff; font-weight:700; margin-bottom:2px;">GDELT • ${time}</div>
+                            <div style="font-size:0.75rem; color:#d1d4dc;">${url ? `<a ${url} style="color:#d1d4dc;">${title}</a>` : title}</div>
+                        </div>`;
+                    }).join('');
+                }
+                if (titlesForTicker.length) fetchAiBrief(titlesForTicker);
+            } catch (e) {
+                feed.innerHTML = `<div class="intel-item"><div class="intel-title">Feed temporarily unavailable. Retrying...</div></div>`;
+                if (tickerEl) tickerEl.textContent = 'Monitoring global event streams...';
+                if (opsEl) opsEl.innerHTML = '<div style="padding:8px; color:#787b86;">Loading...</div>';
+            }
+        }
+        function escapeHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+        // 4. Market Data (real: market_snapshot.php)
+        async function fetchMarkets() {
+            const listEl = document.getElementById('market-list');
+            const updatedEl = document.getElementById('market-updated');
+            const fallback = () => {
+                listEl.innerHTML = '<div style="padding:12px; color:#787b86;">Market data temporarily unavailable.</div>';
+                if (updatedEl) updatedEl.textContent = '--';
+            };
+            try {
+                const res = await fetch('market_snapshot.php?symbols=SPY,QQQ,DIA,GLD,USO,EURUSD');
+                const json = await res.json();
+                if (json.status !== 'ok' || !json.data || !json.data.length) { fallback(); return; }
+                let html = '<div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">';
+                json.data.forEach(t => {
+                    const chg = t.changePct != null ? (t.changePct >= 0 ? '+' + t.changePct.toFixed(2) + '%' : t.changePct.toFixed(2) + '%') : '--';
+                    const isPos = chg.startsWith('+');
+                    const val = typeof t.price === 'number' ? (t.price >= 1000 ? t.price.toFixed(0) : t.price.toFixed(t.symbol && t.symbol.includes('USD') ? 4 : 2)) : t.price;
+                    html += `<div style="background:#0a0e17; padding:8px; border-radius:4px; border:1px solid #2a2e39;">
+                        <div style="font-size:0.65rem; color:#787b86;">${escapeHtml(t.symbol)}</div>
+                        <div style="font-size:0.9rem; font-weight:700; color:#fff;">${val}</div>
+                        <div style="font-size:0.65rem; color:${isPos ? '#26a69a' : '#ef5350'};">${chg}</div>
+                    </div>`;
+                });
+                html += '</div>';
+                listEl.innerHTML = html;
+                if (updatedEl) updatedEl.textContent = 'Updated ' + new Date().toLocaleTimeString();
+            } catch (e) { fallback(); }
+        }
+
+        // 5. Fear & Greed (free: alternative.me via fear_greed.php)
+        async function fetchFearGreed() {
+            const valEl = document.getElementById('fg-value');
+            const classEl = document.getElementById('fg-class');
+            const fillEl = document.getElementById('fg-fill');
+            try {
+                const res = await fetch('fear_greed.php');
+                const j = await res.json();
+                if (j.status === 'ok' && j.value != null) {
+                    if (valEl) valEl.textContent = j.value;
+                    if (classEl) classEl.textContent = j.classification || '--';
+                    if (fillEl) fillEl.style.width = j.value + '%';
+                } else {
+                    if (valEl) valEl.textContent = '--';
+                    if (classEl) classEl.textContent = 'Unavailable';
+                }
+            } catch (e) {
+                if (valEl) valEl.textContent = '--';
+                if (classEl) classEl.textContent = 'Unavailable';
             }
         }
 
-        // 4. Market Data (Mock)
-        function fetchMarkets() {
-            const tickers = [
-                { sym: 'EURUSD', val: '1.0842', chg: '+0.12%' },
-                { sym: 'GBPUSD', val: '1.2650', chg: '-0.05%' },
-                { sym: 'USDJPY', val: '150.20', chg: '+0.30%' },
-                { sym: 'GOLD', val: '2045.50', chg: '+1.20%' },
-                { sym: 'BTCUSD', val: '64200', chg: '+4.50%' },
-                { sym: 'SPX500', val: '5100.50', chg: '+0.80%' }
-            ];
-            
-            let html = '<div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">';
-            tickers.forEach(t => {
-                const isPos = t.chg.includes('+');
-                html += `
-                    <div style="background:#0a0e17; padding:8px; border-radius:4px; border:1px solid #2a2e39;">
-                        <div style="font-size:0.65rem; color:#787b86;">${t.sym}</div>
-                        <div style="font-size:0.9rem; font-weight:700; color:#fff;">${t.val}</div>
-                        <div style="font-size:0.65rem; color:${isPos ? '#26a69a' : '#ef5350'};">${t.chg}</div>
-                    </div>
-                `;
-            });
-            html += '</div>';
-            document.getElementById('market-list').innerHTML = html;
+        // 6. World News (RSS via world_news.php)
+        async function fetchWorldNews() {
+            const el = document.getElementById('world-news-list');
+            if (!el) return;
+            try {
+                const res = await fetch('world_news.php');
+                const j = await res.json();
+                if (j.status === 'ok' && j.items && j.items.length) {
+                    el.innerHTML = j.items.slice(0, 8).map(n => {
+                        const t = escapeHtml(n.title);
+                        const url = n.url ? `href="${n.url}" target="_blank" rel="noopener"` : '';
+                        return `<div style="padding:8px 0; border-bottom:1px solid #2a2e39;">
+                            <div style="font-size:0.6rem; color:#2962ff; font-weight:700; margin-bottom:2px;">${escapeHtml(n.source)}</div>
+                            <div style="font-size:0.75rem; color:#d1d4dc;">${url ? `<a ${url} style="color:#d1d4dc;">${t}</a>` : t}</div>
+                        </div>`;
+                    }).join('');
+                } else {
+                    el.innerHTML = '<div style="padding:12px; color:#787b86;">No items.</div>';
+                }
+            } catch (e) {
+                el.innerHTML = '<div style="padding:12px; color:#787b86;">Loading...</div>';
+            }
         }
 
-        // 5. Ops News (Mock)
-        function fetchOpsNews() {
-             const news = [
-                { src: 'REUTERS', title: 'Oil prices surge as Middle East tensions escalate', time: '10m ago' },
-                { src: 'AP', title: 'Cyberattack targets major European port infrastructure', time: '24m ago' },
-                { src: 'AL JAZEERA', title: 'Diplomatic talks stall regarding ceasefire agreement', time: '1h ago' }
-            ];
-            let html = '';
-            news.forEach(n => {
-                html += `
-                    <div style="padding:8px 0; border-bottom:1px solid #2a2e39;">
-                        <div style="font-size:0.6rem; color:#2962ff; font-weight:700; margin-bottom:2px;">${n.src} • ${n.time}</div>
-                        <div style="font-size:0.75rem; color:#d1d4dc;">${n.title}</div>
-                    </div>
-                `;
-            });
-            document.getElementById('ops-news-list').innerHTML = html;
+        // 7. AI Brief (heuristic from headlines, no key)
+        async function fetchAiBrief(titles) {
+            const el = document.getElementById('ai-brief-text');
+            if (!el) return;
+            try {
+                const res = await fetch('ai_brief.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ titles: titles || [] })
+                });
+                const j = await res.json();
+                if (j.status === 'ok' && j.summary) {
+                    el.innerHTML = '<strong style="color:#fff;">AI Brief:</strong> ' + escapeHtml(j.summary);
+                } else {
+                    el.textContent = 'Brief unavailable.';
+                }
+            } catch (e) {
+                el.textContent = 'Brief unavailable.';
+            }
         }
 
-        // 6. Products
+        // 8. Products
         function renderProducts() {
             const mql5Products = [
                 { title: 'G-Labs Utility Pro', price: '$49', img: 'https://c.mql5.com/31/676/g-labs-utility-pro-logo-200x200.png', link: 'mql5.html' },
@@ -667,27 +787,32 @@
         document.addEventListener('DOMContentLoaded', () => {
             fetchEarthquakes();
             fetchEonet();
+            fetchGDACS();
             fetchGdelt();
             fetchMarkets();
-            fetchOpsNews();
+            fetchFearGreed();
+            fetchWorldNews();
             renderProducts();
-            
             setInterval(fetchGdelt, 60000);
+            setInterval(fetchWorldNews, 300000);
             setInterval(fetchEarthquakes, 300000);
+            setInterval(fetchMarkets, 120000);
+            setInterval(fetchFearGreed, 3600000);
+            setInterval(fetchGDACS, 600000);
         });
 
         // Helper
-        function setVideo(chan) {
+        function setVideo(chan, btn) {
             const frames = {
                 'aljazeera': 'https://www.youtube.com/embed/gCNeDWCI0vo?autoplay=1&mute=1',
                 'dw': 'https://www.youtube.com/embed/MG3jGHnBVQA?autoplay=1&mute=1',
                 'france24': 'https://www.youtube.com/embed/h3MuIUNCCzI?autoplay=1&mute=1',
                 'nasa': 'https://www.youtube.com/embed/21X5lGlDOfg?autoplay=1&mute=1'
             };
-            document.getElementById('main-video-1').src = frames[chan];
-            
+            const el = document.getElementById('main-video-1');
+            if (el) el.src = frames[chan] || frames['aljazeera'];
             document.querySelectorAll('.channel-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
+            if (btn) btn.classList.add('active');
         }
     </script>
 </body>
