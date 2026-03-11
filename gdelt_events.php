@@ -1,6 +1,7 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Access-Control-Allow-Origin: *');
 
 // Preset queries for traders: ?preset=default|markets|commodities|earnings|conflict
 $presets = [

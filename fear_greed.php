@@ -1,6 +1,7 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: public, max-age=3600');
+header('Access-Control-Allow-Origin: *');
 
 $cacheKey = 'g_labs_fear_greed.json';
 $cachePath = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $cacheKey;

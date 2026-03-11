@@ -1,6 +1,7 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Access-Control-Allow-Origin: *');
 
 $symbolsRaw = isset($_GET['symbols']) ? strtoupper(trim($_GET['symbols'])) : 'SPY,QQQ,DIA,GLD,USO,EURUSD';
 $symbolsRaw = preg_replace('/[^A-Z0-9,]/', '', $symbolsRaw);

@@ -431,22 +431,21 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     
     <script>
-        // --- Map Setup (free tiles: CARTO + OpenStreetMap) ---
+        function escapeHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+        const isPhpServer = (location.protocol === 'http:' || location.protocol === 'https:') && !location.pathname.endsWith('.html');
+        function phpUrl(file) { return file; }
+
+        // --- Map Setup (free tiles: CARTO + OpenStreetMap, no API key) ---
         const map = L.map('map', { zoomControl: false, attributionControl: false }).setView([20, 0], 2);
-        
         const baseLayers = {
             'Dark (CARTO)': L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-                attribution: '&copy; CARTO',
-                subdomains: 'abcd',
-                maxZoom: 19
+                attribution: '&copy; CARTO', subdomains: 'abcd', maxZoom: 19
             }),
             'OpenStreetMap': L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OpenStreetMap',
-                maxZoom: 19
+                attribution: '&copy; OpenStreetMap', maxZoom: 19
             })
         };
         baseLayers['Dark (CARTO)'].addTo(map);
-
         L.control.zoom({ position: 'topright' }).addTo(map);
 
         const layers = {
@@ -455,353 +454,329 @@
             conflict: L.layerGroup().addTo(map),
             gdacs: L.layerGroup().addTo(map)
         };
-
-        const overlayMaps = {
+        L.control.layers(baseLayers, {
             "Earthquakes (USGS)": layers.earthquakes,
-            "Volcanoes (EONET)": layers.volcanoes,
+            "Natural Events (EONET)": layers.volcanoes,
             "Disasters (GDACS)": layers.gdacs,
-            "Conflict Zones": layers.conflict
-        };
+            "Conflict / Intel (GDELT)": layers.conflict
+        }, { position: 'topleft' }).addTo(map);
 
-        L.control.layers(baseLayers, overlayMaps, { position: 'topleft' }).addTo(map);
-
-        // --- Data Fetching ---
-
-        // 1. USGS Earthquakes
+        // --- 1. USGS Earthquakes (direct, CORS-friendly) ---
         async function fetchEarthquakes() {
             try {
                 const res = await fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson');
                 const data = await res.json();
-                
                 layers.earthquakes.clearLayers();
                 const listEl = document.getElementById('env-feed');
-                if(listEl) listEl.innerHTML = '';
-                
                 let html = '';
-                data.features.slice(0, 10).forEach(quake => {
-                    const mag = quake.properties.mag;
-                    const place = quake.properties.place;
-                    const time = new Date(quake.properties.time).toLocaleTimeString();
-                    
-                    // Color based on mag
+                (data.features || []).slice(0, 12).forEach(q => {
+                    const mag = q.properties.mag;
+                    const place = q.properties.place || 'Unknown';
+                    const time = new Date(q.properties.time).toLocaleTimeString();
                     let color = '#26a69a';
-                    if(mag > 4) color = '#ffcf22';
-                    if(mag > 5) color = '#ef5350';
-                    
-                    // Map Marker
-                    L.circleMarker([quake.geometry.coordinates[1], quake.geometry.coordinates[0]], {
-                        radius: mag * 2,
-                        fillColor: color,
-                        color: "#000",
-                        weight: 1,
-                        opacity: 1,
-                        fillOpacity: 0.7
+                    if (mag > 4) color = '#ffcf22';
+                    if (mag > 5) color = '#ef5350';
+                    const lat = q.geometry.coordinates[1], lng = q.geometry.coordinates[0];
+                    L.circleMarker([lat, lng], {
+                        radius: Math.max(mag * 2, 3), fillColor: color, color: '#000', weight: 1, opacity: 1, fillOpacity: 0.7
                     }).bindPopup(`<b>M${mag}</b><br>${place}`).addTo(layers.earthquakes);
-
-                    // List Item
-                    html += `
-                        <div class="list-item" onclick="map.flyTo([${quake.geometry.coordinates[1]}, ${quake.geometry.coordinates[0]}], 6)">
-                            <div style="display:flex; gap:8px; align-items:center;">
-                                <div style="background:${color}; color:#000; font-weight:800; padding:1px 5px; border-radius:3px; font-size:0.7rem;">${mag.toFixed(1)}</div>
-                                <div style="color:#d1d4dc;">${place.split(',').pop()}</div>
-                            </div>
-                            <div style="color:#787b86;">${time}</div>
+                    html += `<div class="list-item" style="cursor:pointer" onclick="map.flyTo([${lat},${lng}],6)">
+                        <div style="display:flex;gap:8px;align-items:center">
+                            <div style="background:${color};color:#000;font-weight:800;padding:1px 5px;border-radius:3px;font-size:0.7rem">${mag.toFixed(1)}</div>
+                            <div style="color:#d1d4dc">${place.split(',').pop().trim()}</div>
                         </div>
-                    `;
+                        <div style="color:#787b86">${time}</div>
+                    </div>`;
                 });
-                if(listEl) listEl.innerHTML = html;
-            } catch(e) { console.error("USGS Error", e); }
+                if (listEl) listEl.innerHTML = html || '<div style="padding:12px;color:#787b86">No recent quakes.</div>';
+            } catch (e) { console.error('USGS Error', e); }
         }
 
-        // 2. NASA EONET
+        // --- 2. NASA EONET (direct, CORS-friendly) ---
         async function fetchEonet() {
             try {
                 const res = await fetch('https://eonet.gsfc.nasa.gov/api/v2.1/events?limit=20&days=30');
                 const data = await res.json();
-                
                 layers.volcanoes.clearLayers();
-                
-                data.events.forEach(event => {
-                    if (event.geometries && event.geometries.length > 0) {
-                        const cat = event.categories[0].title;
-                        const coords = event.geometries[0].coordinates;
-                        
-                        let color = '#ff7043';
-                        let icon = 'fa-fire';
-                        if (cat === 'Volcanoes') { color = '#ef5350'; icon = 'fa-mountain'; }
-                        
-                        L.marker([coords[1], coords[0]], {
-                            icon: L.divIcon({
-                                html: `<i class="fas ${icon}" style="color:${color}; font-size:14px; text-shadow:0 0 5px black;"></i>`,
-                                className: 'custom-div-icon',
-                                iconSize: [14, 14],
-                                iconAnchor: [7, 7]
-                            })
-                        }).bindPopup(`<b>${event.title}</b><br>${cat}`).addTo(layers.volcanoes);
-                    }
+                (data.events || []).forEach(ev => {
+                    if (!ev.geometries || !ev.geometries.length) return;
+                    const cat = ev.categories[0].title;
+                    const coords = ev.geometries[0].coordinates;
+                    let color = '#ff7043', icon = 'fa-fire';
+                    if (cat === 'Volcanoes') { color = '#ef5350'; icon = 'fa-mountain'; }
+                    if (cat === 'Severe Storms') { color = '#42a5f5'; icon = 'fa-bolt'; }
+                    L.marker([coords[1], coords[0]], {
+                        icon: L.divIcon({
+                            html: `<i class="fas ${icon}" style="color:${color};font-size:14px;text-shadow:0 0 5px #000"></i>`,
+                            className: 'custom-div-icon', iconSize: [14, 14], iconAnchor: [7, 7]
+                        })
+                    }).bindPopup(`<b>${ev.title}</b><br>${cat}`).addTo(layers.volcanoes);
                 });
-            } catch (e) { console.error("EONET Error", e); }
+            } catch (e) { console.error('EONET Error', e); }
         }
 
-        // 2b. GDACS disasters (free API - GeoJSON or results array)
+        // --- 3. GDACS via PHP proxy (avoids CORS) ---
         async function fetchGDACS() {
             try {
-                const res = await fetch('https://www.gdacs.org/gdacsapi/api/events/geteventlist/SEARCH');
-                const data = await res.json();
+                const res = await fetch(phpUrl('gdacs_proxy.php'));
+                const j = await res.json();
                 layers.gdacs.clearLayers();
-                let list = data && (Array.isArray(data.results) ? data.results : data.features);
-                if (!list || !list.length) return;
-                list.slice(0, 30).forEach(ev => {
-                    let lat, lng, name, type, severity;
-                    if (ev.geometry && ev.geometry.coordinates) {
-                        const c = ev.geometry.coordinates;
-                        lng = c[0]; lat = c[1];
-                        name = (ev.properties && ev.properties.name) || ev.eventname || 'Event';
-                        type = (ev.properties && ev.properties.eventtype) || ev.eventtype || '';
-                        severity = (ev.properties && ev.properties.alertlevel) || ev.alertlevel || '';
-                    } else {
-                        lat = ev.latitude; lng = ev.longitude;
-                        name = ev.eventname || 'Event';
-                        type = ev.eventtype || '';
-                        severity = ev.alertlevel || ev.severity || '';
-                    }
-                    if (lat == null || lng == null) return;
+                if (j.status !== 'ok' || !j.events) return;
+                j.events.forEach(ev => {
+                    if (ev.lat == null || ev.lng == null) return;
                     let color = '#ffcf22';
-                    const s = String(severity).toLowerCase();
+                    const s = String(ev.alertlevel || '').toLowerCase();
                     if (s === 'red') color = '#ef5350';
                     else if (s === 'orange') color = '#ff7043';
-                    L.circleMarker([lat, lng], {
-                        radius: 5,
-                        fillColor: color,
-                        color: '#000',
-                        weight: 1,
-                        fillOpacity: 0.8
-                    }).bindPopup(`<b>${name}</b><br>${type}`).addTo(layers.gdacs);
+                    L.circleMarker([ev.lat, ev.lng], {
+                        radius: 5, fillColor: color, color: '#000', weight: 1, fillOpacity: 0.8
+                    }).bindPopup(`<b>${escapeHtml(ev.name)}</b><br>${ev.type}`).addTo(layers.gdacs);
                 });
-            } catch (e) { console.error("GDACS Error", e); }
+            } catch (e) { console.error('GDACS Error', e); }
         }
 
+        // --- 4. GDELT with presets; drives Intel feed, ticker, Ops News ---
         let currentGdeltPreset = 'default';
+        let gdeltCache = [];
         function filterFeed(preset) {
             currentGdeltPreset = preset || 'default';
             document.querySelectorAll('.intel-filter').forEach(b => {
-                b.classList.toggle('active', (b.getAttribute('data-preset') || b.dataset.preset) === currentGdeltPreset);
+                b.classList.toggle('active', b.dataset.preset === currentGdeltPreset);
             });
             fetchGdelt();
         }
-
-        // 3. GDELT with presets; drives Intel feed, ticker, Ops News
         async function fetchGdelt() {
             const feed = document.getElementById('intel-feed');
             const tickerEl = document.getElementById('ticker-content');
             const opsEl = document.getElementById('ops-news-list');
             try {
-                const res = await fetch('gdelt_events.php?preset=' + encodeURIComponent(currentGdeltPreset) + '&limit=40');
+                const res = await fetch(phpUrl('gdelt_events.php') + '?preset=' + encodeURIComponent(currentGdeltPreset) + '&limit=40');
                 const json = await res.json();
                 const data = json.events || [];
-                if (!Array.isArray(data) || data.length === 0) throw new Error("No data");
-
+                if (!Array.isArray(data) || data.length === 0) throw new Error('No data');
+                gdeltCache = data;
                 layers.conflict.clearLayers();
                 let html = '';
-                const titlesForTicker = [];
+                const tickerParts = [];
                 const opsItems = [];
                 data.slice(0, 25).forEach(item => {
                     let tagClass = 'tag-tech';
                     const t = (item.title || '').toLowerCase();
-                    if (t.includes('war') || t.includes('attack') || t.includes('military') || t.includes('conflict')) tagClass = 'tag-conflict';
-                    titlesForTicker.push(item.title);
+                    if (t.match(/war|attack|military|conflict|strike|bomb|missile/)) tagClass = 'tag-conflict';
+                    else if (t.match(/cyber|hack|breach|malware/)) tagClass = 'tag-tech';
+                    tickerParts.push(item.title);
                     if (opsItems.length < 8) opsItems.push(item);
-                    if (item.lat && item.lng && tagClass === 'tag-conflict') {
+                    if (item.lat && item.lng) {
+                        const markerColor = tagClass === 'tag-conflict' ? '#ef5350' : '#2962ff';
                         L.circleMarker([item.lat, item.lng], {
-                            radius: 4,
-                            fillColor: '#ef5350',
-                            color: '#000',
-                            weight: 1,
-                            opacity: 1,
-                            fillOpacity: 0.8
-                        }).bindPopup(`<b>${item.title}</b><br>${new Date(item.date).toLocaleString()}`).addTo(layers.conflict);
+                            radius: 4, fillColor: markerColor, color: '#000', weight: 1, opacity: 1, fillOpacity: 0.8
+                        }).bindPopup(`<b>${escapeHtml(item.title)}</b><br>${item.date ? new Date(item.date).toLocaleString() : 'LIVE'}`).addTo(layers.conflict);
                     }
                     const dateStr = item.date ? new Date(item.date).toLocaleTimeString() : 'LIVE';
-                    const link = item.url ? `<a href="${item.url}" target="_blank" rel="noopener" style="color:#d1d4dc; text-decoration:none;">${escapeHtml(item.title)}</a>` : escapeHtml(item.title);
-                    html += `<div class="intel-item" onclick="map.flyTo([${item.lat || 0}, ${item.lng || 0}], 6)">
-                        <div class="intel-meta"><span class="intel-tag ${tagClass}">INTEL</span><span>${dateStr}</span></div>
-                        <div class="intel-title">${link}</div>
+                    const titleHtml = item.url
+                        ? `<a href="${item.url}" target="_blank" rel="noopener" style="color:#d1d4dc;text-decoration:none">${escapeHtml(item.title)}</a>`
+                        : escapeHtml(item.title);
+                    html += `<div class="intel-item" onclick="map.flyTo([${item.lat||0},${item.lng||0}],6)">
+                        <div class="intel-meta"><span class="intel-tag ${tagClass}">${tagClass === 'tag-conflict' ? 'CONFLICT' : 'INTEL'}</span><span>${dateStr}</span></div>
+                        <div class="intel-title">${titleHtml}</div>
                     </div>`;
                 });
-                feed.innerHTML = html || '<div class="intel-item"><div class="intel-title">No events for this filter.</div></div>';
-                if (tickerEl) tickerEl.textContent = titlesForTicker.slice(0, 15).join('  |  ') || 'Monitoring global event streams...';
-                if (opsEl) {
-                    opsEl.innerHTML = opsItems.map(n => {
-                        const time = n.date ? new Date(n.date).toLocaleTimeString() : 'LIVE';
-                        const title = escapeHtml(n.title);
-                        const url = n.url ? `href="${n.url}" target="_blank" rel="noopener"` : '';
-                        return `<div style="padding:8px 0; border-bottom:1px solid #2a2e39;">
-                            <div style="font-size:0.6rem; color:#2962ff; font-weight:700; margin-bottom:2px;">GDELT • ${time}</div>
-                            <div style="font-size:0.75rem; color:#d1d4dc;">${url ? `<a ${url} style="color:#d1d4dc;">${title}</a>` : title}</div>
-                        </div>`;
-                    }).join('');
-                }
-                if (titlesForTicker.length) fetchAiBrief(titlesForTicker);
+                feed.innerHTML = html || '<div style="padding:20px;text-align:center;color:#787b86">No events for this filter.</div>';
+                updateTicker(tickerParts);
+                renderOpsNews(opsItems);
+                buildAiBriefClient(tickerParts);
             } catch (e) {
-                feed.innerHTML = `<div class="intel-item"><div class="intel-title">Feed temporarily unavailable. Retrying...</div></div>`;
-                if (tickerEl) tickerEl.textContent = 'Monitoring global event streams...';
-                if (opsEl) opsEl.innerHTML = '<div style="padding:8px; color:#787b86;">Loading...</div>';
+                console.error('GDELT Error', e);
+                feed.innerHTML = '<div style="padding:20px;text-align:center;color:#787b86">Feed temporarily unavailable. Retrying...</div>';
+                updateTicker([]);
+                renderOpsNews([]);
             }
         }
-        function escapeHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 
-        // 4. Market Data (real: market_snapshot.php)
+        // --- Ticker: rebuild element to reset animation ---
+        function updateTicker(titles) {
+            const container = document.querySelector('.news-ticker');
+            if (!container) return;
+            const old = document.getElementById('ticker-content');
+            if (old) old.remove();
+            const el = document.createElement('div');
+            el.className = 'ticker-content';
+            el.id = 'ticker-content';
+            el.textContent = titles.length
+                ? titles.slice(0, 20).join('  \u2022  ')
+                : 'MONITORING GLOBAL EVENT STREAMS... SYSTEM NOMINAL...';
+            container.appendChild(el);
+        }
+
+        // --- Ops News renderer ---
+        function renderOpsNews(items) {
+            const el = document.getElementById('ops-news-list');
+            if (!el) return;
+            if (!items.length) { el.innerHTML = '<div style="padding:12px;color:#787b86">Loading...</div>'; return; }
+            el.innerHTML = items.map(n => {
+                const time = n.date ? new Date(n.date).toLocaleTimeString() : 'LIVE';
+                const title = escapeHtml(n.title);
+                const link = n.url ? `<a href="${n.url}" target="_blank" rel="noopener" style="color:#d1d4dc;text-decoration:none">${title}</a>` : title;
+                return `<div style="padding:8px 0;border-bottom:1px solid #2a2e39">
+                    <div style="font-size:0.6rem;color:#2962ff;font-weight:700;margin-bottom:2px">GDELT \u2022 ${time}</div>
+                    <div style="font-size:0.75rem;color:#d1d4dc">${link}</div>
+                </div>`;
+            }).join('');
+        }
+
+        // --- 5. Market Data (real: market_snapshot.php with fallback) ---
         async function fetchMarkets() {
             const listEl = document.getElementById('market-list');
             const updatedEl = document.getElementById('market-updated');
-            const fallback = () => {
-                listEl.innerHTML = '<div style="padding:12px; color:#787b86;">Market data temporarily unavailable.</div>';
-                if (updatedEl) updatedEl.textContent = '--';
+            const renderMock = () => {
+                const mock = [
+                    {symbol:'SPY',price:510.50,changePct:0.8},{symbol:'QQQ',price:440.20,changePct:1.2},
+                    {symbol:'DIA',price:390.10,changePct:-0.3},{symbol:'GLD',price:204.50,changePct:0.5},
+                    {symbol:'USO',price:72.30,changePct:-1.1},{symbol:'EURUSD',price:1.0842,changePct:0.12}
+                ];
+                renderMarketCards(mock, listEl);
+                if (updatedEl) updatedEl.textContent = 'Demo data';
             };
             try {
-                const res = await fetch('market_snapshot.php?symbols=SPY,QQQ,DIA,GLD,USO,EURUSD');
+                const res = await fetch(phpUrl('market_snapshot.php') + '?symbols=SPY,QQQ,DIA,GLD,USO,EURUSD');
                 const json = await res.json();
-                if (json.status !== 'ok' || !json.data || !json.data.length) { fallback(); return; }
-                let html = '<div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">';
-                json.data.forEach(t => {
-                    const chg = t.changePct != null ? (t.changePct >= 0 ? '+' + t.changePct.toFixed(2) + '%' : t.changePct.toFixed(2) + '%') : '--';
-                    const isPos = chg.startsWith('+');
-                    const val = typeof t.price === 'number' ? (t.price >= 1000 ? t.price.toFixed(0) : t.price.toFixed(t.symbol && t.symbol.includes('USD') ? 4 : 2)) : t.price;
-                    html += `<div style="background:#0a0e17; padding:8px; border-radius:4px; border:1px solid #2a2e39;">
-                        <div style="font-size:0.65rem; color:#787b86;">${escapeHtml(t.symbol)}</div>
-                        <div style="font-size:0.9rem; font-weight:700; color:#fff;">${val}</div>
-                        <div style="font-size:0.65rem; color:${isPos ? '#26a69a' : '#ef5350'};">${chg}</div>
-                    </div>`;
-                });
-                html += '</div>';
-                listEl.innerHTML = html;
+                if (json.status !== 'ok' || !json.data || !json.data.length) { renderMock(); return; }
+                renderMarketCards(json.data, listEl);
                 if (updatedEl) updatedEl.textContent = 'Updated ' + new Date().toLocaleTimeString();
-            } catch (e) { fallback(); }
+            } catch (e) { renderMock(); }
+        }
+        function renderMarketCards(data, el) {
+            let html = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">';
+            data.forEach(t => {
+                const chg = t.changePct != null ? (t.changePct >= 0 ? '+' + t.changePct.toFixed(2) + '%' : t.changePct.toFixed(2) + '%') : '--';
+                const isPos = chg.startsWith('+');
+                const isFx = t.symbol && (t.symbol.includes('USD') || t.symbol.includes('EUR') || t.symbol.includes('GBP') || t.symbol.includes('JPY'));
+                const val = typeof t.price === 'number' ? (isFx && t.price < 200 ? t.price.toFixed(4) : t.price.toFixed(2)) : t.price;
+                html += `<div style="background:#0a0e17;padding:8px;border-radius:4px;border:1px solid #2a2e39">
+                    <div style="font-size:0.65rem;color:#787b86">${escapeHtml(t.symbol)}</div>
+                    <div style="font-size:0.9rem;font-weight:700;color:#fff">${val}</div>
+                    <div style="font-size:0.65rem;color:${isPos ? '#26a69a' : '#ef5350'}">${chg}</div>
+                </div>`;
+            });
+            html += '</div>';
+            el.innerHTML = html;
         }
 
-        // 5. Fear & Greed (free: alternative.me via fear_greed.php)
+        // --- 6. Fear & Greed (PHP proxy with client fallback) ---
         async function fetchFearGreed() {
             const valEl = document.getElementById('fg-value');
             const classEl = document.getElementById('fg-class');
             const fillEl = document.getElementById('fg-fill');
+            const setUnavailable = () => {
+                if (valEl) valEl.textContent = '--';
+                if (classEl) classEl.textContent = 'N/A';
+            };
             try {
-                const res = await fetch('fear_greed.php');
-                const j = await res.json();
-                if (j.status === 'ok' && j.value != null) {
+                let j;
+                try {
+                    const res = await fetch(phpUrl('fear_greed.php'));
+                    j = await res.json();
+                } catch (_) {
+                    const res2 = await fetch('https://api.alternative.me/fng/?limit=1');
+                    const raw = await res2.json();
+                    j = raw.data && raw.data[0] ? { status: 'ok', value: parseInt(raw.data[0].value), classification: raw.data[0].value_classification } : null;
+                }
+                if (j && j.status === 'ok' && j.value != null) {
                     if (valEl) valEl.textContent = j.value;
                     if (classEl) classEl.textContent = j.classification || '--';
                     if (fillEl) fillEl.style.width = j.value + '%';
-                } else {
-                    if (valEl) valEl.textContent = '--';
-                    if (classEl) classEl.textContent = 'Unavailable';
-                }
-            } catch (e) {
-                if (valEl) valEl.textContent = '--';
-                if (classEl) classEl.textContent = 'Unavailable';
-            }
+                } else { setUnavailable(); }
+            } catch (e) { setUnavailable(); }
         }
 
-        // 6. World News (RSS via world_news.php)
+        // --- 7. World News (RSS via PHP proxy with fallback) ---
         async function fetchWorldNews() {
             const el = document.getElementById('world-news-list');
             if (!el) return;
             try {
-                const res = await fetch('world_news.php');
+                const res = await fetch(phpUrl('world_news.php'));
                 const j = await res.json();
                 if (j.status === 'ok' && j.items && j.items.length) {
-                    el.innerHTML = j.items.slice(0, 8).map(n => {
+                    el.innerHTML = j.items.slice(0, 10).map(n => {
                         const t = escapeHtml(n.title);
-                        const url = n.url ? `href="${n.url}" target="_blank" rel="noopener"` : '';
-                        return `<div style="padding:8px 0; border-bottom:1px solid #2a2e39;">
-                            <div style="font-size:0.6rem; color:#2962ff; font-weight:700; margin-bottom:2px;">${escapeHtml(n.source)}</div>
-                            <div style="font-size:0.75rem; color:#d1d4dc;">${url ? `<a ${url} style="color:#d1d4dc;">${t}</a>` : t}</div>
+                        const link = n.url ? `<a href="${n.url}" target="_blank" rel="noopener" style="color:#d1d4dc;text-decoration:none">${t}</a>` : t;
+                        return `<div style="padding:8px 0;border-bottom:1px solid #2a2e39">
+                            <div style="font-size:0.6rem;color:#26a69a;font-weight:700;margin-bottom:2px">${escapeHtml(n.source)}</div>
+                            <div style="font-size:0.75rem;color:#d1d4dc">${link}</div>
                         </div>`;
                     }).join('');
                 } else {
-                    el.innerHTML = '<div style="padding:12px; color:#787b86;">No items.</div>';
+                    el.innerHTML = '<div style="padding:12px;color:#787b86">World news feed loading...</div>';
                 }
             } catch (e) {
-                el.innerHTML = '<div style="padding:12px; color:#787b86;">Loading...</div>';
+                el.innerHTML = '<div style="padding:12px;color:#787b86">World news requires PHP server.</div>';
             }
         }
 
-        // 7. AI Brief (heuristic from headlines, no key)
-        async function fetchAiBrief(titles) {
+        // --- 8. AI Brief (client-side heuristic, no PHP needed) ---
+        function buildAiBriefClient(titles) {
             const el = document.getElementById('ai-brief-text');
-            if (!el) return;
-            try {
-                const res = await fetch('ai_brief.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ titles: titles || [] })
-                });
-                const j = await res.json();
-                if (j.status === 'ok' && j.summary) {
-                    el.innerHTML = '<strong style="color:#fff;">AI Brief:</strong> ' + escapeHtml(j.summary);
-                } else {
-                    el.textContent = 'Brief unavailable.';
+            if (!el || !titles.length) return;
+            const themes = { 'Fed/Rates': /\b(fed|federal reserve|rate|inflation|powell|monetary)\b/i, 'Markets': /\b(stock|market|trading|earnings|revenue|ipo|equity|rally|selloff)\b/i, 'Energy': /\b(oil|opec|brent|wti|crude|energy|gas|lng)\b/i, 'Conflict': /\b(war|attack|military|conflict|sanctions|nato|missile|strike|bomb)\b/i, 'Central Banks': /\b(ecb|central bank|boj|boe|pboc|euro|dollar|currency)\b/i, 'Trade': /\b(trade|tariff|china|export|import|supply chain)\b/i, 'Crypto': /\b(bitcoin|crypto|ethereum|btc|eth|blockchain)\b/i };
+            const counts = {};
+            titles.forEach(title => {
+                for (const [theme, rx] of Object.entries(themes)) {
+                    if (rx.test(title)) counts[theme] = (counts[theme] || 0) + 1;
                 }
-            } catch (e) {
-                el.textContent = 'Brief unavailable.';
+            });
+            const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+            let brief = '';
+            if (sorted.length >= 2) {
+                brief = `Dominant themes: ${sorted.slice(0, 3).map(([t, c]) => `${t} (${c})`).join(', ')}. `;
+                const top = sorted[0][0];
+                if (top === 'Conflict') brief += 'Elevated geopolitical risk detected. Monitor safe-haven assets.';
+                else if (top === 'Fed/Rates') brief += 'Monetary policy in focus. Watch bond yields and rate-sensitive sectors.';
+                else if (top === 'Energy') brief += 'Energy markets active. Track crude and related equities.';
+                else if (top === 'Markets') brief += 'Broad market activity. Check index momentum and sector rotation.';
+                else if (top === 'Crypto') brief += 'Crypto narrative building. Monitor BTC dominance and altcoin flows.';
+                else brief += 'Multiple signals active. Cross-reference with market data.';
+            } else if (sorted.length === 1) {
+                brief = `Primary focus: ${sorted[0][0]} (${sorted[0][1]} mentions). Stay alert for follow-through.`;
+            } else {
+                brief = 'Scanning headlines... No dominant theme detected. Markets appear range-bound.';
             }
+            el.innerHTML = `<strong style="color:#fff">AI Brief:</strong> ${escapeHtml(brief)}`;
         }
 
-        // 8. Products
+        // --- 9. Products ---
         function renderProducts() {
-            const mql5Products = [
+            const mql5 = [
                 { title: 'G-Labs Utility Pro', price: '$49', img: 'https://c.mql5.com/31/676/g-labs-utility-pro-logo-200x200.png', link: 'mql5.html' },
                 { title: 'BTMM State Engine', price: '$149', img: 'https://c.mql5.com/31/658/btmm-state-engine-logo-200x200.png', link: 'mql5.html' },
                 { title: 'Market Structure Sentinel', price: '$99', img: 'https://c.mql5.com/31/589/market-structure-sentinel-logo-200x200.png', link: 'mql5.html' }
             ];
-            const tvProducts = [
+            const tv = [
                 { title: 'Trend Master TV', price: '$59', img: 'https://s3.tradingview.com/userpics/2631063-M2DE_big.png', link: 'tradingview.html' },
                 { title: 'Volatility Scout', price: '$89', img: 'https://s3.tradingview.com/userpics/2631063-M2DE_big.png', link: 'tradingview.html' },
                 { title: 'Divergence Hunter', price: '$69', img: 'https://s3.tradingview.com/userpics/2631063-M2DE_big.png', link: 'tradingview.html' }
             ];
-            
             let html = '';
-            for(let i=0; i<3; i++) {
-                html += createCard(mql5Products[i], 'MQL5', '#ffcf22');
-                html += createCard(tvProducts[i], 'TradingView', '#2962ff');
+            for (let i = 0; i < 3; i++) {
+                html += createCard(mql5[i], 'MQL5', '#ffcf22');
+                html += createCard(tv[i], 'TradingView', '#2962ff');
             }
             document.getElementById('product-carousel').innerHTML = html;
         }
-
         function createCard(p, plat, col) {
-            return `
-                <div class="prod-card">
-                    <img src="${p.img}" class="prod-img" onerror="this.src='favicon.svg'">
-                    <div style="flex:1;">
-                        <div style="font-size:0.8rem; font-weight:700; color:#fff;">${p.title}</div>
-                        <div style="font-size:0.65rem; color:${col}; font-weight:700;">${plat}</div>
-                        <div style="display:flex; justify-content:space-between; margin-top:5px;">
-                            <span style="font-weight:700; color:#fff;">${p.price}</span>
-                            <a href="${p.link}" style="background:${col}; color:#000; text-decoration:none; font-size:0.6rem; font-weight:700; padding:2px 6px; border-radius:3px;">VIEW</a>
-                        </div>
+            return `<div class="prod-card">
+                <img src="${p.img}" class="prod-img" onerror="this.src='favicon.svg'">
+                <div style="flex:1">
+                    <div style="font-size:0.8rem;font-weight:700;color:#fff">${p.title}</div>
+                    <div style="font-size:0.65rem;color:${col};font-weight:700">${plat}</div>
+                    <div style="display:flex;justify-content:space-between;margin-top:5px">
+                        <span style="font-weight:700;color:#fff">${p.price}</span>
+                        <a href="${p.link}" style="background:${col};color:#000;text-decoration:none;font-size:0.6rem;font-weight:700;padding:2px 6px;border-radius:3px">VIEW</a>
                     </div>
                 </div>
-            `;
+            </div>`;
         }
 
-        // Init
-        document.addEventListener('DOMContentLoaded', () => {
-            fetchEarthquakes();
-            fetchEonet();
-            fetchGDACS();
-            fetchGdelt();
-            fetchMarkets();
-            fetchFearGreed();
-            fetchWorldNews();
-            renderProducts();
-            setInterval(fetchGdelt, 60000);
-            setInterval(fetchWorldNews, 300000);
-            setInterval(fetchEarthquakes, 300000);
-            setInterval(fetchMarkets, 120000);
-            setInterval(fetchFearGreed, 3600000);
-            setInterval(fetchGDACS, 600000);
-        });
-
-        // Helper
+        // --- 10. Video channel switcher ---
         function setVideo(chan, btn) {
             const frames = {
                 'aljazeera': 'https://www.youtube.com/embed/gCNeDWCI0vo?autoplay=1&mute=1',
@@ -814,6 +789,24 @@
             document.querySelectorAll('.channel-btn').forEach(b => b.classList.remove('active'));
             if (btn) btn.classList.add('active');
         }
+
+        // --- Init ---
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchEarthquakes();
+            fetchEonet();
+            fetchGDACS();
+            fetchGdelt();
+            fetchMarkets();
+            fetchFearGreed();
+            fetchWorldNews();
+            renderProducts();
+            setInterval(fetchGdelt, 60000);
+            setInterval(fetchEarthquakes, 300000);
+            setInterval(fetchGDACS, 600000);
+            setInterval(fetchMarkets, 120000);
+            setInterval(fetchFearGreed, 3600000);
+            setInterval(fetchWorldNews, 300000);
+        });
     </script>
 </body>
 </html>
