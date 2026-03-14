@@ -1,1837 +1,628 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BTMM State Engine Pro — TradingView Welcome Pack</title>
-<meta name="description" content="BTMM State Engine Pro TradingView welcome pack with installation, layout, and feature explanations.">
-<meta name="robots" content="index, follow">
-<link rel="canonical" href="https://www.g-labs.software/guides/BTMM_State_Engine_Pro_TV_Welcome_Pack.html">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://www.g-labs.software/guides/BTMM_State_Engine_Pro_TV_Welcome_Pack.html">
-<meta property="og:title" content="BTMM State Engine Pro — TradingView Welcome Pack">
-<meta property="og:description" content="BTMM State Engine Pro TradingView welcome pack with installation, layout, and feature explanations.">
-<meta property="og:image" content="https://www.g-labs.software/assets/images/btmm-state-engine-pro-lifetime.png">
-<meta property="twitter:card" content="summary_large_image">
-<meta property="twitter:url" content="https://www.g-labs.software/guides/BTMM_State_Engine_Pro_TV_Welcome_Pack.html">
-<meta property="twitter:title" content="BTMM State Engine Pro — TradingView Welcome Pack">
-<meta property="twitter:description" content="BTMM State Engine Pro TradingView welcome pack with installation, layout, and feature explanations.">
-<meta property="twitter:image" content="https://www.g-labs.software/assets/images/btmm-state-engine-pro-lifetime.png">
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G-Labs | Global Intel & Trading Dashboard</title>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HC5C84CZPP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-HC5C84CZPP');
+    </script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <style>
+        :root{--bg:#05080f;--bg2:#0a0e17;--bg3:#131722;--bg4:#1e222d;--border:#2a2e39;--text:#d1d4dc;--dim:#787b86;--white:#fff;--blue:#2962ff;--green:#26a69a;--red:#ef5350;--yellow:#ffcf22;--orange:#ff7043}
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+        ::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 
-  :root {
-    --blue: #1E90FF;
-    --dark-blue: #0A1929;
-    --navy: #1A365D;
-    --gold: #FFD700;
-    --red: #DC3545;
-    --green: #28A745;
-    --orange: #FF8C00;
-    --cyan: #00CED1;
-    --purple: #7B68EE;
-    --gray: #6C757D;
-    --light: #F8F9FA;
-    --card: #FFFFFF;
-    --text: #1A1A2E;
-    --text-light: #4A5568;
-    --border: #E2E8F0;
-    --grad-hero: linear-gradient(135deg, #0A1929 0%, #1A365D 50%, #0A1929 100%);
-    --grad-blue: linear-gradient(135deg, #1E90FF 0%, #00CED1 100%);
-    --grad-gold: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-    --grad-tv: linear-gradient(135deg, #131722 0%, #1E222D 50%, #131722 100%);
-  }
+        /* Header */
+        header{background:var(--bg4);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;justify-content:space-between;height:44px;position:sticky;top:0;z-index:100}
+        .logo{font-weight:800;font-size:1.1rem;color:var(--white);text-decoration:none;display:flex;align-items:center;gap:8px}.logo span{color:var(--blue)}
+        .main-nav{display:flex;gap:16px;height:100%;align-items:center}
+        .main-nav a{text-decoration:none;color:var(--dim);font-weight:600;font-size:.75rem;transition:color .2s;height:100%;display:flex;align-items:center;padding:0 4px;border-bottom:2px solid transparent}
+        .main-nav a:hover,.main-nav a.active{color:var(--white);border-color:var(--blue)}
+        .market-strip{display:flex;gap:12px;font-size:.7rem;align-items:center;overflow:hidden;white-space:nowrap;max-width:40%}
+        .ms-item{display:flex;gap:4px;color:var(--white);font-weight:600}
+        .ms-up{color:var(--green)}.ms-down{color:var(--red)}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* Layout */
+        .container{display:flex;flex-direction:column;height:calc(100vh - 44px)}
+        .top-section{display:grid;grid-template-columns:300px 1fr;height:60%;min-height:400px;border-bottom:1px solid var(--border)}
+        @media(max-width:900px){.top-section{grid-template-columns:1fr;height:auto;grid-template-rows:400px 400px}}
 
-  body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    color: var(--text);
-    line-height: 1.7;
-    background: #B0B0B0;
-    font-size: 13px;
-  }
+        /* Sidebar */
+        .sidebar{background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+        .panel-head{padding:8px 12px;background:var(--bg3);border-bottom:1px solid var(--border);font-weight:700;font-size:.75rem;display:flex;justify-content:space-between;align-items:center;color:var(--white)}
+        .panel-tabs{display:flex;background:var(--bg4);border-bottom:1px solid var(--border)}
+        .panel-tab{flex:1;text-align:center;padding:6px;font-size:.7rem;cursor:pointer;color:var(--dim);border-bottom:2px solid transparent}
+        .panel-tab.active{color:var(--blue);border-color:var(--blue);background:var(--bg2)}
+        .feed-filters{display:flex;gap:4px;padding:6px;overflow-x:auto;background:var(--bg2);border-bottom:1px solid var(--border)}
+        .feed-btn{padding:2px 8px;border-radius:10px;background:var(--bg4);color:var(--dim);border:1px solid var(--border);font-size:.65rem;cursor:pointer;white-space:nowrap}
+        .feed-btn.active{background:rgba(41,98,255,.2);color:var(--blue);border-color:var(--blue)}
+        .feed-list{flex:1;overflow-y:auto}
+        .feed-item{padding:8px 12px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .2s}
+        .feed-item:hover{background:var(--bg3)}
+        .feed-meta{display:flex;justify-content:space-between;font-size:.6rem;color:var(--dim);margin-bottom:2px}
+        .feed-tag{padding:1px 4px;border-radius:2px;font-weight:700}
+        .tag-intel{color:var(--blue);background:rgba(41,98,255,.1)}
+        .tag-conflict{color:var(--red);background:rgba(239,83,80,.1)}
+        .tag-market{color:var(--green);background:rgba(38,166,154,.1)}
+        .tag-energy{color:var(--orange);background:rgba(255,112,67,.1)}
+        .tag-crypto{color:var(--yellow);background:rgba(255,207,34,.1)}
+        .feed-title{font-size:.75rem;line-height:1.3;color:var(--text)}
+        .feed-title a{color:inherit;text-decoration:none}.feed-title a:hover{text-decoration:underline}
 
-  .page {
-    width: 210mm;
-    min-height: 297mm;
-    margin: 20px auto;
-    background: white;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    padding: 20mm 18mm;
-    position: relative;
-    overflow: hidden;
-  }
-  .page.dark {
-    background: var(--dark-blue);
-    color: white;
-  }
-  .page.dark h2 { color: var(--gold); }
-  .page.dark p, .page.dark li { color: rgba(255,255,255,0.85); }
-  .page.dark td { color: rgba(255,255,255,0.85); }
-  .page.tv {
-    background: var(--grad-tv);
-    color: #D1D4DC;
-  }
-  .page.tv h2 { color: #2962FF; }
-  .page.tv h3 { color: #D1D4DC; }
-  .page.accent {
-    background: linear-gradient(135deg, #EBF4FF 0%, #F0F7FF 100%);
-  }
-  .page.cover {
-    background: var(--grad-hero);
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 15mm;
-  }
+        /* Map */
+        .map-area{position:relative;background:#000;width:100%;height:100%}
+        #map{width:100%;height:100%}
 
-  @media print {
-    body { background: white; margin: 0; }
-    .page {
-      width: 100%;
-      min-height: auto;
-      margin: 0;
-      box-shadow: none;
-      padding: 15mm 18mm;
-      page-break-after: always;
-    }
-    .page:last-child { page-break-after: auto; }
-    .diagram-box, .feature-grid, .signal-card, .callout, table, .scanner-mock, .step, .config-card, .alert-card {
-      break-inside: avoid;
-      page-break-inside: avoid;
-    }
-    h2, h3, h4 { break-after: avoid; page-break-after: avoid; }
-  }
-  @page { size: A4; margin: 0; }
+        /* Dashboard */
+        .dash-section{flex:1;background:var(--bg);overflow-y:auto;padding:12px}
+        .dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+        .card{background:var(--bg2);border:1px solid var(--border);border-radius:4px;overflow:hidden;display:flex;flex-direction:column;min-height:220px}
+        .card-full{grid-column:1/-1}
+        .card-head{padding:8px 12px;background:var(--bg3);border-bottom:1px solid var(--border);font-size:.75rem;font-weight:700;color:var(--white);display:flex;justify-content:space-between;align-items:center}
+        .badge{font-size:.6rem;padding:2px 6px;border-radius:3px;font-weight:700}
+        .card-body{flex:1;overflow-y:auto;position:relative}
 
-  /* HERO */
-  .hero { text-align: center; }
-  .hero-badge {
-    display: inline-block;
-    background: rgba(255,215,0,0.15);
-    border: 1px solid rgba(255,215,0,0.4);
-    color: var(--gold);
-    padding: 8px 24px;
-    border-radius: 50px;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 30px;
-  }
-  .hero h1 {
-    font-size: 48px;
-    font-weight: 900;
-    letter-spacing: -1px;
-    background: var(--grad-blue);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 16px;
-    line-height: 1.1;
-  }
-  .hero .subtitle {
-    font-size: 20px;
-    color: rgba(255,255,255,0.7);
-    font-weight: 300;
-    margin-bottom: 40px;
-  }
-  .hero .version-row {
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  .hero .version-pill {
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.15);
-    padding: 10px 24px;
-    border-radius: 8px;
-    font-size: 13px;
-    color: rgba(255,255,255,0.6);
-  }
-  .hero .version-pill strong { color: var(--cyan); }
-  .hero .tv-badge {
-    display: inline-block;
-    background: rgba(41,98,255,0.2);
-    border: 1px solid rgba(41,98,255,0.4);
-    color: #5B9CF6;
-    padding: 6px 20px;
-    border-radius: 50px;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-bottom: 20px;
-  }
+        /* Crypto */
+        .crypto-row{display:grid;grid-template-columns:24px 1fr auto auto auto;gap:8px;padding:6px 10px;align-items:center;border-bottom:1px solid var(--border);font-size:.75rem}
+        .crypto-icon{width:20px;height:20px;border-radius:50%}
+        .crypto-name{font-weight:700;color:var(--white)}
+        .crypto-sym{font-size:.6rem;color:var(--dim)}
 
-  /* TYPOGRAPHY */
-  h2 {
-    font-size: 26px;
-    font-weight: 800;
-    margin-bottom: 12px;
-    color: var(--dark-blue);
-    letter-spacing: -0.5px;
-  }
-  h3 {
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 10px;
-    color: var(--navy);
-  }
-  h4 {
-    font-size: 15px;
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: var(--text);
-  }
-  p { margin-bottom: 12px; }
-  ul, ol { margin-bottom: 12px; padding-left: 24px; }
-  li { margin-bottom: 4px; }
-  code {
-    font-family: 'JetBrains Mono', monospace;
-    background: rgba(30,144,255,0.08);
-    padding: 2px 7px;
-    border-radius: 4px;
-    font-size: 12px;
-    color: var(--blue);
-  }
-  .page.dark code, .page.tv code {
-    background: rgba(255,255,255,0.1);
-    color: var(--cyan);
-  }
+        /* Forex */
+        .fx-row{display:flex;justify-content:space-between;padding:6px 10px;border-bottom:1px solid var(--border);font-size:.75rem}
+        .fx-pair{color:var(--blue);font-weight:700}
+        .fx-rate{color:var(--white);font-weight:700}
 
-  /* SECTION LABEL */
-  .section-num {
-    display: inline-block;
-    background: var(--grad-blue);
-    color: white;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 4px 14px;
-    border-radius: 20px;
-    letter-spacing: 1px;
-    margin-bottom: 14px;
-  }
-  .page.dark .section-num { background: var(--grad-gold); color: var(--dark-blue); }
-  .page.tv .section-num { background: linear-gradient(135deg, #2962FF, #5B9CF6); color: white; }
+        /* Market Snapshot */
+        .mkt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px}
+        .mkt-tile{background:var(--bg3);padding:8px;border-radius:4px;text-align:center;border:1px solid var(--border)}
+        .mkt-sym{font-size:.7rem;color:var(--dim);font-weight:700}
+        .mkt-price{font-size:.9rem;font-weight:700;color:var(--white);margin:2px 0}
+        .mkt-chg{font-size:.65rem;font-weight:600}
 
-  /* FEATURE GRID */
-  .feature-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-    margin: 16px 0;
-  }
-  .feature-card {
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 16px;
-    transition: box-shadow 0.2s;
-  }
-  .page.dark .feature-card {
-    background: rgba(255,255,255,0.05);
-    border-color: rgba(255,255,255,0.1);
-  }
-  .page.tv .feature-card {
-    background: rgba(255,255,255,0.04);
-    border-color: rgba(255,255,255,0.08);
-  }
-  .feature-card .icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    margin-bottom: 10px;
-  }
-  .feature-card h4 { font-size: 14px; margin-bottom: 6px; }
-  .feature-card p { font-size: 12px; color: var(--text-light); margin: 0; }
-  .page.dark .feature-card h4 { color: white; }
-  .page.dark .feature-card p { color: rgba(255,255,255,0.6); }
-  .page.tv .feature-card h4 { color: #D1D4DC; }
-  .page.tv .feature-card p { color: rgba(209,212,220,0.6); }
+        /* Polymarket */
+        .pm-item{padding:8px 10px;border-bottom:1px solid var(--border)}
+        .pm-title{font-size:.75rem;margin-bottom:4px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .pm-bar{height:6px;background:var(--bg4);border-radius:3px;overflow:hidden;margin-bottom:2px}
+        .pm-fill{height:100%;font-size:5px;line-height:6px;text-align:right;padding-right:2px;color:#000;font-weight:700}
+        .pm-meta{display:flex;justify-content:space-between;font-size:.6rem;color:var(--dim)}
 
-  /* TABLES */
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 14px 0;
-    font-size: 12px;
-  }
-  th {
-    background: var(--dark-blue);
-    color: var(--gold);
-    padding: 10px 12px;
-    text-align: left;
-    font-weight: 600;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  td {
-    padding: 8px 12px;
-    border-bottom: 1px solid var(--border);
-    vertical-align: top;
-  }
-  tr:nth-child(even) td { background: var(--light); }
-  .page.dark td { border-color: rgba(255,255,255,0.08); }
-  .page.dark tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+        /* AI Brief */
+        .ai-brief{padding:12px;font-size:.75rem;line-height:1.5;color:var(--text)}
 
-  /* TV-STYLE TABLE */
-  .tv-table th {
-    background: #131722;
-    color: #5B9CF6;
-    border-bottom: 2px solid #2962FF;
-  }
-  .tv-table td {
-    border-color: rgba(255,255,255,0.06);
-  }
-  .tv-table tr:nth-child(even) td {
-    background: rgba(255,255,255,0.02);
-  }
+        /* Video */
+        .vid-tabs{display:flex;background:var(--bg3);border-bottom:1px solid var(--border);overflow-x:auto}
+        .vid-btn{padding:6px 12px;background:none;border:none;color:var(--dim);font-size:.7rem;font-weight:700;cursor:pointer;white-space:nowrap}
+        .vid-btn.active{color:var(--white);background:var(--blue)}
+        .vid-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:8px;padding:8px}
+        .vid-item{aspect-ratio:16/9;background:#000;position:relative}
+        .vid-item iframe{width:100%;height:100%;border:none}
+        .vid-label{position:absolute;top:4px;left:4px;background:rgba(0,0,0,.7);color:var(--white);padding:2px 6px;font-size:.6rem;border-radius:2px;pointer-events:none}
 
-  /* CALLOUT */
-  .callout {
-    border-radius: 10px;
-    padding: 16px 20px;
-    margin: 16px 0;
-    display: flex;
-    gap: 14px;
-    align-items: flex-start;
-  }
-  .callout.tip { background: rgba(40,167,69,0.08); border-left: 4px solid var(--green); }
-  .callout.warn { background: rgba(255,140,0,0.08); border-left: 4px solid var(--orange); }
-  .callout.info { background: rgba(30,144,255,0.08); border-left: 4px solid var(--blue); }
-  .callout.danger { background: rgba(220,53,69,0.08); border-left: 4px solid var(--red); }
-  .page.dark .callout.tip { background: rgba(40,167,69,0.12); }
-  .page.dark .callout.warn { background: rgba(255,140,0,0.12); }
-  .page.dark .callout.info { background: rgba(30,144,255,0.12); }
-  .callout .callout-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
-  .callout .callout-body { font-size: 13px; }
-  .callout .callout-body strong { display: block; margin-bottom: 4px; }
+        /* Footer */
+        footer{background:var(--bg4);border-top:1px solid var(--border);padding:12px;text-align:center;font-size:.65rem;color:var(--dim)}
+        footer a{color:var(--blue);text-decoration:none}
 
-  /* SIGNAL CARDS */
-  .signal-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin: 14px 0;
-  }
-  .signal-card {
-    border-radius: 10px;
-    padding: 16px;
-    color: white;
-  }
-  .signal-card.buy { background: linear-gradient(135deg, #28A745, #20C997); }
-  .signal-card.sell { background: linear-gradient(135deg, #DC3545, #FF6B6B); }
-  .signal-card.id50 { background: linear-gradient(135deg, #00CED1, #1E90FF); }
-  .signal-card.safety { background: linear-gradient(135deg, #FFD700, #FF8C00); color: var(--dark-blue); }
-  .signal-card h4 { font-size: 15px; color: inherit; margin-bottom: 6px; }
-  .signal-card p { font-size: 12px; margin: 0; opacity: 0.9; }
+        /* Ticker */
+        .ticker-bar{background:var(--blue);color:var(--white);height:24px;display:flex;align-items:center;overflow:hidden;font-size:.7rem;font-weight:700;white-space:nowrap;position:relative}
+        .ticker-label{background:#000;padding:0 10px;height:100%;display:flex;align-items:center;z-index:2;box-shadow:2px 0 5px rgba(0,0,0,.3)}
+        .ticker-content{display:inline-block;padding-left:100%;animation:tick 60s linear infinite}
+        @keyframes tick{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
 
-  /* DIAGRAM BOX */
-  .diagram-box {
-    background: var(--dark-blue);
-    border-radius: 12px;
-    padding: 20px;
-    margin: 16px 0;
-    color: white;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-  .diagram-box h4 { color: var(--gold); margin-bottom: 14px; }
+        /* Products */
+        .prod-scroll{display:flex;gap:10px;padding:10px;overflow-x:auto}
+        .prod-card{min-width:200px;background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:8px;display:flex;gap:8px}
+        .prod-img{width:40px;height:40px;background:#000;border-radius:4px;object-fit:cover}
 
-  /* FLOW */
-  .flow {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin: 14px 0;
-  }
-  .flow-node {
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 600;
-    text-align: center;
-  }
-  .flow-arrow {
-    font-size: 16px;
-    color: var(--gray);
-  }
-  .page.dark .flow-arrow { color: rgba(255,255,255,0.4); }
+        /* Quakes */
+        .quake-row{padding:6px 10px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;font-size:.7rem;cursor:pointer}
+        .quake-mag{font-weight:800;color:#000;padding:1px 4px;border-radius:2px;min-width:24px;text-align:center}
 
-  /* DASHBOARD MOCK */
-  .dash-mock {
-    background: rgba(10,25,41,0.95);
-    border: 1px solid rgba(30,144,255,0.3);
-    border-radius: 10px;
-    padding: 0;
-    margin: 16px 0;
-    overflow: hidden;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-  }
-  .dash-mock .dash-header {
-    background: rgba(30,144,255,0.15);
-    padding: 8px 14px;
-    color: var(--gold);
-    font-weight: 700;
-    font-size: 12px;
-    text-align: center;
-    letter-spacing: 1px;
-  }
-  .dash-mock .dash-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 6px 14px;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-  }
-  .dash-mock .dash-row:last-child { border: none; }
-  .dash-mock .dash-label { color: rgba(255,255,255,0.5); }
-  .dash-mock .dash-value { font-weight: 600; }
-
-  /* SCANNER MOCK */
-  .scanner-mock {
-    background: rgba(10,25,41,0.95);
-    border: 1px solid rgba(30,144,255,0.3);
-    border-radius: 10px;
-    overflow: hidden;
-    margin: 16px 0;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-  }
-  .scanner-mock table {
-    margin: 0;
-    font-size: 11px;
-  }
-  .scanner-mock th {
-    background: rgba(13,71,161,0.6);
-    color: var(--gold);
-    padding: 7px 10px;
-    font-size: 10px;
-  }
-  .scanner-mock td {
-    color: #D1D4DC;
-    padding: 6px 10px;
-    border-color: rgba(255,255,255,0.06);
-  }
-  .scanner-mock tr:nth-child(even) td {
-    background: rgba(255,255,255,0.02);
-  }
-
-  /* EMA STACK */
-  .ema-stack {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin: 14px 0;
-  }
-  .ema-bar {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 8px 14px;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 600;
-  }
-  .ema-bar .ema-dot {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-  .ema-bar .ema-name { flex: 1; }
-  .ema-bar .ema-role { font-weight: 400; font-size: 11px; opacity: 0.7; }
-
-  /* COLOUR BAR INDICATOR */
-  .colour-bar {
-    height: 6px;
-    border-radius: 3px;
-    margin: 3px 0;
-  }
-
-  /* STEPS */
-  .steps {
-    counter-reset: step;
-    margin: 14px 0;
-  }
-  .step {
-    display: flex;
-    gap: 14px;
-    margin-bottom: 14px;
-    align-items: flex-start;
-  }
-  .step::before {
-    counter-increment: step;
-    content: counter(step);
-    flex-shrink: 0;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: var(--grad-blue);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 14px;
-  }
-  .step-body h4 { margin-bottom: 4px; }
-  .step-body p { font-size: 12px; margin: 0; }
-
-  /* CONFIG CARDS */
-  .config-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin: 14px 0;
-  }
-  .config-card {
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 14px;
-    background: white;
-  }
-  .page.dark .config-card {
-    background: rgba(255,255,255,0.04);
-    border-color: rgba(255,255,255,0.08);
-  }
-  .config-card .config-name {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    color: var(--blue);
-    font-weight: 600;
-    margin-bottom: 4px;
-  }
-  .config-card .config-default {
-    font-size: 11px;
-    color: var(--gray);
-    margin-bottom: 6px;
-  }
-  .config-card .config-desc {
-    font-size: 12px;
-    color: var(--text-light);
-    margin: 0;
-  }
-  .page.dark .config-card .config-name { color: var(--cyan); }
-  .page.dark .config-card .config-desc { color: rgba(255,255,255,0.6); }
-
-  /* ALERT CARDS */
-  .alert-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 10px;
-    margin: 14px 0;
-  }
-  .alert-card {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 14px;
-    border-radius: 8px;
-    border: 1px solid rgba(255,255,255,0.08);
-    background: rgba(255,255,255,0.03);
-  }
-  .alert-card .alert-icon {
-    font-size: 18px;
-    flex-shrink: 0;
-  }
-  .alert-card .alert-title {
-    font-weight: 600;
-    font-size: 13px;
-    color: white;
-  }
-  .alert-card .alert-msg {
-    font-size: 11px;
-    color: rgba(255,255,255,0.5);
-    font-family: 'JetBrains Mono', monospace;
-  }
-
-  /* COMPARISON TABLE */
-  .compare-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin: 16px 0;
-  }
-  .compare-col {
-    border-radius: 10px;
-    padding: 16px;
-    border: 1px solid var(--border);
-  }
-  .compare-col.indicator { border-color: var(--blue); }
-  .compare-col.scanner { border-color: var(--orange); }
-  .compare-col h4 { margin-bottom: 10px; }
-  .compare-col ul { font-size: 12px; }
-
-  /* ISSUE CARD */
-  .issue-card {
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 16px;
-    margin-bottom: 12px;
-  }
-  .issue-card h4 { color: var(--red); margin-bottom: 6px; }
-  .issue-card .fix { color: var(--green); font-weight: 600; font-size: 12px; }
-
-  /* SVG DIAGRAM */
-  .svg-diagram {
-    margin: 14px 0;
-    text-align: center;
-  }
-
-  /* FOOTER */
-  .footer {
-    text-align: center;
-    padding: 30px 20px;
-    color: rgba(255,255,255,0.3);
-    font-size: 11px;
-  }
-  .footer a { color: var(--blue); text-decoration: none; }
-  .footer .footer-brand {
-    font-size: 16px;
-    font-weight: 700;
-    color: rgba(255,255,255,0.5);
-    margin-bottom: 8px;
-  }
-
-  /* CONTACT GRID */
-  .contact-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 12px;
-    margin: 16px 0;
-  }
-  .contact-card {
-    text-align: center;
-    padding: 16px 12px;
-    border-radius: 10px;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
-  }
-  .contact-card .c-icon { font-size: 24px; margin-bottom: 8px; }
-  .contact-card .c-label { font-size: 11px; color: rgba(255,255,255,0.4); margin-bottom: 4px; }
-  .contact-card .c-value { font-size: 13px; font-weight: 600; color: var(--cyan); }
-  .contact-card .c-value a { color: var(--cyan); text-decoration: none; }
-
-  /* CHEAT SHEET */
-  .cheat-sheet {
-    background: var(--dark-blue);
-    border-radius: 12px;
-    padding: 20px;
-    margin: 16px 0;
-    color: white;
-  }
-  .cheat-sheet h3 { color: var(--gold); margin-bottom: 14px; text-align: center; }
-  .cheat-cols {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
-  .cheat-cols ul { font-size: 12px; list-style: none; padding: 0; }
-  .cheat-cols li { padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
-  .cheat-cols li:last-child { border: none; }
-</style>
+        /* News */
+        .news-item{padding:6px 10px;border-bottom:1px solid var(--border);font-size:.75rem}
+        .news-src{font-size:.6rem;font-weight:700;margin-bottom:2px}
+        .news-title a{color:var(--text);text-decoration:none}.news-title a:hover{color:var(--blue)}
+    </style>
 </head>
 <body>
 
-<!-- ============================================================= -->
-<!-- COVER PAGE                                                      -->
-<!-- ============================================================= -->
-<div class="page cover">
-  <div class="hero">
-    <div class="tv-badge">TradingView Edition</div>
-    <div class="hero-badge">G-Labs Software &mdash; Apex Pro Group Ltd</div>
-    <h1>BTMM State Engine Pro</h1>
-    <p class="subtitle">The Complete Market Maker Cycle Tracking System<br>for TradingView &mdash; Pine Script v6</p>
-    <div class="version-row">
-      <div class="version-pill"><strong>Indicator</strong> &mdash; Single-Chart Engine</div>
-      <div class="version-pill"><strong>Scanner</strong> &mdash; Up to 16 Pairs</div>
-      <div class="version-pill"><strong>Pine v6</strong> &mdash; 2026 Release</div>
+<header>
+    <a href="index.html" class="logo"><i class="fas fa-globe-americas"></i> G-LABS <span>INTEL</span></a>
+    <div class="market-strip" id="market-strip">
+        <div class="fg-strip" style="display:flex;gap:6px;align-items:center;margin-right:12px;padding-right:12px;border-right:1px solid var(--border)">
+            <span style="color:var(--dim)">FEAR & GREED:</span>
+            <span id="fg-val" style="font-weight:700;color:var(--white)">--</span>
+            <div style="width:40px;height:4px;background:var(--bg4);border-radius:2px;overflow:hidden"><div id="fg-fill" style="width:0;height:100%;background:linear-gradient(90deg,var(--red),var(--yellow),var(--green))"></div></div>
+            <span id="fg-label" style="font-size:.6rem;color:var(--dim)"></span>
+        </div>
+        <!-- JS Injected Tickers -->
     </div>
-    <div style="margin-top:40px; color:rgba(255,255,255,0.35); font-size:12px;">
-      Welcome Pack &amp; Complete User Guide<br>
-      &copy; 2026 G-Labs Software. All rights reserved.
-    </div>
-  </div>
+    <nav class="main-nav">
+        <a href="index.html">HOME</a>
+        <a href="global_intel.html" class="active">INTEL</a>
+        <a href="mql5.html">ALGOS</a>
+        <a href="tradingview.html">CHARTS</a>
+    </nav>
+</header>
+
+<div class="ticker-bar">
+    <div class="ticker-label">LIVE WIRE</div>
+    <div class="ticker-content" id="ticker-content">Initializing global surveillance...</div>
 </div>
 
-<!-- ============================================================= -->
-<!-- PAGE 2: WHAT'S INCLUDED                                        -->
-<!-- ============================================================= -->
-<div class="page">
-  <div class="section-num">PART 1</div>
-  <h2>What You Get</h2>
-  <p>The BTMM State Engine Pro for TradingView is a <strong>two-script system</strong> that brings institutional-grade Market Maker cycle tracking directly onto TradingView charts. No broker plugins, no external software &mdash; just add the indicators and trade.</p>
+<div class="container">
+    <div class="top-section">
+        <!-- Sidebar Feed -->
+        <div class="sidebar">
+            <div class="panel-head"><span><i class="fas fa-satellite-dish"></i> INTELLIGENCE STREAM</span><span class="badge" style="background:rgba(239,83,80,.1);color:var(--red)">LIVE</span></div>
+            <div class="panel-tabs">
+                <div class="panel-tab active" data-tab="intel" onclick="switchTab('intel',this)">INTEL</div>
+                <div class="panel-tab" data-tab="world" onclick="switchTab('world',this)">WORLD</div>
+                <div class="panel-tab" data-tab="markets" onclick="switchTab('markets',this)">MARKETS</div>
+            </div>
+            <div class="feed-filters" id="feed-filters">
+                <button class="feed-btn active" data-preset="default" onclick="filterFeed('default')">ALL</button>
+                <button class="feed-btn" data-preset="conflict" onclick="filterFeed('conflict')">CONFLICT</button>
+                <button class="feed-btn" data-preset="economy" onclick="filterFeed('economy')">ECON</button>
+                <button class="feed-btn" data-preset="crypto" onclick="filterFeed('crypto')">CRYPTO</button>
+            </div>
+            <div class="feed-list" id="feed-list">
+                <div style="padding:20px;text-align:center;color:var(--dim)">Connecting to satellite feed...</div>
+            </div>
+        </div>
 
-  <div class="compare-grid">
-    <div class="compare-col indicator">
-      <h4 style="color:var(--blue);">BTMM State Engine Pro [G-Labs]</h4>
-      <p style="font-size:12px; color:var(--text-light); margin-bottom:10px;">The main indicator &mdash; applied to any single chart.</p>
-      <ul>
-        <li>Room-bound staircase level counting (L1&rarr;L2+)</li>
-        <li>Two-stage Peak Formation (pending &rarr; confirmed)</li>
-        <li>Retroactive room recolouring on PF confirmation</li>
-        <li>Stale room detection &amp; cycle reset</li>
-        <li>Asian Range box with Water (50 EMA) midline</li>
-        <li>5 EMAs (5, 13, 50, 200, 800) with custom colours</li>
-        <li>T1 / T2 / ID50 / Safety entry signals</li>
-        <li>Vector Candle + TDI + Cycle Direction filters</li>
-        <li>Yesterday High/Low &amp; Psychological levels</li>
-        <li>ADR tracking with exhaustion warnings</li>
-        <li>Kill Zone time strips (London &amp; NY)</li>
-        <li>Pro-styled dashboard with 12 data rows</li>
-        <li>30+ alert conditions</li>
-      </ul>
+        <!-- Map -->
+        <div class="map-area"><div id="map"></div></div>
     </div>
-    <div class="compare-col scanner">
-      <h4 style="color:var(--orange);">BTMM Multi-Pair Scanner Pro [G-Labs]</h4>
-      <p style="font-size:12px; color:var(--text-light); margin-bottom:10px;">The scanner &mdash; monitors up to 16 pairs from one chart.</p>
-      <ul>
-        <li>Two banks of 8 pairs (Bank 2 toggleable)</li>
-        <li>Full BTMM state engine per pair via <code>request.security()</code></li>
-        <li>Level, PF status, direction, phase for every pair</li>
-        <li>Real-time signal detection (T1/T2/ID50/Safety)</li>
-        <li>L3+ shift warning column</li>
-        <li>Stale detection per pair</li>
-        <li>ADR pips, Range pips &amp; ADR% columns</li>
-        <li>Cycle direction filter built-in</li>
-        <li>Potential reversal detection</li>
-        <li>Branded pro-styled dashboard table</li>
-        <li>Per-pair detailed runtime alerts</li>
-        <li>Kill Zone status footer</li>
-      </ul>
-    </div>
-  </div>
 
-  <div class="callout info">
-    <div class="callout-icon">&#x1F4CB;</div>
-    <div class="callout-body">
-      <strong>File Names</strong>
-      <code>BTMM_State_Engine_Pro_TV.pine</code> &mdash; The Indicator<br>
-      <code>BTMM_Multi_Pair_Scanner_Pro_TV.pine</code> &mdash; The Scanner
+    <!-- Dashboard Section -->
+    <div class="dash-section">
+        <div class="dash-grid">
+
+            <!-- Crypto Prices -->
+            <div class="card">
+                <div class="card-head"><span><i class="fas fa-coins"></i> CRYPTO MARKETS</span><span class="badge" style="background:rgba(38,166,154,.15);color:var(--green)">LIVE</span></div>
+                <div class="card-body" id="crypto-body"><div style="text-align:center;color:var(--dim);padding:20px">Loading...</div></div>
+            </div>
+
+            <!-- Forex -->
+            <div class="card">
+                <div class="card-head"><span><i class="fas fa-exchange-alt"></i> FOREX MAJORS</span><span class="badge" style="background:rgba(41,98,255,.15);color:var(--blue)">FX</span></div>
+                <div class="card-body" id="forex-body"><div style="text-align:center;color:var(--dim);padding:20px">Loading...</div></div>
+            </div>
+
+            <!-- Market Snapshot -->
+            <div class="card">
+                <div class="card-head"><span><i class="fas fa-chart-line"></i> INDICES & ETFs</span><span id="mkt-updated" style="font-size:.55rem;color:var(--dim)">--</span></div>
+                <div class="card-body" id="market-body"><div style="text-align:center;color:var(--dim);padding:20px">Loading...</div></div>
+            </div>
+
+            <!-- Prediction Markets -->
+            <div class="card">
+                <div class="card-head"><span><i class="fas fa-poll"></i> PREDICTION MARKETS</span><span class="badge" style="background:rgba(255,207,34,.15);color:var(--yellow)">POLYMARKET</span></div>
+                <div class="card-body" id="polymarket-body"><div style="text-align:center;color:var(--dim);padding:20px">Loading...</div></div>
+            </div>
+
+            <!-- AI Strategic Brief -->
+            <div class="card">
+                <div class="card-head"><span><i class="fas fa-brain"></i> AI STRATEGIC BRIEF</span><span class="badge" style="background:rgba(255,207,34,.15);color:var(--yellow)">HEURISTIC</span></div>
+                <div class="card-body" id="ai-body">
+                    <div class="ai-brief" id="ai-brief">Analyzing headlines...</div>
+                </div>
+            </div>
+
+            <!-- Seismic Monitor -->
+            <div class="card">
+                <div class="card-head"><span><i class="fas fa-house-damage"></i> SEISMIC MONITOR</span><span class="badge" style="background:rgba(239,83,80,.15);color:var(--red)">USGS</span></div>
+                <div class="card-body" id="quake-body"><div style="text-align:center;color:var(--dim);padding:20px">Loading...</div></div>
+            </div>
+
+            <!-- World News -->
+            <div class="card">
+                <div class="card-head"><span><i class="fas fa-globe"></i> WORLD NEWS WIRE</span><span class="badge" style="background:rgba(41,98,255,.15);color:var(--blue)">35+ SOURCES</span></div>
+                <div class="card-body" id="worldnews-body"><div style="text-align:center;color:var(--dim);padding:20px">Loading...</div></div>
+            </div>
+
+            <!-- Market News -->
+            <div class="card">
+                <div class="card-head"><span><i class="fas fa-newspaper"></i> MARKET NEWS</span><span class="badge" style="background:rgba(38,166,154,.15);color:var(--green)">FINANCE</span></div>
+                <div class="card-body" id="marketnews-body"><div style="text-align:center;color:var(--dim);padding:20px">Loading...</div></div>
+            </div>
+
+            <!-- Live Video -->
+            <div class="card card-full">
+                <div class="card-head"><span><i class="fas fa-video"></i> LIVE SURVEILLANCE</span><span class="badge" style="background:rgba(38,166,154,.15);color:var(--green)">LIVE</span></div>
+                <div class="vid-tabs">
+                    <button class="vid-btn active" onclick="setVideo('aljazeera',this)">AL JAZEERA</button>
+                    <button class="vid-btn" onclick="setVideo('dw',this)">DW NEWS</button>
+                    <button class="vid-btn" onclick="setVideo('france24',this)">FRANCE 24</button>
+                    <button class="vid-btn" onclick="setVideo('sky',this)">SKY NEWS</button>
+                    <button class="vid-btn" onclick="setVideo('nasa',this)">NASA TV</button>
+                </div>
+                <div class="vid-grid">
+                    <div class="vid-item"><div class="vid-label">AL JAZEERA LIVE</div><iframe id="main-vid" src="https://www.youtube.com/embed/gCNeDWCI0vo?autoplay=1&mute=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen title="Live stream"></iframe></div>
+                    <div class="vid-item"><div class="vid-label">KYIV, UKRAINE</div><iframe src="https://www.youtube.com/embed/V0I5eglJMKE?autoplay=1&mute=1&controls=0" allow="autoplay"></iframe></div>
+                    <div class="vid-item"><div class="vid-label">TOKYO, JAPAN</div><iframe src="https://www.youtube.com/embed/F8MN0o6rs9A?autoplay=1&mute=1&controls=0" allow="autoplay"></iframe></div>
+                </div>
+            </div>
+
+            <!-- Algo Store -->
+            <div class="card card-full" style="min-height:auto">
+                <div class="card-head"><span><i class="fas fa-robot"></i> ALGO STORE</span></div>
+                <div class="card-body"><div id="product-carousel" class="prod-scroll"></div></div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
-<!-- ============================================================= -->
-<!-- PAGE 3: INSTALLATION                                           -->
-<!-- ============================================================= -->
-<div class="page accent">
-  <div class="section-num">PART 2</div>
-  <h2>Installation Guide</h2>
-  <p>Adding the scripts to TradingView takes under two minutes.</p>
-
-  <h3>Method 1: Pine Editor (Recommended)</h3>
-  <div class="steps">
-    <div class="step">
-      <div class="step-body">
-        <h4>Open the Pine Editor</h4>
-        <p>At the bottom of any TradingView chart, click the <strong>Pine Editor</strong> tab. If it's collapsed, click the up-arrow or the tab name to expand it.</p>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-body">
-        <h4>Paste the code</h4>
-        <p>Open <code>BTMM_State_Engine_Pro_TV.pine</code> in any text editor, select all (<strong>Ctrl+A</strong>), copy (<strong>Ctrl+C</strong>), then paste into the Pine Editor (<strong>Ctrl+V</strong>), replacing any existing code.</p>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-body">
-        <h4>Save &amp; Add to Chart</h4>
-        <p>Press <strong>Ctrl+S</strong> to save, give it a name (e.g. "BTMM State Engine Pro"), then click <strong>"Add to Chart"</strong>. The indicator will appear on your chart immediately.</p>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-body">
-        <h4>Repeat for the Scanner</h4>
-        <p>Open a <strong>new Pine Editor tab</strong> (click the "+" icon), paste <code>BTMM_Multi_Pair_Scanner_Pro_TV.pine</code>, save, and add to chart. The scanner table will appear.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="callout tip">
-    <div class="callout-icon">&#x2705;</div>
-    <div class="callout-body">
-      <strong>Pro Tip: Favourite the scripts</strong>
-      After adding, right-click the indicator name on the chart and select "Add to Favorites" (star icon). This lets you quickly re-add it to any chart from the Indicators panel.
-    </div>
-  </div>
-
-  <h3>Recommended Chart Setup</h3>
-  <table>
-    <tr><th>Setting</th><th>Recommendation</th><th>Why</th></tr>
-    <tr><td>Timeframe</td><td><strong>M15</strong> (primary), H1 for structure</td><td>Best balance of signal frequency and accuracy</td></tr>
-    <tr><td>Chart Type</td><td>Candlestick</td><td>Required for Vector Candle filter</td></tr>
-    <tr><td>Session Timezone</td><td>Match your broker's server time</td><td>Ensures Asian Range aligns correctly</td></tr>
-    <tr><td>Max Bars</td><td>At least 5000</td><td>Enough history for 800 EMA and level counting</td></tr>
-  </table>
-</div>
-
-<!-- ============================================================= -->
-<!-- PAGE 4: THE BTMM METHODOLOGY                                  -->
-<!-- ============================================================= -->
-<div class="page dark">
-  <div class="section-num">PART 3</div>
-  <h2>The BTMM Methodology</h2>
-  <p>The <strong>Beat The Market Maker</strong> (BTMM) system, pioneered by Steve Mauro, is built on one core insight: <em>Institutional market makers follow a predictable daily cycle to fill orders</em>.</p>
-
-  <h3>The Daily Cycle</h3>
-  <div class="flow">
-    <div class="flow-node" style="background:rgba(30,144,255,0.2); color:#5B9CF6; border:1px solid rgba(30,144,255,0.3);">Accumulation<br><small>Asian Session</small></div>
-    <div class="flow-arrow">&rarr;</div>
-    <div class="flow-node" style="background:rgba(220,53,69,0.2); color:#FF6B6B; border:1px solid rgba(220,53,69,0.3);">Manipulation<br><small>Stop Hunt</small></div>
-    <div class="flow-arrow">&rarr;</div>
-    <div class="flow-node" style="background:rgba(40,167,69,0.2); color:#5BDE7F; border:1px solid rgba(40,167,69,0.3);">Distribution<br><small>The Real Move</small></div>
-  </div>
-
-  <p><strong>Accumulation</strong> &mdash; During the Asian session, price trades in a tight range (the "Asian Range"). Market makers are quietly building positions.</p>
-  <p><strong>Manipulation</strong> &mdash; At London or NY open, price spikes beyond the Asian Range to trigger retail stop losses. This is the "stop hunt".</p>
-  <p><strong>Distribution</strong> &mdash; After sweeping liquidity, price reverses sharply in the opposite direction. This is the high-probability trade.</p>
-
-  <h3>Level Counting: The Room-Bound Staircase</h3>
-  <p>Each day's Asian Range creates a "room". If today's room clears above yesterday's &mdash; that's a <strong>Level Up</strong>. Rooms stack like a staircase:</p>
-
-  <div class="callout info">
-    <div class="callout-icon">&#x1F4CF;</div>
-    <div class="callout-body">
-      <strong>Close-Based Level Breaks</strong>
-      Level breaks use candle <strong>close</strong> prices, not wicks. A room only "clears" the previous room when closes confirm the move &mdash; this prevents false triggers from wick spikes and stop hunts. Core BTMM principle: the close is what matters, not the spike.
-    </div>
-  </div>
-
-  <div class="diagram-box">
-    <h4>Bullish Staircase &rarr; Peak Formation</h4>
-    <svg width="500" height="200" viewBox="0 0 500 200" style="display:block; margin:0 auto;">
-      <rect x="10" y="150" width="90" height="40" rx="6" fill="rgba(108,117,125,0.3)" stroke="#6C757D" stroke-width="2" stroke-dasharray="6"/>
-      <text x="55" y="175" text-anchor="middle" fill="#6C757D" font-size="13" font-weight="700">L1</text>
-      <rect x="120" y="110" width="90" height="40" rx="6" fill="rgba(255,215,0,0.25)" stroke="#FFD700" stroke-width="2" stroke-dasharray="6"/>
-      <text x="165" y="135" text-anchor="middle" fill="#FFD700" font-size="13" font-weight="700">L2 &#x26A0;</text>
-      <rect x="230" y="70" width="90" height="40" rx="6" fill="rgba(255,215,0,0.25)" stroke="#FFD700" stroke-width="2" stroke-dasharray="6"/>
-      <text x="275" y="95" text-anchor="middle" fill="#FFD700" font-size="13" font-weight="700">L3 &#x25B2;</text>
-      <rect x="340" y="120" width="90" height="40" rx="6" fill="rgba(220,53,69,0.25)" stroke="#DC3545" stroke-width="2" stroke-dasharray="6"/>
-      <text x="385" y="145" text-anchor="middle" fill="#DC3545" font-size="13" font-weight="700">PFH</text>
-      <line x1="100" y1="170" x2="120" y2="130" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-dasharray="4"/>
-      <line x1="210" y1="130" x2="230" y2="90" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-dasharray="4"/>
-      <line x1="320" y1="90" x2="340" y2="140" stroke="#DC3545" stroke-width="2" stroke-dasharray="4"/>
-      <text x="350" y="105" fill="#DC3545" font-size="11">Reversal!</text>
-      <text x="10" y="20" fill="rgba(255,255,255,0.3)" font-size="11">Each box = one Asian Range session</text>
-    </svg>
-  </div>
-
-  <p><strong>L1</strong> = First room (neutral direction). <strong>L2+</strong> = Peak Zone (reversal imminent). When the staircase reverses at L2 or higher &mdash; that's a <strong>Peak Formation</strong> (PFH for a top, PFL for a bottom).</p>
-</div>
-
-<!-- ============================================================= -->
-<!-- PAGE 5: ROOMS & PEAK FORMATIONS                                -->
-<!-- ============================================================= -->
-<div class="page">
-  <div class="section-num">PART 4</div>
-  <h2>Rooms, Stale Detection &amp; Peak Formations</h2>
-
-  <h3>How Rooms Work</h3>
-  <p>Each Asian Range is compared to the previous one. Rooms connect <strong>edge-to-edge</strong> with no overlap &mdash; the previous room's right edge ends exactly where the next room's left edge begins, creating a clean staircase visual. There are three possible outcomes:</p>
-
-  <table>
-    <tr><th>Outcome</th><th>Condition</th><th>Effect</th></tr>
-    <tr>
-      <td><strong style="color:var(--blue);">Clear Up</strong></td>
-      <td>Today's low &ge; Yesterday's high</td>
-      <td>Level increments, room moves UP. New dotted-border rectangle drawn in <span style="color:var(--blue);">blue</span>.</td>
-    </tr>
-    <tr>
-      <td><strong style="color:var(--red);">Clear Down</strong></td>
-      <td>Today's high &le; Yesterday's low</td>
-      <td>Level increments, room moves DOWN. New rectangle drawn in <span style="color:var(--red);">red</span>.</td>
-    </tr>
-    <tr>
-      <td><strong style="color:var(--gray);">Overlap</strong></td>
-      <td>Ranges intersect</td>
-      <td>Room expands to contain both ranges. Room box count increases. No new level.</td>
-    </tr>
-  </table>
-
-  <h3>Stale Detection</h3>
-  <p>If a room accumulates too many overlapping Asian Ranges without breaking out, price is consolidating &mdash; the cycle has stalled. When the box count reaches the <code>Stale Threshold</code> (default: 5), the room goes stale. Unlike a full reset, stale <strong>preserves the current level and direction</strong>. A new room opens at the same level with <strong style="color:var(--gray);">grey</strong> colouring, and the label shows <strong>"Lx STALE"</strong> (e.g. "L3 STALE"). Because the direction is preserved, the next opposite break correctly triggers PFH/PFL.</p>
-
-  <div class="callout warn">
-    <div class="callout-icon">&#x26A0;</div>
-    <div class="callout-body">
-      <strong>Stale = No Trade</strong>
-      When a room is STALE, the indicator stops firing entry signals. The direction is remembered, not reset &mdash; so when a breakout finally occurs, the engine picks up exactly where it left off. The Room Boxes counter in the dashboard warns you as it approaches the threshold.
-    </div>
-  </div>
-
-  <h3>Two-Stage Peak Formation</h3>
-  <p>At L2 or higher, a direction reversal triggers a <strong>two-stage confirmation</strong>:</p>
-
-  <div class="flow">
-    <div class="flow-node" style="background:rgba(255,215,0,0.15); color:var(--gold); border:1px solid rgba(255,215,0,0.3);">L2+ Reached</div>
-    <div class="flow-arrow">&rarr;</div>
-    <div class="flow-node" style="background:rgba(255,140,0,0.15); color:var(--orange); border:1px solid rgba(255,140,0,0.3);">PFH? / PFL?<br><small>Pending</small></div>
-    <div class="flow-arrow">&rarr;</div>
-    <div class="flow-node" style="background:rgba(220,53,69,0.15); color:var(--red); border:1px solid rgba(220,53,69,0.3);">Next Clear Break</div>
-    <div class="flow-arrow">&rarr;</div>
-    <div class="flow-node" style="background:rgba(40,167,69,0.15); color:var(--green); border:1px solid rgba(40,167,69,0.3);">PFH / PFL<br><small>Confirmed!</small></div>
-  </div>
-
-  <p>PF labels use a simplified format: pending peaks show as <strong>PFH?</strong> / <strong>PFL?</strong>, and confirmed peaks as <strong>PFH &#x2713;</strong> / <strong>PFL &#x2713;</strong> &mdash; no level numbers in the labels.</p>
-
-  <p>Confirmation uses <strong>close-based prices</strong>: a PFL? is confirmed when the next room's lowest close exceeds the peak room's highest close, and a PFH? is confirmed when the next room's highest close falls below the peak room's lowest close. On confirmation, all rooms in the old cycle are <strong>retroactively recoloured</strong> &mdash; blue rooms turn red (PFH) or vice versa &mdash; giving you a clear visual history of where the cycle peaked.</p>
-
-  <div class="callout info">
-    <div class="callout-icon">&#x1F504;</div>
-    <div class="callout-body">
-      <strong>Peak Resets</strong>
-      After an initial peak (PFH/PFL), even L1 reversals create new peak references. The indicator tracks <code>lastPFHHigh</code> and <code>lastPFLLow</code> to stay alert during shallow pullbacks. Peak resets don't need L2+ &mdash; they only require an existing confirmed peak.
-    </div>
-  </div>
-</div>
-
-<!-- ============================================================= -->
-<!-- PAGE 6: EMAs & FILTERS                                         -->
-<!-- ============================================================= -->
-<div class="page tv">
-  <div class="section-num">PART 5</div>
-  <h2>The Five EMAs</h2>
-  <p>The State Engine plots five Exponential Moving Averages, each with a specific role in the BTMM framework:</p>
-
-  <div class="ema-stack">
-    <div class="ema-bar" style="background:rgba(255,215,0,0.1); border:1px solid rgba(255,215,0,0.2);">
-      <div class="ema-dot" style="background:#FFD700;"></div>
-      <div class="ema-name" style="color:#FFD700;">EMA 5 (Fast)</div>
-      <div class="ema-role">Signal line &mdash; crosses EMA 13 to trigger entries</div>
-    </div>
-    <div class="ema-bar" style="background:rgba(220,53,69,0.1); border:1px solid rgba(220,53,69,0.2);">
-      <div class="ema-dot" style="background:#DC3545;"></div>
-      <div class="ema-name" style="color:#DC3545;">EMA 13 (Slow)</div>
-      <div class="ema-role">Trend confirmation line &mdash; partner to EMA 5</div>
-    </div>
-    <div class="ema-bar" style="background:rgba(0,206,209,0.1); border:1px solid rgba(0,206,209,0.2);">
-      <div class="ema-dot" style="background:#00CED1;"></div>
-      <div class="ema-name" style="color:#00CED1;">EMA 50 (Water)</div>
-      <div class="ema-role">Key pullback level for ID50 &amp; Safety entries — the "Water line"</div>
-    </div>
-    <div class="ema-bar" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12);">
-      <div class="ema-dot" style="background:white;"></div>
-      <div class="ema-name" style="color:white;">EMA 200 (Mayo)</div>
-      <div class="ema-role">Major trend filter &mdash; above = bullish, below = bearish</div>
-    </div>
-    <div class="ema-bar" style="background:rgba(123,104,238,0.1); border:1px solid rgba(123,104,238,0.2);">
-      <div class="ema-dot" style="background:#7B68EE;"></div>
-      <div class="ema-name" style="color:#7B68EE;">EMA 800 (Blueberry)</div>
-      <div class="ema-role">Macro trend &mdash; institutional bias anchor</div>
-    </div>
-  </div>
-
-  <h3 style="margin-top:20px;">Signal Filters</h3>
-  <p>Three optional filters are applied before any signal fires:</p>
-
-  <table class="tv-table">
-    <tr><th>Filter</th><th>Logic</th><th>Purpose</th></tr>
-    <tr>
-      <td><strong style="color:#00CED1;">Vector Candle</strong></td>
-      <td>Current candle body &gt; 1.2&times; average of last 5</td>
-      <td>Ensures momentum behind the signal</td>
-    </tr>
-    <tr>
-      <td><strong style="color:#7B68EE;">TDI / RSI</strong></td>
-      <td>RSI signal line vs. trade line, plus zone check (30/50/70)</td>
-      <td>Confirms internal momentum alignment</td>
-    </tr>
-    <tr>
-      <td><strong style="color:#FFD700;">Cycle Direction</strong></td>
-      <td>Only BUY in UP cycles, only SELL in DOWN cycles (unless PF detected)</td>
-      <td>Prevents counter-trend signals in active trends</td>
-    </tr>
-  </table>
-
-  <div class="callout tip" style="background:rgba(40,167,69,0.1); border-color:#28A745;">
-    <div class="callout-icon">&#x2705;</div>
-    <div class="callout-body" style="color:#D1D4DC;">
-      <strong style="color:#28A745;">All filters are toggleable.</strong>
-      You can enable/disable each filter independently in the indicator settings. Start with all three ON for the highest-quality signals, then experiment.
-    </div>
-  </div>
-</div>
-
-<!-- ============================================================= -->
-<!-- PAGE 7: ENTRY SIGNALS                                          -->
-<!-- ============================================================= -->
-<div class="page">
-  <div class="section-num">PART 6</div>
-  <h2>Entry Signals Explained</h2>
-  <p>The State Engine classifies every EMA 5/13 crossover into one of four signal types based on price's relationship to the Asian Range and the 50 EMA:</p>
-
-  <div class="signal-grid">
-    <div class="signal-card buy">
-      <h4>T1 &mdash; Stop Hunt Entry</h4>
-      <p>Price has broken <strong>below</strong> the Asian Range low (for BUY) or <strong>above</strong> the high (for SELL), then EMA cross occurs. This is the classic BTMM stop-hunt reversal &mdash; the highest probability setup.</p>
-    </div>
-    <div class="signal-card sell">
-      <h4>T2 &mdash; Standard Entry</h4>
-      <p>EMA cross occurs while price remains <strong>within</strong> the Asian Range zone. No stop hunt detected. Good continuation signal within an established trend.</p>
-    </div>
-    <div class="signal-card id50">
-      <h4>ID50 &mdash; Water (50 EMA) Bounce</h4>
-      <p>EMA cross occurs and price is near the 50 EMA (within 15 pips). This is the "Institutional Dynamic" pullback entry. Appears when price respects the ID50 line without having broken the range first.</p>
-    </div>
-    <div class="signal-card safety">
-      <h4>Safety &mdash; Post-Break Pullback</h4>
-      <p>Price has already broken the Asian Range, <strong>then</strong> pulls back to the 50 EMA and crosses. This is a re-entry after the initial move &mdash; a "safety" second chance trade.</p>
-    </div>
-  </div>
-
-  <h3>Visual Signal Elements</h3>
-  <p>Each valid signal places three elements on the chart:</p>
-  <table>
-    <tr><th>Element</th><th>Colour</th><th>Description</th></tr>
-    <tr><td>Label</td><td>Green (BUY) / Red (SELL) / Teal (ID50) / Gold (Safety)</td><td>Shows "BUY T1", "SELL T2", etc. at the signal bar</td></tr>
-    <tr><td>SL Line</td><td style="color:var(--red);">Red</td><td>Stop Loss line projected 15 bars forward. Distance = <code>SL Buffer</code> pips from signal bar</td></tr>
-    <tr><td>TP Line</td><td style="color:var(--green);">Green</td><td>Take Profit projected at 1&times; Asian Range width from entry</td></tr>
-    <tr><td>Entry Line</td><td style="color:var(--gray);">White (dashed)</td><td>Marks the close price at signal bar</td></tr>
-  </table>
-
-  <div class="callout info">
-    <div class="callout-icon">&#x1F4A1;</div>
-    <div class="callout-body">
-      <strong>Filtered signals</strong>
-      If <code>Show Filtered-Out Signals</code> is enabled, signals that fail the Vector or TDI filter appear as gray "SKIP" labels with the reason (e.g. "(Vec)" or "(TDI)"). Useful for learning why signals were rejected.
-    </div>
-  </div>
-</div>
-
-<!-- ============================================================= -->
-<!-- PAGE 8: INDICATOR DASHBOARD                                    -->
-<!-- ============================================================= -->
-<div class="page dark">
-  <div class="section-num">PART 7</div>
-  <h2>The Indicator Dashboard</h2>
-  <p>The on-chart dashboard gives you a complete state snapshot at a glance. It appears as a compact table in your chosen corner.</p>
-
-  <div class="dash-mock">
-    <div class="dash-header">STATE ENGINE PRO</div>
-    <div class="dash-row">
-      <span class="dash-label">Level</span>
-      <span class="dash-value" style="color:#1E90FF;">L2</span>
-    </div>
-    <div class="dash-row">
-      <span class="dash-label">Direction</span>
-      <span class="dash-value" style="color:#1E90FF;">UP</span>
-    </div>
-    <div class="dash-row">
-      <span class="dash-label">Phase</span>
-      <span class="dash-value" style="color:#1E90FF;">Trend</span>
-    </div>
-    <div class="dash-row">
-      <span class="dash-label">Peak Form</span>
-      <span class="dash-value" style="color:#6C757D;">&mdash;</span>
-    </div>
-    <div class="dash-row">
-      <span class="dash-label">Room Boxes</span>
-      <span class="dash-value" style="color:white;">2 / 5</span>
-    </div>
-    <div class="dash-row">
-      <span class="dash-label">Kill Zone</span>
-      <span class="dash-value" style="color:#28A745;">LONDON</span>
-    </div>
-    <div class="dash-row">
-      <span class="dash-label">ADR</span>
-      <span class="dash-value" style="color:#1E90FF;">42.3 / 78.1 (54%)</span>
-    </div>
-    <div class="dash-row">
-      <span class="dash-label">Mayo (200)</span>
-      <span class="dash-value" style="color:#1E90FF;">ABOVE &#x25B2;</span>
-    </div>
-    <div class="dash-row">
-      <span class="dash-label">Status</span>
-      <span class="dash-value" style="color:#28A745;">READY</span>
-    </div>
-    <div class="dash-row">
-      <span class="dash-label">Time</span>
-      <span class="dash-value" style="color:white;">09:45</span>
-    </div>
-    <div class="dash-row">
-      <span class="dash-label">Symbol</span>
-      <span class="dash-value" style="color:#00CED1;">EURUSD</span>
-    </div>
-  </div>
-
-  <h3>Dashboard Fields Explained</h3>
-  <table>
-    <tr><th>Field</th><th>Values</th><th>Colour Key</th></tr>
-    <tr><td><strong>Level</strong></td><td>L1, L2, L3+, or L# STALE</td><td>Blue=UP, Red=DOWN, Gray=Neutral/Stale</td></tr>
-    <tr><td><strong>Direction</strong></td><td>UP, DOWN, or &mdash;</td><td>Blue=UP, Red=DOWN</td></tr>
-    <tr><td><strong>Phase</strong></td><td>Init, Trend, Peak Zone, Reversal, STALE</td><td>Blue=Trend, Gold=Peak, Red=Reversal, Gray=Stale</td></tr>
-    <tr><td><strong>Peak Form</strong></td><td>PFH &#x2713;, PFL &#x2713;, PFH?, PFL?, or &mdash;</td><td>Red=PFH, Blue=PFL</td></tr>
-    <tr><td><strong>Room Boxes</strong></td><td>count / max</td><td>Orange when near threshold</td></tr>
-    <tr><td><strong>Kill Zone</strong></td><td>LONDON, NEW YORK, CLOSED</td><td>Green=Active, Red=Closed</td></tr>
-    <tr><td><strong>ADR</strong></td><td>Range / ATR (ADR%)</td><td>White&lt;60%, Blue 60-80%, Orange 80-100%, Red &gt;100%</td></tr>
-    <tr><td><strong>Mayo (200)</strong></td><td>ABOVE / BELOW</td><td>Blue=Above (bullish), Red=Below (bearish)</td></tr>
-    <tr><td><strong>Status</strong></td><td>READY, ASIAN, WAIT KZ, STALE</td><td>Green=Ready, Orange=Waiting</td></tr>
-  </table>
-</div>
-
-<!-- ============================================================= -->
-<!-- PAGE 9: SCANNER OVERVIEW                                       -->
-<!-- ============================================================= -->
-<div class="page">
-  <div class="section-num">PART 8</div>
-  <h2>The Multi-Pair Scanner</h2>
-  <p>The scanner runs the full BTMM state engine on up to <strong>16 currency pairs simultaneously</strong>, displaying everything in a single dashboard table. No need to flip between charts &mdash; see the entire market at a glance.</p>
-
-  <h3>How It Works</h3>
-  <p>The scanner uses TradingView's <code>request.security()</code> function to fetch data for each pair and run the BTMM state logic remotely. Bank 1 (pairs 1-8) is always active. Bank 2 (pairs 9-16) can be toggled on when needed. The scanner function is memory-optimised &mdash; it returns compact tuples with no internal arrays, keeping it stable in replay mode and on lower timeframes.</p>
-
-  <div class="callout warn">
-    <div class="callout-icon">&#x26A0;</div>
-    <div class="callout-body">
-      <strong>TradingView Limits</strong>
-      TradingView allows a maximum of ~40 <code>request.security()</code> calls per script. Bank 1 uses 16 calls (8 pairs &times; 2: state + ADR). Bank 2 uses another 16. With both banks enabled, 32 calls are used. This is within limits but leaves little room for additional data feeds.
-    </div>
-  </div>
-
-  <h3>Scanner Table Layout</h3>
-  <div class="scanner-mock">
-    <table style="width:100%;">
-      <tr>
-        <th>PAIR</th><th>LVL</th><th>PEAK</th><th>DIR</th><th>SIGNAL</th><th>KZ</th><th>L3 WARN</th><th>PHASE</th><th>ADR</th><th>RNG</th><th>ADR%</th>
-      </tr>
-      <tr>
-        <td>EURUSD</td>
-        <td style="color:#1E90FF;">L2</td>
-        <td style="color:#6C757D;">&mdash;</td>
-        <td style="color:#1E90FF;">&#x25B2;</td>
-        <td style="color:#28A745;">BUY T1</td>
-        <td style="color:#28A745;">Active</td>
-        <td style="color:rgba(255,255,255,0.3);">&mdash;</td>
-        <td style="color:#1E90FF;">Trend</td>
-        <td style="color:#00CED1;">78.2</td>
-        <td style="color:#FFD700;">42.1</td>
-        <td style="color:white;">54%</td>
-      </tr>
-      <tr>
-        <td>GBPUSD</td>
-        <td style="color:#DC3545;">L3</td>
-        <td style="color:#DC3545;">PFH?</td>
-        <td style="color:#DC3545;">&#x25BC;</td>
-        <td style="color:rgba(255,255,255,0.3);">&mdash;</td>
-        <td style="color:#28A745;">Active</td>
-        <td style="color:#FFD700;">&#x25BC; SHIFT</td>
-        <td style="color:#FFD700;">Peak</td>
-        <td style="color:#00CED1;">102.5</td>
-        <td style="color:#FFD700;">88.3</td>
-        <td style="color:#FF8C00;">86%</td>
-      </tr>
-      <tr>
-        <td>USDJPY</td>
-        <td style="color:#1E90FF;">L1</td>
-        <td style="color:#1E90FF;">PFL</td>
-        <td style="color:#1E90FF;">&#x25B2;</td>
-        <td style="color:rgba(255,255,255,0.3);">&mdash;</td>
-        <td style="color:#DC3545;">Wait</td>
-        <td style="color:rgba(255,255,255,0.3);">&mdash;</td>
-        <td style="color:#DC3545;">Rev</td>
-        <td style="color:#00CED1;">95.0</td>
-        <td style="color:#FFD700;">31.2</td>
-        <td style="color:white;">33%</td>
-      </tr>
-      <tr>
-        <td colspan="11" style="text-align:center; color:rgba(30,144,255,0.5); font-size:10px; padding:6px;">KZ: LDN &nbsp;|&nbsp; 09:45 &nbsp;|&nbsp; BTMM State Engine Pro [G-Labs]</td>
-      </tr>
-    </table>
-  </div>
-
-  <h3>Scanner Column Guide</h3>
-  <table>
-    <tr><th>Column</th><th>Shows</th><th>Colours</th></tr>
-    <tr><td><strong>PAIR</strong></td><td>Symbol name (exchange prefix stripped)</td><td>White</td></tr>
-    <tr><td><strong>LVL</strong></td><td>Current level (L1, L2, L3+). "!" suffix = stale</td><td>Blue=UP, Red=DOWN. Orange bg if stale</td></tr>
-    <tr><td><strong>PEAK</strong></td><td>Peak Formation status: PFH, PFL, PFH?, PFL?, PFL&#x21BB;, PFH&#x21BB;</td><td>Red=PFH, Blue=PFL, &#x21BB;=potential reversal</td></tr>
-    <tr><td><strong>DIR</strong></td><td>&#x25B2; (UP), &#x25BC; (DOWN), or &mdash;</td><td>Blue/Red/Gray</td></tr>
-    <tr><td><strong>SIGNAL</strong></td><td>Active signal (BUY T1, SELL Safety, etc.) or &mdash;</td><td>Green=BUY, Red=SELL</td></tr>
-    <tr><td><strong>KZ</strong></td><td>Active or Wait</td><td>Green/Red</td></tr>
-    <tr><td><strong>L3 WARN</strong></td><td>&#x25BC; SHIFT or &#x25B2; SHIFT at L3+</td><td>Gold when active</td></tr>
-    <tr><td><strong>PHASE</strong></td><td>Init, Trend, Peak, Rev, STALE</td><td>Blue/Gold/Red/Gray</td></tr>
-    <tr><td><strong>ADR</strong></td><td>Average Daily Range in pips</td><td>Teal</td></tr>
-    <tr><td><strong>RNG</strong></td><td>Today's range in pips</td><td>Gold</td></tr>
-    <tr><td><strong>ADR%</strong></td><td>Today's range as % of ADR</td><td>White&rarr;Blue&rarr;Orange&rarr;Red</td></tr>
-  </table>
-</div>
-
-<!-- ============================================================= -->
-<!-- PAGE 10: CONFIGURATION — INDICATOR                             -->
-<!-- ============================================================= -->
-<div class="page accent">
-  <div class="section-num">PART 9</div>
-  <h2>Indicator Configuration Guide</h2>
-  <p>All settings are accessible via the indicator's Settings panel (gear icon or double-click the indicator name).</p>
-
-  <h3>Asian Session</h3>
-  <div class="config-grid">
-    <div class="config-card">
-      <div class="config-name">Session Timezone</div>
-      <div class="config-default">Default: Europe/London</div>
-      <p class="config-desc">Must match your broker's server timezone for the Asian Range to align correctly. Common values: <code>Europe/London</code>, <code>UTC</code>, <code>America/New_York</code>, <code>UTC+2</code>.</p>
-    </div>
-    <div class="config-card">
-      <div class="config-name">Asian Session</div>
-      <div class="config-default">Default: 2200-0500</div>
-      <p class="config-desc">The 7-hour Asian consolidation window. Adjust if your broker's chart time differs from the timezone setting.</p>
-    </div>
-    <div class="config-card">
-      <div class="config-name">Asian Box Fill / Border</div>
-      <div class="config-default">Default: Teal (85% transparent)</div>
-      <p class="config-desc">Colour of the Asian Range rectangle drawn on the chart. The border is drawn with less transparency for visibility.</p>
-    </div>
-    <div class="config-card">
-      <div class="config-name">Show ID50 Midline</div>
-      <div class="config-default">Default: ON</div>
-      <p class="config-desc">Draws a dashed horizontal line at the midpoint of the Asian Range. Useful for gauging price position within the box.</p>
-    </div>
-  </div>
-
-  <h3>Level Counting</h3>
-  <div class="config-grid">
-    <div class="config-card">
-      <div class="config-name">Stale: Max Boxes Per Level</div>
-      <div class="config-default">Default: 5 (range: 2-10)</div>
-      <p class="config-desc">How many overlapping Asian Ranges are allowed in one room before it's marked STALE. Lower = stricter, Higher = more patient.</p>
-    </div>
-    <div class="config-card">
-      <div class="config-name">Room Fill / Border colours</div>
-      <div class="config-default">UP=Blue, DOWN=Red, Neutral=Gray</div>
-      <p class="config-desc">Customise the dotted-border room rectangles that wrap each level. They recolour retroactively on PF confirmation.</p>
-    </div>
-    <div class="config-card">
-      <div class="config-name">Show Level Labels on Rooms</div>
-      <div class="config-default">Default: ON</div>
-      <p class="config-desc">Shows level labels above each room rectangle at <code>size.normal</code> for maximum visibility. Labels have coloured semi-transparent backgrounds &mdash; blue for UP rooms, red for DOWN, grey for neutral/stale. PFH/PFL labels get distinct coloured backgrounds to stand out.</p>
-    </div>
-  </div>
-
-  <h3>Signal Filters</h3>
-  <div class="config-grid">
-    <div class="config-card">
-      <div class="config-name">Vector Candle Filter</div>
-      <div class="config-default">Default: ON</div>
-      <p class="config-desc">Only fires signals when the trigger candle's body is &gt;1.2&times; the 5-bar average. Ensures momentum.</p>
-    </div>
-    <div class="config-card">
-      <div class="config-name">TDI / RSI Filter</div>
-      <div class="config-default">Default: ON</div>
-      <p class="config-desc">Checks RSI signal vs. trade line alignment plus zone thresholds (30/50/70).</p>
-    </div>
-    <div class="config-card">
-      <div class="config-name">Cycle Direction Filter</div>
-      <div class="config-default">Default: ON</div>
-      <p class="config-desc">Blocks counter-trend signals. BUY only when cycle is UP, SELL only when DOWN. PF detection overrides this.</p>
-    </div>
-    <div class="config-card">
-      <div class="config-name">SL Buffer</div>
-      <div class="config-default">Default: 15 pips</div>
-      <p class="config-desc">Distance in pips from signal bar to the projected Stop Loss line. Adjust per your risk tolerance.</p>
-    </div>
-  </div>
-</div>
-
-<!-- ============================================================= -->
-<!-- PAGE 11: CONFIGURATION — SCANNER                               -->
-<!-- ============================================================= -->
-<div class="page">
-  <div class="section-num">PART 10</div>
-  <h2>Scanner Configuration Guide</h2>
-
-  <h3>Pairs</h3>
-  <p>The scanner has two banks of 8 pairs each. Bank 1 is always active. Bank 2 is off by default and can be enabled with the <code>Enable Pairs 9-16</code> toggle.</p>
-
-  <table>
-    <tr><th>Bank</th><th>Default Pairs</th><th>request.security() Calls</th></tr>
-    <tr>
-      <td><strong>Bank 1</strong> (Always On)</td>
-      <td>EURUSD, GBPUSD, USDJPY, AUDUSD, USDCAD, NZDUSD, USDCHF, EURGBP</td>
-      <td>16 (8&times;2: state + ADR)</td>
-    </tr>
-    <tr>
-      <td><strong>Bank 2</strong> (Optional)</td>
-      <td>GBPJPY, EURJPY, AUDJPY, CADJPY, GBPAUD, EURAUD, GBPCAD, EURCHF</td>
-      <td>+16 (32 total)</td>
-    </tr>
-  </table>
-
-  <div class="callout info">
-    <div class="callout-icon">&#x1F4A1;</div>
-    <div class="callout-body">
-      <strong>Custom Pairs</strong>
-      You can change any pair in the settings. Click the pair input field and type or search for any TradingView symbol &mdash; forex, crypto, indices, or commodities. The BTMM logic adapts automatically.
-    </div>
-  </div>
-
-  <h3>Display Settings</h3>
-  <div class="config-grid">
-    <div class="config-card">
-      <div class="config-name">Position</div>
-      <div class="config-default">Default: Bottom Right</div>
-      <p class="config-desc">Where the scanner table appears on the chart. Options: Bottom Right, Bottom Left, Top Right, Top Left.</p>
-    </div>
-    <div class="config-card">
-      <div class="config-name">Background Transparency</div>
-      <div class="config-default">Default: 20</div>
-      <p class="config-desc">0 = fully opaque, 100 = fully transparent. Adjust so the table is readable without obscuring chart data.</p>
-    </div>
-    <div class="config-card">
-      <div class="config-name">Show ADR Column</div>
-      <div class="config-default">Default: ON</div>
-      <p class="config-desc">Toggles the ADR, Range, and ADR% columns. Disable for a more compact table.</p>
-    </div>
-    <div class="config-card">
-      <div class="config-name">Show Phase Column</div>
-      <div class="config-default">Default: ON</div>
-      <p class="config-desc">Toggles the Phase column (Init/Trend/Peak/Rev/STALE). Disable for narrower display.</p>
-    </div>
-  </div>
-
-  <h3>Stale Threshold</h3>
-  <p>The scanner has its own <code>Stale Threshold</code> setting (default: 5), which works identically to the indicator's room stale detection. Stale preserves the current level and direction &mdash; it opens a new room at the same level with grey colouring. Stale pairs show an "!" suffix on their level and an orange background in the scanner table.</p>
-</div>
-
-<!-- ============================================================= -->
-<!-- PAGE 12: REFERENCE LINES & ADR                                 -->
-<!-- ============================================================= -->
-<div class="page dark">
-  <div class="section-num">PART 11</div>
-  <h2>Reference Lines &amp; ADR</h2>
-
-  <h3>Yesterday High / Low</h3>
-  <p>Orange dashed lines mark the previous day's high and low. These act as key support/resistance levels and are commonly targeted by market makers during stop hunts.</p>
-
-  <h3>Psychological Levels</h3>
-  <p>When enabled, dotted gray lines appear at round-number price levels (every 50 pips for standard pairs, adjusted for JPY). These are institutional order-cluster zones.</p>
-
-  <h3>Zone Modes (ZN)</h3>
-  <p>The indicator includes optional zone overlays that visualise accumulation and distribution areas within each room. Select a mode via the <code>Zone Mode</code> setting:</p>
-
-  <table>
-    <tr><th>Mode</th><th>Name</th><th>Description</th></tr>
-    <tr>
-      <td><strong style="color:var(--cyan);">ZN0</strong></td>
-      <td>Off (default)</td>
-      <td>Zones disabled &mdash; no extra rectangles drawn.</td>
-    </tr>
-    <tr>
-      <td><strong style="color:var(--cyan);">ZN1</strong></td>
-      <td>AR Union</td>
-      <td>A dashed rectangle showing the union of all Asian Range boxes within the current room. Highlights the full accumulation zone.</td>
-    </tr>
-    <tr>
-      <td><strong style="color:var(--cyan);">ZN2</strong></td>
-      <td>Candle Extremes</td>
-      <td>A dotted rectangle covering all candle wicks (high to low) across the room's full timespan. Shows the complete distribution range.</td>
-    </tr>
-  </table>
-
-  <div class="callout tip">
-    <div class="callout-icon">&#x2705;</div>
-    <div class="callout-body">
-      <strong>Zones help you see the bigger picture</strong>
-      ZN1 (AR Union) reveals where market makers accumulated orders across multiple sessions. ZN2 (Candle Extremes) shows the full price range they engineered. Both help identify key support/resistance for the current cycle.
-    </div>
-  </div>
-
-  <h3>Average Daily Range (ADR)</h3>
-  <p>ADR is calculated from <strong>Daily timeframe data</strong> (not the chart timeframe), ensuring accurate values regardless of which timeframe you're viewing. The dashboard shows today's range in pips, the ADR in pips, and the ADR% used. The colour coding tells you at a glance how much room is left:</p>
-
-  <table>
-    <tr><th>ADR%</th><th>Meaning</th><th>Colour</th><th>Action</th></tr>
-    <tr>
-      <td>&lt; 60%</td>
-      <td>Range barely started</td>
-      <td style="color:white;">White</td>
-      <td>Full room for the move &mdash; ideal trading conditions</td>
-    </tr>
-    <tr>
-      <td>60-80%</td>
-      <td>Range developing</td>
-      <td style="color:#1E90FF;">Blue</td>
-      <td>Proceed with normal position sizing</td>
-    </tr>
-    <tr>
-      <td>80-100%</td>
-      <td>Range nearly exhausted</td>
-      <td style="color:#FF8C00;">Orange</td>
-      <td>Reduce position size, tighten stops</td>
-    </tr>
-    <tr>
-      <td>&gt; 100%</td>
-      <td>Range exceeded</td>
-      <td style="color:#DC3545;">Red</td>
-      <td>Avoid new trades &mdash; the daily move is done</td>
-    </tr>
-  </table>
-
-  <div class="callout warn">
-    <div class="callout-icon">&#x26A0;</div>
-    <div class="callout-body">
-      <strong>ADR &gt; 100% = Stop Trading</strong>
-      When ADR% turns red, the pair has already moved its full average daily range. New entries have poor risk/reward because there's limited room left for the move. Wait for the next session.
-    </div>
-  </div>
-</div>
-
-<!-- ============================================================= -->
-<!-- PAGE 13: ALERTS                                                -->
-<!-- ============================================================= -->
-<div class="page">
-  <div class="section-num">PART 12</div>
-  <h2>Alerts &amp; Notifications</h2>
-  <p>Both scripts include two types of alerts: <strong>Alert Conditions</strong> (manual setup via TradingView's alert dialog) and <strong>Runtime Alerts</strong> (fire automatically when you set an "Any alert() call" alert).</p>
-
-  <h3>Setting Up Alerts</h3>
-  <div class="steps">
-    <div class="step">
-      <div class="step-body">
-        <h4>Open the Alert Dialog</h4>
-        <p>Press <strong>Alt+A</strong> (or click the alarm clock icon in the right toolbar).</p>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-body">
-        <h4>Select the Indicator</h4>
-        <p>In the "Condition" dropdown, choose <strong>"BTMM State Engine Pro [G-Labs]"</strong> (or the Scanner).</p>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-body">
-        <h4>Choose the Condition</h4>
-        <p>For specific alerts: select from the dropdown (e.g. "BUY T1", "PF Confirmed").<br>
-        For all alerts at once: select <strong>"Any alert() function call"</strong> &mdash; this catches every runtime alert the script fires.</p>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-body">
-        <h4>Configure Delivery</h4>
-        <p>Choose your notification method: App notification, Email, Webhook, or SMS. Set expiration and click <strong>Create</strong>.</p>
-      </div>
-    </div>
-  </div>
-
-  <h3>Indicator Alert List</h3>
-  <table>
-    <tr><th>Alert</th><th>Fires When</th></tr>
-    <tr><td>PF Pending</td><td>L2+ reversal detected &mdash; PFH? or PFL? set</td></tr>
-    <tr><td>PF Confirmed</td><td>Pending PF confirmed by next clear break</td></tr>
-    <tr><td>Room Stale</td><td>Room accumulates max overlapping boxes</td></tr>
-    <tr><td>London / NY KZ Start</td><td>Kill zone session begins</td></tr>
-    <tr><td>BUY T1 / T2 / ID50 / Safety</td><td>Respective buy signal fires</td></tr>
-    <tr><td>SELL T1 / T2 / ID50 / Safety</td><td>Respective sell signal fires</td></tr>
-    <tr><td>Any BUY / Any SELL / Any Entry</td><td>Combined conditions</td></tr>
-  </table>
-
-  <h3>Scanner Alert List</h3>
-  <p>The scanner fires per-pair runtime alerts with detailed messages including the pair name, signal type, level, direction, and peak formation status:</p>
-  <div class="callout info">
-    <div class="callout-icon">&#x1F514;</div>
-    <div class="callout-body">
-      <strong>Example Scanner Alert Message:</strong><br>
-      <code style="font-size:11px;">BTMM Pro: BUY T1 | EURUSD | 1.0842 | L2 UP | &mdash;</code>
-    </div>
-  </div>
-</div>
-
-<!-- ============================================================= -->
-<!-- PAGE 14: TRADING PLAYBOOK                                      -->
-<!-- ============================================================= -->
-<div class="page dark">
-  <div class="section-num">PART 13</div>
-  <h2>The Complete Trading Playbook</h2>
-
-  <h3>Pre-Session Checklist</h3>
-  <div class="steps" style="counter-reset:step;">
-    <div class="step" style="color:rgba(255,255,255,0.85);">
-      <div class="step-body">
-        <h4 style="color:white;">Check the Scanner</h4>
-        <p style="color:rgba(255,255,255,0.7);">Open the scanner and identify pairs at L1 (fresh reversal) or early L2 (established trend). These are your primary watchlist. Pairs at L2+ are already in the peak zone &mdash; only trade these if you're looking for PF reversals.</p>
-      </div>
-    </div>
-    <div class="step" style="color:rgba(255,255,255,0.85);">
-      <div class="step-body">
-        <h4 style="color:white;">Check ADR%</h4>
-        <p style="color:rgba(255,255,255,0.7);">Filter out any pairs already above 80% ADR &mdash; the daily move is nearly done. Focus on pairs below 60%.</p>
-      </div>
-    </div>
-    <div class="step" style="color:rgba(255,255,255,0.85);">
-      <div class="step-body">
-        <h4 style="color:white;">Switch to Indicator Chart</h4>
-        <p style="color:rgba(255,255,255,0.7);">Open the best candidate pair with the State Engine indicator on M15. Check the dashboard: Level, Phase, Mayo status, and Kill Zone.</p>
-      </div>
-    </div>
-    <div class="step" style="color:rgba(255,255,255,0.85);">
-      <div class="step-body">
-        <h4 style="color:white;">Wait for Kill Zone</h4>
-        <p style="color:rgba(255,255,255,0.7);">If KZ is "CLOSED", wait. The best signals occur during London (08:00-11:00) and NY (13:00-16:00) sessions.</p>
-      </div>
-    </div>
-    <div class="step" style="color:rgba(255,255,255,0.85);">
-      <div class="step-body">
-        <h4 style="color:white;">Execute on Signal</h4>
-        <p style="color:rgba(255,255,255,0.7);">When a labelled signal appears (BUY/SELL + type), enter with SL at the indicated red line and TP at the green line. Prefer T1 signals as they have the highest win rate.</p>
-      </div>
-    </div>
-  </div>
-
-  <h3>Golden Rules</h3>
-  <table style="color:rgba(255,255,255,0.85);">
-    <tr><th>#</th><th>Rule</th></tr>
-    <tr><td>1</td><td>Never trade during the Asian session &mdash; that's accumulation, not distribution</td></tr>
-    <tr><td>2</td><td>T1 (Stop Hunt) entries are the highest probability &mdash; prioritise them</td></tr>
-    <tr><td>3</td><td>If ADR% is red (&gt;100%), the daily move is done &mdash; stand aside</td></tr>
-    <tr><td>4</td><td>STALE rooms mean no clear direction &mdash; wait for a breakout</td></tr>
-    <tr><td>5</td><td>PFH/PFL confirmed = trend change &mdash; start looking for signals in the new direction</td></tr>
-    <tr><td>6</td><td>Always use the scanner to find the best pair, then switch to the indicator for precision</td></tr>
-    <tr><td>7</td><td>Mayo (200 EMA) alignment increases probability &mdash; trade with the macro trend</td></tr>
-    <tr><td>8</td><td>Risk 1-2% per trade maximum &mdash; the system gives you an edge, but no signal is 100%</td></tr>
-  </table>
-</div>
-
-<!-- ============================================================= -->
-<!-- PAGE 15: YOUR FIRST SESSION                                    -->
-<!-- ============================================================= -->
-<div class="page">
-  <div class="section-num">PART 14</div>
-  <h2>Your First Trading Session</h2>
-  <p>Follow this step-by-step walkthrough for your first live session with the State Engine Pro.</p>
-
-  <div class="steps">
-    <div class="step">
-      <div class="step-body">
-        <h4>Set Up Two Chart Tabs</h4>
-        <p><strong>Tab 1:</strong> Any chart with the <strong>Scanner</strong> indicator added. This is your "command centre".<br>
-        <strong>Tab 2:</strong> EURUSD M15 with the <strong>Indicator</strong> added. This is your "execution chart".</p>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-body">
-        <h4>Configure Timezone</h4>
-        <p>On both scripts, set <code>Session Timezone</code> to match your broker's server time. If unsure, check TradingView's bottom-right time display vs. your broker's platform.</p>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-body">
-        <h4>Verify Asian Range</h4>
-        <p>On the indicator chart, scroll back and confirm the teal Asian Range boxes align with the Asian session hours (roughly 22:00 - 05:00 London time). If they're misaligned, adjust the timezone or session times.</p>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-body">
-        <h4>Set Up "Any alert()" Alert</h4>
-        <p>Press Alt+A, select the Indicator, choose "Any alert() function call", enable app notifications, and create. Repeat for the Scanner. You'll now get alerts for every signal, PF, and KZ start.</p>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-body">
-        <h4>Wait for London Open</h4>
-        <p>Watch the scanner. When the KZ column turns green ("Active") for your pairs and the indicator dashboard shows "READY", you're in the trading window.</p>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-body">
-        <h4>Take Your First Signal</h4>
-        <p>When a BUY T1 or SELL T1 label appears on the indicator chart, enter the trade with the displayed SL and TP levels. Record the result in your journal.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="callout tip">
-    <div class="callout-icon">&#x2705;</div>
-    <div class="callout-body">
-      <strong>Demo first!</strong>
-      Practice on a paper trading account for at least one week before going live. Track your signals, note which types work best for each pair, and build confidence in reading the dashboard.
-    </div>
-  </div>
-
-  <div class="callout info">
-    <div class="callout-icon">&#x23EA;</div>
-    <div class="callout-body">
-      <strong>Bar Replay Compatible</strong>
-      Both the indicator and scanner work in TradingView's <strong>bar replay mode</strong>. Use replay to practice identifying level breaks and peak formations in real time &mdash; the dashboard updates correctly on each replayed bar. This is the fastest way to build pattern recognition without waiting for live sessions.
-    </div>
-  </div>
-</div>
-
-<!-- ============================================================= -->
-<!-- PAGE 16: TROUBLESHOOTING                                       -->
-<!-- ============================================================= -->
-<div class="page accent">
-  <div class="section-num">PART 15</div>
-  <h2>Troubleshooting &amp; Common Issues</h2>
-
-  <div class="issue-card">
-    <h4>Asian Range boxes are in the wrong place</h4>
-    <p>The most common issue. Your <code>Session Timezone</code> doesn't match your broker's server time.</p>
-    <p class="fix">Fix: Change the timezone setting. Try <code>Europe/London</code>, <code>UTC</code>, or your broker's specific timezone. Compare the box position to when you know the Asian session should be.</p>
-  </div>
-
-  <div class="issue-card">
-    <h4>No signals appearing</h4>
-    <p>Several possible causes:</p>
-    <p class="fix">Fix: (1) Check if <code>Filter Signals by Kill Zones</code> is ON &mdash; signals only fire during KZ hours. (2) Check if the room is STALE. (3) Check if all three filters are ON &mdash; try disabling one at a time. (4) Ensure you're on M15 timeframe.</p>
-  </div>
-
-  <div class="issue-card">
-    <h4>Scanner shows same data for all pairs in Bank 2</h4>
-    <p>Bank 2 is disabled by default. When disabled, the Bank 2 <code>request.security()</code> calls fall back to pair1's data.</p>
-    <p class="fix">Fix: Enable <code>Enable Pairs 9-16</code> in the scanner settings.</p>
-  </div>
-
-  <div class="issue-card">
-    <h4>"Too many request.security() calls" error</h4>
-    <p>TradingView limits the number of security calls per script.</p>
-    <p class="fix">Fix: If using both banks, ensure you haven't added other indicators that also use <code>request.security()</code> on the same chart. Alternatively, disable Bank 2 and run two scanner instances on separate chart tabs.</p>
-  </div>
-
-  <div class="issue-card">
-    <h4>Rooms / Labels / Lines hitting the max limit</h4>
-    <p>TradingView allows max 500 boxes, 500 lines, and 500 labels per indicator.</p>
-    <p class="fix">Fix: Reduce the visible history by zooming in. The indicator draws objects for each session, so very long history windows can hit limits. Alternatively, hide optional elements (Psychological Levels, Yesterday H/L, Show Invalid Signals).</p>
-  </div>
-
-  <div class="issue-card">
-    <h4>Level counting seems wrong</h4>
-    <p>Level counting requires the current bar's timeframe to properly detect session boundaries.</p>
-    <p class="fix">Fix: Use M15 or H1 timeframes. Very high timeframes (D, W) don't have intra-day session detection. Very low timeframes (M1) work but may be slow due to the large number of bars processed.</p>
-  </div>
-</div>
-
-<!-- ============================================================= -->
-<!-- PAGE 17: CHEAT SHEET                                           -->
-<!-- ============================================================= -->
-<div class="page dark">
-  <div class="section-num">PART 16</div>
-  <h2>Quick Reference Cheat Sheet</h2>
-
-  <div class="cheat-sheet" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);">
-    <h3>BTMM State Engine Pro &mdash; TradingView Edition</h3>
-    <div class="cheat-cols">
-      <div>
-        <h4 style="color:var(--cyan); font-size:13px; margin-bottom:8px;">Levels &amp; Phases</h4>
-        <ul>
-          <li><span style="color:#6C757D;">L1</span> &mdash; First room, neutral direction</li>
-          <li><span style="color:#1E90FF;">L2 UP / DOWN</span> &mdash; Trend established</li>
-          <li><span style="color:#FFD700;">L2+ &#x26A0;</span> &mdash; Peak Zone, reversal imminent</li>
-          <li><span style="color:#6C757D;">STALE</span> &mdash; Too many overlaps, no breakout</li>
-          <li><span style="color:#FF8C00;">PFH? / PFL?</span> &mdash; Peak Formation pending</li>
-          <li><span style="color:#DC3545;">PFH &#x2713;</span> / <span style="color:#1E90FF;">PFL &#x2713;</span> &mdash; Peak confirmed</li>
-        </ul>
-      </div>
-      <div>
-        <h4 style="color:var(--cyan); font-size:13px; margin-bottom:8px;">Signal Types</h4>
-        <ul>
-          <li><span style="color:#28A745;">T1 (Stop Hunt)</span> &mdash; Price broke the range, reversed</li>
-          <li><span style="color:#28A745;">T2 (Standard)</span> &mdash; EMA cross within range zone</li>
-          <li><span style="color:#00CED1;">ID50</span> &mdash; Pullback to Water (50 EMA), no prior break</li>
-          <li><span style="color:#FFD700;">Safety</span> &mdash; Pullback to 50 EMA after range break</li>
-        </ul>
-        <h4 style="color:var(--cyan); font-size:13px; margin-top:12px; margin-bottom:8px;">Key EMAs</h4>
-        <ul>
-          <li><span style="color:#FFD700;">5</span> / <span style="color:#DC3545;">13</span> &mdash; Entry cross pair</li>
-          <li><span style="color:#00CED1;">50</span> &mdash; ID50 / Safety reference</li>
-          <li><span style="color:white;">200</span> &mdash; Major trend (Mayo)</li>
-          <li><span style="color:#7B68EE;">800</span> &mdash; Macro bias (Blueberry)</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <div class="cheat-sheet" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); margin-top:16px;">
-    <h3>Scanner Quick Reference</h3>
-    <div class="cheat-cols">
-      <div>
-        <h4 style="color:var(--cyan); font-size:13px; margin-bottom:8px;">Best Scanner Reads</h4>
-        <ul>
-          <li><span style="color:#1E90FF;">L1 + PFL + UP</span> &mdash; Fresh buy cycle starting</li>
-          <li><span style="color:#DC3545;">L1 + PFH + DOWN</span> &mdash; Fresh sell cycle starting</li>
-          <li><span style="color:#FFD700;">L3 + &#x25BC; SHIFT</span> &mdash; Cycle topping, watch for PFH</li>
-          <li><span style="color:white;">ADR% &lt; 60%</span> &mdash; Plenty of room for the move</li>
-        </ul>
-      </div>
-      <div>
-        <h4 style="color:var(--cyan); font-size:13px; margin-bottom:8px;">Avoid These</h4>
-        <ul>
-          <li><span style="color:#6C757D;">STALE</span> &mdash; No clear direction</li>
-          <li><span style="color:#DC3545;">ADR% &gt; 100%</span> &mdash; Daily range exhausted</li>
-          <li><span style="color:#DC3545;">KZ: Wait</span> &mdash; Outside trading hours</li>
-          <li><span style="color:#FF8C00;">L3+ with no SHIFT</span> &mdash; Trend extended but unconfirmed</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ============================================================= -->
-<!-- PAGE 18: TV vs MT5 DIFFERENCES                                 -->
-<!-- ============================================================= -->
-<div class="page">
-  <div class="section-num">PART 17</div>
-  <h2>TradingView vs. MetaTrader 5 &mdash; Key Differences</h2>
-  <p>If you also use the MT5 version of State Engine Pro, here's what to know about the TradingView edition:</p>
-
-  <table>
-    <tr><th>Feature</th><th>MT5 Version</th><th>TradingView Version</th></tr>
-    <tr>
-      <td>Platform</td>
-      <td>MetaTrader 5 desktop</td>
-      <td>TradingView (web, desktop, mobile)</td>
-    </tr>
-    <tr>
-      <td>Language</td>
-      <td>MQL5</td>
-      <td>Pine Script v6</td>
-    </tr>
-    <tr>
-      <td>Scanner Pairs</td>
-      <td>Unlimited (comma-separated list)</td>
-      <td>Up to 16 (2 banks of 8)</td>
-    </tr>
-    <tr>
-      <td>Push Notifications</td>
-      <td>MT5 mobile push</td>
-      <td>TradingView app notification, email, webhook, SMS</td>
-    </tr>
-    <tr>
-      <td>Dashboard Drag</td>
-      <td>Click-and-drag to reposition</td>
-      <td>Fixed position (9 positions available in settings)</td>
-    </tr>
-    <tr>
-      <td>Broker Suffix</td>
-      <td>Auto-detected (e.g. EURUSD.m)</td>
-      <td>Not needed &mdash; TradingView uses universal symbols</td>
-    </tr>
-    <tr>
-      <td>Multi-Timeframe</td>
-      <td>Full MTF with H1/M15 dual data</td>
-      <td>Single timeframe per chart (use multiple tabs)</td>
-    </tr>
-    <tr>
-      <td>Stale Detection</td>
-      <td>Configurable threshold</td>
-      <td>Configurable threshold (same logic)</td>
-    </tr>
-    <tr>
-      <td>Two-Stage PF</td>
-      <td>Pending &rarr; Confirmed</td>
-      <td>Pending &rarr; Confirmed (same logic)</td>
-    </tr>
-    <tr>
-      <td>Room Recolouring</td>
-      <td>Instant on PF confirmation</td>
-      <td>Retroactive recolouring via array tracking</td>
-    </tr>
-    <tr>
-      <td>Accessibility</td>
-      <td>Windows only (broker account needed)</td>
-      <td>Any device, any browser, free TradingView account</td>
-    </tr>
-  </table>
-
-  <div class="callout tip">
-    <div class="callout-icon">&#x2705;</div>
-    <div class="callout-body">
-      <strong>Best of Both Worlds</strong>
-      Many traders use TradingView for analysis and scanning (it's accessible everywhere), then execute on MT5 where their broker account lives. The signals and levels are identical between versions.
-    </div>
-  </div>
-</div>
-
-<!-- ============================================================= -->
-<!-- PAGE 19: SUPPORT & CONTACT                                     -->
-<!-- ============================================================= -->
-<div class="page dark">
-  <div class="section-num">PART 18</div>
-  <h2 style="text-align:center;">Need Help? Get In Touch</h2>
-  <p style="text-align:center; max-width:600px; margin:0 auto 30px;">Whether you have a setup question, a feature request, or need help configuring the indicator for your broker &mdash; we're here to help.</p>
-
-  <div style="display:flex; gap:20px; flex-wrap:wrap; justify-content:center;">
-    <div class="contact-card" style="flex:1; min-width:200px; max-width:260px;">
-      <div class="c-icon">&#x1F310;</div>
-      <div class="c-label">Website</div>
-      <div class="c-value"><a href="https://g-labs.software">g-labs.software</a></div>
-      <div style="font-size:11px; color:rgba(255,255,255,0.4); margin-top:8px;">Product pages, documentation, custom development enquiries</div>
-    </div>
-    <div class="contact-card" style="flex:1; min-width:200px; max-width:260px;">
-      <div class="c-icon">&#x2709;</div>
-      <div class="c-label">Email Support</div>
-      <div class="c-value"><a href="mailto:info@g-labs.software">info@g-labs.software</a></div>
-      <div style="font-size:11px; color:rgba(255,255,255,0.4); margin-top:8px;">Technical support, licensing, setup help &mdash; we typically reply within 24 hours</div>
-    </div>
-    <div class="contact-card" style="flex:1; min-width:200px; max-width:260px;">
-      <div class="c-icon">&#x1F4AC;</div>
-      <div class="c-label">Telegram Community</div>
-      <div class="c-value"><a href="https://t.me/glabssoftware1">@glabssoftware1</a></div>
-      <div style="font-size:11px; color:rgba(255,255,255,0.4); margin-top:8px;">Join the community &mdash; setups, tips, live discussion with other traders</div>
-    </div>
-    <div class="contact-card" style="flex:1; min-width:200px; max-width:260px;">
-      <div class="c-icon">&#x1F3AC;</div>
-      <div class="c-label">YouTube</div>
-      <div class="c-value"><a href="https://youtube.com/@glabssoftware1">@glabssoftware1</a></div>
-      <div style="font-size:11px; color:rgba(255,255,255,0.4); margin-top:8px;">Video tutorials, indicator walkthroughs, live trading examples</div>
-    </div>
-  </div>
-
-  <div style="display:flex; gap:20px; flex-wrap:wrap; justify-content:center; margin-top:20px;">
-    <div class="contact-card" style="flex:1; min-width:200px; max-width:260px;">
-      <div class="c-icon">&#x1F4CA;</div>
-      <div class="c-label">MQL5 Market</div>
-      <div class="c-value" style="color:var(--blue);">G-Labs on MQL5.com</div>
-      <div style="font-size:11px; color:rgba(255,255,255,0.4); margin-top:8px;">Official MetaTrader marketplace &mdash; reviews, ratings, verified purchases</div>
-    </div>
-    <div class="contact-card" style="flex:1; min-width:200px; max-width:260px;">
-      <div class="c-icon">&#x1F6E0;</div>
-      <div class="c-label">Custom Development</div>
-      <div class="c-value"><a href="https://g-labs.software/custom_development.html">Request a Quote</a></div>
-      <div style="font-size:11px; color:rgba(255,255,255,0.4); margin-top:8px;">Need a custom EA, indicator, or strategy coded? MQL4, MQL5, Pine Script.</div>
-    </div>
-  </div>
-
-  <div style="text-align:center; margin-top:30px; padding-top:20px; border-top:1px solid rgba(255,255,255,0.1);">
-    <div style="font-size:12px; color:rgba(255,255,255,0.3);">
-      G-Labs is a trading name of <strong style="color:rgba(255,255,255,0.5);">Apex Pro Group Ltd</strong> &nbsp;|&nbsp; Harwich, Essex, United Kingdom
-    </div>
-  </div>
-</div>
-
-<!-- ============================================================= -->
-<!-- FOOTER PAGE                                                     -->
-<!-- ============================================================= -->
-<div class="page dark" style="display:flex; flex-direction:column; justify-content:flex-end;">
-<div class="footer">
-  <p><strong style="color:white;">BTMM State Engine Pro &mdash; TradingView Edition</strong></p>
-  <p style="margin-top:5px;">The Professional Market Maker Cycle Tracker &mdash; Pine Script v6</p>
-  <p style="margin-top:15px;">
-    <a href="https://g-labs.software">g-labs.software</a> &nbsp;|&nbsp;
-    <a href="mailto:info@g-labs.software">info@g-labs.software</a> &nbsp;|&nbsp;
-    <a href="https://t.me/glabssoftware1">Telegram</a> &nbsp;|&nbsp;
-    <a href="https://youtube.com/@glabssoftware1">YouTube</a>
-  </p>
-  <p style="margin-top:15px;">&copy; 2026 G-Labs Software. All Rights Reserved.</p>
-  <p style="margin-top:5px; font-size:11px;">G-Labs is a trading name of Apex Pro Group Ltd.</p>
-  <p style="margin-top:10px; font-size:11px;">Beat The Market Maker is a methodology created by Steve Mauro. This indicator is an independent automation tool and is not affiliated with or endorsed by Steve Mauro.</p>
-</div>
-</div>
-
+<footer>
+    <p>G-Labs Intel Dashboard &mdash; Real-time OSINT & Trading Intelligence &mdash; <a href="index.html">G-Labs</a> &copy; 2024-2026</p>
+    <p style="margin-top:4px">Data: USGS, NASA EONET, GDACS, GDELT, CoinGecko, Polymarket, Frankfurter, Reuters, BBC, AP, CNBC, Al Jazeera + 30 more</p>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+const $ = id => document.getElementById(id);
+function esc(s){if(s==null)return'';const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function fmtNum(n,d=2){return typeof n==='number'?n.toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d}):n}
+function fmtBig(n){if(n>=1e12)return(n/1e12).toFixed(1)+'T';if(n>=1e9)return(n/1e9).toFixed(1)+'B';if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n>=1e3)return(n/1e3).toFixed(1)+'K';return n}
+function chgClass(v){return v>=0?'ms-up':'ms-down'}
+function chgStr(v){if(v==null)return'--';return(v>=0?'+':'')+v.toFixed(2)+'%'}
+var API_BASE = '';
+function apiUrl(path){return (API_BASE || '') + path;}
+
+// === MAP ===
+const map=L.map('map',{zoomControl:false,attributionControl:false}).setView([20,0],2);
+const baseLayers={'Dark (CARTO)':L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19}),'Satellite':L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:18}),'OpenStreetMap':L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19})};
+baseLayers['Dark (CARTO)'].addTo(map);
+L.control.zoom({position:'topright'}).addTo(map);
+const layers={quakes:L.layerGroup().addTo(map),eonet:L.layerGroup(),gdacs:L.layerGroup().addTo(map),intel:L.layerGroup().addTo(map)};
+L.control.layers(baseLayers,{"Earthquakes (USGS)":layers.quakes,"Natural Events (EONET)":layers.eonet,"Disasters (GDACS)":layers.gdacs,"Intel / Conflict (GDELT)":layers.intel},{position:'topleft'}).addTo(map);
+
+// === USGS EARTHQUAKES ===
+async function fetchQuakes(){
+    try{
+        const r=await fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson');
+        const d=await r.json();layers.quakes.clearLayers();
+        let html='';
+        (d.features||[]).slice(0,15).forEach(q=>{
+            const m=q.properties.mag,p=q.properties.place||'Unknown',t=new Date(q.properties.time).toLocaleTimeString();
+            let c='var(--green)';if(m>4)c='var(--yellow)';if(m>5)c='var(--red)';
+            const lat=q.geometry.coordinates[1],lng=q.geometry.coordinates[0];
+            L.circleMarker([lat,lng],{radius:Math.max(m*2,3),fillColor:c.replace('var(--green)','#26a69a').replace('var(--yellow)','#ffcf22').replace('var(--red)','#ef5350'),color:'#000',weight:1,fillOpacity:.7}).bindPopup(`<b>M${m}</b><br>${p}`).addTo(layers.quakes);
+            const bgc=c.replace('var(--green)','#26a69a').replace('var(--yellow)','#ffcf22').replace('var(--red)','#ef5350');
+            html+=`<div class="quake-row" onclick="map.flyTo([${lat},${lng}],6)"><div style="display:flex;gap:6px;align-items:center"><span class="quake-mag" style="background:${bgc}">${m.toFixed(1)}</span><span>${esc(p.split(',').pop().trim())}</span></div><span style="color:var(--dim)">${t}</span></div>`;
+        });
+        $('quake-body').innerHTML=html||'<div style="padding:12px;color:var(--dim)">No recent quakes.</div>';
+    }catch(e){console.error('USGS',e)}
+}
+
+// === EONET ===
+async function fetchEonet(){
+    try{
+        const r=await fetch('https://eonet.gsfc.nasa.gov/api/v2.1/events?limit=20&days=30');
+        const d=await r.json();layers.eonet.clearLayers();
+        (d.events||[]).forEach(ev=>{
+            if(!ev.geometries||!ev.geometries.length)return;
+            const cat=ev.categories[0].title,co=ev.geometries[0].coordinates;
+            let color='#ff7043',icon='fa-fire';
+            if(cat==='Volcanoes'){color='#ef5350';icon='fa-mountain'}
+            if(cat==='Severe Storms'){color='#42a5f5';icon='fa-bolt'}
+            L.marker([co[1],co[0]],{icon:L.divIcon({html:`<i class="fas ${icon}" style="color:${color};font-size:14px;text-shadow:0 0 5px #000"></i>`,className:'',iconSize:[14,14],iconAnchor:[7,7]})}).bindPopup(`<b>${ev.title}</b><br>${cat}`).addTo(layers.eonet);
+        });
+    }catch(e){console.error('EONET',e)}
+}
+
+// === GDACS ===
+async function fetchGDACS(){
+    try{
+        const r=await fetch(apiUrl('gdacs_proxy.php'));const j=await r.json();layers.gdacs.clearLayers();
+        if(j.status!=='ok'||!j.events)return;
+        j.events.forEach(ev=>{
+            if(ev.lat==null||ev.lng==null)return;
+            let c='#ffcf22';const s=String(ev.alertlevel||'').toLowerCase();
+            if(s==='red')c='#ef5350';else if(s==='orange')c='#ff7043';
+            L.circleMarker([ev.lat,ev.lng],{radius:5,fillColor:c,color:'#000',weight:1,fillOpacity:.8}).bindPopup(`<b>${esc(ev.name)}</b><br>${ev.type}`).addTo(layers.gdacs);
+        });
+    }catch(e){console.error('GDACS',e)}
+}
+
+// === GDELT ===
+let gdeltPreset='default';
+let currentTab='intel';
+let gdeltTitles=[];
+function filterFeed(p){
+    gdeltPreset=p||'default';
+    document.querySelectorAll('.feed-btn').forEach(b=>b.classList.toggle('active',b.dataset.preset===gdeltPreset));
+    fetchGdelt();
+}
+function switchTab(tab,el){
+    currentTab=tab;
+    document.querySelectorAll('.panel-tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===tab));
+    const filters=$('feed-filters');
+    if(filters)filters.style.display=tab==='intel'?'flex':'none';
+    if(tab==='intel')fetchGdelt();
+    else fetchNewsFeed(tab);
+}
+async function fetchGdelt(){
+    const el=$('feed-list');
+    if(!el)return;
+    let tickers=[];gdeltTitles=[];
+    try{
+        const r=await fetch(apiUrl('gdelt_events.php?preset='+encodeURIComponent(gdeltPreset)+'&limit=40'));
+        let j;
+        try{j=await r.json()}catch(_){j={events:[]};}
+        if(!r.ok)throw new Error(r.status);
+        const data=Array.isArray(j.events)?j.events:[];
+        layers.intel.clearLayers();
+        let html='';
+        if(data.length){
+            data.slice(0,30).forEach(item=>{
+                const t=(item.title||'').toLowerCase();
+                let tag='tag-intel',label='INTEL';
+                if(t.match(/war|attack|military|conflict|strike|bomb|missile/)){tag='tag-conflict';label='CONFLICT'}
+                else if(t.match(/stock|market|fed|rate|inflation|gdp|earnings/)){tag='tag-market';label='MARKET'}
+                else if(t.match(/oil|gas|gold|opec|crude|commodity/)){tag='tag-energy';label='ENERGY'}
+                else if(t.match(/crypto|bitcoin|ethereum|btc/)){tag='tag-crypto';label='CRYPTO'}
+                tickers.push(item.title);gdeltTitles.push(item.title);
+                if(item.lat&&item.lng){
+                    const mc=tag==='tag-conflict'?'#ef5350':tag==='tag-market'?'#2962ff':tag==='tag-energy'?'#ffcf22':'#ff7043';
+                    L.circleMarker([item.lat,item.lng],{radius:4,fillColor:mc,color:'#000',weight:1,fillOpacity:.8}).bindPopup(`<b>${esc(item.title)}</b>`).addTo(layers.intel);
+                }
+                const time=item.date?new Date(item.date).toLocaleTimeString():'LIVE';
+                const link=item.url?`<a href="${item.url}" target="_blank" rel="noopener">${esc(item.title)}</a>`:esc(item.title);
+                html+=`<div class="feed-item"><div class="feed-meta"><span class="feed-tag ${tag}">${label}</span><span>${time}</span></div><div class="feed-title">${link}</div></div>`;
+            });
+            el.innerHTML=html;
+        }else{
+            el.innerHTML='<div style="padding:20px;text-align:center;color:var(--dim)">No GDELT events for this filter. Try another preset or check back later.</div>';
+        }
+    }catch(e){
+        console.warn('GDELT:',e);
+        el.innerHTML='<div style="padding:20px;text-align:center;color:var(--dim)">Intel feed temporarily unavailable. Retrying...</div>';
+    }
+    updateTicker(tickers.length?tickers:['Monitoring global event streams. GDELT feed connecting…']);
+    buildAiBrief(gdeltTitles.length?gdeltTitles:null);
+}
+async function fetchNewsFeed(cat){
+    const el=$('feed-list');
+    if(!el)return;
+    el.innerHTML='<div style="padding:20px;text-align:center;color:var(--dim)">Loading...</div>';
+    try{
+        const r=await fetch(apiUrl('world_news.php?cat='+encodeURIComponent(cat)));
+        if(!r.ok)throw new Error(r.status);
+        const j=await r.json();
+        if(j.status==='ok'&&Array.isArray(j.items)&&j.items.length){
+            el.innerHTML=j.items.slice(0,25).map(n=>{
+                const link=n.url?`<a href="${n.url}" target="_blank" rel="noopener">${esc(n.title)}</a>`:esc(n.title);
+                const src=esc(n.source);
+                const desc=(n.desc)?`<div class="feed-desc">${esc(n.desc)}</div>`:'';
+                return`<div class="feed-item"><div class="feed-meta"><span class="feed-tag tag-market">${src}</span></div><div class="feed-title">${link}</div>${desc}</div>`;
+            }).join('');
+        }else{
+            el.innerHTML='<div style="padding:20px;text-align:center;color:var(--dim)">No news items for this category. Try again shortly.</div>';
+        }
+    }catch(e){
+        console.warn('News feed:',e);
+        el.innerHTML='<div style="padding:20px;text-align:center;color:var(--dim)">News feed unavailable. Ensure PHP is running (e.g. cPanel).</div>';
+    }
+}
+
+// === TICKER ===
+function updateTicker(titles){
+    const c=document.querySelector('.ticker-bar');if(!c)return;
+    const old=$('ticker-content');if(old)old.remove();
+    const el=document.createElement('div');el.className='ticker-content';el.id='ticker-content';
+    const text=Array.isArray(titles)&&titles.length?titles.slice(0,20).join('  \u2022  '):'MONITORING GLOBAL EVENT STREAMS... SYSTEM NOMINAL...';
+    el.textContent=text;
+    c.appendChild(el);
+}
+
+// === CRYPTO ===
+async function fetchCrypto(){
+    try{
+        const r=await fetch(apiUrl('crypto_prices.php'));const j=await r.json();
+        if(j.status!=='ok'||!j.coins||!j.coins.length)throw new Error('no data');
+        let html='';
+        j.coins.forEach(c=>{
+            const p=c.price!=null?(c.price>=1?fmtNum(c.price,2):'$'+c.price.toFixed(6)):'--';
+            const ch24=c.change24h;
+            html+=`<div class="crypto-row"><img class="crypto-icon" src="${c.image}" onerror="this.style.display='none'"><div><div class="crypto-name">${esc(c.symbol)}</div><div class="crypto-sym">${esc(c.name)}</div></div><div style="text-align:right;font-weight:700;color:var(--white)">$${p}</div><div class="mkt-chg ${chgClass(ch24)}" style="text-align:right">${chgStr(ch24)}</div><div style="text-align:right;font-size:.6rem;color:var(--dim)">${fmtBig(c.marketCap)}</div></div>`;
+        });
+        $('crypto-body').innerHTML=html;
+        addToStrip(j.coins.slice(0,4).map(c=>({sym:c.symbol,price:'$'+fmtNum(c.price,c.price>=1?2:4),chg:c.change24h})));
+    }catch(e){$('crypto-body').innerHTML='<div style="padding:12px;color:var(--dim)">Crypto data loading...</div>'}
+}
+
+// === FOREX ===
+async function fetchForex(){
+    try{
+        const r=await fetch(apiUrl('forex_proxy.php'));const j=await r.json();
+        if(j.status!=='ok'||!j.pairs||!j.pairs.length)throw new Error('no data');
+        let html='';
+        j.pairs.forEach(p=>{
+            html+=`<div class="fx-row"><span class="fx-pair">${esc(p.pair)}</span><span class="fx-rate">${fmtNum(p.rate,p.rate>100?2:4)}</span><span class="mkt-chg ${chgClass(p.change)}">${chgStr(p.change)}</span></div>`;
+        });
+        $('forex-body').innerHTML=html;
+        addToStrip(j.pairs.slice(0,4).map(p=>({sym:p.pair,price:fmtNum(p.rate,p.rate>100?2:4),chg:p.change})));
+    }catch(e){$('forex-body').innerHTML='<div style="padding:12px;color:var(--dim)">Forex data loading...</div>'}
+}
+
+// === MARKETS ===
+async function fetchMarkets(){
+    const el=$('market-body');const upd=$('mkt-updated');
+    const mock=[{symbol:'SPY',price:510.5,changePct:.8},{symbol:'QQQ',price:440.2,changePct:1.2},{symbol:'DIA',price:390.1,changePct:-.3},{symbol:'GLD',price:204.5,changePct:.5},{symbol:'USO',price:72.3,changePct:-1.1},{symbol:'IWM',price:198.7,changePct:.4}];
+    const render=data=>{
+        el.innerHTML='<div class="mkt-grid">'+data.map(t=>{
+            const chg=chgStr(t.changePct);const cls=chgClass(t.changePct);
+            return`<div class="mkt-tile"><div class="mkt-sym">${esc(t.symbol)}</div><div class="mkt-price">${fmtNum(t.price,2)}</div><div class="mkt-chg ${cls}">${chg}</div></div>`;
+        }).join('')+'</div>';
+        addToStrip(data.slice(0,3).map(t=>({sym:t.symbol,price:fmtNum(t.price,2),chg:t.changePct})));
+    };
+    try{
+        const r=await fetch(apiUrl('market_snapshot.php?symbols=SPY,QQQ,DIA,GLD,USO,IWM'));
+        const j=await r.json();
+        if(j.status==='ok'&&j.data&&j.data.length){render(j.data);if(upd)upd.textContent='Updated '+new Date().toLocaleTimeString()}
+        else{render(mock);if(upd)upd.textContent='Demo'}
+    }catch(e){render(mock);if(upd)upd.textContent='Demo'}
+}
+
+// === POLYMARKET ===
+async function fetchPolymarket(){
+    try{
+        const r=await fetch(apiUrl('polymarket_proxy.php'));const j=await r.json();
+        if(j.status!=='ok'||!j.markets||!j.markets.length)throw new Error('no data');
+        let html='';
+        j.markets.slice(0,8).forEach(m=>{
+            const pct=m.yesPercent!=null?m.yesPercent:50;
+            const color=pct>65?'var(--green)':pct<35?'var(--red)':'var(--yellow)';
+            html+=`<div class="pm-item"><div class="pm-title">${esc(m.title)}</div><div class="pm-bar"><div class="pm-fill" style="width:${pct}%;background:${color}">${pct}% YES</div></div><div class="pm-meta"><span>Vol: $${fmtBig(m.volume24h)}</span><span>Liq: $${fmtBig(m.liquidity)}</span></div></div>`;
+        });
+        $('polymarket-body').innerHTML=html;
+    }catch(e){$('polymarket-body').innerHTML='<div style="padding:12px;color:var(--dim)">Prediction markets loading...</div>'}
+}
+
+// === FEAR & GREED ===
+async function fetchFearGreed(){
+    try{
+        let j;
+        try{const r=await fetch(apiUrl('fear_greed.php'));j=await r.json()}
+        catch(_){const r2=await fetch('https://api.alternative.me/fng/?limit=1');const raw=await r2.json();j=raw.data&&raw.data[0]?{status:'ok',value:parseInt(raw.data[0].value),classification:raw.data[0].value_classification}:null}
+        if(j&&j.status==='ok'&&j.value!=null){
+            $('fg-val').textContent=j.value;
+            $('fg-label').textContent=j.classification||'';
+            $('fg-fill').style.width=j.value+'%';
+        }
+    }catch(e){}
+}
+
+// === WORLD NEWS ===
+async function fetchWorldNews(){
+    const el=$('worldnews-body');if(!el)return;
+    try{
+        const r=await fetch(apiUrl('world_news.php?cat=world'));
+        if(!r.ok)throw new Error(r.status);
+        const j=await r.json();
+        if(j.status==='ok'&&Array.isArray(j.items)&&j.items.length){
+            el.innerHTML=j.items.slice(0,12).map(n=>{
+                const link=n.url?`<a href="${n.url}" target="_blank" rel="noopener">${esc(n.title)}</a>`:esc(n.title);
+                const colors={'Reuters':'#ff6600','BBC World':'#bb1919','AP News':'#d32f2f','Al Jazeera':'#d4a843','NPR':'#1a8fe3','DW News':'#0078d4','France 24':'#0055a4','The Guardian':'#005689'};
+                const sc=colors[n.source]||'var(--blue)';
+                return`<div class="news-item"><div class="news-src" style="color:${sc}">${esc(n.source)}</div><div class="news-title">${link}</div></div>`;
+            }).join('');
+        }else{
+            el.innerHTML='<div style="padding:12px;color:var(--dim)">No world news items. Try again shortly.</div>';
+        }
+    }catch(e){
+        console.warn('World news:',e);
+        el.innerHTML='<div style="padding:12px;color:var(--dim)">World news unavailable. Ensure PHP is running (e.g. cPanel).</div>';
+    }
+}
+async function fetchMarketNews(){
+    const el=$('marketnews-body');if(!el)return;
+    try{
+        const r=await fetch(apiUrl('world_news.php?cat=markets'));
+        if(!r.ok)throw new Error(r.status);
+        const j=await r.json();
+        if(j.status==='ok'&&Array.isArray(j.items)&&j.items.length){
+            el.innerHTML=j.items.slice(0,12).map(n=>{
+                const link=n.url?`<a href="${n.url}" target="_blank" rel="noopener">${esc(n.title)}</a>`:esc(n.title);
+                return`<div class="news-item"><div class="news-src" style="color:var(--green)">${esc(n.source)}</div><div class="news-title">${link}</div></div>`;
+            }).join('');
+        }else el.innerHTML='<div style="padding:12px;color:var(--dim)">No market news.</div>';
+    }catch(e){el.innerHTML='<div style="padding:12px;color:var(--dim)">Market news unavailable.</div>';}
+}
+
+// === AI BRIEF ===
+function buildAiBrief(titles){
+    const el=$('ai-brief');if(!el)return;
+    if(!titles||!Array.isArray(titles)||!titles.length){
+        el.innerHTML='<strong style="color:var(--white)">Status:</strong> Waiting for headline data. GDELT intel or World tab will feed this brief.';
+        return;
+    }
+    const themes={'Fed/Rates':/\b(fed|federal reserve|rate|inflation|powell|monetary|treasury|yield)\b/i,'Markets':/\b(stock|market|trading|earnings|revenue|ipo|equity|rally|selloff|nasdaq|s&p|dow)\b/i,'Energy':/\b(oil|opec|brent|wti|crude|energy|gas|lng|pipeline)\b/i,'Conflict':/\b(war|attack|military|conflict|sanctions|nato|missile|strike|bomb|troops)\b/i,'Central Banks':/\b(ecb|central bank|boj|boe|pboc|euro|dollar|currency|forex)\b/i,'Trade':/\b(trade|tariff|china|export|import|supply chain|wto)\b/i,'Crypto':/\b(bitcoin|crypto|ethereum|btc|eth|blockchain|defi|stablecoin)\b/i,'Tech':/\b(ai|artificial intelligence|chip|semiconductor|nvidia|apple|google|meta|microsoft)\b/i};
+    const counts={};
+    titles.forEach(title=>{for(const[theme,rx]of Object.entries(themes)){if(rx.test(title))counts[theme]=(counts[theme]||0)+1}});
+    const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+    let brief='';
+    if(sorted.length>=2){
+        brief=`<strong style="color:var(--white)">Dominant Themes:</strong> ${sorted.slice(0,4).map(([t,c])=>`<span style="color:var(--blue)">${t}</span> (${c})`).join(', ')}.<br><br>`;
+        const top=sorted[0][0];
+        const insights={'Conflict':'Elevated geopolitical risk. Safe-haven flows likely (gold, JPY, CHF). Monitor defense sector and energy supply disruptions.','Fed/Rates':'Monetary policy in focus. Watch 2Y/10Y spread, rate-sensitive sectors (REITs, utilities, tech). Bond volatility expected.','Energy':'Energy complex active. Track WTI/Brent spread, OPEC+ compliance, and downstream equities. Shipping rates may react.','Markets':'Broad market activity detected. Check VIX for sentiment, sector rotation patterns, and index momentum divergences.','Crypto':'Crypto narrative building. Monitor BTC dominance, ETF flows, stablecoin market caps, and DeFi TVL for confirmation.','Central Banks':'Central bank action in focus. Watch FX majors for policy divergence trades. Carry trade dynamics may shift.','Trade':'Trade policy signals detected. Monitor CNY, commodity importers, and supply chain proxies (shipping, semiconductors).','Tech':'Tech sector in focus. Watch NASDAQ relative strength, semiconductor cycle indicators, and AI capex trends.'};
+        brief+=`<strong style="color:var(--white)">Analysis:</strong> ${insights[top]||'Multiple signals active. Cross-reference with market data for confirmation.'}`;
+        if(sorted.length>=3)brief+=`<br><br><strong style="color:var(--white)">Secondary:</strong> ${sorted[1][0]} and ${sorted[2][0]} themes also elevated. Watch for cross-asset correlation shifts.`;
+    }else if(sorted.length===1){
+        brief=`<strong style="color:var(--white)">Primary Focus:</strong> ${sorted[0][0]} (${sorted[0][1]} mentions). Stay alert for follow-through in related assets.`;
+    }else{
+        brief='<strong style="color:var(--white)">Status:</strong> Scanning headlines... No dominant theme detected. Markets appear range-bound. Low-conviction environment.';
+    }
+    el.innerHTML=brief;
+}
+
+// === MARKET STRIP ===
+let stripItems=[];
+function addToStrip(items){
+    items.forEach(i=>{
+        if(!stripItems.find(s=>s.sym===i.sym))stripItems.push(i);
+    });
+    renderStrip();
+}
+function renderStrip(){
+    const el=$('market-strip');if(!el)return;
+    const fg=el.querySelector('.fg-strip');
+    let html=fg?fg.outerHTML:'';
+    stripItems.forEach(i=>{
+        html+=`<div class="ms-item"><span class="ms-sym">${esc(i.sym)}</span><span class="ms-price">${i.price}</span><span class="ms-chg ${chgClass(i.chg)}">${chgStr(i.chg)}</span></div>`;
+    });
+    el.innerHTML=html;
+}
+
+// === VIDEO ===
+function setVideo(ch,btn){
+    const vids={aljazeera:'gCNeDWCI0vo',dw:'MG3jGHnBVQA',france24:'h3MuIUNCCzI',sky:'9Auq9mYxFEE',nasa:'21X5lGlDOfg'};
+    const el=$('main-vid');if(el)el.src=`https://www.youtube.com/embed/${vids[ch]||vids.aljazeera}?autoplay=1&mute=1`;
+    document.querySelectorAll('.vid-btn').forEach(b=>b.classList.remove('active'));
+    if(btn)btn.classList.add('active');
+}
+
+// === PRODUCTS ===
+function renderProducts(){
+    const items=[
+        {title:'G-Labs Utility Pro',price:'$49',plat:'MQL5',col:'#ffcf22',img:'favicon.svg',link:'mql5.html'},
+        {title:'BTMM State Engine',price:'$149',plat:'MQL5',col:'#ffcf22',img:'favicon.svg',link:'mql5.html'},
+        {title:'Market Structure Sentinel',price:'$99',plat:'MQL5',col:'#ffcf22',img:'favicon.svg',link:'mql5.html'},
+        {title:'Trend Master TV',price:'$59',plat:'TradingView',col:'#2962ff',img:'https://s3.tradingview.com/userpics/2631063-M2DE_big.png',link:'tradingview.html'},
+        {title:'Volatility Scout',price:'$89',plat:'TradingView',col:'#2962ff',img:'https://s3.tradingview.com/userpics/2631063-M2DE_big.png',link:'tradingview.html'},
+        {title:'Divergence Hunter',price:'$69',plat:'TradingView',col:'#2962ff',img:'https://s3.tradingview.com/userpics/2631063-M2DE_big.png',link:'tradingview.html'}
+    ];
+    $('product-carousel').innerHTML=items.map(p=>`<div class="prod-card"><img src="${p.img}" class="prod-img" onerror="this.src='favicon.svg'"><div style="flex:1"><div style="font-size:.75rem;font-weight:700;color:var(--white)">${p.title}</div><div style="font-size:.6rem;color:${p.col};font-weight:700">${p.plat}</div><div style="display:flex;justify-content:space-between;margin-top:4px"><span style="font-weight:700;color:var(--white)">${p.price}</span><a href="${p.link}" style="background:${p.col};color:#000;text-decoration:none;font-size:.55rem;font-weight:700;padding:2px 6px;border-radius:3px">VIEW</a></div></div></div>`).join('');
+}
+
+// === INIT ===
+document.addEventListener('DOMContentLoaded',()=>{
+    fetchQuakes();fetchEonet();fetchGDACS();fetchGdelt();
+    fetchCrypto();fetchForex();fetchMarkets();fetchFearGreed();
+    fetchPolymarket();fetchWorldNews();fetchMarketNews();
+    renderProducts();
+    setInterval(fetchGdelt,60000);
+    setInterval(fetchQuakes,300000);
+    setInterval(fetchGDACS,600000);
+    setInterval(fetchCrypto,60000);
+    setInterval(fetchForex,300000);
+    setInterval(fetchMarkets,120000);
+    setInterval(fetchFearGreed,3600000);
+    setInterval(fetchPolymarket,300000);
+    setInterval(fetchWorldNews,300000);
+    setInterval(fetchMarketNews,300000);
+});
+</script>
 </body>
 </html>
