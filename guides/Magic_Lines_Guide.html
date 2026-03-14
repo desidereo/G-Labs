@@ -1,638 +1,645 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>G-Labs Magic Lines v5 — Complete User Guide</title>
-<meta name="description" content="Magic Lines v5 MT5 indicator user guide with setup, configuration, scanner dashboard, and trade signal explanations.">
-<meta name="robots" content="index, follow">
-<link rel="canonical" href="https://www.g-labs.software/guides/Magic_Lines_Guide.html">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://www.g-labs.software/guides/Magic_Lines_Guide.html">
-<meta property="og:title" content="G-Labs Magic Lines v5 — Complete User Guide">
-<meta property="og:description" content="Magic Lines v5 MT5 indicator user guide with setup, configuration, scanner dashboard, and trade signal explanations.">
-<meta property="og:image" content="https://www.g-labs.software/assets/images/btmm-state-engine-pro-lifetime.png">
-<meta property="twitter:card" content="summary_large_image">
-<meta property="twitter:url" content="https://www.g-labs.software/guides/Magic_Lines_Guide.html">
-<meta property="twitter:title" content="G-Labs Magic Lines v5 — Complete User Guide">
-<meta property="twitter:description" content="Magic Lines v5 MT5 indicator user guide with setup, configuration, scanner dashboard, and trade signal explanations.">
-<meta property="twitter:image" content="https://www.g-labs.software/assets/images/btmm-state-engine-pro-lifetime.png">
-<style>
-:root {
-  --bg-primary: #0a0e17;
-  --bg-secondary: #111827;
-  --bg-card: #1a2332;
-  --bg-card-alt: #1e293b;
-  --bg-highlight: #0f2a4a;
-  --border: #1e3a5f;
-  --text-primary: #e2e8f0;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --accent-blue: #1e90ff;
-  --accent-cyan: #00ced1;
-  --accent-gold: #ffd700;
-  --accent-green: #28a745;
-  --accent-red: #dc3545;
-  --accent-orange: #ff8c00;
-  --accent-purple: #7b68ee;
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{
-  font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
-  background:var(--bg-primary);
-  color:var(--text-primary);
-  line-height:1.7;
-  font-size:15px;
-}
-::selection{background:var(--accent-blue);color:#fff;}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G-Labs | Global Intel & Trading Dashboard</title>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HC5C84CZPP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-HC5C84CZPP');
+    </script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <style>
+        :root{--bg:#05080f;--bg2:#0a0e17;--bg3:#131722;--bg4:#1e222d;--border:#2a2e39;--text:#d1d4dc;--dim:#787b86;--white:#fff;--blue:#2962ff;--green:#26a69a;--red:#ef5350;--yellow:#ffcf22;--orange:#ff7043}
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+        ::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 
-.hero{
-  background:linear-gradient(135deg,#0a1628 0%,#0f2a4a 50%,#0a1628 100%);
-  border-bottom:1px solid var(--border);
-  padding:80px 0 60px;
-  text-align:center;
-  position:relative;
-  overflow:hidden;
-}
-.hero::before{
-  content:'';position:absolute;top:0;left:0;right:0;bottom:0;
-  background:radial-gradient(ellipse at 50% 0%,rgba(30,144,255,0.08) 0%,transparent 70%);
-}
-.hero-badge{
-  display:inline-block;
-  background:linear-gradient(135deg,var(--accent-blue),var(--accent-cyan));
-  color:#fff;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;
-  padding:6px 18px;border-radius:20px;margin-bottom:20px;position:relative;
-}
-.hero h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:800;margin-bottom:12px;position:relative;}
-.hero h1 span{background:linear-gradient(135deg,var(--accent-gold),var(--accent-orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.hero p{font-size:1.1rem;color:var(--text-secondary);max-width:600px;margin:0 auto;position:relative;}
-.hero .version{color:var(--accent-cyan);font-weight:600;}
+        /* Header */
+        header{background:var(--bg4);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;justify-content:space-between;height:44px;position:sticky;top:0;z-index:100}
+        .logo{font-weight:800;font-size:1.1rem;color:var(--white);text-decoration:none;display:flex;align-items:center;gap:8px}.logo span{color:var(--blue)}
+        .main-nav{display:flex;gap:16px;height:100%;align-items:center}
+        .main-nav a{text-decoration:none;color:var(--dim);font-weight:600;font-size:.75rem;transition:color .2s;height:100%;display:flex;align-items:center;padding:0 4px;border-bottom:2px solid transparent}
+        .main-nav a:hover,.main-nav a.active{color:var(--blue);border-bottom-color:var(--blue)}
+        .header-right{display:flex;align-items:center;gap:10px}
+        .status-pill{display:inline-flex;align-items:center;gap:5px;background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:999px;padding:3px 10px;font-size:.65rem;font-weight:700}
+        .status-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
-nav.toc-bar{
-  position:sticky;top:0;z-index:100;
-  background:rgba(10,14,23,0.92);backdrop-filter:blur(12px);
-  border-bottom:1px solid var(--border);
-  padding:0 20px;
-  overflow-x:auto;white-space:nowrap;
-}
-nav.toc-bar a{
-  display:inline-block;padding:14px 16px;color:var(--text-secondary);
-  text-decoration:none;font-size:13px;font-weight:600;letter-spacing:0.3px;
-  transition:color .2s;border-bottom:2px solid transparent;
-}
-nav.toc-bar a:hover{color:var(--accent-gold);border-bottom-color:var(--accent-gold);}
+        /* Ticker */
+        .ticker-bar{background:var(--blue);color:var(--white);display:flex;align-items:center;overflow:hidden;white-space:nowrap;font-size:.75rem;font-weight:600;height:26px;flex-shrink:0}
+        .ticker-label{background:#000;padding:0 12px;height:100%;display:flex;align-items:center;font-weight:800;z-index:2;font-size:.65rem;letter-spacing:1px}
+        .ticker-content{display:inline-block;padding-left:100%;animation:scroll 120s linear infinite}
+        @keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
 
-.container{max-width:1100px;margin:0 auto;padding:0 24px;}
+        /* Market Strip */
+        .market-strip{display:flex;align-items:center;gap:0;padding:0;background:var(--bg2);border-bottom:1px solid var(--border);overflow-x:auto;flex-shrink:0}
+        .ms-item{display:flex;align-items:center;gap:6px;padding:5px 14px;border-right:1px solid var(--border);font-size:.7rem;white-space:nowrap}
+        .ms-sym{color:var(--dim);font-weight:700}.ms-price{color:var(--white);font-weight:700}.ms-chg{font-weight:600;font-size:.65rem}
+        .ms-up{color:var(--green)}.ms-down{color:var(--red)}
 
-section{padding:60px 0;}
-section:nth-child(even){background:var(--bg-secondary);}
+        /* Main Layout */
+        .main-layout{display:grid;grid-template-columns:320px 1fr;min-height:calc(100vh - 100px)}
+        @media(max-width:1100px){.main-layout{grid-template-columns:1fr;grid-template-rows:auto 50vh}}
 
-h2{
-  font-size:1.8rem;font-weight:800;margin-bottom:8px;
-  display:flex;align-items:center;gap:12px;
-}
-h2 .icon{
-  width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;
-  font-size:20px;flex-shrink:0;
-}
-h2 .icon.blue{background:rgba(30,144,255,0.15);color:var(--accent-blue);}
-h2 .icon.gold{background:rgba(255,215,0,0.15);color:var(--accent-gold);}
-h2 .icon.green{background:rgba(40,167,69,0.15);color:var(--accent-green);}
-h2 .icon.red{background:rgba(220,53,69,0.15);color:var(--accent-red);}
-h2 .icon.cyan{background:rgba(0,206,209,0.15);color:var(--accent-cyan);}
-h2 .icon.orange{background:rgba(255,140,0,0.15);color:var(--accent-orange);}
-h2 .icon.purple{background:rgba(123,104,238,0.15);color:var(--accent-purple);}
-.section-subtitle{color:var(--text-secondary);margin-bottom:32px;font-size:1rem;}
+        /* Left Panel */
+        .left-panel{background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;max-height:calc(100vh - 100px);position:sticky;top:44px}
+        .panel-head{padding:8px 12px;background:var(--bg4);border-bottom:1px solid var(--border);font-weight:800;display:flex;justify-content:space-between;align-items:center;font-size:.75rem;color:var(--white)}
+        .panel-tabs{display:flex;background:var(--bg3);border-bottom:1px solid var(--border)}
+        .panel-tab{flex:1;padding:6px 8px;text-align:center;font-size:.65rem;font-weight:700;color:var(--dim);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s}
+        .panel-tab:hover,.panel-tab.active{color:var(--blue);border-bottom-color:var(--blue);background:rgba(41,98,255,.05)}
+        .feed-filters{display:flex;gap:4px;padding:6px 8px;border-bottom:1px solid var(--border);background:var(--bg3);overflow-x:auto}
+        .feed-btn{background:var(--border);border:1px solid #434651;color:#b2b5be;font-size:.6rem;padding:2px 8px;border-radius:999px;cursor:pointer;white-space:nowrap;font-weight:600}
+        .feed-btn.active{background:rgba(41,98,255,.2);color:var(--white);border-color:var(--blue)}
+        .feed-list{flex:1;overflow-y:auto}
+        .feed-item{padding:8px 12px;border-bottom:1px solid var(--border);cursor:pointer;border-left:3px solid transparent;transition:all .15s}
+        .feed-item:hover{background:var(--bg4);border-left-color:var(--blue)}
+        .feed-meta{display:flex;justify-content:space-between;margin-bottom:3px;font-size:.6rem;color:var(--dim)}
+        .feed-tag{font-weight:800;text-transform:uppercase;padding:1px 4px;border-radius:2px;font-size:.55rem}
+        .tag-conflict{background:rgba(239,83,80,.15);color:var(--red)}.tag-market{background:rgba(41,98,255,.15);color:var(--blue)}.tag-energy{background:rgba(255,207,34,.15);color:var(--yellow)}.tag-crypto{background:rgba(38,166,154,.15);color:var(--green)}.tag-intel{background:rgba(255,112,67,.15);color:var(--orange)}
+        .feed-title{font-size:.75rem;color:var(--text);line-height:1.3}.feed-title a{color:var(--text);text-decoration:none}.feed-title a:hover{color:var(--blue)}
+        .feed-desc{font-size:.65rem;color:var(--dim);margin-top:2px;line-height:1.2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 
-h3{font-size:1.15rem;font-weight:700;margin:28px 0 12px;color:var(--accent-cyan);}
-h4{font-size:1rem;font-weight:700;margin:20px 0 8px;color:var(--text-primary);}
+        /* Map */
+        .map-area{position:relative;background:#000}
+        #map{width:100%;height:100%;min-height:500px}
 
-.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin:24px 0;}
-.card{
-  background:var(--bg-card);border:1px solid var(--border);border-radius:12px;
-  padding:24px;transition:border-color .3s,transform .2s;
-}
-.card:hover{border-color:var(--accent-blue);transform:translateY(-2px);}
-.card-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
-.card-header .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
-.card-header h4{margin:0;font-size:1rem;}
-.card p,.card ul{color:var(--text-secondary);font-size:0.92rem;}
-.card ul{padding-left:18px;}
-.card ul li{margin-bottom:4px;}
-.card ul li::marker{color:var(--accent-blue);}
+        /* Dashboard Grid */
+        .dash-section{padding:10px;background:var(--bg)}
+        .dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:10px}
+        .card{background:var(--bg2);border:1px solid var(--border);border-radius:4px;overflow:hidden;display:flex;flex-direction:column}
+        .card-full{grid-column:1/-1}
+        .card-head{padding:7px 12px;background:var(--bg4);border-bottom:1px solid var(--border);font-size:.7rem;font-weight:800;color:#b2b5be;display:flex;justify-content:space-between;align-items:center}
+        .card-head .badge{font-size:.55rem;padding:1px 6px;border-radius:3px;font-weight:700}
+        .card-body{padding:10px;flex:1;overflow-y:auto;max-height:350px}
 
-.feature-table{width:100%;border-collapse:collapse;margin:20px 0;font-size:0.9rem;}
-.feature-table th{
-  background:var(--bg-highlight);color:var(--accent-gold);font-weight:700;
-  text-align:left;padding:12px 16px;border-bottom:2px solid var(--border);
-  font-size:0.8rem;text-transform:uppercase;letter-spacing:1px;
-}
-.feature-table td{padding:10px 16px;border-bottom:1px solid var(--border);color:var(--text-secondary);}
-.feature-table tr:hover td{background:rgba(30,144,255,0.04);}
-.feature-table .label{font-weight:600;color:var(--text-primary);}
+        /* Market cards */
+        .mkt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px}
+        .mkt-tile{background:var(--bg);padding:8px;border-radius:4px;border:1px solid var(--border)}
+        .mkt-sym{font-size:.6rem;color:var(--dim);font-weight:700}.mkt-price{font-size:.85rem;font-weight:700;color:var(--white);margin:2px 0}.mkt-chg{font-size:.6rem;font-weight:600}
 
-.badge{
-  display:inline-block;padding:2px 10px;border-radius:10px;font-size:0.75rem;font-weight:700;
-  letter-spacing:0.5px;vertical-align:middle;
-}
-.badge.buy{background:rgba(40,167,69,0.2);color:var(--accent-green);}
-.badge.sell{background:rgba(220,53,69,0.2);color:var(--accent-red);}
-.badge.info{background:rgba(30,144,255,0.2);color:var(--accent-blue);}
-.badge.warn{background:rgba(255,140,0,0.2);color:var(--accent-orange);}
-.badge.gold{background:rgba(255,215,0,0.15);color:var(--accent-gold);}
+        /* Crypto table */
+        .crypto-row{display:grid;grid-template-columns:28px 1fr 90px 70px 70px;gap:6px;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);font-size:.7rem}
+        .crypto-row:last-child{border-bottom:none}
+        .crypto-icon{width:20px;height:20px;border-radius:50%}
+        .crypto-name{font-weight:700;color:var(--white)}.crypto-sym{color:var(--dim);font-size:.6rem}
 
-.tip-box{
-  background:var(--bg-highlight);border-left:3px solid var(--accent-blue);
-  border-radius:0 8px 8px 0;padding:16px 20px;margin:20px 0;
-}
-.tip-box.warn{border-left-color:var(--accent-orange);background:rgba(255,140,0,0.05);}
-.tip-box.success{border-left-color:var(--accent-green);background:rgba(40,167,69,0.05);}
-.tip-box.danger{border-left-color:var(--accent-red);background:rgba(220,53,69,0.05);}
-.tip-box .tip-label{font-weight:700;font-size:0.8rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
-.tip-box .tip-label.blue{color:var(--accent-blue);}
-.tip-box .tip-label.orange{color:var(--accent-orange);}
-.tip-box .tip-label.green{color:var(--accent-green);}
-.tip-box .tip-label.red{color:var(--accent-red);}
-.tip-box p{color:var(--text-secondary);font-size:0.92rem;margin:0;}
+        /* Forex table */
+        .fx-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);font-size:.75rem}
+        .fx-row:last-child{border-bottom:none}
+        .fx-pair{font-weight:700;color:var(--white)}.fx-rate{font-weight:600;color:var(--white)}
 
-.step-list{counter-reset:step;list-style:none;padding:0;margin:20px 0;}
-.step-list li{
-  counter-increment:step;position:relative;padding:16px 16px 16px 60px;
-  background:var(--bg-card);border:1px solid var(--border);border-radius:10px;
-  margin-bottom:12px;
-}
-.step-list li::before{
-  content:counter(step);position:absolute;left:16px;top:16px;
-  width:30px;height:30px;border-radius:50%;
-  background:linear-gradient(135deg,var(--accent-blue),var(--accent-cyan));
-  color:#fff;font-weight:800;font-size:0.85rem;
-  display:flex;align-items:center;justify-content:center;
-}
-.step-list li strong{color:var(--text-primary);}
-.step-list li p{color:var(--text-secondary);font-size:0.92rem;margin-top:4px;}
+        /* Prediction markets */
+        .pm-item{padding:8px 0;border-bottom:1px solid var(--border)}
+        .pm-item:last-child{border-bottom:none}
+        .pm-title{font-size:.7rem;color:var(--text);margin-bottom:4px}
+        .pm-bar{height:20px;background:var(--border);border-radius:3px;overflow:hidden;position:relative}
+        .pm-fill{height:100%;border-radius:3px;display:flex;align-items:center;padding:0 6px;font-size:.6rem;font-weight:700;color:var(--white)}
+        .pm-meta{display:flex;justify-content:space-between;font-size:.6rem;color:var(--dim);margin-top:3px}
 
-.columns{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;}
+        /* News list */
+        .news-item{padding:8px 0;border-bottom:1px solid var(--border)}
+        .news-item:last-child{border-bottom:none}
+        .news-src{font-size:.55rem;font-weight:700;margin-bottom:2px}
+        .news-title{font-size:.7rem;color:var(--text);line-height:1.3}.news-title a{color:var(--text);text-decoration:none}.news-title a:hover{color:var(--blue)}
 
-.color-swatch{display:inline-flex;align-items:center;gap:8px;margin:4px 8px 4px 0;}
-.color-swatch .dot{width:14px;height:14px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);}
+        /* AI Brief */
+        .ai-brief{font-size:.75rem;line-height:1.5;color:var(--text);border-left:3px solid var(--blue);padding:8px 12px;background:rgba(41,98,255,.03)}
 
-.scanner-preview{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin:24px 0;}
-.scanner-header{
-  background:linear-gradient(135deg,#0d2137,#0f2a4a);
-  padding:10px 16px;display:flex;align-items:center;justify-content:space-between;
-  border-bottom:1px solid var(--border);
-}
-.scanner-header .title{font-weight:700;color:var(--accent-gold);font-size:0.85rem;letter-spacing:1px;}
-.scanner-body{padding:0;overflow-x:auto;}
-.scanner-table{width:100%;border-collapse:collapse;font-size:0.82rem;font-family:'Consolas','Courier New',monospace;}
-.scanner-table th{
-  padding:8px 12px;text-align:center;color:var(--accent-gold);
-  background:rgba(13,71,161,0.2);font-size:0.75rem;letter-spacing:0.5px;
-  border-bottom:1px solid var(--border);white-space:nowrap;
-}
-.scanner-table td{
-  padding:7px 12px;text-align:center;border-bottom:1px solid rgba(30,58,95,0.3);white-space:nowrap;
-}
-.scanner-table tr:hover td{background:rgba(30,144,255,0.04);}
+        /* Video */
+        .vid-tabs{display:flex;gap:4px;padding:6px 8px;background:var(--bg3);border-bottom:1px solid var(--border);overflow-x:auto}
+        .vid-btn{background:var(--border);border:none;color:#b2b5be;padding:3px 10px;border-radius:3px;cursor:pointer;font-size:.65rem;white-space:nowrap;font-weight:600}
+        .vid-btn.active{background:var(--blue);color:var(--white)}
+        .vid-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:8px;padding:10px}
+        .vid-item{aspect-ratio:16/9;background:#000;position:relative;border-radius:4px;overflow:hidden}
+        .vid-item iframe{width:100%;height:100%;border:none}
+        .vid-label{position:absolute;top:4px;left:4px;background:rgba(0,0,0,.8);color:var(--white);padding:2px 6px;font-size:.6rem;border-radius:3px;pointer-events:none}
 
-code{
-  background:rgba(30,144,255,0.1);color:var(--accent-cyan);
-  padding:2px 7px;border-radius:4px;font-size:0.88em;
-  font-family:'Consolas','Courier New',monospace;
-}
+        /* Quake list */
+        .quake-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);font-size:.7rem;cursor:pointer}
+        .quake-row:hover{background:var(--bg4)}.quake-row:last-child{border-bottom:none}
+        .quake-mag{font-weight:800;padding:1px 5px;border-radius:3px;font-size:.65rem;color:#000}
 
-.footer{
-  background:var(--bg-secondary);border-top:1px solid var(--border);
-  padding:40px 0;text-align:center;color:var(--text-muted);font-size:0.85rem;
-}
-.footer a{color:var(--accent-blue);text-decoration:none;}
-.kbd{
-  display:inline-block;padding:2px 8px;border-radius:4px;
-  background:var(--bg-card-alt);border:1px solid var(--border);
-  font-family:monospace;font-size:0.85em;color:var(--text-primary);
-}
+        /* Product carousel */
+        .prod-scroll{display:flex;gap:8px;overflow-x:auto;padding:4px 0}
+        .prod-card{min-width:200px;background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:10px;display:flex;gap:8px}
+        .prod-img{width:44px;height:44px;background:#000;border-radius:4px;object-fit:cover}
 
-@media(max-width:768px){
-  .hero{padding:50px 0 40px;}
-  section{padding:40px 0;}
-  .card-grid{grid-template-columns:1fr;}
-  .columns{grid-template-columns:1fr;}
-}
-</style>
+        /* Fear & Greed */
+        .fg-strip{display:flex;align-items:center;gap:8px;padding:5px 14px;border-right:1px solid var(--border);font-size:.65rem;white-space:nowrap}
+        .fg-bar{width:80px;height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+        .fg-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--red),var(--yellow),var(--green));transition:width .5s}
+
+        /* Footer */
+        footer{padding:12px;text-align:center;font-size:.6rem;color:var(--dim);border-top:1px solid var(--border);background:var(--bg2)}
+        footer a{color:var(--blue);text-decoration:none}
+    </style>
 </head>
 <body>
 
-<header class="hero">
-  <div class="container">
-    <div class="hero-badge">G-LABS SOFTWARE</div>
-    <h1>Magic Lines <span>v5</span></h1>
-    <p>Complete User Guide &mdash; Cycle Detection, Entry System, Magic Line Targets, Scanner, Helper &amp; Alerts</p>
-    <p style="margin-top:12px;"><span class="version">MetaTrader 5 Indicator</span> &bull; Version 5.2</p>
-  </div>
+<header>
+    <a href="index.html" class="logo"><i class="fas fa-globe-americas"></i> G-LABS <span>INTEL</span></a>
+    <nav class="main-nav">
+        <a href="index.html">HOME</a>
+        <a href="global_intel.html" class="active">GLOBAL INTEL</a>
+        <a href="mql5.html">MQL5 ALGOS</a>
+        <a href="tradingview.html">TRADINGVIEW</a>
+    </nav>
+    <div class="header-right">
+        <div class="status-pill"><div class="status-dot"></div> LIVE</div>
+        <div class="status-pill">DEFCON <span style="color:var(--green);margin-left:3px">5</span></div>
+    </div>
 </header>
 
-<nav class="toc-bar" id="toc">
-  <div class="container" style="padding:0;">
-    <a href="#overview">Overview</a>
-    <a href="#setup">Setup</a>
-    <a href="#cycle">Cycle Detection</a>
-    <a href="#entries">Entry System</a>
-    <a href="#magic-lines">Magic Lines</a>
-    <a href="#reentry">Re-Entry</a>
-    <a href="#scanner">Scanner</a>
-    <a href="#helper">Helper</a>
-    <a href="#buttons">Buttons</a>
-    <a href="#alerts">Alerts</a>
-    <a href="#faq">FAQ</a>
-  </div>
-</nav>
+<!-- Ticker -->
+<div class="ticker-bar">
+    <div class="ticker-label">BREAKING</div>
+    <div class="ticker-content" id="ticker-content">MONITORING GLOBAL EVENT STREAMS... SYSTEM NOMINAL...</div>
+</div>
 
-<!-- ========== OVERVIEW ========== -->
-<section id="overview">
-  <div class="container">
-    <h2><span class="icon blue">&#x1F4CA;</span> Indicator Overview</h2>
-    <p class="section-subtitle">Magic Lines v5 is a complete BTMM (Beat The Market Maker) trading system for MetaTrader 5, rebuilt from scratch with clean code and enhanced features.</p>
-
-    <div class="card-grid">
-      <div class="card">
-        <div class="card-header"><div class="dot" style="background:var(--accent-blue)"></div><h4>Heiken Ashi Candles</h4></div>
-        <p>Volume-weighted 6-colour HA candles. Dark red/Red/Orange for bears, Dark blue/Blue/Light blue for bulls. Volume intensity shows conviction.</p>
-      </div>
-      <div class="card">
-        <div class="card-header"><div class="dot" style="background:var(--accent-gold)"></div><h4>VWAP (Auto-Anchor)</h4></div>
-        <p>Volume Weighted Average Price that auto-adjusts its anchor period based on your chart timeframe. Daily on M1-M15, Weekly on M30-H1, Monthly on H1-H4.</p>
-      </div>
-      <div class="card">
-        <div class="card-header"><div class="dot" style="background:var(--accent-cyan)"></div><h4>EMA 62</h4></div>
-        <p>Colour-coded trend line &mdash; blue when price is above (bullish), red when below (bearish). The key level for cycle detection alongside VWAP.</p>
-      </div>
-      <div class="card">
-        <div class="card-header"><div class="dot" style="background:var(--accent-green)"></div><h4>Triple ZigZag</h4></div>
-        <p>Large (150/24), Medium (34/6), and Small (14/3) ZigZag levels shown as semafor dots. Visual reference only &mdash; not used in signal logic.</p>
-      </div>
-      <div class="card">
-        <div class="card-header"><div class="dot" style="background:var(--accent-orange)"></div><h4>Smart Entry System</h4></div>
-        <p>Entry at HA midpoint with ADR-based SL and Magic Line TP targets. Each label shows pip distance, R:R ratio, and partial close suggestions.</p>
-      </div>
-      <div class="card">
-        <div class="card-header"><div class="dot" style="background:var(--accent-purple)"></div><h4>Multi-Pair Scanner</h4></div>
-        <p>9-column live scanner showing cycle direction, ADR%, EMA touch status, re-entry signals, and confluence score across up to 8 pairs.</p>
-      </div>
+<!-- Market Strip -->
+<div class="market-strip" id="market-strip">
+    <div class="fg-strip" id="fg-strip">
+        <span style="color:var(--dim)">Fear/Greed</span>
+        <span style="font-weight:800;color:var(--white)" id="fg-val">--</span>
+        <span id="fg-label" style="color:var(--dim)">...</span>
+        <div class="fg-bar"><div class="fg-fill" id="fg-fill" style="width:50%"></div></div>
     </div>
-  </div>
-</section>
+</div>
 
-<!-- ========== SETUP ========== -->
-<section id="setup">
-  <div class="container">
-    <h2><span class="icon green">&#x1F527;</span> Installation &amp; Setup</h2>
-    <p class="section-subtitle">Getting Magic Lines v5 running on your MetaTrader 5 charts.</p>
-
-    <ol class="step-list">
-      <li><strong>Copy the file</strong> <code>G_Labs_Magic_Lines_v5.mq5</code> into your MT5 <code>MQL5\Indicators\</code> folder.</li>
-      <li><strong>Open MetaEditor</strong> (press <span class="kbd">F4</span> in MT5) and find the file in the Navigator under Indicators.</li>
-      <li><strong>Compile</strong> by pressing <span class="kbd">F7</span>. Ensure zero errors in the output log.</li>
-      <li><strong>Drag the indicator</strong> onto any chart. Recommended timeframes: <span class="badge info">M5</span> <span class="badge info">M15</span> <span class="badge info">H1</span></li>
-      <li><strong>Configure inputs</strong> &mdash; adjust scanner pairs, ADR period, session times to match your broker's server time.</li>
-    </ol>
-
-    <div class="tip-box">
-      <div class="tip-label blue">KEY SETTING</div>
-      <p>The <strong>Scanner Pairs</strong> input accepts comma-separated symbols: <code>EURUSD,GBPUSD,USDJPY,AUDUSD,USDCAD,NZDUSD,USDCHF,EURGBP</code>. If your broker uses suffixes (e.g. EURUSD.m), the indicator auto-detects them.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ========== CYCLE DETECTION ========== -->
-<section id="cycle">
-  <div class="container">
-    <h2><span class="icon blue">&#x1F504;</span> Cycle Detection</h2>
-    <p class="section-subtitle">How v5 identifies bull and bear cycles &mdash; the foundation of the entire entry system.</p>
-
-    <h3>The "Clean Candle" Concept</h3>
-    <p>A <strong>clean bearish HA candle</strong> has its entire body below BOTH the VWAP and the EMA 62, with <em>no upper wick</em> (haHigh equals haOpen). This means sellers completely dominated with zero retracement.</p>
-    <p style="margin-top:8px;">A <strong>clean bullish HA candle</strong> is the mirror &mdash; entire body above both lines, no lower wick.</p>
-
-    <h3>APH Trigger (Bear Cycle Starts)</h3>
-    <div class="tip-box">
-      <div class="tip-label red">APH &mdash; Average Price High</div>
-      <p>When <strong>2 consecutive clean bearish HA candles</strong> appear below both VWAP and EMA, after price was previously bullish or neutral, the indicator records the <strong>highest high</strong> reached during the previous bull run as the APH level. A <span class="badge sell">SELL</span> cycle begins.</p>
+<!-- Main Layout -->
+<div class="main-layout">
+    <!-- Left Panel -->
+    <div class="left-panel">
+        <div class="panel-head">
+            <span><i class="fas fa-satellite-dish"></i> INTEL FEED</span>
+            <span style="color:var(--red);font-size:.65rem">● LIVE</span>
+        </div>
+        <div class="panel-tabs">
+            <div class="panel-tab active" data-tab="intel" onclick="switchTab('intel',this)">GDELT INTEL</div>
+            <div class="panel-tab" data-tab="markets" onclick="switchTab('markets',this)">MARKETS</div>
+            <div class="panel-tab" data-tab="crypto" onclick="switchTab('crypto',this)">CRYPTO</div>
+            <div class="panel-tab" data-tab="world" onclick="switchTab('world',this)">WORLD</div>
+        </div>
+        <div class="feed-filters" id="feed-filters">
+            <button class="feed-btn active" data-preset="default" onclick="filterFeed('default')">ALL</button>
+            <button class="feed-btn" data-preset="markets" onclick="filterFeed('markets')">MARKETS</button>
+            <button class="feed-btn" data-preset="commodities" onclick="filterFeed('commodities')">COMMODITIES</button>
+            <button class="feed-btn" data-preset="conflict" onclick="filterFeed('conflict')">CONFLICT</button>
+        </div>
+        <div class="feed-list" id="feed-list">
+            <div style="padding:20px;text-align:center;color:var(--dim)">Initializing...</div>
+        </div>
     </div>
 
-    <h3>APL Trigger (Bull Cycle Starts)</h3>
-    <div class="tip-box success">
-      <div class="tip-label green">APL &mdash; Average Price Low</div>
-      <p>When <strong>2 consecutive clean bullish HA candles</strong> appear above both VWAP and EMA, after price was previously bearish or neutral, the indicator records the <strong>lowest low</strong> as the APL level. A <span class="badge buy">BUY</span> cycle begins.</p>
+    <!-- Map -->
+    <div class="map-area"><div id="map"></div></div>
+</div>
+
+<!-- Dashboard Section -->
+<div class="dash-section">
+    <div class="dash-grid">
+
+        <!-- Crypto Prices -->
+        <div class="card">
+            <div class="card-head"><span><i class="fas fa-coins"></i> CRYPTO MARKETS</span><span class="badge" style="background:rgba(38,166,154,.15);color:var(--green)">LIVE</span></div>
+            <div class="card-body" id="crypto-body"><div style="text-align:center;color:var(--dim);padding:20px">Loading...</div></div>
+        </div>
+
+        <!-- Forex -->
+        <div class="card">
+            <div class="card-head"><span><i class="fas fa-exchange-alt"></i> FOREX MAJORS</span><span class="badge" style="background:rgba(41,98,255,.15);color:var(--blue)">FX</span></div>
+            <div class="card-body" id="forex-body"><div style="text-align:center;color:var(--dim);padding:20px">Loading...</div></div>
+        </div>
+
+        <!-- Market Snapshot -->
+        <div class="card">
+            <div class="card-head"><span><i class="fas fa-chart-line"></i> INDICES & ETFs</span><span id="mkt-updated" style="font-size:.55rem;color:var(--dim)">--</span></div>
+            <div class="card-body" id="market-body"><div style="text-align:center;color:var(--dim);padding:20px">Loading...</div></div>
+        </div>
+
+        <!-- Prediction Markets -->
+        <div class="card">
+            <div class="card-head"><span><i class="fas fa-poll"></i> PREDICTION MARKETS</span><span class="badge" style="background:rgba(255,207,34,.15);color:var(--yellow)">POLYMARKET</span></div>
+            <div class="card-body" id="polymarket-body"><div style="text-align:center;color:var(--dim);padding:20px">Loading...</div></div>
+        </div>
+
+        <!-- AI Strategic Brief -->
+        <div class="card">
+            <div class="card-head"><span><i class="fas fa-brain"></i> AI STRATEGIC BRIEF</span><span class="badge" style="background:rgba(255,207,34,.15);color:var(--yellow)">HEURISTIC</span></div>
+            <div class="card-body" id="ai-body">
+                <div class="ai-brief" id="ai-brief">Analyzing headlines...</div>
+            </div>
+        </div>
+
+        <!-- Seismic Monitor -->
+        <div class="card">
+            <div class="card-head"><span><i class="fas fa-house-damage"></i> SEISMIC MONITOR</span><span class="badge" style="background:rgba(239,83,80,.15);color:var(--red)">USGS</span></div>
+            <div class="card-body" id="quake-body"><div style="text-align:center;color:var(--dim);padding:20px">Loading...</div></div>
+        </div>
+
+        <!-- World News -->
+        <div class="card">
+            <div class="card-head"><span><i class="fas fa-globe"></i> WORLD NEWS WIRE</span><span class="badge" style="background:rgba(41,98,255,.15);color:var(--blue)">35+ SOURCES</span></div>
+            <div class="card-body" id="worldnews-body"><div style="text-align:center;color:var(--dim);padding:20px">Loading...</div></div>
+        </div>
+
+        <!-- Market News -->
+        <div class="card">
+            <div class="card-head"><span><i class="fas fa-newspaper"></i> MARKET NEWS</span><span class="badge" style="background:rgba(38,166,154,.15);color:var(--green)">FINANCE</span></div>
+            <div class="card-body" id="marketnews-body"><div style="text-align:center;color:var(--dim);padding:20px">Loading...</div></div>
+        </div>
+
+        <!-- Live Video -->
+        <div class="card card-full">
+            <div class="card-head"><span><i class="fas fa-video"></i> LIVE SURVEILLANCE</span><span class="badge" style="background:rgba(38,166,154,.15);color:var(--green)">LIVE</span></div>
+            <div class="vid-tabs">
+                <button class="vid-btn active" onclick="setVideo('aljazeera',this)">AL JAZEERA</button>
+                <button class="vid-btn" onclick="setVideo('dw',this)">DW NEWS</button>
+                <button class="vid-btn" onclick="setVideo('france24',this)">FRANCE 24</button>
+                <button class="vid-btn" onclick="setVideo('sky',this)">SKY NEWS</button>
+                <button class="vid-btn" onclick="setVideo('nasa',this)">NASA TV</button>
+            </div>
+            <div class="vid-grid">
+                <div class="vid-item"><div class="vid-label">AL JAZEERA LIVE</div><iframe id="main-vid" src="https://www.youtube.com/embed/gCNeDWCI0vo?autoplay=1&mute=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen title="Live stream"></iframe></div>
+                <div class="vid-item"><div class="vid-label">KYIV, UKRAINE</div><iframe src="https://www.youtube.com/embed/V0I5eglJMKE?autoplay=1&mute=1&controls=0" allow="autoplay"></iframe></div>
+                <div class="vid-item"><div class="vid-label">TOKYO, JAPAN</div><iframe src="https://www.youtube.com/embed/F8MN0o6rs9A?autoplay=1&mute=1&controls=0" allow="autoplay"></iframe></div>
+            </div>
+        </div>
+
+        <!-- Algo Store -->
+        <div class="card card-full" style="min-height:auto">
+            <div class="card-head"><span><i class="fas fa-robot"></i> ALGO STORE</span></div>
+            <div class="card-body"><div id="product-carousel" class="prod-scroll"></div></div>
+        </div>
     </div>
+</div>
 
-    <h3>Why Two Candles?</h3>
-    <p>A single clean candle can be noise. Two consecutive candles on the same side of both VWAP and EMA confirms a genuine shift in market structure. The <code>NOT isTCls[2]</code> condition ensures we only fire once at the transition, not on every subsequent candle.</p>
-  </div>
-</section>
-
-<!-- ========== ENTRY SYSTEM ========== -->
-<section id="entries">
-  <div class="container">
-    <h2><span class="icon green">&#x1F3AF;</span> Entry System</h2>
-    <p class="section-subtitle">When a cycle change fires, the full entry system draws automatically on the chart.</p>
-
-    <h3>Entry Price</h3>
-    <p>The entry is placed at the <strong>HA candle midpoint</strong>: <code>(haOpen + haClose) / 2</code>. This is more reliable than the close price because it represents the average commitment level of that candle.</p>
-
-    <h3>Lines Drawn on Chart</h3>
-    <table class="feature-table">
-      <tr><th>Line</th><th>Colour</th><th>Description</th></tr>
-      <tr><td class="label">Entry</td><td style="color:var(--accent-gold)">Gold</td><td>HA midpoint + BUY/SELL label + signal quality (STRONG/WEAK based on volume)</td></tr>
-      <tr><td class="label">APH / APL</td><td style="color:var(--accent-blue)">Blue / Red</td><td>Structural level (highest high or lowest low of previous cycle) + age in days</td></tr>
-      <tr><td class="label">Stop Loss</td><td style="color:var(--accent-red)">Red</td><td>Entry &plusmn; ADR &times; SL Multiplier, with pip distance label</td></tr>
-      <tr><td class="label">TP1 (ML 1)</td><td style="color:var(--accent-green)">Green</td><td>Entry &plusmn; 1&times;ADR &mdash; "TP1 (50%) | XXp | 1:X.X"</td></tr>
-      <tr><td class="label">TP2 (ML 2)</td><td style="color:#50ff78">Bright Green</td><td>Entry &plusmn; 2&times;ADR &mdash; "TP2 (30%) | XXp | 1:X.X"</td></tr>
-      <tr><td class="label">TP3 (ML 3)</td><td style="color:var(--accent-gold)">Gold</td><td>Entry &plusmn; 3&times;ADR &mdash; "TP3 (20%) | XXp | 1:X.X"</td></tr>
-      <tr><td class="label">Breakeven</td><td style="color:#666">Grey dotted</td><td>Appears at entry price when TP1 is hit &mdash; "BE (move SL here)"</td></tr>
-    </table>
-
-    <h3>Signal Quality Rating</h3>
-    <p>Each entry is rated based on volume at the trigger candle:</p>
-    <ul style="margin:12px 0 0 20px;color:var(--text-secondary);">
-      <li><strong>STRONG</strong> &mdash; Volume &gt; 1.5&times; the 21-bar average. High conviction.</li>
-      <li><strong>(no label)</strong> &mdash; Normal volume. Standard signal.</li>
-      <li><strong>WEAK</strong> &mdash; Volume &lt; 0.8&times; average. Low conviction, trade with caution.</li>
-    </ul>
-
-    <h3>Partial Close Strategy</h3>
-    <div class="tip-box success">
-      <div class="tip-label green">RECOMMENDED</div>
-      <p>Close 50% at TP1, move SL to breakeven. Close 30% at TP2, move SL to ML1. Let the remaining 20% run to TP3. This locks in profit while allowing for extension moves.</p>
-    </div>
-
-    <h3>Understanding ADR-Based Targets</h3>
-    <p>Magic Lines are <strong>not</strong> traditional support/resistance. They are ADR-projected price targets measured from the entry. The ADR (Average Daily Range) is calculated over the last 15 days by default. If a pair's ADR is 80 pips, then ML1 is 80 pips from entry, ML2 is 160 pips, ML3 is 240 pips. This scales dynamically with volatility.</p>
-  </div>
-</section>
-
-<!-- ========== MAGIC LINES ========== -->
-<section id="magic-lines">
-  <div class="container">
-    <h2><span class="icon gold">&#x2728;</span> Understanding Magic Lines</h2>
-    <p class="section-subtitle">The core concept that gives the indicator its name.</p>
-
-    <h3>What Are Magic Lines?</h3>
-    <p>Magic Lines are <strong>ADR-based take-profit targets</strong> projected from the entry price when a new cycle starts. They represent where price is statistically likely to reach based on average daily volatility.</p>
-
-    <div class="columns">
-      <div class="card">
-        <div class="card-header"><div class="dot" style="background:var(--accent-green)"></div><h4>Buy Cycle (APL)</h4></div>
-        <ul>
-          <li>ML 1 = Entry + 1&times;ADR (first target)</li>
-          <li>ML 2 = Entry + 2&times;ADR (extension)</li>
-          <li>ML 3 = Entry + 3&times;ADR (full extension)</li>
-          <li>SL = Entry &minus; ADR &times; SL multiplier</li>
-        </ul>
-      </div>
-      <div class="card">
-        <div class="card-header"><div class="dot" style="background:var(--accent-red)"></div><h4>Sell Cycle (APH)</h4></div>
-        <ul>
-          <li>ML 1 = Entry &minus; 1&times;ADR (first target)</li>
-          <li>ML 2 = Entry &minus; 2&times;ADR (extension)</li>
-          <li>ML 3 = Entry &minus; 3&times;ADR (full extension)</li>
-          <li>SL = Entry + ADR &times; SL multiplier</li>
-        </ul>
-      </div>
-    </div>
-
-    <h3>ADR Multiplier Inputs</h3>
-    <table class="feature-table">
-      <tr><th>Input</th><th>Default</th><th>Purpose</th></tr>
-      <tr><td class="label">ADR Period</td><td>15</td><td>Number of days used to calculate average daily range</td></tr>
-      <tr><td class="label">ADR Multiplier (TP)</td><td>1.0</td><td>Scales target distances. Set to 0.8 for tighter targets, 1.2 for wider</td></tr>
-      <tr><td class="label">ADR Multiplier (SL)</td><td>1.0</td><td>Scales stop loss distance. Set to 0.5 for tighter stops</td></tr>
-      <tr><td class="label">Number of Lines</td><td>4</td><td>Total lines: 1 SL + (N-1) ML targets. Default = 1 SL + 3 TPs</td></tr>
-      <tr><td class="label">Line Extension</td><td>150</td><td>How far right (in bars) the lines extend</td></tr>
-    </table>
-  </div>
-</section>
-
-<!-- ========== RE-ENTRY ========== -->
-<section id="reentry">
-  <div class="container">
-    <h2><span class="icon orange">&#x1F501;</span> Re-Entry Signals</h2>
-    <p class="section-subtitle">Catching the second (and third) wave within an existing cycle.</p>
-
-    <h3>How Re-Entry Works</h3>
-    <p>After an APL or APH sets the cycle direction, price may retrace before continuing. The re-entry system catches these pullbacks:</p>
-
-    <ol class="step-list">
-      <li><strong>Cycle is active</strong> &mdash; An APL (bull) or APH (bear) has already fired.</li>
-      <li><strong>Pullback detected</strong> &mdash; Price crosses to the <em>opposite</em> side of both VWAP and EMA. This "arms" the re-entry trigger.</li>
-      <li><strong>Resumption confirmed</strong> &mdash; 2 consecutive clean HA candles appear back on the correct side of VWAP+EMA. The re-entry fires.</li>
-    </ol>
-
-    <h3>What Appears on the Chart</h3>
-    <ul style="margin:12px 0 0 20px;color:var(--text-secondary);">
-      <li><strong>Diamond arrow</strong> (blue for bull, red for bear) at the re-entry bar</li>
-      <li><strong>Gold horizontal line</strong> at the HA midpoint, labeled "Re-Entry #1", "#2", etc.</li>
-      <li><strong>"RE#N" text label</strong> directly on the chart for quick visual identification</li>
-    </ul>
-
-    <div class="tip-box warn">
-      <div class="tip-label orange">IMPORTANT</div>
-      <p>Re-entry lines and labels are automatically cleared when a new cycle starts (new APH or APL). Each cycle tracks its own re-entry count from zero.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ========== SCANNER ========== -->
-<section id="scanner">
-  <div class="container">
-    <h2><span class="icon purple">&#x1F4CB;</span> Multi-Pair Scanner</h2>
-    <p class="section-subtitle">Live dashboard showing the state of up to 8 pairs at a glance.</p>
-
-    <div class="scanner-preview">
-      <div class="scanner-header">
-        <span class="title">MAGIC LINES v5</span>
-        <span style="color:var(--accent-cyan);font-size:0.8rem;">LDN NY</span>
-      </div>
-      <div class="scanner-body">
-        <table class="scanner-table">
-          <tr><th>PAIR</th><th>DIR</th><th>HTF</th><th>ADR%</th><th>EMA</th><th>RE</th><th>CF</th><th>ADR</th><th>RNG</th></tr>
-          <tr><td style="color:var(--accent-orange)">EURUSD</td><td style="color:var(--accent-blue)">BUY</td><td style="color:var(--accent-blue)">BULL</td><td style="color:#fff">42%</td><td style="color:var(--accent-green)">YES</td><td style="color:#555">-</td><td style="color:var(--accent-green)">4</td><td>78</td><td>33</td></tr>
-          <tr><td>GBPUSD</td><td style="color:var(--accent-red)">SEL</td><td style="color:var(--accent-red)">BEAR</td><td style="color:var(--accent-orange)">81%</td><td style="color:#555">-</td><td style="color:var(--accent-red)">SEL</td><td style="color:var(--accent-orange)">3</td><td>112</td><td>91</td></tr>
-          <tr><td>USDJPY</td><td style="color:var(--accent-blue)">BUY</td><td style="color:var(--accent-blue)">BULL</td><td style="color:var(--accent-blue)">67%</td><td style="color:#555">-</td><td style="color:#555">-</td><td style="color:var(--accent-blue)">2</td><td>95</td><td>64</td></tr>
-        </table>
-      </div>
-    </div>
-
-    <h3>Column Descriptions</h3>
-    <table class="feature-table">
-      <tr><th>Column</th><th>What It Shows</th></tr>
-      <tr><td class="label">PAIR</td><td>Symbol name (click to switch chart). Current pair highlighted in orange.</td></tr>
-      <tr><td class="label">DIR</td><td>Current timeframe cycle: <span class="badge buy">BUY</span> or <span class="badge sell">SEL</span> based on close vs EMA</td></tr>
-      <tr><td class="label">HTF</td><td>Higher timeframe bias (configurable, default H1): <span style="color:var(--accent-blue)">BULL</span> / <span style="color:var(--accent-red)">BEAR</span></td></tr>
-      <tr><td class="label">ADR%</td><td>Today's range as % of average daily range. White &lt;50%, Blue &lt;75%, Orange &lt;100%, <span style="color:var(--accent-red)">Red &ge;100%</span></td></tr>
-      <tr><td class="label">EMA</td><td><span style="color:var(--accent-green)">YES</span> if current candle is touching the EMA, otherwise <span style="color:#555">&ndash;</span></td></tr>
-      <tr><td class="label">RE</td><td>Re-entry signal active: <span class="badge buy">BUY</span> / <span class="badge sell">SEL</span> or <span style="color:#555">&ndash;</span></td></tr>
-      <tr><td class="label">CF</td><td>Confluence score 0&ndash;5. <span style="color:var(--accent-green)">4+ = Strong</span>, <span style="color:var(--accent-orange)">3 = Moderate</span>, <span style="color:var(--accent-blue)">2 = Building</span></td></tr>
-      <tr><td class="label">ADR</td><td>Average Daily Range in pips</td></tr>
-      <tr><td class="label">RNG</td><td>Today's range so far in pips</td></tr>
-    </table>
-
-    <div class="tip-box">
-      <div class="tip-label blue">PERFORMANCE NOTE</div>
-      <p>The scanner uses lightweight iMA handles instead of loading the full indicator per pair. No iCustom calls. This keeps CPU usage minimal even with 8 pairs scanning.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ========== HELPER ========== -->
-<section id="helper">
-  <div class="container">
-    <h2><span class="icon cyan">&#x1F4A1;</span> Trade Helper Window</h2>
-    <p class="section-subtitle">Real-time trade assistant in the bottom-left corner of your chart.</p>
-
-    <h3>Helper Fields</h3>
-    <table class="feature-table">
-      <tr><th>Field</th><th>Description</th></tr>
-      <tr><td class="label">Cycle</td><td>Current confirmed cycle: BULL (APL), BEAR (APH), or FLAT</td></tr>
-      <tr><td class="label">VWAP</td><td>Distance from VWAP in pips. Blue = above, Red = below</td></tr>
-      <tr><td class="label">EMA 62</td><td>Distance from EMA in pips. Green when within 15 pips (touch imminent)</td></tr>
-      <tr><td class="label">ADR Used</td><td>Percentage of average daily range consumed today. Red when &gt;90%</td></tr>
-      <tr><td class="label">Near ML</td><td>Distance to the nearest Magic Line target. Gold when close (&lt;20 pips)</td></tr>
-      <tr><td class="label">Quality</td><td>Signal rating 1&ndash;5 stars based on volume, ADR remaining, VWAP position, and cycle status</td></tr>
-      <tr><td class="label">Trail SL</td><td>Dynamic suggestion: "SL at original" &rarr; "Move SL to Breakeven" (TP1 hit) &rarr; "Move SL to ML1" (TP2 hit)</td></tr>
-      <tr><td class="label">Confluence</td><td>Score out of 5 combining cycle, VWAP alignment, EMA proximity, ADR capacity, and ML proximity</td></tr>
-      <tr><td class="label">Action</td><td>Trade recommendation: STRONG BUY/SELL, WATCH ENTRY, BUILDING, or NO SETUP</td></tr>
-    </table>
-
-    <div class="tip-box warn">
-      <div class="tip-label orange">ADR EXHAUSTION</div>
-      <p>When ADR Used exceeds 90%, the helper displays a red warning: <strong>"ADR EXHAUSTED &mdash; AVOID ENTRIES"</strong>. Price has already moved its average full-day range, making new entries high-risk.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ========== BUTTONS ========== -->
-<section id="buttons">
-  <div class="container">
-    <h2><span class="icon gold">&#x1F39B;</span> Toggle Buttons</h2>
-    <p class="section-subtitle">Clickable toolbar at the top of the chart for toggling features on and off.</p>
-
-    <table class="feature-table">
-      <tr><th>Button</th><th>Toggles</th><th>Default</th></tr>
-      <tr><td class="label">HA</td><td>Heiken Ashi candle overlay</td><td><span class="badge buy">ON</span></td></tr>
-      <tr><td class="label">VWAP</td><td>VWAP line</td><td><span class="badge buy">ON</span></td></tr>
-      <tr><td class="label">EMA</td><td>EMA 62 colour line</td><td><span class="badge buy">ON</span></td></tr>
-      <tr><td class="label">ZZ</td><td>All three ZigZag levels</td><td><span class="badge buy">ON</span></td></tr>
-      <tr><td class="label">ML</td><td>Entry lines, SL, and Magic Line TP targets</td><td><span class="badge buy">ON</span></td></tr>
-      <tr><td class="label">SESS</td><td>Session vertical markers (London, NY, Asian)</td><td><span class="badge buy">ON</span></td></tr>
-      <tr><td class="label">SIG</td><td>APH/APL signal arrows and re-entry arrows</td><td><span class="badge buy">ON</span></td></tr>
-      <tr><td class="label">SCAN</td><td>Multi-pair scanner dashboard</td><td><span class="badge buy">ON</span></td></tr>
-      <tr><td class="label">HELP</td><td>Trade helper window</td><td><span class="badge buy">ON</span></td></tr>
-    </table>
-
-    <p style="margin-top:16px;color:var(--text-secondary);">Buttons glow blue when active and go dark when disabled. Click the button or its label text to toggle. All toggles are instant &mdash; no need to reopen settings.</p>
-  </div>
-</section>
-
-<!-- ========== ALERTS ========== -->
-<section id="alerts">
-  <div class="container">
-    <h2><span class="icon orange">&#x1F514;</span> Alert System</h2>
-    <p class="section-subtitle">Never miss a cycle change, re-entry, or VWAP cross.</p>
-
-    <h3>Alert Types</h3>
-    <table class="feature-table">
-      <tr><th>Alert</th><th>Fires When</th></tr>
-      <tr><td class="label">BULL Cycle (APL)</td><td>New bull cycle starts &mdash; 2 clean bull candles above VWAP+EMA after bear period</td></tr>
-      <tr><td class="label">BEAR Cycle (APH)</td><td>New bear cycle starts &mdash; 2 clean bear candles below VWAP+EMA after bull period</td></tr>
-      <tr><td class="label">Bull Re-Entry</td><td>Re-entry signal in a bull cycle (pullback then resume)</td></tr>
-      <tr><td class="label">Bear Re-Entry</td><td>Re-entry signal in a bear cycle</td></tr>
-      <tr><td class="label">VWAP Cross UP</td><td>Price closes above VWAP after being below</td></tr>
-      <tr><td class="label">VWAP Cross DOWN</td><td>Price closes below VWAP after being above</td></tr>
-    </table>
-
-    <h3>Delivery Methods</h3>
-    <div class="columns">
-      <div class="card">
-        <div class="card-header"><div class="dot" style="background:var(--accent-green)"></div><h4>4 Delivery Options</h4></div>
-        <ul>
-          <li><strong>MT5 Alert Popup</strong> &mdash; Standard alert dialog (default: ON)</li>
-          <li><strong>Sound</strong> &mdash; Plays alert.wav (default: ON)</li>
-          <li><strong>Push Notification</strong> &mdash; To your phone via MetaTrader app (default: OFF)</li>
-          <li><strong>Email</strong> &mdash; To configured SMTP in MT5 (default: OFF)</li>
-        </ul>
-      </div>
-      <div class="card">
-        <div class="card-header"><div class="dot" style="background:var(--accent-blue)"></div><h4>Deduplication</h4></div>
-        <p>All alerts use timestamp-based deduplication. The same alert type will not fire twice on the same bar, preventing alert spam during volatile conditions.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ========== SESSION MARKERS ========== -->
-<section id="sessions" style="padding:60px 0;">
-  <div class="container">
-    <h2><span class="icon purple">&#x23F0;</span> Session Markers</h2>
-    <p class="section-subtitle">Thin dotted vertical lines mark session open and close times.</p>
-
-    <table class="feature-table">
-      <tr><th>Session</th><th>Default Times</th><th>Colour</th></tr>
-      <tr><td class="label">London</td><td>08:00 &ndash; 17:00 (server time)</td><td><span class="color-swatch"><span class="dot" style="background:#006432"></span> Dark green</span></td></tr>
-      <tr><td class="label">New York</td><td>13:00 &ndash; 22:00</td><td><span class="color-swatch"><span class="dot" style="background:#b46400"></span> Dark orange</span></td></tr>
-      <tr><td class="label">Asian</td><td>00:00 &ndash; 09:00</td><td><span class="color-swatch"><span class="dot" style="background:#3c0064"></span> Dark purple</span></td></tr>
-    </table>
-
-    <p style="margin-top:16px;color:var(--text-secondary);">Session markers use vertical dotted lines instead of filled rectangles. This keeps the chart clean and doesn't obscure price action. Adjust session times in the inputs to match your broker's server timezone.</p>
-  </div>
-</section>
-
-<!-- ========== FAQ ========== -->
-<section id="faq">
-  <div class="container">
-    <h2><span class="icon cyan">&#x2753;</span> Frequently Asked Questions</h2>
-    <p class="section-subtitle">Common questions about Magic Lines v5.</p>
-
-    <div class="card" style="margin-bottom:16px;">
-      <h4>Why aren't any entry lines showing?</h4>
-      <p>Entry lines only appear after a cycle change (APH or APL) has fired. If the market hasn't had a clear transition with 2 clean HA candles crossing both VWAP and EMA, no entry will trigger. Try a lower timeframe (M5/M15) for more frequent signals.</p>
-    </div>
-    <div class="card" style="margin-bottom:16px;">
-      <h4>What's the difference between Magic Lines and traditional S/R?</h4>
-      <p>Magic Lines are <strong>forward-projected targets</strong> based on ADR, not historical support/resistance. They represent where price is likely to travel based on average volatility, measured from the entry point. Think of them as statistical price targets.</p>
-    </div>
-    <div class="card" style="margin-bottom:16px;">
-      <h4>How does the VWAP auto-anchor work?</h4>
-      <p>The VWAP resets at different intervals depending on your chart timeframe: Daily for M1-M15, Weekly for M30-H1, Monthly for H1-H4. This ensures VWAP is always relevant to the timeframe you're analysing.</p>
-    </div>
-    <div class="card" style="margin-bottom:16px;">
-      <h4>Can I adjust the signal sensitivity?</h4>
-      <p>The "clean candle" requirement is strict by design &mdash; it filters out noise. To get more signals, lower your chart timeframe. The ADR multipliers control target/SL distances but not signal frequency.</p>
-    </div>
-    <div class="card" style="margin-bottom:16px;">
-      <h4>Why is the scanner showing different data than my chart?</h4>
-      <p>The scanner uses a simplified cycle detection (close vs EMA) for remote pairs, while the chart uses the full HA + VWAP + EMA system. This is by design for performance &mdash; running full calculations across 8 pairs would be too heavy.</p>
-    </div>
-    <div class="card" style="margin-bottom:16px;">
-      <h4>What does the "Quality" rating in the helper mean?</h4>
-      <p>It's a 0&ndash;5 score based on: volume at the cycle change (&gt;1.5x avg = +2), ADR remaining (&lt;70% used = +1), VWAP proximity (&lt;30 pips = +1), and active cycle (+1). Higher scores indicate higher-probability setups.</p>
-    </div>
-    <div class="card">
-      <h4>Does this indicator repaint?</h4>
-      <p>Signals only fire on confirmed bars (when the clean candle conditions are fully met). The ZigZag semafor dots are visual reference only and do not affect signals. Entry lines are drawn at the point of signal confirmation and do not move.</p>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer class="footer">
-  <div class="container">
-    <p>G-Labs Magic Lines v5.2 &mdash; User Guide</p>
-    <p style="margin-top:8px;">&copy; 2026 <a href="http://www.g-labs.software">G-Labs Software</a> &bull; Apex Pro Group Ltd</p>
-    <p style="margin-top:12px;font-size:0.8rem;color:var(--text-muted);">This indicator is for educational and informational purposes. Trading involves substantial risk. Past performance does not guarantee future results.</p>
-  </div>
+<footer>
+    <p>G-Labs Intel Dashboard &mdash; Real-time OSINT & Trading Intelligence &mdash; <a href="index.html">G-Labs</a> &copy; 2024-2026</p>
+    <p style="margin-top:4px">Data: USGS, NASA EONET, GDACS, GDELT, CoinGecko, Polymarket, Frankfurter, Reuters, BBC, AP, CNBC, Al Jazeera + 30 more</p>
 </footer>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+const $ = id => document.getElementById(id);
+function esc(s){if(s==null)return'';const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function fmtNum(n,d=2){return typeof n==='number'?n.toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d}):n}
+function fmtBig(n){if(n>=1e12)return(n/1e12).toFixed(1)+'T';if(n>=1e9)return(n/1e9).toFixed(1)+'B';if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n>=1e3)return(n/1e3).toFixed(1)+'K';return n}
+function chgClass(v){return v>=0?'ms-up':'ms-down'}
+function chgStr(v){if(v==null)return'--';return(v>=0?'+':'')+v.toFixed(2)+'%'}
+var API_BASE = '';
+function apiUrl(path){return (API_BASE || '') + path;}
+
+// === MAP ===
+const map=L.map('map',{zoomControl:false,attributionControl:false}).setView([20,0],2);
+const baseLayers={'Dark (CARTO)':L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19}),'Satellite':L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:18}),'OpenStreetMap':L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19})};
+baseLayers['Dark (CARTO)'].addTo(map);
+L.control.zoom({position:'topright'}).addTo(map);
+const layers={quakes:L.layerGroup().addTo(map),eonet:L.layerGroup(),gdacs:L.layerGroup().addTo(map),intel:L.layerGroup().addTo(map)};
+L.control.layers(baseLayers,{"Earthquakes (USGS)":layers.quakes,"Natural Events (EONET)":layers.eonet,"Disasters (GDACS)":layers.gdacs,"Intel / Conflict (GDELT)":layers.intel},{position:'topleft'}).addTo(map);
+
+// === USGS EARTHQUAKES ===
+async function fetchQuakes(){
+    try{
+        const r=await fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson');
+        const d=await r.json();layers.quakes.clearLayers();
+        let html='';
+        (d.features||[]).slice(0,15).forEach(q=>{
+            const m=q.properties.mag,p=q.properties.place||'Unknown',t=new Date(q.properties.time).toLocaleTimeString();
+            let c='var(--green)';if(m>4)c='var(--yellow)';if(m>5)c='var(--red)';
+            const lat=q.geometry.coordinates[1],lng=q.geometry.coordinates[0];
+            L.circleMarker([lat,lng],{radius:Math.max(m*2,3),fillColor:c.replace('var(--green)','#26a69a').replace('var(--yellow)','#ffcf22').replace('var(--red)','#ef5350'),color:'#000',weight:1,fillOpacity:.7}).bindPopup(`<b>M${m}</b><br>${p}`).addTo(layers.quakes);
+            const bgc=c.replace('var(--green)','#26a69a').replace('var(--yellow)','#ffcf22').replace('var(--red)','#ef5350');
+            html+=`<div class="quake-row" onclick="map.flyTo([${lat},${lng}],6)"><div style="display:flex;gap:6px;align-items:center"><span class="quake-mag" style="background:${bgc}">${m.toFixed(1)}</span><span>${esc(p.split(',').pop().trim())}</span></div><span style="color:var(--dim)">${t}</span></div>`;
+        });
+        $('quake-body').innerHTML=html||'<div style="padding:12px;color:var(--dim)">No recent quakes.</div>';
+    }catch(e){console.error('USGS',e)}
+}
+
+// === EONET ===
+async function fetchEonet(){
+    try{
+        const r=await fetch('https://eonet.gsfc.nasa.gov/api/v2.1/events?limit=20&days=30');
+        const d=await r.json();layers.eonet.clearLayers();
+        (d.events||[]).forEach(ev=>{
+            if(!ev.geometries||!ev.geometries.length)return;
+            const cat=ev.categories[0].title,co=ev.geometries[0].coordinates;
+            let color='#ff7043',icon='fa-fire';
+            if(cat==='Volcanoes'){color='#ef5350';icon='fa-mountain'}
+            if(cat==='Severe Storms'){color='#42a5f5';icon='fa-bolt'}
+            L.marker([co[1],co[0]],{icon:L.divIcon({html:`<i class="fas ${icon}" style="color:${color};font-size:14px;text-shadow:0 0 5px #000"></i>`,className:'',iconSize:[14,14],iconAnchor:[7,7]})}).bindPopup(`<b>${ev.title}</b><br>${cat}`).addTo(layers.eonet);
+        });
+    }catch(e){console.error('EONET',e)}
+}
+
+// === GDACS ===
+async function fetchGDACS(){
+    try{
+        const r=await fetch(apiUrl('gdacs_proxy.php'));const j=await r.json();layers.gdacs.clearLayers();
+        if(j.status!=='ok'||!j.events)return;
+        j.events.forEach(ev=>{
+            if(ev.lat==null||ev.lng==null)return;
+            let c='#ffcf22';const s=String(ev.alertlevel||'').toLowerCase();
+            if(s==='red')c='#ef5350';else if(s==='orange')c='#ff7043';
+            L.circleMarker([ev.lat,ev.lng],{radius:5,fillColor:c,color:'#000',weight:1,fillOpacity:.8}).bindPopup(`<b>${esc(ev.name)}</b><br>${ev.type}`).addTo(layers.gdacs);
+        });
+    }catch(e){console.error('GDACS',e)}
+}
+
+// === GDELT ===
+let gdeltPreset='default';
+let currentTab='intel';
+let gdeltTitles=[];
+function filterFeed(p){
+    gdeltPreset=p||'default';
+    document.querySelectorAll('.feed-btn').forEach(b=>b.classList.toggle('active',b.dataset.preset===gdeltPreset));
+    fetchGdelt();
+}
+function switchTab(tab,el){
+    currentTab=tab;
+    document.querySelectorAll('.panel-tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===tab));
+    const filters=$('feed-filters');
+    if(filters)filters.style.display=tab==='intel'?'flex':'none';
+    if(tab==='intel')fetchGdelt();
+    else fetchNewsFeed(tab);
+}
+async function fetchGdelt(){
+    const el=$('feed-list');
+    if(!el)return;
+    let tickers=[];gdeltTitles=[];
+    try{
+        const r=await fetch(apiUrl('gdelt_events.php?preset='+encodeURIComponent(gdeltPreset)+'&limit=40'));
+        let j;
+        try{j=await r.json()}catch(_){j={events:[]};}
+        if(!r.ok)throw new Error(r.status);
+        const data=Array.isArray(j.events)?j.events:[];
+        layers.intel.clearLayers();
+        let html='';
+        if(data.length){
+            data.slice(0,30).forEach(item=>{
+                const t=(item.title||'').toLowerCase();
+                let tag='tag-intel',label='INTEL';
+                if(t.match(/war|attack|military|conflict|strike|bomb|missile/)){tag='tag-conflict';label='CONFLICT'}
+                else if(t.match(/stock|market|fed|rate|inflation|gdp|earnings/)){tag='tag-market';label='MARKET'}
+                else if(t.match(/oil|gas|gold|opec|crude|commodity/)){tag='tag-energy';label='ENERGY'}
+                else if(t.match(/crypto|bitcoin|ethereum|btc/)){tag='tag-crypto';label='CRYPTO'}
+                tickers.push(item.title);gdeltTitles.push(item.title);
+                if(item.lat&&item.lng){
+                    const mc=tag==='tag-conflict'?'#ef5350':tag==='tag-market'?'#2962ff':tag==='tag-energy'?'#ffcf22':'#ff7043';
+                    L.circleMarker([item.lat,item.lng],{radius:4,fillColor:mc,color:'#000',weight:1,fillOpacity:.8}).bindPopup(`<b>${esc(item.title)}</b>`).addTo(layers.intel);
+                }
+                const time=item.date?new Date(item.date).toLocaleTimeString():'LIVE';
+                const link=item.url?`<a href="${item.url}" target="_blank" rel="noopener">${esc(item.title)}</a>`:esc(item.title);
+                html+=`<div class="feed-item"><div class="feed-meta"><span class="feed-tag ${tag}">${label}</span><span>${time}</span></div><div class="feed-title">${link}</div></div>`;
+            });
+            el.innerHTML=html;
+        }else{
+            el.innerHTML='<div style="padding:20px;text-align:center;color:var(--dim)">No GDELT events for this filter. Try another preset or check back later.</div>';
+        }
+    }catch(e){
+        console.warn('GDELT:',e);
+        el.innerHTML='<div style="padding:20px;text-align:center;color:var(--dim)">Intel feed temporarily unavailable. Retrying...</div>';
+    }
+    updateTicker(tickers.length?tickers:['Monitoring global event streams. GDELT feed connecting…']);
+    buildAiBrief(gdeltTitles.length?gdeltTitles:null);
+}
+async function fetchNewsFeed(cat){
+    const el=$('feed-list');
+    if(!el)return;
+    el.innerHTML='<div style="padding:20px;text-align:center;color:var(--dim)">Loading...</div>';
+    try{
+        const r=await fetch(apiUrl('world_news.php?cat='+encodeURIComponent(cat)));
+        if(!r.ok)throw new Error(r.status);
+        const j=await r.json();
+        if(j.status==='ok'&&Array.isArray(j.items)&&j.items.length){
+            el.innerHTML=j.items.slice(0,25).map(n=>{
+                const link=n.url?`<a href="${n.url}" target="_blank" rel="noopener">${esc(n.title)}</a>`:esc(n.title);
+                const src=esc(n.source);
+                const desc=(n.desc)?`<div class="feed-desc">${esc(n.desc)}</div>`:'';
+                return`<div class="feed-item"><div class="feed-meta"><span class="feed-tag tag-market">${src}</span></div><div class="feed-title">${link}</div>${desc}</div>`;
+            }).join('');
+        }else{
+            el.innerHTML='<div style="padding:20px;text-align:center;color:var(--dim)">No news items for this category. Try again shortly.</div>';
+        }
+    }catch(e){
+        console.warn('News feed:',e);
+        el.innerHTML='<div style="padding:20px;text-align:center;color:var(--dim)">News feed unavailable. Ensure PHP is running (e.g. cPanel).</div>';
+    }
+}
+
+// === TICKER ===
+function updateTicker(titles){
+    const c=document.querySelector('.ticker-bar');if(!c)return;
+    const old=$('ticker-content');if(old)old.remove();
+    const el=document.createElement('div');el.className='ticker-content';el.id='ticker-content';
+    const text=Array.isArray(titles)&&titles.length?titles.slice(0,20).join('  \u2022  '):'MONITORING GLOBAL EVENT STREAMS... SYSTEM NOMINAL...';
+    el.textContent=text;
+    c.appendChild(el);
+}
+
+// === CRYPTO ===
+async function fetchCrypto(){
+    try{
+        const r=await fetch(apiUrl('crypto_prices.php'));const j=await r.json();
+        if(j.status!=='ok'||!j.coins||!j.coins.length)throw new Error('no data');
+        let html='';
+        j.coins.forEach(c=>{
+            const p=c.price!=null?(c.price>=1?fmtNum(c.price,2):'$'+c.price.toFixed(6)):'--';
+            const ch24=c.change24h;
+            html+=`<div class="crypto-row"><img class="crypto-icon" src="${c.image}" onerror="this.style.display='none'"><div><div class="crypto-name">${esc(c.symbol)}</div><div class="crypto-sym">${esc(c.name)}</div></div><div style="text-align:right;font-weight:700;color:var(--white)">$${p}</div><div class="mkt-chg ${chgClass(ch24)}" style="text-align:right">${chgStr(ch24)}</div><div style="text-align:right;font-size:.6rem;color:var(--dim)">${fmtBig(c.marketCap)}</div></div>`;
+        });
+        $('crypto-body').innerHTML=html;
+        addToStrip(j.coins.slice(0,4).map(c=>({sym:c.symbol,price:'$'+fmtNum(c.price,c.price>=1?2:4),chg:c.change24h})));
+    }catch(e){$('crypto-body').innerHTML='<div style="padding:12px;color:var(--dim)">Crypto data loading...</div>'}
+}
+
+// === FOREX ===
+async function fetchForex(){
+    try{
+        const r=await fetch(apiUrl('forex_proxy.php'));const j=await r.json();
+        if(j.status!=='ok'||!j.pairs||!j.pairs.length)throw new Error('no data');
+        let html='';
+        j.pairs.forEach(p=>{
+            html+=`<div class="fx-row"><span class="fx-pair">${esc(p.pair)}</span><span class="fx-rate">${fmtNum(p.rate,p.rate>100?2:4)}</span><span class="mkt-chg ${chgClass(p.change)}">${chgStr(p.change)}</span></div>`;
+        });
+        $('forex-body').innerHTML=html;
+        addToStrip(j.pairs.slice(0,4).map(p=>({sym:p.pair,price:fmtNum(p.rate,p.rate>100?2:4),chg:p.change})));
+    }catch(e){$('forex-body').innerHTML='<div style="padding:12px;color:var(--dim)">Forex data loading...</div>'}
+}
+
+// === MARKETS ===
+async function fetchMarkets(){
+    const el=$('market-body');const upd=$('mkt-updated');
+    const mock=[{symbol:'SPY',price:510.5,changePct:.8},{symbol:'QQQ',price:440.2,changePct:1.2},{symbol:'DIA',price:390.1,changePct:-.3},{symbol:'GLD',price:204.5,changePct:.5},{symbol:'USO',price:72.3,changePct:-1.1},{symbol:'IWM',price:198.7,changePct:.4}];
+    const render=data=>{
+        el.innerHTML='<div class="mkt-grid">'+data.map(t=>{
+            const chg=chgStr(t.changePct);const cls=chgClass(t.changePct);
+            return`<div class="mkt-tile"><div class="mkt-sym">${esc(t.symbol)}</div><div class="mkt-price">${fmtNum(t.price,2)}</div><div class="mkt-chg ${cls}">${chg}</div></div>`;
+        }).join('')+'</div>';
+        addToStrip(data.slice(0,3).map(t=>({sym:t.symbol,price:fmtNum(t.price,2),chg:t.changePct})));
+    };
+    try{
+        const r=await fetch(apiUrl('market_snapshot.php?symbols=SPY,QQQ,DIA,GLD,USO,IWM'));
+        const j=await r.json();
+        if(j.status==='ok'&&j.data&&j.data.length){render(j.data);if(upd)upd.textContent='Updated '+new Date().toLocaleTimeString()}
+        else{render(mock);if(upd)upd.textContent='Demo'}
+    }catch(e){render(mock);if(upd)upd.textContent='Demo'}
+}
+
+// === POLYMARKET ===
+async function fetchPolymarket(){
+    try{
+        const r=await fetch(apiUrl('polymarket_proxy.php'));const j=await r.json();
+        if(j.status!=='ok'||!j.markets||!j.markets.length)throw new Error('no data');
+        let html='';
+        j.markets.slice(0,8).forEach(m=>{
+            const pct=m.yesPercent!=null?m.yesPercent:50;
+            const color=pct>65?'var(--green)':pct<35?'var(--red)':'var(--yellow)';
+            html+=`<div class="pm-item"><div class="pm-title">${esc(m.title)}</div><div class="pm-bar"><div class="pm-fill" style="width:${pct}%;background:${color}">${pct}% YES</div></div><div class="pm-meta"><span>Vol: $${fmtBig(m.volume24h)}</span><span>Liq: $${fmtBig(m.liquidity)}</span></div></div>`;
+        });
+        $('polymarket-body').innerHTML=html;
+    }catch(e){$('polymarket-body').innerHTML='<div style="padding:12px;color:var(--dim)">Prediction markets loading...</div>'}
+}
+
+// === FEAR & GREED ===
+async function fetchFearGreed(){
+    try{
+        let j;
+        try{const r=await fetch(apiUrl('fear_greed.php'));j=await r.json()}
+        catch(_){const r2=await fetch('https://api.alternative.me/fng/?limit=1');const raw=await r2.json();j=raw.data&&raw.data[0]?{status:'ok',value:parseInt(raw.data[0].value),classification:raw.data[0].value_classification}:null}
+        if(j&&j.status==='ok'&&j.value!=null){
+            $('fg-val').textContent=j.value;
+            $('fg-label').textContent=j.classification||'';
+            $('fg-fill').style.width=j.value+'%';
+        }
+    }catch(e){}
+}
+
+// === WORLD NEWS ===
+async function fetchWorldNews(){
+    const el=$('worldnews-body');if(!el)return;
+    try{
+        const r=await fetch(apiUrl('world_news.php?cat=world'));
+        if(!r.ok)throw new Error(r.status);
+        const j=await r.json();
+        if(j.status==='ok'&&Array.isArray(j.items)&&j.items.length){
+            el.innerHTML=j.items.slice(0,12).map(n=>{
+                const link=n.url?`<a href="${n.url}" target="_blank" rel="noopener">${esc(n.title)}</a>`:esc(n.title);
+                const colors={'Reuters':'#ff6600','BBC World':'#bb1919','AP News':'#d32f2f','Al Jazeera':'#d4a843','NPR':'#1a8fe3','DW News':'#0078d4','France 24':'#0055a4','The Guardian':'#005689'};
+                const sc=colors[n.source]||'var(--blue)';
+                return`<div class="news-item"><div class="news-src" style="color:${sc}">${esc(n.source)}</div><div class="news-title">${link}</div></div>`;
+            }).join('');
+        }else{
+            el.innerHTML='<div style="padding:12px;color:var(--dim)">No world news items. Try again shortly.</div>';
+        }
+    }catch(e){
+        console.warn('World news:',e);
+        el.innerHTML='<div style="padding:12px;color:var(--dim)">World news unavailable. Ensure PHP is running (e.g. cPanel).</div>';
+    }
+}
+async function fetchMarketNews(){
+    const el=$('marketnews-body');if(!el)return;
+    try{
+        const r=await fetch(apiUrl('world_news.php?cat=markets'));
+        if(!r.ok)throw new Error(r.status);
+        const j=await r.json();
+        if(j.status==='ok'&&Array.isArray(j.items)&&j.items.length){
+            el.innerHTML=j.items.slice(0,12).map(n=>{
+                const link=n.url?`<a href="${n.url}" target="_blank" rel="noopener">${esc(n.title)}</a>`:esc(n.title);
+                return`<div class="news-item"><div class="news-src" style="color:var(--green)">${esc(n.source)}</div><div class="news-title">${link}</div></div>`;
+            }).join('');
+        }else el.innerHTML='<div style="padding:12px;color:var(--dim)">No market news.</div>';
+    }catch(e){el.innerHTML='<div style="padding:12px;color:var(--dim)">Market news unavailable.</div>';}
+}
+
+// === AI BRIEF ===
+function buildAiBrief(titles){
+    const el=$('ai-brief');if(!el)return;
+    if(!titles||!Array.isArray(titles)||!titles.length){
+        el.innerHTML='<strong style="color:var(--white)">Status:</strong> Waiting for headline data. GDELT intel or World tab will feed this brief.';
+        return;
+    }
+    const themes={'Fed/Rates':/\b(fed|federal reserve|rate|inflation|powell|monetary|treasury|yield)\b/i,'Markets':/\b(stock|market|trading|earnings|revenue|ipo|equity|rally|selloff|nasdaq|s&p|dow)\b/i,'Energy':/\b(oil|opec|brent|wti|crude|energy|gas|lng|pipeline)\b/i,'Conflict':/\b(war|attack|military|conflict|sanctions|nato|missile|strike|bomb|troops)\b/i,'Central Banks':/\b(ecb|central bank|boj|boe|pboc|euro|dollar|currency|forex)\b/i,'Trade':/\b(trade|tariff|china|export|import|supply chain|wto)\b/i,'Crypto':/\b(bitcoin|crypto|ethereum|btc|eth|blockchain|defi|stablecoin)\b/i,'Tech':/\b(ai|artificial intelligence|chip|semiconductor|nvidia|apple|google|meta|microsoft)\b/i};
+    const counts={};
+    titles.forEach(title=>{for(const[theme,rx]of Object.entries(themes)){if(rx.test(title))counts[theme]=(counts[theme]||0)+1}});
+    const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+    let brief='';
+    if(sorted.length>=2){
+        brief=`<strong style="color:var(--white)">Dominant Themes:</strong> ${sorted.slice(0,4).map(([t,c])=>`<span style="color:var(--blue)">${t}</span> (${c})`).join(', ')}.<br><br>`;
+        const top=sorted[0][0];
+        const insights={'Conflict':'Elevated geopolitical risk. Safe-haven flows likely (gold, JPY, CHF). Monitor defense sector and energy supply disruptions.','Fed/Rates':'Monetary policy in focus. Watch 2Y/10Y spread, rate-sensitive sectors (REITs, utilities, tech). Bond volatility expected.','Energy':'Energy complex active. Track WTI/Brent spread, OPEC+ compliance, and downstream equities. Shipping rates may react.','Markets':'Broad market activity detected. Check VIX for sentiment, sector rotation patterns, and index momentum divergences.','Crypto':'Crypto narrative building. Monitor BTC dominance, ETF flows, stablecoin market caps, and DeFi TVL for confirmation.','Central Banks':'Central bank action in focus. Watch FX majors for policy divergence trades. Carry trade dynamics may shift.','Trade':'Trade policy signals detected. Monitor CNY, commodity importers, and supply chain proxies (shipping, semiconductors).','Tech':'Tech sector in focus. Watch NASDAQ relative strength, semiconductor cycle indicators, and AI capex trends.'};
+        brief+=`<strong style="color:var(--white)">Analysis:</strong> ${insights[top]||'Multiple signals active. Cross-reference with market data for confirmation.'}`;
+        if(sorted.length>=3)brief+=`<br><br><strong style="color:var(--white)">Secondary:</strong> ${sorted[1][0]} and ${sorted[2][0]} themes also elevated. Watch for cross-asset correlation shifts.`;
+    }else if(sorted.length===1){
+        brief=`<strong style="color:var(--white)">Primary Focus:</strong> ${sorted[0][0]} (${sorted[0][1]} mentions). Stay alert for follow-through in related assets.`;
+    }else{
+        brief='<strong style="color:var(--white)">Status:</strong> Scanning headlines... No dominant theme detected. Markets appear range-bound. Low-conviction environment.';
+    }
+    el.innerHTML=brief;
+}
+
+// === MARKET STRIP ===
+let stripItems=[];
+function addToStrip(items){
+    items.forEach(i=>{
+        if(!stripItems.find(s=>s.sym===i.sym))stripItems.push(i);
+    });
+    renderStrip();
+}
+function renderStrip(){
+    const el=$('market-strip');if(!el)return;
+    const fg=el.querySelector('.fg-strip');
+    let html=fg?fg.outerHTML:'';
+    stripItems.forEach(i=>{
+        html+=`<div class="ms-item"><span class="ms-sym">${esc(i.sym)}</span><span class="ms-price">${i.price}</span><span class="ms-chg ${chgClass(i.chg)}">${chgStr(i.chg)}</span></div>`;
+    });
+    el.innerHTML=html;
+}
+
+// === VIDEO ===
+function setVideo(ch,btn){
+    const vids={aljazeera:'gCNeDWCI0vo',dw:'MG3jGHnBVQA',france24:'h3MuIUNCCzI',sky:'9Auq9mYxFEE',nasa:'21X5lGlDOfg'};
+    const el=$('main-vid');if(el)el.src=`https://www.youtube.com/embed/${vids[ch]||vids.aljazeera}?autoplay=1&mute=1`;
+    document.querySelectorAll('.vid-btn').forEach(b=>b.classList.remove('active'));
+    if(btn)btn.classList.add('active');
+}
+
+// === PRODUCTS ===
+function renderProducts(){
+    const items=[
+        {title:'G-Labs Utility Pro',price:'$49',plat:'MQL5',col:'#ffcf22',img:'favicon.svg',link:'mql5.html'},
+        {title:'BTMM State Engine',price:'$149',plat:'MQL5',col:'#ffcf22',img:'favicon.svg',link:'mql5.html'},
+        {title:'Market Structure Sentinel',price:'$99',plat:'MQL5',col:'#ffcf22',img:'favicon.svg',link:'mql5.html'},
+        {title:'Trend Master TV',price:'$59',plat:'TradingView',col:'#2962ff',img:'https://s3.tradingview.com/userpics/2631063-M2DE_big.png',link:'tradingview.html'},
+        {title:'Volatility Scout',price:'$89',plat:'TradingView',col:'#2962ff',img:'https://s3.tradingview.com/userpics/2631063-M2DE_big.png',link:'tradingview.html'},
+        {title:'Divergence Hunter',price:'$69',plat:'TradingView',col:'#2962ff',img:'https://s3.tradingview.com/userpics/2631063-M2DE_big.png',link:'tradingview.html'}
+    ];
+    $('product-carousel').innerHTML=items.map(p=>`<div class="prod-card"><img src="${p.img}" class="prod-img" onerror="this.src='favicon.svg'"><div style="flex:1"><div style="font-size:.75rem;font-weight:700;color:var(--white)">${p.title}</div><div style="font-size:.6rem;color:${p.col};font-weight:700">${p.plat}</div><div style="display:flex;justify-content:space-between;margin-top:4px"><span style="font-weight:700;color:var(--white)">${p.price}</span><a href="${p.link}" style="background:${p.col};color:#000;text-decoration:none;font-size:.55rem;font-weight:700;padding:2px 6px;border-radius:3px">VIEW</a></div></div></div>`).join('');
+}
+
+// === INIT ===
+document.addEventListener('DOMContentLoaded',()=>{
+    fetchQuakes();fetchEonet();fetchGDACS();fetchGdelt();
+    fetchCrypto();fetchForex();fetchMarkets();fetchFearGreed();
+    fetchPolymarket();fetchWorldNews();fetchMarketNews();
+    renderProducts();
+    setInterval(fetchGdelt,60000);
+    setInterval(fetchQuakes,300000);
+    setInterval(fetchGDACS,600000);
+    setInterval(fetchCrypto,60000);
+    setInterval(fetchForex,300000);
+    setInterval(fetchMarkets,120000);
+    setInterval(fetchFearGreed,3600000);
+    setInterval(fetchPolymarket,300000);
+    setInterval(fetchWorldNews,300000);
+    setInterval(fetchMarketNews,300000);
+});
+</script>
 </body>
 </html>
