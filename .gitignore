@@ -31,3 +31,9 @@ chrome_debug_profile/
 *.csv
 *.txt
 *.py
+
+# Stripe webhook runtime data (subscription → username/pine_ids)
+stripe_grants.json
+
+# Stripe keys (never commit)
+.env

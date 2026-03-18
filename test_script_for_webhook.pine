@@ -1,0 +1,14 @@
+// =============================================================================
+// G-Labs test script for Stripe → TradingView webhook
+// Publish this as INVITE-ONLY on TradingView to get a pine_id for testing.
+// Once published: Manage access → F12 → Network → find pine_id (PUB;xxx)
+// =============================================================================
+//@version=5
+indicator("G-Labs Webhook Test", overlay=true, max_lines_count=500, max_labels_count=500)
+
+// Simple test: plot midline and a label so it's obviously "on"
+float mid = math.avg(ta.highest(high, 20), ta.lowest(low, 20))
+plot(mid, "Mid", color=color.new(color.blue, 30), linewidth=2)
+
+if barstate.islast
+    label.new(bar_index, high, "Webhook test ✓", style=label.style_label_down, color=color.blue, textcolor=color.white, size=size.small)

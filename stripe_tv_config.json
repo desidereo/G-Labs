@@ -1,0 +1,12 @@
+{
+  "_comment": "Map each Stripe Price ID to TradingView script(s) and access type. Get Price ID from Stripe Dashboard > Product > Price. Get pine_id from TradingView: script page > Manage access > DevTools Network tab.",
+  "products": {
+    "price_TEST_PLACEHOLDER": {
+      "pine_ids": ["PUB;your_pine_id_here"],
+      "duration": "1L",
+      "type": "one_time",
+      "name": "Test product (replace with your test Stripe Price ID)"
+    }
+  },
+  "custom_field_key": "TradingView Username"
+}

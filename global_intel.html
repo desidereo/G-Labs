@@ -382,16 +382,26 @@ function renderStrip(){
 }
 
 /* ────────────────────────── Indices / ETFs ────────────────────────── */
-async function fetchIndices(){
+async function fetchIndices(attempt=1){
   try{
     const r=await fetch(api('market_snapshot.php?symbols=SPY,QQQ,DIA,IWM,GLD,USO'));
-    const j=await r.json();
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    let j;try{j=await r.json()}catch(_){j={data:[]}}
     const tb=$('indicesTable').querySelector('tbody');
-    if(!j.data||!j.data.length){tb.innerHTML='<tr><td colspan="3"><div class="empty-state">No data available</div></td></tr>';return}
+    if(!j.data||!j.data.length){
+      if(attempt<3){$('indicesBadge').textContent='RETRY '+attempt;setTimeout(()=>fetchIndices(attempt+1),4000);return}
+      tb.innerHTML='<tr><td colspan="3"><div class="empty-state">Market APIs offline — will retry</div></td></tr>';
+      $('indicesBadge').textContent='OFFLINE';
+      setTimeout(()=>fetchIndices(1),60000);
+      return;
+    }
     tb.innerHTML=j.data.map(d=>`<tr><td style="font-weight:600">${esc(d.symbol)}</td><td>${fmt(d.price,2)}</td><td class="${d.changePct>=0?'green':'red'}">${chgSign(d.changePct)}</td></tr>`).join('');
     $('indicesBadge').textContent=j.provider||'LIVE';
   }catch(e){
-    $('indicesTable').querySelector('tbody').innerHTML='<tr><td colspan="3"><div class="empty-state">Unavailable</div></td></tr>';
+    if(attempt<3){$('indicesBadge').textContent='RETRY '+attempt;setTimeout(()=>fetchIndices(attempt+1),4000);return}
+    $('indicesTable').querySelector('tbody').innerHTML='<tr><td colspan="3"><div class="empty-state">Market data unavailable</div></td></tr>';
+    $('indicesBadge').textContent='OFFLINE';
+    setTimeout(()=>fetchIndices(1),60000);
   }
 }
 
@@ -649,46 +659,53 @@ document.querySelectorAll('.site-header nav a').forEach(a=>{
 });
 
 /* ────────────────────────── Init ────────────────────────── */
-async function init(){
+async function loadNewsAndBrief(){
+  const el=$('newsContent');
+  el.innerHTML='<div class="loading-state">Loading news&hellip;</div>';
+  try{
+    const r=await fetch(api('world_news.php?cat=all'));
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const j=await r.json();
+    const items=j.items||[];
+    newsCache['all']=items;
+    renderNews(items);
+    if(items.length){
+      headlineBank=items.map(i=>i.title);
+      updateTicker(headlineBank.slice(0,20));
+      buildAiBrief();
+    }else{
+      $('aiBriefContent').innerHTML='<div class="empty-state">No headlines to analyze</div>';
+    }
+  }catch(e){
+    el.innerHTML='<div class="empty-state">Unable to load news &mdash; retrying&hellip;</div>';
+    $('aiBriefContent').innerHTML='<div class="empty-state">Waiting for headline data</div>';
+    console.warn('news init',e);
+    setTimeout(loadNewsAndBrief,8000);
+  }
+}
+
+function init(){
   fetchStrip();
   fetchIndices();
   fetchForex();
   fetchCrypto();
-  fetchNews('all');
   fetchFearGreed();
   fetchCalendar();
   fetchCorrelation();
-
-  try{
-    const r=await fetch(api('world_news.php?cat=all'));
-    const j=await r.json();
-    if(j.items&&j.items.length){
-      headlineBank=j.items.map(i=>i.title);
-      updateTicker(headlineBank.slice(0,20));
-      buildAiBrief();
-    }
-  }catch(e){console.warn('ticker/brief',e)}
+  loadNewsAndBrief();
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
   init();
   setInterval(fetchStrip,120000);
-  setInterval(fetchIndices,120000);
+  setInterval(()=>fetchIndices(1),120000);
   setInterval(fetchForex,300000);
   setInterval(fetchCrypto,60000);
   setInterval(()=>fetchNews(newsCat),300000);
   setInterval(fetchFearGreed,3600000);
   setInterval(fetchCalendar,600000);
   setInterval(fetchCorrelation,3600000);
-  setInterval(()=>{
-    fetch(api('world_news.php?cat=all')).then(r=>r.json()).then(j=>{
-      if(j.items&&j.items.length){
-        headlineBank=j.items.map(i=>i.title);
-        updateTicker(headlineBank.slice(0,20));
-        buildAiBrief();
-      }
-    }).catch(()=>{});
-  },300000);
+  setInterval(loadNewsAndBrief,300000);
 });
 </script>
 </body>
