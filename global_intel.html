@@ -382,27 +382,51 @@ function renderStrip(){
 }
 
 /* ────────────────────────── Indices / ETFs ────────────────────────── */
+function renderIndices(data,provider){
+  const tb=$('indicesTable').querySelector('tbody');
+  if(!data||!data.length){tb.innerHTML='<tr><td colspan="3"><div class="empty-state">No market data</div></td></tr>';return}
+  tb.innerHTML=data.map(d=>`<tr><td style="font-weight:600">${esc(d.symbol)}</td><td>${fmt(d.price,2)}</td><td class="${(d.changePct||0)>=0?'green':'red'}">${chgSign(d.changePct)}</td></tr>`).join('');
+  $('indicesBadge').textContent=provider||'LIVE';
+}
 async function fetchIndices(attempt=1){
   try{
     const r=await fetch(api('market_snapshot.php?symbols=SPY,QQQ,DIA,IWM,GLD,USO'));
     if(!r.ok)throw new Error('HTTP '+r.status);
     let j;try{j=await r.json()}catch(_){j={data:[]}}
-    const tb=$('indicesTable').querySelector('tbody');
-    if(!j.data||!j.data.length){
-      if(attempt<3){$('indicesBadge').textContent='RETRY '+attempt;setTimeout(()=>fetchIndices(attempt+1),4000);return}
-      tb.innerHTML='<tr><td colspan="3"><div class="empty-state">Market APIs offline — will retry</div></td></tr>';
-      $('indicesBadge').textContent='OFFLINE';
-      setTimeout(()=>fetchIndices(1),60000);
-      return;
-    }
-    tb.innerHTML=j.data.map(d=>`<tr><td style="font-weight:600">${esc(d.symbol)}</td><td>${fmt(d.price,2)}</td><td class="${d.changePct>=0?'green':'red'}">${chgSign(d.changePct)}</td></tr>`).join('');
-    $('indicesBadge').textContent=j.provider||'LIVE';
-  }catch(e){
-    if(attempt<3){$('indicesBadge').textContent='RETRY '+attempt;setTimeout(()=>fetchIndices(attempt+1),4000);return}
-    $('indicesTable').querySelector('tbody').innerHTML='<tr><td colspan="3"><div class="empty-state">Market data unavailable</div></td></tr>';
-    $('indicesBadge').textContent='OFFLINE';
-    setTimeout(()=>fetchIndices(1),60000);
+    if(j.data&&j.data.length){renderIndices(j.data,j.provider);return}
+  }catch(_){}
+  if(attempt<2){$('indicesBadge').textContent='RETRY';setTimeout(()=>fetchIndices(attempt+1),3000);return}
+  await fetchIndicesClientFallback();
+}
+async function fetchIndicesClientFallback(){
+  $('indicesBadge').textContent='FALLBACK';
+  const syms=['SPY','QQQ','DIA','IWM','GLD'];
+  const data=[];
+  for(const sym of syms){
+    try{
+      const r=await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=1d&range=2d`);
+      if(!r.ok)continue;
+      const j=await r.json();
+      const meta=j?.chart?.result?.[0]?.meta;
+      if(!meta?.regularMarketPrice)continue;
+      const p=meta.regularMarketPrice;
+      const prev=meta.chartPreviousClose||meta.previousClose||0;
+      data.push({symbol:sym,price:p,changePct:prev>0?((p-prev)/prev*100):null});
+    }catch(_){}
   }
+  if(data.length){renderIndices(data,'yahoo-direct');return}
+  const fxData=[];
+  try{
+    const r=await fetch('https://api.frankfurter.app/latest?from=USD&to=EUR,GBP,JPY');
+    const j=await r.json();
+    if(j.rates){
+      if(j.rates.EUR)fxData.push({symbol:'EUR/USD',price:+(1/j.rates.EUR).toFixed(5),changePct:null});
+      if(j.rates.GBP)fxData.push({symbol:'GBP/USD',price:+(1/j.rates.GBP).toFixed(5),changePct:null});
+      if(j.rates.JPY)fxData.push({symbol:'USD/JPY',price:+j.rates.JPY.toFixed(3),changePct:null});
+    }
+  }catch(_){}
+  if(fxData.length){renderIndices(fxData,'fx-fallback');}
+  else{$('indicesTable').querySelector('tbody').innerHTML='<tr><td colspan="3"><div class="empty-state">Markets unavailable — APIs may be blocked</div></td></tr>';$('indicesBadge').textContent='OFFLINE';}
 }
 
 /* ────────────────────────── Forex ────────────────────────── */
@@ -658,30 +682,65 @@ document.querySelectorAll('.site-header nav a').forEach(a=>{
   });
 });
 
+/* ────────────────────────── Client-side RSS fallback ────────────────────────── */
+async function fetchNewsClientFallback(){
+  const feeds=[
+    {source:'BBC World',url:'http://feeds.bbci.co.uk/news/world/rss.xml'},
+    {source:'NPR',url:'https://feeds.npr.org/1001/rss.xml'},
+    {source:'CNBC',url:'https://www.cnbc.com/id/20910258/device/rss/rss.html'}
+  ];
+  const proxy='https://api.rss2json.com/v1/api.json?rss_url=';
+  const items=[];
+  for(const f of feeds){
+    try{
+      const r=await fetch(proxy+encodeURIComponent(f.url));
+      if(!r.ok)continue;
+      const j=await r.json();
+      if(j.items){
+        j.items.forEach(it=>{
+          const ts=it.pubDate?Math.floor(new Date(it.pubDate).getTime()/1000):Math.floor(Date.now()/1000);
+          items.push({title:it.title||'',url:it.link||'',source:f.source,desc:'',publishedAt:it.pubDate||'',timestamp:ts});
+        });
+      }
+    }catch(_){}
+  }
+  items.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
+  return items;
+}
+
 /* ────────────────────────── Init ────────────────────────── */
-async function loadNewsAndBrief(){
+async function loadNewsAndBrief(attempt=1){
   const el=$('newsContent');
-  el.innerHTML='<div class="loading-state">Loading news&hellip;</div>';
+  if(attempt===1)el.innerHTML='<div class="loading-state">Loading news&hellip;</div>';
   try{
     const r=await fetch(api('world_news.php?cat=all'));
     if(!r.ok)throw new Error('HTTP '+r.status);
     const j=await r.json();
     const items=j.items||[];
-    newsCache['all']=items;
-    renderNews(items);
     if(items.length){
+      newsCache['all']=items;
+      renderNews(items);
       headlineBank=items.map(i=>i.title);
       updateTicker(headlineBank.slice(0,20));
       buildAiBrief();
-    }else{
-      $('aiBriefContent').innerHTML='<div class="empty-state">No headlines to analyze</div>';
+      return;
     }
-  }catch(e){
-    el.innerHTML='<div class="empty-state">Unable to load news &mdash; retrying&hellip;</div>';
-    $('aiBriefContent').innerHTML='<div class="empty-state">Waiting for headline data</div>';
-    console.warn('news init',e);
-    setTimeout(loadNewsAndBrief,8000);
-  }
+  }catch(e){console.warn('news php attempt '+attempt,e)}
+  if(attempt<2){setTimeout(()=>loadNewsAndBrief(2),5000);return}
+  el.innerHTML='<div class="loading-state">Trying fallback&hellip;</div>';
+  try{
+    const items=await fetchNewsClientFallback();
+    if(items.length){
+      newsCache['all']=items;
+      renderNews(items);
+      headlineBank=items.map(i=>i.title);
+      updateTicker(headlineBank.slice(0,20));
+      buildAiBrief();
+      return;
+    }
+  }catch(_){}
+  el.innerHTML='<div class="empty-state">Unable to load news &mdash; check server PHP</div>';
+  $('aiBriefContent').innerHTML='<div class="empty-state">No headline data available</div>';
 }
 
 function init(){

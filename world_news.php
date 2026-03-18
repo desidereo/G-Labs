@@ -4,6 +4,7 @@ header('Cache-Control: public, max-age=300');
 header('Access-Control-Allow-Origin: *');
 error_reporting(0);
 ini_set('display_errors', 0);
+set_time_limit(60);
 
 $category = isset($_GET['cat']) ? trim($_GET['cat']) : 'all';
 
@@ -17,46 +18,33 @@ if (file_exists($cachePath) && (time() - filemtime($cachePath) < $cacheTtl)) {
 
 $feedsByCategory = [
     'world' => [
-        'Reuters'       => 'https://feeds.reuters.com/reuters/topNews',
         'BBC World'     => 'http://feeds.bbci.co.uk/news/world/rss.xml',
-        'AP News'       => 'https://feeds.ap.org/rss/TopNews',
-        'Al Jazeera'    => 'https://www.aljazeera.com/xml/rss/all.xml',
         'NPR'           => 'https://feeds.npr.org/1001/rss.xml',
         'DW News'       => 'https://rss.dw.com/xml/rss-en-world',
-        'France 24'     => 'https://www.france24.com/en/rss',
         'The Guardian'  => 'https://www.theguardian.com/world/rss',
+        'Al Jazeera'    => 'https://www.aljazeera.com/xml/rss/all.xml',
     ],
     'markets' => [
         'CNBC Markets'    => 'https://www.cnbc.com/id/20910258/device/rss/rss.html',
-        'CNBC World'      => 'https://www.cnbc.com/id/100003114/device/rss/rss.html',
         'MarketWatch'     => 'https://feeds.marketwatch.com/marketwatch/topstories/',
-        'Investing.com'   => 'https://www.investing.com/rss/news.rss',
-        'Yahoo Finance'   => 'https://finance.yahoo.com/news/rssindex',
-        'FT Markets'      => 'https://www.ft.com/rss/home',
         'Seeking Alpha'   => 'https://seekingalpha.com/market_currents.xml',
-        'Barrons'         => 'https://www.barrons.com/market-data/rss',
+        'Yahoo Finance'   => 'https://finance.yahoo.com/news/rssindex',
     ],
     'forex' => [
         'ForexLive'       => 'https://www.forexlive.com/feed/news',
-        'FXStreet'        => 'https://www.fxstreet.com/rss',
         'DailyFX'         => 'https://www.dailyfx.com/feeds/all',
     ],
     'crypto' => [
         'CoinDesk'        => 'https://www.coindesk.com/arc/outboundfeeds/rss/',
         'CoinTelegraph'   => 'https://cointelegraph.com/rss',
         'Decrypt'         => 'https://decrypt.co/feed',
-        'The Block'       => 'https://www.theblock.co/rss.xml',
     ],
     'commodities' => [
         'OilPrice.com'    => 'https://oilprice.com/rss/main',
-        'Kitco Gold'      => 'https://www.kitco.com/rss/gold.xml',
         'Mining.com'      => 'https://www.mining.com/feed/',
     ],
     'geopolitics' => [
-        'Defense One'     => 'https://www.defenseone.com/rss/',
         'War on Rocks'    => 'https://warontherocks.com/feed/',
-        'Foreign Affairs' => 'https://www.foreignaffairs.com/rss.xml',
-        'CSIS'            => 'https://www.csis.org/analysis/feed',
         'Brookings'       => 'https://www.brookings.edu/feed/',
     ],
 ];
@@ -70,22 +58,12 @@ if ($category === 'all') {
     foreach ($feedsByCategory as $feeds) $selectedFeeds = array_merge($selectedFeeds, $feeds);
 }
 
-$items = [];
-$ctx = stream_context_create([
-    'http' => [
-        'timeout' => 6,
-        'header' => "User-Agent: G-Labs-WorldNews/1.0\r\nAccept: application/rss+xml, application/xml, text/xml\r\n",
-        'ignore_errors' => true
-    ],
-    'ssl' => ['verify_peer' => true, 'verify_peer_name' => true]
-]);
-
-foreach ($selectedFeeds as $source => $url) {
-    $xml = @file_get_contents($url, false, $ctx);
-    if ($xml === false || strlen($xml) < 100) continue;
+function parseXmlToItems($xml, $source) {
+    if (!$xml || strlen($xml) < 100) return [];
     libxml_use_internal_errors(true);
     $doc = @simplexml_load_string($xml);
-    if (!$doc) continue;
+    if (!$doc) return [];
+    $items = [];
 
     if (isset($doc->channel->item)) {
         foreach ($doc->channel->item as $e) {
@@ -96,10 +74,10 @@ foreach ($selectedFeeds as $source => $url) {
             $desc = trim(strip_tags((string)($e->description ?? '')));
             if (strlen($desc) > 200) $desc = substr($desc, 0, 200) . '...';
             $ts = $date ? @strtotime($date) : time();
-            if ($ts === false) $ts = time();
+            if ($ts === false || $ts <= 0) $ts = time();
             $items[] = ['title' => $title, 'url' => $link, 'source' => $source, 'desc' => $desc, 'publishedAt' => $date, 'timestamp' => $ts];
         }
-        continue;
+        return $items;
     }
     if (isset($doc->entry)) {
         foreach ($doc->entry as $e) {
@@ -117,10 +95,10 @@ foreach ($selectedFeeds as $source => $url) {
             if (strlen($desc) > 200) $desc = substr($desc, 0, 200) . '...';
             $date = trim((string)($e->published ?? $e->updated ?? ''));
             $ts = $date ? @strtotime($date) : time();
-            if ($ts === false) $ts = time();
+            if ($ts === false || $ts <= 0) $ts = time();
             $items[] = ['title' => $title, 'url' => $link, 'source' => $source, 'desc' => $desc, 'publishedAt' => $date, 'timestamp' => $ts];
         }
-        continue;
+        return $items;
     }
     if (isset($doc->item)) {
         foreach ($doc->item as $e) {
@@ -129,9 +107,85 @@ foreach ($selectedFeeds as $source => $url) {
             $link = trim((string)($e->link ?? ''));
             $date = trim((string)($e->pubDate ?? $e->date ?? ''));
             $ts = $date ? @strtotime($date) : time();
-            if ($ts === false) $ts = time();
+            if ($ts === false || $ts <= 0) $ts = time();
             $items[] = ['title' => $title, 'url' => $link, 'source' => $source, 'desc' => '', 'publishedAt' => $date, 'timestamp' => $ts];
         }
+    }
+    return $items;
+}
+
+$items = [];
+$ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
+
+if (function_exists('curl_multi_init')) {
+    $mh = curl_multi_init();
+    $handles = [];
+    foreach ($selectedFeeds as $source => $url) {
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT        => 8,
+            CURLOPT_CONNECTTIMEOUT => 4,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_MAXREDIRS      => 3,
+            CURLOPT_USERAGENT      => $ua,
+            CURLOPT_HTTPHEADER     => ['Accept: application/rss+xml, application/xml, text/xml, */*'],
+            CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_ENCODING       => '',
+        ]);
+        curl_multi_add_handle($mh, $ch);
+        $handles[$source] = $ch;
+    }
+
+    $running = null;
+    do {
+        $status = curl_multi_exec($mh, $running);
+        if ($running > 0) curl_multi_select($mh, 1);
+    } while ($running > 0 && $status === CURLM_OK);
+
+    foreach ($handles as $source => $ch) {
+        $body = curl_multi_getcontent($ch);
+        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_multi_remove_handle($mh, $ch);
+        curl_close($ch);
+        if ($code >= 200 && $code < 400 && $body) {
+            $items = array_merge($items, parseXmlToItems($body, $source));
+        }
+    }
+    curl_multi_close($mh);
+
+} elseif (function_exists('curl_init')) {
+    foreach ($selectedFeeds as $source => $url) {
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT        => 5,
+            CURLOPT_CONNECTTIMEOUT => 3,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_USERAGENT      => $ua,
+            CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_ENCODING       => '',
+        ]);
+        $body = curl_exec($ch);
+        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        if ($code >= 200 && $code < 400 && $body) {
+            $items = array_merge($items, parseXmlToItems($body, $source));
+        }
+    }
+
+} else {
+    $ctx = stream_context_create([
+        'http' => [
+            'timeout' => 4,
+            'header' => "User-Agent: $ua\r\nAccept: application/rss+xml, application/xml, text/xml\r\n",
+            'ignore_errors' => true
+        ],
+        'ssl' => ['verify_peer' => true, 'verify_peer_name' => true]
+    ]);
+    foreach ($selectedFeeds as $source => $url) {
+        $xml = @file_get_contents($url, false, $ctx);
+        if ($xml !== false) $items = array_merge($items, parseXmlToItems($xml, $source));
     }
 }
 
@@ -149,5 +203,5 @@ foreach ($items as $item) {
 
 $out = ['status' => 'ok', 'category' => $category, 'count' => count($unique), 'items' => $unique, 'updatedAt' => gmdate('c')];
 $json = json_encode($out, JSON_UNESCAPED_SLASHES);
-if ($json) @file_put_contents($cachePath, $json);
+if ($json && count($unique) > 0) @file_put_contents($cachePath, $json);
 echo $json ?: json_encode(['status' => 'error', 'items' => []]);
