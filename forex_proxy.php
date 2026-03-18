@@ -56,6 +56,24 @@ if ($prevRaw !== false) {
     }
 }
 
-$out = json_encode(['status' => 'ok', 'pairs' => $pairs, 'updatedAt' => gmdate('c')]);
+$strength = [];
+$curScores = ['USD' => [], 'EUR' => [], 'GBP' => [], 'JPY' => [], 'CHF' => [], 'CAD' => [], 'AUD' => [], 'NZD' => []];
+foreach ($pairs as $p) {
+    if ($p['change'] === null) continue;
+    $parts = explode('/', $p['pair']);
+    $base = $parts[0]; $quote = $parts[1];
+    $curScores[$base][] = $p['change'];
+    $curScores[$quote][] = -$p['change'];
+}
+$raw_scores = [];
+foreach ($curScores as $cur => $moves) {
+    $raw_scores[$cur] = count($moves) ? array_sum($moves) / count($moves) : 0;
+}
+$minS = min($raw_scores); $maxS = max($raw_scores); $rangeS = $maxS - $minS;
+foreach ($raw_scores as $cur => $v) {
+    $strength[$cur] = $rangeS > 0 ? round(($v - $minS) / $rangeS * 100, 1) : 50;
+}
+
+$out = json_encode(['status' => 'ok', 'pairs' => $pairs, 'strength' => $strength, 'updatedAt' => gmdate('c')]);
 if ($out) @file_put_contents($cachePath, $out);
-echo $out ?: json_encode(['status' => 'error', 'pairs' => []]);
+echo $out ?: json_encode(['status' => 'error', 'pairs' => [], 'strength' => []]);
