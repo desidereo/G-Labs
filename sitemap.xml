@@ -2,72 +2,92 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.g-labs.software/</loc>
-    <lastmod>2026-03-03</lastmod>
+    <lastmod>2026-03-11</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://www.g-labs.software/global_intel.html</loc>
+    <lastmod>2026-03-11</lastmod>
+    <priority>0.85</priority>
+  </url>
+  <url>
     <loc>https://www.g-labs.software/tradingview.html</loc>
-    <lastmod>2026-03-03</lastmod>
+    <lastmod>2026-03-11</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.g-labs.software/mql5.html</loc>
-    <lastmod>2026-03-03</lastmod>
+    <lastmod>2026-03-11</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.g-labs.software/custom_development.html</loc>
-    <lastmod>2026-03-03</lastmod>
+    <lastmod>2026-03-11</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.g-labs.software/downloads.html</loc>
-    <lastmod>2026-03-03</lastmod>
+    <lastmod>2026-03-11</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.g-labs.software/about.html</loc>
+    <lastmod>2026-03-11</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.g-labs.software/faq.html</loc>
+    <lastmod>2026-03-11</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.g-labs.software/contact.html</loc>
-    <lastmod>2026-03-03</lastmod>
+    <lastmod>2026-03-11</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.g-labs.software/privacy.html</loc>
-    <lastmod>2026-03-03</lastmod>
+    <lastmod>2026-03-11</lastmod>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://www.g-labs.software/terms.html</loc>
-    <lastmod>2026-03-03</lastmod>
+    <lastmod>2026-03-11</lastmod>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://www.g-labs.software/guides/BTMM_State_Engine_Pro_TV_Welcome_Pack.html</loc>
-    <lastmod>2026-03-03</lastmod>
+    <lastmod>2026-03-11</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.g-labs.software/guides/BTMM_State_Engine_Welcome_Pack.html</loc>
-    <lastmod>2026-03-03</lastmod>
+    <lastmod>2026-03-11</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.g-labs.software/guides/Advanced_Market_Maker_MT5_UserGuide.html</loc>
+    <lastmod>2026-03-11</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.g-labs.software/guides/Connix_Smart_Trading_Guide.html</loc>
-    <lastmod>2026-03-03</lastmod>
+    <lastmod>2026-03-11</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.g-labs.software/guides/Smart_Market_Structure_Guide.html</loc>
-    <lastmod>2026-03-03</lastmod>
+    <lastmod>2026-03-11</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.g-labs.software/guides/Magic_Lines_Guide.html</loc>
-    <lastmod>2026-03-03</lastmod>
+    <lastmod>2026-03-11</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.g-labs.software/guides/Trade_Manager_Guide.html</loc>
-    <lastmod>2026-03-03</lastmod>
+    <lastmod>2026-03-11</lastmod>
     <priority>0.6</priority>
   </url>
 </urlset>

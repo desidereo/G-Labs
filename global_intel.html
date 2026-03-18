@@ -178,9 +178,21 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 </head>
 <body>
 
+<!-- ═══════════ SITE NAV ═══════════ -->
+<div style="background:#0a0d12;border-bottom:1px solid var(--border);padding:0 20px;display:flex;align-items:center;height:36px;gap:14px;overflow-x:auto">
+  <a href="index.html" style="color:var(--accent);font-weight:700;font-size:.78rem;white-space:nowrap;text-decoration:none">G-LABS</a>
+  <a href="index.html" style="color:var(--muted);font-size:.72rem;text-decoration:none;white-space:nowrap">Home</a>
+  <a href="tradingview.html" style="color:var(--muted);font-size:.72rem;text-decoration:none;white-space:nowrap">TradingView</a>
+  <a href="mql5.html" style="color:var(--muted);font-size:.72rem;text-decoration:none;white-space:nowrap">MetaTrader 4/5</a>
+  <a href="custom_development.html" style="color:var(--muted);font-size:.72rem;text-decoration:none;white-space:nowrap">Custom Dev</a>
+  <a href="downloads.html" style="color:var(--muted);font-size:.72rem;text-decoration:none;white-space:nowrap">Downloads</a>
+  <a href="about.html" style="color:var(--muted);font-size:.72rem;text-decoration:none;white-space:nowrap">About</a>
+  <a href="contact.html" style="color:var(--muted);font-size:.72rem;text-decoration:none;white-space:nowrap">Contact</a>
+</div>
+
 <!-- ═══════════ HEADER ═══════════ -->
 <header class="site-header">
-  <div class="logo">G-LABS <span>Trader Hub</span></div>
+  <a href="index.html" class="logo" style="text-decoration:none;color:var(--accent)">G-LABS <span>Trader Hub</span></a>
   <nav>
     <a href="#markets" class="active">Markets</a>
     <a href="#news">News</a>
@@ -353,10 +365,53 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
   </div>
 </div>
 
+<!-- ═══════════ PRODUCTS CAROUSEL ═══════════ -->
+<div class="section">
+  <div class="section-title">G-Labs Trading Products</div>
+</div>
+<div style="padding:0 20px 20px;overflow-x:auto">
+  <div style="display:flex;gap:16px;min-width:max-content">
+    <a href="tradingview.html" style="text-decoration:none;flex-shrink:0;width:240px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:transform .15s">
+      <div style="height:120px;background:var(--surface);display:flex;align-items:center;justify-content:center"><img src="assets/images/btmm-state-engine-pro-lifetime.png" alt="BTMM State Engine Pro" style="max-height:100px;max-width:200px;object-fit:contain"></div>
+      <div style="padding:14px"><div style="font-size:.82rem;font-weight:600;color:var(--text);margin-bottom:4px">BTMM State Engine Pro</div><div style="font-size:.7rem;color:var(--muted);margin-bottom:8px">TradingView &bull; Lifetime</div><div style="font-size:.88rem;font-weight:700;color:var(--accent)">&pound;150</div></div>
+    </a>
+    <a href="tradingview.html" style="text-decoration:none;flex-shrink:0;width:240px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:transform .15s">
+      <div style="height:120px;background:var(--surface);display:flex;align-items:center;justify-content:center"><img src="assets/images/magic-lines-single.png" alt="Magic Lines" style="max-height:100px;max-width:200px;object-fit:contain" onerror="this.src='favicon.svg';this.style.maxHeight='60px'"></div>
+      <div style="padding:14px"><div style="font-size:.82rem;font-weight:600;color:var(--text);margin-bottom:4px">Magic Lines</div><div style="font-size:.7rem;color:var(--muted);margin-bottom:8px">TradingView &bull; Monthly</div><div style="font-size:.88rem;font-weight:700;color:var(--accent)">&pound;9.99/mo</div></div>
+    </a>
+    <a href="tradingview.html" style="text-decoration:none;flex-shrink:0;width:240px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:transform .15s">
+      <div style="height:120px;background:var(--surface);display:flex;align-items:center;justify-content:center"><img src="assets/images/connix-smart-trading-single.png" alt="Connix Smart Trading" style="max-height:100px;max-width:200px;object-fit:contain" onerror="this.src='favicon.svg';this.style.maxHeight='60px'"></div>
+      <div style="padding:14px"><div style="font-size:.82rem;font-weight:600;color:var(--text);margin-bottom:4px">Connix Smart Trading</div><div style="font-size:.7rem;color:var(--muted);margin-bottom:8px">TradingView &bull; Monthly</div><div style="font-size:.88rem;font-weight:700;color:var(--accent)">&pound;9.99/mo</div></div>
+    </a>
+    <a href="mql5.html" style="text-decoration:none;flex-shrink:0;width:240px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:transform .15s">
+      <div style="height:120px;background:var(--surface);display:flex;align-items:center;justify-content:center"><img src="https://c.mql5.com/31/1722/market-maker-dashboard-by-g-labs-logo-200x200-7861.png" alt="Market Maker Dashboard" style="max-height:100px;max-width:200px;object-fit:contain" onerror="this.src='favicon.svg';this.style.maxHeight='60px'"></div>
+      <div style="padding:14px"><div style="font-size:.82rem;font-weight:600;color:var(--text);margin-bottom:4px">Market Maker Dashboard</div><div style="font-size:.7rem;color:var(--muted);margin-bottom:8px">MetaTrader 4/5 &bull; Lifetime</div><div style="font-size:.88rem;font-weight:700;color:var(--accent)">$149</div></div>
+    </a>
+    <a href="mql5.html" style="text-decoration:none;flex-shrink:0;width:240px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:transform .15s">
+      <div style="height:120px;background:var(--surface);display:flex;align-items:center;justify-content:center"><img src="https://c.mql5.com/31/1722/g-cash-ic-breaker-order-blocks-logo-200x200-3769.png" alt="IC Breaker Order Blocks" style="max-height:100px;max-width:200px;object-fit:contain" onerror="this.src='favicon.svg';this.style.maxHeight='60px'"></div>
+      <div style="padding:14px"><div style="font-size:.82rem;font-weight:600;color:var(--text);margin-bottom:4px">G-Cash IC Breaker</div><div style="font-size:.7rem;color:var(--muted);margin-bottom:8px">MetaTrader 4 &bull; Lifetime</div><div style="font-size:.88rem;font-weight:700;color:var(--accent)">$39</div></div>
+    </a>
+    <a href="custom_development.html" style="text-decoration:none;flex-shrink:0;width:240px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:transform .15s">
+      <div style="height:120px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:2.4rem;color:var(--accent)">&#9881;</div>
+      <div style="padding:14px"><div style="font-size:.82rem;font-weight:600;color:var(--text);margin-bottom:4px">Custom Development</div><div style="font-size:.7rem;color:var(--muted);margin-bottom:8px">MQL4/5 &bull; Pine Script</div><div style="font-size:.88rem;font-weight:700;color:var(--accent)">Get a Quote</div></div>
+    </a>
+  </div>
+</div>
+
 <!-- ═══════════ FOOTER ═══════════ -->
 <footer class="site-footer">
+  <div style="margin-bottom:10px">
+    <a href="index.html" style="color:var(--muted);margin:0 8px;font-size:.72rem">Home</a>
+    <a href="tradingview.html" style="color:var(--muted);margin:0 8px;font-size:.72rem">TradingView</a>
+    <a href="mql5.html" style="color:var(--muted);margin:0 8px;font-size:.72rem">MetaTrader</a>
+    <a href="about.html" style="color:var(--muted);margin:0 8px;font-size:.72rem">About</a>
+    <a href="faq.html" style="color:var(--muted);margin:0 8px;font-size:.72rem">FAQ</a>
+    <a href="contact.html" style="color:var(--muted);margin:0 8px;font-size:.72rem">Contact</a>
+    <a href="privacy.html" style="color:var(--muted);margin:0 8px;font-size:.72rem">Privacy</a>
+    <a href="terms.html" style="color:var(--muted);margin:0 8px;font-size:.72rem">Terms</a>
+  </div>
   G-Labs Trader Hub &mdash; Data from Frankfurter, CoinGecko, RSS feeds, alternative.me &mdash; Not financial advice<br>
-  &copy; 2026 G-Labs. All rights reserved.
+  &copy; 2026 G-Labs Software. A trading name of Apex Pro Group Ltd.
 </footer>
 
 <script>
