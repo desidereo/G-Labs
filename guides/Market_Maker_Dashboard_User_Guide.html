@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Market Maker &mdash; User Guide (MT4 / MT5)</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #181b23;
+    --surface2: #1e2230;
+    --border: #2a2e3a;
+    --accent: #3b82f6;
+    --accent2: #06b6d4;
+    --green: #22c55e;
+    --red: #ef4444;
+    --gold: #eab308;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --heading: #f1f5f9;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .hero {
+    background: linear-gradient(135deg, #0c1220 0%, #162038 50%, #0c1220 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 52px 20px 44px;
+    text-align: center;
+  }
+  .hero h1 {
+    font-size: clamp(1.65rem, 4vw, 2.35rem);
+    color: var(--heading);
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+  .hero .subtitle { color: var(--muted); font-size: 1.05rem; margin-bottom: 6px; }
+  .hero .version {
+    display: inline-block;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    color: #fff;
+    font-size: 0.72rem;
+    padding: 4px 14px;
+    border-radius: 14px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    margin-top: 12px;
+    text-transform: uppercase;
+  }
+
+  .wrapper {
+    display: flex;
+    max-width: 1320px;
+    margin: 0 auto;
+    gap: 0;
+  }
+
+  .sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 260px;
+    min-width: 260px;
+    overflow-y: auto;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 24px 0;
+    font-size: 0.86rem;
+  }
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  .sidebar .nav-group { margin-bottom: 18px; }
+  .sidebar .nav-title {
+    color: var(--muted);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0 22px;
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+  .sidebar a {
+    display: block;
+    padding: 5px 22px;
+    color: var(--muted);
+    transition: all .15s;
+    border-left: 2px solid transparent;
+  }
+  .sidebar a:hover {
+    color: var(--text);
+    background: rgba(59,130,246,0.06);
+    border-left-color: var(--accent);
+    text-decoration: none;
+  }
+
+  .content {
+    flex: 1;
+    min-width: 0;
+    padding: 44px 48px 80px;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    color: var(--heading);
+    margin: 48px 0 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    letter-spacing: -0.3px;
+  }
+  h2:first-of-type { margin-top: 0; }
+  h3 {
+    font-size: 1.12rem;
+    color: var(--accent2);
+    margin: 28px 0 10px;
+  }
+  h4 {
+    font-size: 0.95rem;
+    color: var(--gold);
+    margin: 20px 0 8px;
+  }
+  p { margin-bottom: 12px; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0 24px;
+    font-size: 0.9rem;
+  }
+  thead th {
+    background: var(--surface2);
+    color: var(--heading);
+    font-weight: 600;
+    text-align: left;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+  }
+  tbody td {
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tbody tr:nth-child(even) { background: rgba(255,255,255,0.015); }
+
+  code {
+    background: var(--surface2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.88em;
+    font-family: 'Cascadia Code', 'Consolas', monospace;
+    color: var(--accent2);
+  }
+
+  .box {
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 18px 0;
+    border-left: 4px solid;
+  }
+  .box-info { background: rgba(59,130,246,0.08); border-color: var(--accent); }
+  .box-tip  { background: rgba(34,197,94,0.08); border-color: var(--green); }
+  .box-warn { background: rgba(234,179,8,0.08); border-color: var(--gold); }
+  .box-danger { background: rgba(239,68,68,0.08); border-color: #ef4444; }
+  .box strong:first-child { display: block; margin-bottom: 6px; font-size: 0.9rem; }
+  .box-info strong { color: var(--accent); }
+  .box-tip strong  { color: var(--green); }
+  .box-warn strong { color: var(--gold); }
+  .box-danger strong { color: #f87171; }
+
+  ul, ol { margin: 8px 0 14px 22px; }
+  li { margin-bottom: 6px; }
+
+  /* Panel mockup — matches Advanced guide styling */
+  .panel-mock {
+    display: grid;
+    grid-template-columns: repeat(9, auto);
+    gap: 1px;
+    background: #000;
+    border: 1px solid #000;
+    border-radius: 8px;
+    overflow: auto;
+    margin: 18px 0 8px;
+    font-size: 0.7rem;
+    font-family: Verdana, Geneva, sans-serif;
+    max-width: 100%;
+  }
+  .panel-mock .cell {
+    padding: 6px 8px;
+    text-align: center;
+    white-space: nowrap;
+    min-width: 44px;
+  }
+  .cell-header { background: #000; color: #ffd700; font-weight: bold; font-size: 0.68rem; }
+  .cell-min { background: #ffb6c1; color: #000; font-weight: bold; font-size: 0.65rem; }
+  .cell-sym    { background: #376b87; color: #fff; }
+  .cell-sym.active { background: #ffd700; color: #000; font-weight: bold; }
+  .cell-bg     { background: #3f4d5a; color: #fff; }
+  .cell-green  { background: #1c8a59; color: #fff; }
+  .cell-dgreen { background: #15661d; color: #fff; }
+  .cell-red    { background: #cc2323; color: #fff; }
+  .cell-dred   { background: #911313; color: #fff; }
+  .cell-blue   { background: #376b87; color: #fff; }
+  .cell-dblue  { background: #0f5f8a; color: #fff; }
+  .cell-rsi-ob { background: #5c1010; color: #fff; }
+  .cell-rsi-os { background: #15661d; color: #fff; }
+  .cell-dr-hot { background: #7f1d1d; color: #fff; }
+
+  .caption {
+    color: var(--muted);
+    font-size: 0.82rem;
+    margin: 0 0 22px;
+  }
+
+  /* Flow */
+  .flow {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 22px 24px;
+    margin: 18px 0;
+    overflow-x: auto;
+  }
+  .flow-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+    margin: 10px 0;
+  }
+  .flow-step {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 16px;
+    font-size: 0.88rem;
+    max-width: 200px;
+    text-align: center;
+  }
+  .flow-arrow { color: var(--accent); font-size: 1.25rem; font-weight: bold; }
+
+  /* SVG diagrams */
+  .diagram-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 22px 0;
+    overflow-x: auto;
+  }
+  .diagram-wrap svg { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+  .diagram-title {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--gold);
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+
+  .color-key {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 10px;
+    margin: 16px 0;
+  }
+  .color-key .sw {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 0.86rem;
+  }
+  .color-key .dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    .content { padding: 32px 18px 60px; }
+    .hero h1 { font-size: 1.45rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Market Maker</h1>
+  <div class="subtitle">G-Labs &mdash; Multi-symbol ADR dashboard (Basic build)</div>
+  <div class="subtitle" style="font-size:0.88rem;">User guide &mdash; MT4 / MT5 &middot; same layout &amp; behaviour on both platforms</div>
+  <span class="version">Basic</span>
+</div>
+
+<div class="wrapper">
+
+<nav class="sidebar" aria-label="Guide sections">
+  <div class="nav-group">
+    <div class="nav-title">Start</div>
+    <a href="#overview">Overview</a>
+    <a href="#visual">Dashboard mockup</a>
+    <a href="#cycle">BTMM cycle (Steve Mauro)</a>
+    <a href="#h1-daily">Daily: A &rarr; M &rarr; D</a>
+    <a href="#h1-cycle">H1 cycle direction</a>
+    <a href="#cycle-graphic">Cycle diagram</a>
+    <a href="#h1-levels">Levels &amp; ×ADR</a>
+    <a href="#pf-deep">PFH &amp; PFL</a>
+    <a href="#h1-weekly">Weekly MAAW</a>
+    <a href="#wvvm">WVVM</a>
+    <a href="#btmm-how">BTMM &rarr; dashboard map</a>
+    <a href="#btmm-playbook">Daily playbook</a>
+    <a href="#btmm-rules">Rules of engagement</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-title">Columns</div>
+    <a href="#col-symbol">Symbol</a>
+    <a href="#col-pf">PFH / PFL</a>
+    <a href="#col-status">STATUS &amp; REAL TIME</a>
+    <a href="#col-adr">ADR</a>
+    <a href="#col-sh">Stop Hunt</a>
+    <a href="#col-dr">Daily range</a>
+    <a href="#col-rsi">RSI</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-title">Chart</div>
+    <a href="#chart-svg">Chart overlay diagram</a>
+    <a href="#markers">Markers &amp; projections</a>
+    <a href="#color-key">Panel color key</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-title">Reference</div>
+    <a href="#workflow">Workflow</a>
+    <a href="#settings">Settings</a>
+    <a href="#notes">Notes</a>
+  </div>
+</nav>
+
+<main class="content">
+
+<h2 id="overview">Overview</h2>
+<p>
+  <strong>Market Maker</strong> (Basic) is a chart-window indicator that shows a <strong>live dashboard</strong> for every symbol in your list: peak formation (PFH/PFL), maximum and live distance in ADR, average daily range in pips, optional stop-hunt distance vs the session box, today&rsquo;s range, and RSI. By default the <strong>trend / cycle direction</strong> comes from <strong>H1</strong> (fast vs slow moving average on the <strong>Time Frame</strong> input &mdash; usually H1). The <strong>active chart symbol</strong> also gets on-chart <strong>ADR projection lines</strong> and optional <strong>Asian range</strong> rectangle.
+</p>
+<p>Two visual parts:</p>
+<ol>
+  <li><strong>Dashboard panel</strong> &mdash; grid of buttons (gold headers, one row per pair).</li>
+  <li><strong>Chart overlays</strong> &mdash; PF label, dotted 1×/2×/3× ADR horizontals, optional session box (when enabled).</li>
+</ol>
+
+<div class="box box-info">
+  <strong>Same family as Advanced</strong>
+  This Basic build omits breakers, TDI, divergence, currency strength, and other Advanced-only columns. Core ideas &mdash; PF, ADR multiples, stop hunt, DR &mdash; match the <em>Advanced Market Maker MT5</em> user guide style.
+</div>
+
+<h2 id="visual">Dashboard layout (mockup)</h2>
+<p>
+  The panel uses a <strong>MINIMIZE</strong> control, gold column headers, and one row per symbol. The current chart symbol is highlighted in <strong>gold</strong>. Below is a <em>stylized</em> mockup; your live values will differ.
+</p>
+
+<div class="panel-mock" role="img" aria-label="Mockup of Basic Market Maker dashboard">
+  <div class="cell cell-min">MIN</div>
+  <div class="cell cell-header">SYMBOL</div>
+  <div class="cell cell-header">PF H/L</div>
+  <div class="cell cell-header">STATUS</div>
+  <div class="cell cell-header">REAL TIME</div>
+  <div class="cell cell-header">ADR PIPS</div>
+  <div class="cell cell-header">StopHunt</div>
+  <div class="cell cell-header">DR</div>
+  <div class="cell cell-header">RSI</div>
+
+  <div class="cell cell-min">—</div>
+  <div class="cell cell-sym active">EURUSD</div>
+  <div class="cell cell-green">2 PFL</div>
+  <div class="cell cell-dblue">2.40*ADR</div>
+  <div class="cell cell-dblue">2.18*ADR</div>
+  <div class="cell cell-bg">87</div>
+  <div class="cell cell-green">L 22.5</div>
+  <div class="cell cell-dr-hot">95</div>
+  <div class="cell cell-rsi-os">31.2</div>
+
+  <div class="cell cell-min">—</div>
+  <div class="cell cell-sym">GBPUSD</div>
+  <div class="cell cell-red">1 PFH</div>
+  <div class="cell cell-bg">1.65*ADR</div>
+  <div class="cell cell-bg">1.52*ADR</div>
+  <div class="cell cell-bg">110</div>
+  <div class="cell cell-red">H 15.0</div>
+  <div class="cell cell-bg">88</div>
+  <div class="cell cell-rsi-ob">71.5</div>
+
+  <div class="cell cell-min">—</div>
+  <div class="cell cell-sym">USDJPY</div>
+  <div class="cell cell-dgreen">3 PFL</div>
+  <div class="cell cell-bg">0.92*ADR</div>
+  <div class="cell cell-bg">0.88*ADR</div>
+  <div class="cell cell-bg">65</div>
+  <div class="cell cell-bg"></div>
+  <div class="cell cell-bg">42</div>
+  <div class="cell cell-bg">52.1</div>
+</div>
+<p class="caption">DR column appears when &ldquo;Show Daily Range&rdquo; is on. Empty StopHunt cells are normal when filters are not met.</p>
+
+<!-- ============================================================ -->
+<!--              THE BTMM H1 CYCLE & WEEKLY FRAMEWORK            -->
+<!-- ============================================================ -->
+
+<h2 id="cycle">The BTMM cycle &mdash; Steve Mauro framework</h2>
+<p>
+  The foreign exchange market is not random. Behind every spike, every stop hunt, every reversal lies <strong>the market maker</strong> &mdash; the institutional participant obligated to provide liquidity on both sides of the market. To fill profitably, they follow a <strong>repeating, mechanical cycle</strong>. <em>Beat The Market Maker</em> (BTMM), developed by <strong>Steve Mauro</strong>, teaches retail traders to recognise this cycle and trade alongside it.
+</p>
+<p>
+  This dashboard is built around that cycle. The <strong>H1 timeframe</strong> is the engine: it defines cycle direction, swing anchors (PFH / PFL), and how many ADRs a leg has travelled. Everything else &mdash; session boxes, stop hunts, daily range, RSI &mdash; is <strong>context</strong> underneath.
+</p>
+
+<h3 id="h1-daily">The daily cycle: accumulation &rarr; manipulation &rarr; distribution</h3>
+<p>Every single trading day, on every pair, the market maker runs the same three-phase sequence:</p>
+<div class="flow">
+  <div class="flow-row">
+    <span class="flow-step" style="border-color:var(--accent2);">ACCUMULATION<br><small style="color:var(--muted)">Asian session &mdash; tight range<br>MM builds position quietly</small></span>
+    <span class="flow-arrow">&rarr;</span>
+    <span class="flow-step" style="border-color:var(--red);">MANIPULATION<br><small style="color:var(--muted)">London / NY open &mdash; stop hunt<br>Spikes beyond box to fill orders</small></span>
+    <span class="flow-arrow">&rarr;</span>
+    <span class="flow-step" style="border-color:var(--green);">DISTRIBUTION<br><small style="color:var(--muted)">The real move &mdash; trend leg<br>This is where you trade</small></span>
+  </div>
+</div>
+
+<table>
+  <thead><tr><th>Phase</th><th>What happens</th><th>This dashboard</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><strong>Accumulation</strong></td>
+      <td>Asian session: low volatility, tight range. The MM quietly builds a position while retail sees &ldquo;nothing happening.&rdquo;</td>
+      <td>Optional <strong>Asian rectangle</strong> on chart; <strong>DR</strong> is small early vs <strong>ADR</strong>.</td>
+    </tr>
+    <tr>
+      <td><strong>Manipulation</strong></td>
+      <td>Session open (London / NY): price spikes <strong>beyond</strong> the Asian box to hunt retail stop losses and fill the MM&rsquo;s remaining order.</td>
+      <td><strong>Stop Hunt</strong> column &mdash; pips above/below the session box when filters pass.</td>
+    </tr>
+    <tr>
+      <td><strong>Distribution</strong></td>
+      <td>Order filled. The <strong>genuine directional move</strong> begins. This is the move you ride.</td>
+      <td><strong>STATUS / REAL TIME</strong> climbing in ×ADR; <strong>1× / 2× / 3× ADR projection lines</strong> on chart.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="box box-info">
+  <strong>The dashboard in one sentence</strong>
+  It tells you <em>which phase you are in</em> (accumulation / hunt / distribution), <em>how far distribution has run</em> (×ADR), and <em>which direction the H1 cycle says you should be trading</em> (PFL up / PFH down).
+</div>
+
+<h3 id="h1-cycle">The H1 cycle &mdash; your directional engine</h3>
+<p>
+  In BTMM the <strong>H1 timeframe</strong> (default setting in this indicator) defines the <strong>cycle direction</strong>. The fast MA (default 13 EMA) crossing above the slow MA (default 50 EMA) on H1 means the market maker is distributing <strong>upward</strong> &mdash; bullish cycle. Cross below = <strong>bearish cycle</strong>.
+</p>
+<p>That single H1 cross drives <strong>everything</strong> on the panel:</p>
+<ul>
+  <li><strong>Bullish H1 cycle</strong> &rarr; swing anchor is a <strong>Peak Formation Low (PFL)</strong>; the leg is measured upward from there.</li>
+  <li><strong>Bearish H1 cycle</strong> &rarr; swing anchor is a <strong>Peak Formation High (PFH)</strong>; the leg is measured downward.</li>
+  <li><strong>STATUS / REAL TIME</strong> measure how far distribution has run from the PF in <strong>multiples of ADR</strong>.</li>
+  <li><strong>Stop Hunt</strong> direction is interpreted relative to the H1 bias (low-side hunt in a bullish cycle = potential long; high-side in bearish = potential short).</li>
+</ul>
+
+<div class="box box-tip">
+  <strong>H1 cycle flip</strong>
+  When the H1 MAs cross the other way, the cycle flips. PF re-anchors, extension resets. This is normal &mdash; you are seeing a <strong>new cycle begin</strong>. Don&rsquo;t carry the old direction.
+</div>
+
+<h3 id="cycle-graphic">The full cycle &mdash; PFL &rarr; L1 &rarr; L2 &rarr; L3 &rarr; PFH &rarr; L1 &rarr; L2 &rarr; L3 &rarr; PFL</h3>
+<p>This is what the <strong>complete BTMM staircase</strong> looks like. Three levels up from a PFL, peak forms (PFH), then three levels down to the next PFL. The dashboard tracks <strong>which level you are in</strong> via ×ADR and labels the peaks.</p>
+
+<div class="diagram-wrap">
+  <div class="diagram-title">Full bullish &rarr; bearish cycle: PFL &rarr; L1 &rarr; L2 &rarr; L3 &rarr; PFH &rarr; L1 &rarr; L2 &rarr; L3 &rarr; PFL</div>
+  <svg viewBox="0 0 900 420" xmlns="http://www.w3.org/2000/svg" aria-label="BTMM level cycle diagram">
+    <defs>
+      <pattern id="g2" width="25" height="25" patternUnits="userSpaceOnUse">
+        <path d="M 25 0 L 0 0 0 25" fill="none" stroke="#2a2e3a" stroke-width="0.4"/>
+      </pattern>
+    </defs>
+    <rect width="900" height="420" fill="#0f1117"/>
+    <rect width="900" height="420" fill="url(#g2)" opacity="0.35"/>
+
+    <!-- ===== BULLISH SIDE (left half) ===== -->
+    <!-- PFL marker -->
+    <circle cx="60" cy="340" r="8" fill="#22c55e" opacity="0.9"/>
+    <text x="60" y="370" text-anchor="middle" font-size="13" fill="#22c55e" font-weight="800" font-family="Segoe UI,sans-serif">PFL</text>
+    <text x="60" y="385" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="Segoe UI,sans-serif">Low is in</text>
+
+    <!-- L1 bullish room -->
+    <rect x="90" y="270" width="100" height="70" rx="4" fill="none" stroke="#3b82f6" stroke-width="2" stroke-dasharray="6 3"/>
+    <text x="140" y="265" text-anchor="middle" font-size="12" fill="#3b82f6" font-weight="700" font-family="Segoe UI,sans-serif">L1</text>
+    <text x="140" y="325" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="Segoe UI,sans-serif">&lt; 1× ADR</text>
+
+    <!-- L2 bullish room -->
+    <rect x="210" y="185" width="100" height="70" rx="4" fill="none" stroke="#3b82f6" stroke-width="2" stroke-dasharray="6 3"/>
+    <text x="260" y="180" text-anchor="middle" font-size="12" fill="#3b82f6" font-weight="700" font-family="Segoe UI,sans-serif">L2</text>
+    <text x="260" y="240" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="Segoe UI,sans-serif">1×–2× ADR</text>
+
+    <!-- L3 bullish room -->
+    <rect x="330" y="95" width="100" height="70" rx="4" fill="none" stroke="#eab308" stroke-width="2" stroke-dasharray="6 3"/>
+    <text x="380" y="90" text-anchor="middle" font-size="12" fill="#eab308" font-weight="700" font-family="Segoe UI,sans-serif">L3</text>
+    <text x="380" y="150" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="Segoe UI,sans-serif">2×+ ADR</text>
+    <text x="380" y="82" text-anchor="middle" font-size="8" fill="#eab308" font-family="Segoe UI,sans-serif">PF ZONE</text>
+
+    <!-- Bullish price line (staircase up) -->
+    <polyline points="60,340 110,310 140,300 160,280 190,270 230,225 260,210 290,195 340,140 380,115 420,95"
+      fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round"/>
+
+    <!-- Bullish arrows -->
+    <text x="125" y="295" font-size="14" fill="#3b82f6" font-family="Segoe UI,sans-serif">&#9650;</text>
+    <text x="245" y="210" font-size="14" fill="#3b82f6" font-family="Segoe UI,sans-serif">&#9650;</text>
+    <text x="365" y="125" font-size="14" fill="#eab308" font-family="Segoe UI,sans-serif">&#9650;</text>
+
+    <!-- PFH marker (the peak) -->
+    <circle cx="450" cy="60" r="10" fill="#ef4444" opacity="0.9"/>
+    <text x="450" y="42" text-anchor="middle" font-size="14" fill="#ef4444" font-weight="900" font-family="Segoe UI,sans-serif">PFH</text>
+    <text x="450" y="28" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="Segoe UI,sans-serif">High is in — cycle reverses</text>
+
+    <!-- Peak spike -->
+    <polyline points="420,95 450,60" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round"/>
+    <polyline points="450,60 470,85" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/>
+
+    <!-- ===== BEARISH SIDE (right half) ===== -->
+    <!-- L1 bearish room -->
+    <rect x="480" y="95" width="100" height="70" rx="4" fill="none" stroke="#ef4444" stroke-width="2" stroke-dasharray="6 3"/>
+    <text x="530" y="90" text-anchor="middle" font-size="12" fill="#ef4444" font-weight="700" font-family="Segoe UI,sans-serif">L1</text>
+    <text x="530" y="150" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="Segoe UI,sans-serif">&lt; 1× ADR</text>
+
+    <!-- L2 bearish room -->
+    <rect x="600" y="185" width="100" height="70" rx="4" fill="none" stroke="#ef4444" stroke-width="2" stroke-dasharray="6 3"/>
+    <text x="650" y="180" text-anchor="middle" font-size="12" fill="#ef4444" font-weight="700" font-family="Segoe UI,sans-serif">L2</text>
+    <text x="650" y="240" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="Segoe UI,sans-serif">1×–2× ADR</text>
+
+    <!-- L3 bearish room -->
+    <rect x="720" y="270" width="100" height="70" rx="4" fill="none" stroke="#eab308" stroke-width="2" stroke-dasharray="6 3"/>
+    <text x="770" y="265" text-anchor="middle" font-size="12" fill="#eab308" font-weight="700" font-family="Segoe UI,sans-serif">L3</text>
+    <text x="770" y="325" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="Segoe UI,sans-serif">2×+ ADR</text>
+    <text x="770" y="355" text-anchor="middle" font-size="8" fill="#eab308" font-family="Segoe UI,sans-serif">PF ZONE</text>
+
+    <!-- Bearish price line (staircase down) -->
+    <polyline points="470,85 510,120 530,135 560,155 590,165 630,215 650,230 680,245 730,300 770,320 810,345"
+      fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/>
+
+    <!-- Bearish arrows -->
+    <text x="515" y="140" font-size="14" fill="#ef4444" font-family="Segoe UI,sans-serif">&#9660;</text>
+    <text x="635" y="230" font-size="14" fill="#ef4444" font-family="Segoe UI,sans-serif">&#9660;</text>
+    <text x="755" y="315" font-size="14" fill="#eab308" font-family="Segoe UI,sans-serif">&#9660;</text>
+
+    <!-- PFL marker (the bottom — new cycle) -->
+    <polyline points="810,345 840,375" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="840" cy="380" r="8" fill="#22c55e" opacity="0.9"/>
+    <text x="840" y="405" text-anchor="middle" font-size="13" fill="#22c55e" font-weight="800" font-family="Segoe UI,sans-serif">PFL</text>
+    <text x="840" y="418" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="Segoe UI,sans-serif">New bullish cycle begins</text>
+
+    <!-- Centre axis label -->
+    <line x1="450" y1="400" x2="450" y2="55" stroke="#2a2e3a" stroke-width="1" stroke-dasharray="4 4" opacity="0.5"/>
+
+    <!-- Side labels -->
+    <text x="220" y="400" text-anchor="middle" font-size="11" fill="#3b82f6" font-weight="700" font-family="Segoe UI,sans-serif" letter-spacing="1">BULLISH CYCLE</text>
+    <text x="220" y="413" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="Segoe UI,sans-serif">H1 fast MA above slow &bull; PFL anchored</text>
+    <text x="680" y="400" text-anchor="middle" font-size="11" fill="#ef4444" font-weight="700" font-family="Segoe UI,sans-serif" letter-spacing="1">BEARISH CYCLE</text>
+    <text x="680" y="413" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="Segoe UI,sans-serif">H1 fast MA below slow &bull; PFH anchored</text>
+  </svg>
+</div>
+<p class="caption">Each dashed box is a &ldquo;room&rdquo; (one daily distribution leg). L3 boxes are gold = <strong>peak formation zone</strong>. The cycle repeats: PFL &rarr; 3 levels up &rarr; PFH &rarr; 3 levels down &rarr; PFL.</p>
+
+<h3 id="h1-levels">Levels &mdash; knowing where you are in the H1 cycle (×ADR)</h3>
+<p>
+  In BTMM, price moves in <strong>counted levels</strong> &mdash; typically <strong>three levels in one direction</strong> before the cycle reverses. This indicator uses <strong>×ADR</strong> as its level ruler. Each ADR multiple maps roughly to a &ldquo;level&rdquo; in the cycle:
+</p>
+<table>
+  <thead><tr><th>Level zone</th><th>×ADR read</th><th>BTMM meaning</th><th>How to trade it</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><strong>Level 1</strong><br><small>Early cycle</small></td>
+      <td>Below ~1× ADR</td>
+      <td>First distribution leg after accumulation. The cycle is young. The MM is still building.</td>
+      <td>Trend entries with cycle direction. Session box context matters most.</td>
+    </tr>
+    <tr>
+      <td><strong>Level 2</strong><br><small>Trend confirmed</small></td>
+      <td>~1×&ndash;2× ADR</td>
+      <td>Cycle momentum confirmed. This is where PFH/PFL can start to form on a reversal.</td>
+      <td>Still with trend but manage size. <strong>PF zone</strong> &mdash; any reversal here could become the peak.</td>
+    </tr>
+    <tr>
+      <td><strong>Level 3+</strong><br><small>Peak formation zone</small></td>
+      <td>Above ~2× ADR (blue highlight on panel)</td>
+      <td>The MM may be fully loaded. This is <strong>reversal territory</strong>. Peak Formation (PFH or PFL) is likely.</td>
+      <td><strong>Trade reversals only</strong> or stand aside. Don&rsquo;t chase continuation. Watch for H1 cross flip.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="box box-warn">
+  <strong>STATUS vs REAL TIME at each level</strong>
+  <strong>STATUS</strong> = the maximum the leg has reached (the peak of distribution). <strong>REAL TIME</strong> = where price is <em>now</em>. If REAL TIME is well below STATUS, you are in a <strong>pullback inside the cycle</strong> &mdash; potential re-entry if the H1 direction still holds. If both are high and climbing, the cycle is still distributing.
+</div>
+
+<h3 id="pf-deep">PFH &amp; PFL &mdash; Peak Formation (the reversal signal)</h3>
+<p>
+  In Steve Mauro&rsquo;s framework, a <strong>Peak Formation</strong> is the moment the multi-day swing reverses. After the H1 cycle has run through <strong>multiple levels</strong> (typically 2&ndash;3 daily sessions in one direction), the market maker has accumulated enough. The cycle flips.
+</p>
+<ul>
+  <li><strong>Peak Formation High (PFH)</strong> &mdash; a bullish cycle at Level 2+ followed by a clear down-break. The high is in. Market is now <strong>bearish</strong>.</li>
+  <li><strong>Peak Formation Low (PFL)</strong> &mdash; a bearish cycle at Level 2+ followed by a clear up-break. The low is in. Market is now <strong>bullish</strong>.</li>
+</ul>
+<p>
+  On the panel, <strong>PFH / PFL</strong> plus the <strong>number</strong> (days since peak) tells you: <em>&ldquo;Is a confirmed peak behind us? How recent?&rdquo;</em> A count of <strong>1 or 2</strong> (bright colour) means the formation is very fresh &mdash; the new cycle just started and continuation trades are highest probability.
+</p>
+
+<h3 id="h1-weekly">The weekly cycle &mdash; MAAW</h3>
+<p>
+  BTMM traders use the acronym <strong>MAAW</strong> to describe the <strong>weekly rhythm</strong> of the market maker cycle. The week has its own accumulation&ndash;manipulation&ndash;distribution sequence:
+</p>
+<table>
+  <thead><tr><th>Day</th><th>Phase</th><th>What to expect</th><th>Dashboard clues</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><strong>Monday</strong></td>
+      <td><strong>M</strong> &mdash; Markup / consolidation</td>
+      <td>The week opens: positioning from Friday close, often choppy. The <strong>weekly range</strong> is being set. Asian boxes may overlap.</td>
+      <td><strong>DR</strong> is usually small vs <strong>ADR</strong>. H1 cycle may still carry Friday&rsquo;s direction or be in transition. Don&rsquo;t overcommit.</td>
+    </tr>
+    <tr>
+      <td><strong>Tuesday</strong></td>
+      <td><strong>A</strong> &mdash; Accumulation</td>
+      <td>The market maker has gathered information from Monday. Tuesday is often the <strong>start of the real weekly move</strong>. H1 cycles that confirm on Tuesday tend to stick.</td>
+      <td>Watch for a <strong>fresh PFL or PFH</strong> forming (days since = 1); <strong>STATUS</strong> building from low levels. This is where the weekly direction often reveals itself.</td>
+    </tr>
+    <tr>
+      <td><strong>Wednesday</strong></td>
+      <td><strong>A</strong> &mdash; Acceleration / continuation</td>
+      <td>Peak distribution day of the week. If the H1 cycle confirmed Tuesday, Wednesday usually <strong>extends</strong> it. The biggest ADR moves of the week often land here.</td>
+      <td><strong>STATUS / REAL TIME</strong> climbing through 1×&ndash;2× ADR; <strong>DR</strong> may challenge or exceed one <strong>ADR</strong> in pips. This is the core &ldquo;trade the cycle&rdquo; day.</td>
+    </tr>
+    <tr>
+      <td><strong>Thursday&ndash;Friday</strong></td>
+      <td><strong>W</strong> &mdash; Wind-down / reversal</td>
+      <td>Profit-taking, position squaring, thin Friday flow. The weekly cycle may be <strong>exhausted</strong>. H1 cycles can flip here as the week&rsquo;s peak forms.</td>
+      <td><strong>STATUS</strong> may be deep (2×+ ADR); <strong>RSI</strong> extreme with it. <strong>DR</strong> often above one ADR already. This is <strong>PF zone for the week</strong> &mdash; be careful chasing.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="flow">
+  <div class="flow-row">
+    <span class="flow-step" style="border-color:var(--muted);">Mon<br><small style="color:var(--muted)">Markup / range</small></span>
+    <span class="flow-arrow">&rarr;</span>
+    <span class="flow-step" style="border-color:var(--accent2);">Tue<br><small style="color:var(--muted)">Accumulation &mdash; weekly direction sets</small></span>
+    <span class="flow-arrow">&rarr;</span>
+    <span class="flow-step" style="border-color:var(--green);">Wed<br><small style="color:var(--muted)">Acceleration &mdash; biggest moves</small></span>
+    <span class="flow-arrow">&rarr;</span>
+    <span class="flow-step" style="border-color:var(--red);">Thu&ndash;Fri<br><small style="color:var(--muted)">Wind-down &mdash; peak zone</small></span>
+  </div>
+</div>
+
+<div class="box box-info">
+  <strong>MAAW + H1 + ×ADR = your complete picture</strong>
+  Know which <strong>day of the week</strong> you are in (MAAW). Know the <strong>H1 cycle direction</strong> (PFL up or PFH down). Know <strong>which ×ADR level</strong> the leg is in (early / mid / peak zone). Only <em>then</em> drop into session context (box, stop hunt, DR, RSI). This is the layered BTMM read this dashboard enables.
+</div>
+
+<h3 id="wvvm">WVVM &mdash; Weekly Volume Volatility Model</h3>
+<p>
+  <strong>WVVM</strong> is the Steve Mauro concept that <strong>volume and volatility are not random across the week</strong> &mdash; they follow a predictable shape:
+</p>
+<ul>
+  <li><strong>Monday</strong>: low volume, small ranges (accumulation / markup).</li>
+  <li><strong>Tuesday&ndash;Wednesday</strong>: rising volume, <strong>expanding ranges</strong> (distribution / acceleration).</li>
+  <li><strong>Thursday</strong>: peak volatility, often the weekly extreme.</li>
+  <li><strong>Friday</strong>: declining volume, profit-taking, range compresses or chops.</li>
+</ul>
+<p>
+  The dashboard column <strong>DR (daily range)</strong> is your live WVVM meter: compare it against <strong>ADR (pips)</strong> across the week. Early week, DR tends to be small vs ADR. Mid-week, DR may match or exceed ADR. Late week, if DR is already large by mid-session, the weekly move may be done.
+</p>
+
+<h3 id="btmm-how">How the dashboard maps to BTMM</h3>
+<table>
+  <thead><tr><th>BTMM concept</th><th>Dashboard column or chart element</th></tr></thead>
+  <tbody>
+    <tr><td>H1 cycle direction</td><td><strong>PFH / PFL</strong> on panel &mdash; PFL = bullish cycle, PFH = bearish cycle (derived from H1 fast vs slow MA cross).</td></tr>
+    <tr><td>Accumulation (Asian box)</td><td>Optional <strong>rectangle</strong> on chart + pip label; same box <strong>Stop Hunt</strong> measures from.</td></tr>
+    <tr><td>Manipulation (stop hunt)</td><td><strong>Stop Hunt</strong> column: pips <strong>above (H)</strong> or <strong>below (L)</strong> the session box when rules pass.</td></tr>
+    <tr><td>Distribution (the real move)</td><td><strong>STATUS / REAL TIME</strong> in ×ADR. <strong>1× / 2× / 3× ADR projection lines</strong> on chart.</td></tr>
+    <tr><td>Level (how far in the cycle)</td><td><strong>STATUS</strong> vs ADR bands: &lt;1× = Level 1 zone, 1×&ndash;2× = Level 2, 2×+ = Level 3 / PF zone.</td></tr>
+    <tr><td>Peak Formation (PFH / PFL)</td><td><strong>PFH / PFL</strong> column + <strong>days since</strong>. Fresh (1&ndash;2) = new cycle just started. Deep = the peak is aging.</td></tr>
+    <tr><td>ADR ruler</td><td><strong>ADR (pips)</strong> &mdash; one &ldquo;average day.&rdquo; Every ×ADR level refers back to this number.</td></tr>
+    <tr><td>WVVM / daily volatility check</td><td><strong>DR</strong> vs <strong>ADR</strong> &mdash; how much of the day&rsquo;s range is used already.</td></tr>
+    <tr><td>Weekly cycle (MAAW)</td><td>Not on the panel &mdash; you mark <strong>weekly high/low</strong> and know which MAAW day you are in. Combine with H1 + ×ADR.</td></tr>
+    <tr><td>RSI exhaustion</td><td><strong>RSI</strong> column &mdash; only meaningful with H1 cycle + level + weekly context.</td></tr>
+  </tbody>
+</table>
+
+<h3 id="btmm-playbook">The BTMM playbook &mdash; daily routine with this dashboard</h3>
+<p>Use this as a <strong>repeatable process</strong>. Order matters &mdash; work from the biggest clock down:</p>
+<ol>
+  <li><strong>MAAW check</strong> &mdash; What day of the week is it? Monday (range setting, don&rsquo;t overcommit), Tuesday (weekly direction reveals), Wednesday (distribution day, biggest moves), Thursday&ndash;Friday (wind-down, PF zone).</li>
+  <li><strong>Weekly structure (manual)</strong> &mdash; On your chart, mark the <strong>weekly high and low</strong> developing. Is the H1 cycle taking price <em>toward</em> or <em>away from</em> last week&rsquo;s close?</li>
+  <li><strong>H1 cycle direction</strong> &mdash; Confirm on the H1 chart: fast above slow = <strong>bullish</strong> (expect <strong>PFL</strong> on panel); fast below slow = <strong>bearish</strong> (expect <strong>PFH</strong>). If the panel disagrees with what you see on H1, wait for clarity.</li>
+  <li><strong>Level check (×ADR)</strong> &mdash; Read <strong>STATUS / REAL TIME</strong>. Below 1× = Level 1 territory (trend entries). 1×&ndash;2× = Level 2 (manage, potential PF zone). 2×+ = Level 3 (reversal territory or stand aside).</li>
+  <li><strong>PFH / PFL freshness</strong> &mdash; Days since peak: 1&ndash;2 = new cycle, highest probability continuation. Higher numbers = the cycle is aging.</li>
+  <li><strong>Scan the strip</strong> &mdash; Prioritise pairs where MAAW + H1 direction + level all agree. Skip conflicted setups.</li>
+  <li><strong>Drop to session context</strong> &mdash; Now (and only now) look at the <strong>session box</strong> (rectangle), <strong>Stop Hunt</strong> distance, <strong>DR vs ADR</strong>. Does the daily picture fit the higher clocks?</li>
+  <li><strong>ADR projections on chart</strong> &mdash; Use the <strong>1× / 2× / 3× dotted lines</strong> from the PF as distribution targets and management levels. At 2×+ ADR, reduce risk or take partials.</li>
+  <li><strong>RSI last</strong> &mdash; Overbought / oversold only has meaning when you already know the H1 cycle, the level, and the MAAW day. RSI at 72 on a Wednesday in a confirmed bullish Level 1 is <strong>not</strong> the same as RSI at 72 on a Friday in Level 3.</li>
+</ol>
+
+<div class="box box-tip">
+  <strong>The BTMM filter in one sentence</strong>
+  Before you touch a session box or stop-hunt column: <strong>MAAW day + H1 direction + ×ADR level + PF freshness</strong>. If those four don&rsquo;t agree, you do not have a trade &mdash; you have a guess.
+</div>
+
+<h3 id="btmm-rules">Rules of engagement (Steve Mauro style)</h3>
+<ul>
+  <li><strong>Never fight the H1 cycle.</strong> If the panel says PFL (bullish) and you want to short, you need a <strong>confirmed PFH</strong> first &mdash; not a hunch.</li>
+  <li><strong>Level 3+ = reversal zone only.</strong> Do not chase continuation trades above 2× ADR unless the H1 cycle is freshly confirmed. Wait for PFH/PFL and the new cycle.</li>
+  <li><strong>Accumulation &rarr; manipulation &rarr; distribution.</strong> You enter during <strong>distribution</strong> (after the stop hunt), not during accumulation or manipulation. The Stop Hunt column tells you manipulation has occurred; then wait for the H1 cycle to confirm direction before acting.</li>
+  <li><strong>Tuesday sets the week.</strong> A confirmed H1 cross on Tuesday that aligns with the weekly developing range is a high-probability weekly cycle. Wednesday extends it. This is your best MAAW window.</li>
+  <li><strong>DR vs ADR is your WVVM meter.</strong> If DR already exceeds ADR early in the session, the day&rsquo;s distribution may be done. Don&rsquo;t chase &mdash; wait for tomorrow&rsquo;s cycle.</li>
+  <li><strong>PFH/PFL freshness matters.</strong> A &ldquo;1 PFL&rdquo; or &ldquo;1 PFH&rdquo; on the panel means <em>yesterday</em> was the peak. The new cycle just started. This is where continuation trades are strongest. A &ldquo;5 PFL&rdquo; means the cycle is five days old &mdash; the easy move may be behind you.</li>
+  <li><strong>RSI is context, never a signal.</strong> Overbought with H1 trend + Level 1 + mid-week = momentum, not exhaustion. Overbought with Level 3 + Friday + PFH developing = genuine warning.</li>
+  <li><strong>Journal your MAAW day.</strong> After each trade, note: was it Mon / Tue / Wed / Thu / Fri? Which level? You will see patterns fast.</li>
+</ul>
+
+<div class="box box-danger">
+  <strong>Risk</strong>
+  BTMM is a framework for reading the market maker cycle, not a guaranteed system. The indicator measures distance and range &mdash; it does not know order flow or intent. Stop placement, position sizing, and discipline are always your responsibility. Past cycle behaviour does not predict future results.
+</div>
+
+<h2 id="col-symbol">Symbol column</h2>
+<p>
+  <strong>Symbol changer.</strong> Click the pair name to load that instrument on the chart (or open a new chart if you enabled that). The active row is highlighted in <strong>gold</strong> like the mockup above.
+</p>
+
+<h2 id="col-pf">PFH / PFL (Peak formation)</h2>
+<p>
+  <strong>Peak Formation Low (PFL)</strong> in an uptrend or <strong>Peak Formation High (PFH)</strong> in a downtrend, plus a <strong>number</strong> = how many <strong>daily bars back</strong> that swing sits. Brighter greens/reds often mean the count is 1 or 2 (very recent formation).
+</p>
+
+<h2 id="col-status">STATUS &amp; REAL TIME</h2>
+<p>
+  <strong>STATUS</strong> = maximum move of the leg so far, in ×ADR (e.g. <code>2.40*ADR</code>). <strong>REAL TIME</strong> = same idea measured to <strong>current bid</strong>. When price pulls back from the extreme, REAL TIME drops below STATUS.
+</p>
+<p>
+  When either exceeds your <strong>ADR multiplier</strong>, cells typically take a <strong>stronger blue</strong> background (extended leg) and may trigger alerts.
+</p>
+
+<h2 id="col-adr">ADR (pips)</h2>
+<p>
+  <strong>Average Daily Range</strong> in pips over the configured lookback of <strong>completed</strong> daily candles &mdash; not today&rsquo;s range. This is the ruler behind every ×ADR value.
+</p>
+
+<h2 id="col-sh">Stop Hunt</h2>
+<p>
+  When conditions pass (including move &gt; 1×ADR, time gate, tight H4 range), the cell can show <strong>L … pips</strong> (below the box) or <strong>H … pips</strong> (above), meaning distance from the <strong>session box</strong> edge in pips.
+</p>
+
+<h2 id="col-dr">Daily range (DR)</h2>
+<p>
+  <strong>Today&rsquo;s</strong> high−low in pips. Background may emphasize when today has already exceeded one ADR in pips. Hide the column via inputs if you prefer a tighter panel.
+</p>
+
+<h2 id="col-rsi">RSI</h2>
+<p>
+  Short timeframe RSI (smoothed across bars in the implementation). Cell colour flags <strong>oversold</strong> / <strong>overbought</strong> vs default panel tone &mdash; use with ADR context, not alone.
+</p>
+
+<h2 id="chart-svg">Chart overlay (schematic)</h2>
+<p>
+  On the <strong>chart symbol only</strong>, the indicator can draw the Asian-style <strong>rectangle</strong>, a <strong>PF</strong> text label at the swing, and <strong>dotted horizontals</strong> at 1×, 2×, and 3× ADR from that pivot. Diagram (not to scale):
+</p>
+
+<div class="diagram-wrap">
+  <div class="diagram-title">Uptrend example &mdash; PFL with ADR projections + session box</div>
+  <svg viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#2a2e3a" stroke-width="0.5"/>
+      </pattern>
+    </defs>
+    <rect width="720" height="280" fill="#0f1117"/>
+    <rect width="720" height="280" fill="url(#grid)" opacity="0.4"/>
+    <!-- Candles -->
+    <g fill="#64748b">
+      <rect x="40" y="120" width="8" height="60" rx="1"/>
+      <rect x="56" y="100" width="8" height="85" rx="1"/>
+      <rect x="72" y="110" width="8" height="55" rx="1"/>
+      <rect x="88" y="95" width="8" height="45" rx="1"/>
+      <rect x="104" y="85" width="8" height="50" rx="1"/>
+      <rect x="120" y="70" width="8" height="40" rx="1"/>
+    </g>
+    <!-- Asian box -->
+    <rect x="38" y="125" width="95" height="52" fill="none" stroke="#eab308" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.9"/>
+    <text x="42" y="118" fill="#eab308" font-size="11" font-family="Segoe UI,sans-serif">Asian range</text>
+    <!-- Swing low -->
+    <circle cx="124" cy="188" r="5" fill="#22c55e"/>
+    <text x="132" y="200" fill="#22c55e" font-size="12" font-weight="bold" font-family="Verdana,sans-serif">2 PFL</text>
+    <!-- ADR lines from low -->
+    <line x1="120" y1="150" x2="680" y2="150" stroke="#22c55e" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.85"/>
+    <text x="630" y="146" fill="#22c55e" font-size="10" font-family="Segoe UI,sans-serif">1 ADR</text>
+    <line x1="120" y1="115" x2="680" y2="115" stroke="#22c55e" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.75"/>
+    <text x="630" y="111" fill="#22c55e" font-size="10" font-family="Segoe UI,sans-serif">2 ADR</text>
+    <line x1="120" y1="80" x2="680" y2="80" stroke="#22c55e" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.65"/>
+    <text x="630" y="76" fill="#22c55e" font-size="10" font-family="Segoe UI,sans-serif">3 ADR</text>
+    <text x="400" y="268" fill="#94a3b8" font-size="11" font-family="Segoe UI,sans-serif" text-anchor="middle">Price →</text>
+  </svg>
+</div>
+
+<div class="box box-tip">
+  <strong>Downtrend mirror</strong>
+  For PFH, projections extend <em>downward</em> from the formation high; label and line colours follow the bearish scheme on the chart (reds).
+</div>
+
+<h2 id="markers">Markers &amp; labels</h2>
+<ul>
+  <li><strong>PF text</strong> &mdash; anchored at the formation price (e.g. <code>2 PFL</code>).</li>
+  <li><strong>1 ADR / 2 ADR / 3 ADR</strong> &mdash; small tags on dotted horizontals from that pivot.</li>
+  <li><strong>Rectangle</strong> &mdash; optional early-session box; may show pip width of the H4 segment used.</li>
+</ul>
+
+<h2 id="color-key">Panel colour key</h2>
+<div class="color-key">
+  <div class="sw"><span class="dot" style="background:#ffd700"></span><span><strong>Gold</strong> &mdash; column headers; <strong>active symbol</strong> row.</span></div>
+  <div class="sw"><span class="dot" style="background:#ffb6c1"></span><span><strong>Pink</strong> &mdash; MINIMIZE control.</span></div>
+  <div class="sw"><span class="dot" style="background:#3f4d5a"></span><span><strong>Grey-blue</strong> &mdash; default data cells.</span></div>
+  <div class="sw"><span class="dot" style="background:#0f5f8a"></span><span><strong>Deep blue</strong> &mdash; STATUS/REAL TIME when ADR multiplier exceeded.</span></div>
+  <div class="sw"><span class="dot" style="background:#1c8a59"></span><span><strong>Green</strong> &mdash; PFL / stop-hunt low side / oversold RSI (typical).</span></div>
+  <div class="sw"><span class="dot" style="background:#cc2323"></span><span><strong>Red</strong> &mdash; PFH / stop-hunt high side / overbought RSI (typical).</span></div>
+</div>
+
+<h2 id="workflow">Practical workflow</h2>
+<ol>
+  <li>Confirm <strong>gold row</strong> = chart symbol.</li>
+  <li>Read <strong>PFH/PFL</strong> + days back.</li>
+  <li>Note <strong>ADR pips</strong> as one &ldquo;unit.&rdquo;</li>
+  <li>Compare <strong>STATUS</strong> vs <strong>REAL TIME</strong>.</li>
+  <li>Check <strong>Stop Hunt</strong> and <strong>DR</strong>.</li>
+  <li>Use <strong>RSI</strong> last, with context.</li>
+  <li>Verify <strong>chart lines</strong> match the table.</li>
+</ol>
+
+<h2 id="settings">Settings you will use often</h2>
+<table>
+  <thead><tr><th>Area</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td>Symbol list</td><td>Hyphen-separated pairs for MT5 basic (<code>EURUSD-GBPUSD-…</code>).</td></tr>
+    <tr><td>ADR period / multiplier</td><td>Average range length; when legs count as &ldquo;extended.&rdquo;</td></tr>
+    <tr><td><strong>Time Frame</strong> + MA periods</td><td>Defines the <strong>H1 cycle</strong> (default <code>PERIOD_H1</code> with fast/slow MA). Changing this changes what the dashboard calls trend &mdash; keep it H1 unless you deliberately want another cycle clock.</td></tr>
+    <tr><td>Show ADR lines / Asian range</td><td>Chart projections and box.</td></tr>
+    <tr><td>Show daily range</td><td>DR column on/off.</td></tr>
+    <tr><td>Alerts / push</td><td>Threshold and stop-hunt messages.</td></tr>
+    <tr><td>Panel X, Y, W, H</td><td>Position and cell size.</td></tr>
+  </tbody>
+</table>
+
+<h2 id="notes">Important notes</h2>
+<ul>
+  <li><strong>MT4 / MT5:</strong> Same dashboard behaviour on both.</li>
+  <li><strong>Sessions</strong> depend on broker server time.</li>
+  <li><strong>Mockup &amp; SVG</strong> are illustrative; live colours follow your terminal theme and data.</li>
+  <li>For <strong>breakers, TDI, full panel</strong>, see <strong>Advanced Market Maker MT5</strong> user guide.</li>
+</ul>
+
+<p style="margin-top:36px;color:var(--muted);font-size:0.88rem;">
+  <strong>Market Maker &mdash; User Guide (MT4 / MT5)</strong> &middot; Styled to match G-Labs Advanced guide documents.
+</p>
+
+</main>
+</div>
+
+</body>
+</html>
