@@ -36,6 +36,8 @@
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-HC5C84CZPP');</script>
 
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="dns-prefetch" href="https://api.alternative.me">
+<link rel="dns-prefetch" href="https://query1.finance.yahoo.com">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -451,9 +453,45 @@ function updateClock(){
 }
 setInterval(updateClock,1000);updateClock();
 
-/* ────────────────────────── Market Strip ────────────────────────── */
+/* ────────────────────────── Market Strip + Forex + Crypto + Fear (single fetch) ────────────────────────── */
 let stripData=[];
-async function fetchStrip(){
+let forexPairs=[];
+let cryptoCoins=[];
+function renderStrip(){
+  const el=$('marketStrip');
+  if(!stripData.length){el.innerHTML='<div class="strip-item"><span class="name">Awaiting data</span></div>';return}
+  el.innerHTML=stripData.map(s=>{
+    let chgHtml='';
+    if(s.chg!=null)chgHtml=`<span class="${chgClass(s.chg)}">${chgSign(s.chg)}</span>`;
+    else if(s.extra)chgHtml=`<span style="font-size:.72rem;color:var(--muted)">${esc(s.extra)}</span>`;
+    return`<div class="strip-item"><span class="name">${esc(s.name)}</span><span class="val">${esc(s.val)}</span>${chgHtml}</div>`;
+  }).join('');
+}
+function renderFearFromJson(fgRes){
+  if(fgRes&&fgRes.value!=null){
+    const v=fgRes.value;
+    let col=v<=25?'var(--red)':v<=45?'var(--amber)':v<=55?'var(--muted)':v<=75?'var(--green)':'var(--green)';
+    $('fgContent').innerHTML=`<div class="gauge-wrap"><div class="gauge-val" style="color:${col}">${v}</div><div class="gauge-label" style="color:${col}">${esc(fgRes.classification||'')}</div><div class="gauge-sub">Crypto Fear &amp; Greed Index</div></div>`;
+    return true;
+  }
+  return false;
+}
+async function fetchFearFallback(){
+  try{
+    const r2=await fetch('https://api.alternative.me/fng/?limit=1');
+    const j2=await r2.json();
+    if(j2.data&&j2.data[0]){
+      const d=j2.data[0];const v=parseInt(d.value);
+      let col=v<=25?'var(--red)':v<=45?'var(--amber)':v<=55?'var(--muted)':v<=75?'var(--green)':'var(--green)';
+      $('fgContent').innerHTML=`<div class="gauge-wrap"><div class="gauge-val" style="color:${col}">${v}</div><div class="gauge-label" style="color:${col}">${esc(d.value_classification||'')}</div><div class="gauge-sub">Crypto Fear &amp; Greed Index</div></div>`;
+      return true;
+    }
+  }catch(_){}
+  $('fgContent').innerHTML='<div class="empty-state">Index unavailable</div>';
+  return false;
+}
+/** One round-trip for strip, forex table, strength, crypto, fear — avoids duplicate PHP calls on load */
+async function fetchMarketBundle(){
   try{
     const [fxRes,crRes,fgRes]=await Promise.all([
       fetch(api('forex_proxy.php')).then(r=>r.ok?r.json():null).catch(()=>null),
@@ -472,17 +510,28 @@ async function fetchStrip(){
     }
     stripData=items;
     renderStrip();
-  }catch(e){console.warn('strip',e)}
-}
-function renderStrip(){
-  const el=$('marketStrip');
-  if(!stripData.length){el.innerHTML='<div class="strip-item"><span class="name">Awaiting data</span></div>';return}
-  el.innerHTML=stripData.map(s=>{
-    let chgHtml='';
-    if(s.chg!=null)chgHtml=`<span class="${chgClass(s.chg)}">${chgSign(s.chg)}</span>`;
-    else if(s.extra)chgHtml=`<span style="font-size:.72rem;color:var(--muted)">${esc(s.extra)}</span>`;
-    return`<div class="strip-item"><span class="name">${esc(s.name)}</span><span class="val">${esc(s.val)}</span>${chgHtml}</div>`;
-  }).join('');
+    forexPairs=fxRes&&fxRes.pairs?fxRes.pairs:[];
+    const tb=$('forexTable').querySelector('tbody');
+    if(!forexPairs.length){tb.innerHTML='<tr><td colspan="3"><div class="empty-state">No data</div></td></tr>';}
+    else{
+      tb.innerHTML=forexPairs.map(p=>`<tr><td style="font-weight:600">${esc(p.pair)}</td><td>${fmt(p.rate,p.pair.includes('JPY')?3:5)}</td><td class="${p.change>=0?'green':'red'}">${chgSign(p.change,3)}</td></tr>`).join('');
+      if(fxRes.strength)renderStrength(fxRes.strength);
+    }
+    cryptoCoins=crRes&&crRes.coins?crRes.coins:[];
+    const ct=$('cryptoTable').querySelector('tbody');
+    if(!cryptoCoins.length){ct.innerHTML='<tr><td colspan="4"><div class="empty-state">No data</div></td></tr>';}
+    else{
+      ct.innerHTML=cryptoCoins.map(c=>{
+        const priceStr=c.price>1000?'$'+fmtBig(c.price):'$'+fmt(c.price,c.price>1?2:4);
+        return`<tr><td style="font-weight:600"><img src="${esc(c.image)}" width="16" height="16" style="vertical-align:middle;margin-right:4px;border-radius:50%">${esc(c.symbol)}</td><td>${priceStr}</td><td class="${(c.change24h||0)>=0?'green':'red'}">${chgSign(c.change24h)}</td><td class="${(c.change7d||0)>=0?'green':'red'}">${chgSign(c.change7d)}</td></tr>`;
+      }).join('');
+    }
+    if(!renderFearFromJson(fgRes))await fetchFearFallback();
+  }catch(e){
+    console.warn('market bundle',e);
+    $('forexTable').querySelector('tbody').innerHTML='<tr><td colspan="3"><div class="empty-state">Unavailable</div></td></tr>';
+    $('cryptoTable').querySelector('tbody').innerHTML='<tr><td colspan="4"><div class="empty-state">Unavailable</div></td></tr>';
+  }
 }
 
 /* ────────────────────────── Indices / ETFs ────────────────────────── */
@@ -499,25 +548,25 @@ async function fetchIndices(attempt=1){
     let j;try{j=await r.json()}catch(_){j={data:[]}}
     if(j.data&&j.data.length){renderIndices(j.data,j.provider);return}
   }catch(_){}
-  if(attempt<2){$('indicesBadge').textContent='RETRY';setTimeout(()=>fetchIndices(attempt+1),3000);return}
+  if(attempt<2){$('indicesBadge').textContent='RETRY';setTimeout(()=>fetchIndices(attempt+1),1500);return}
   await fetchIndicesClientFallback();
 }
 async function fetchIndicesClientFallback(){
   $('indicesBadge').textContent='FALLBACK';
   const syms=['SPY','QQQ','DIA','IWM','GLD'];
-  const data=[];
-  for(const sym of syms){
+  const results=await Promise.all(syms.map(async sym=>{
     try{
       const r=await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=1d&range=2d`);
-      if(!r.ok)continue;
+      if(!r.ok)return null;
       const j=await r.json();
       const meta=j?.chart?.result?.[0]?.meta;
-      if(!meta?.regularMarketPrice)continue;
+      if(!meta?.regularMarketPrice)return null;
       const p=meta.regularMarketPrice;
       const prev=meta.chartPreviousClose||meta.previousClose||0;
-      data.push({symbol:sym,price:p,changePct:prev>0?((p-prev)/prev*100):null});
-    }catch(_){}
-  }
+      return{symbol:sym,price:p,changePct:prev>0?((p-prev)/prev*100):null};
+    }catch(_){return null}
+  }));
+  const data=results.filter(Boolean);
   if(data.length){renderIndices(data,'yahoo-direct');return}
   const fxData=[];
   try{
@@ -531,40 +580,6 @@ async function fetchIndicesClientFallback(){
   }catch(_){}
   if(fxData.length){renderIndices(fxData,'fx-fallback');}
   else{$('indicesTable').querySelector('tbody').innerHTML='<tr><td colspan="3"><div class="empty-state">Markets unavailable — APIs may be blocked</div></td></tr>';$('indicesBadge').textContent='OFFLINE';}
-}
-
-/* ────────────────────────── Forex ────────────────────────── */
-let forexPairs=[];
-async function fetchForex(){
-  try{
-    const r=await fetch(api('forex_proxy.php'));
-    const j=await r.json();
-    forexPairs=j.pairs||[];
-    const tb=$('forexTable').querySelector('tbody');
-    if(!forexPairs.length){tb.innerHTML='<tr><td colspan="3"><div class="empty-state">No data</div></td></tr>';return}
-    tb.innerHTML=forexPairs.map(p=>`<tr><td style="font-weight:600">${esc(p.pair)}</td><td>${fmt(p.rate,p.pair.includes('JPY')?3:5)}</td><td class="${p.change>=0?'green':'red'}">${chgSign(p.change,3)}</td></tr>`).join('');
-    if(j.strength)renderStrength(j.strength);
-  }catch(e){
-    $('forexTable').querySelector('tbody').innerHTML='<tr><td colspan="3"><div class="empty-state">Unavailable</div></td></tr>';
-  }
-}
-
-/* ────────────────────────── Crypto ────────────────────────── */
-let cryptoCoins=[];
-async function fetchCrypto(){
-  try{
-    const r=await fetch(api('crypto_prices.php'));
-    const j=await r.json();
-    cryptoCoins=j.coins||[];
-    const tb=$('cryptoTable').querySelector('tbody');
-    if(!cryptoCoins.length){tb.innerHTML='<tr><td colspan="4"><div class="empty-state">No data</div></td></tr>';return}
-    tb.innerHTML=cryptoCoins.map(c=>{
-      const priceStr=c.price>1000?'$'+fmtBig(c.price):'$'+fmt(c.price,c.price>1?2:4);
-      return`<tr><td style="font-weight:600"><img src="${esc(c.image)}" width="16" height="16" style="vertical-align:middle;margin-right:4px;border-radius:50%">${esc(c.symbol)}</td><td>${priceStr}</td><td class="${(c.change24h||0)>=0?'green':'red'}">${chgSign(c.change24h)}</td><td class="${(c.change7d||0)>=0?'green':'red'}">${chgSign(c.change7d)}</td></tr>`;
-    }).join('');
-  }catch(e){
-    $('cryptoTable').querySelector('tbody').innerHTML='<tr><td colspan="4"><div class="empty-state">Unavailable</div></td></tr>';
-  }
 }
 
 /* ────────────────────────── News ────────────────────────── */
@@ -597,31 +612,6 @@ document.querySelectorAll('#newsTabBar .tab-btn').forEach(btn=>{
     fetchNews(btn.dataset.cat);
   });
 });
-
-/* ────────────────────────── Fear & Greed ────────────────────────── */
-async function fetchFearGreed(){
-  try{
-    const r=await fetch(api('fear_greed.php'));
-    const j=await r.json();
-    if(j.value!=null){
-      const v=j.value;
-      let col=v<=25?'var(--red)':v<=45?'var(--amber)':v<=55?'var(--muted)':v<=75?'var(--green)':'var(--green)';
-      $('fgContent').innerHTML=`<div class="gauge-wrap"><div class="gauge-val" style="color:${col}">${v}</div><div class="gauge-label" style="color:${col}">${esc(j.classification||'')}</div><div class="gauge-sub">Crypto Fear &amp; Greed Index</div></div>`;
-    }else{
-      $('fgContent').innerHTML='<div class="empty-state">Index unavailable</div>';
-    }
-  }catch(e){
-    try{
-      const r2=await fetch('https://api.alternative.me/fng/?limit=1');
-      const j2=await r2.json();
-      if(j2.data&&j2.data[0]){
-        const d=j2.data[0];const v=parseInt(d.value);
-        let col=v<=25?'var(--red)':v<=45?'var(--amber)':v<=55?'var(--muted)':v<=75?'var(--green)':'var(--green)';
-        $('fgContent').innerHTML=`<div class="gauge-wrap"><div class="gauge-val" style="color:${col}">${v}</div><div class="gauge-label" style="color:${col}">${esc(d.value_classification||'')}</div><div class="gauge-sub">Crypto Fear &amp; Greed Index</div></div>`;
-      }
-    }catch(_){}
-  }
-}
 
 /* ────────────────────────── Economic Calendar (Heuristic from RSS) ── */
 async function fetchCalendar(){
@@ -830,7 +820,7 @@ async function loadNewsAndBrief(attempt=1){
       return;
     }
   }catch(e){console.warn('news php attempt '+attempt,e)}
-  if(attempt<2){setTimeout(()=>loadNewsAndBrief(2),5000);return}
+  if(attempt<2){setTimeout(()=>loadNewsAndBrief(2),2500);return}
   el.innerHTML='<div class="loading-state">Trying fallback&hellip;</div>';
   try{
     const items=await fetchNewsClientFallback();
@@ -847,25 +837,23 @@ async function loadNewsAndBrief(attempt=1){
   $('aiBriefContent').innerHTML='<div class="empty-state">No headline data available</div>';
 }
 
+function scheduleDeferred(fn){
+  if(typeof requestIdleCallback!=='undefined'){requestIdleCallback(()=>{try{fn()}catch(e){console.warn(e)}},{timeout:2500});}
+  else{setTimeout(()=>{try{fn()}catch(e){console.warn(e)}},500);}
+}
+
 function init(){
-  fetchStrip();
+  fetchMarketBundle();
   fetchIndices();
-  fetchForex();
-  fetchCrypto();
-  fetchFearGreed();
-  fetchCalendar();
-  fetchCorrelation();
   loadNewsAndBrief();
+  scheduleDeferred(()=>{fetchCalendar();fetchCorrelation();});
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
   init();
-  setInterval(fetchStrip,120000);
+  setInterval(fetchMarketBundle,120000);
   setInterval(()=>fetchIndices(1),120000);
-  setInterval(fetchForex,300000);
-  setInterval(fetchCrypto,60000);
   setInterval(()=>fetchNews(newsCat),300000);
-  setInterval(fetchFearGreed,3600000);
   setInterval(fetchCalendar,600000);
   setInterval(fetchCorrelation,3600000);
   setInterval(loadNewsAndBrief,300000);
