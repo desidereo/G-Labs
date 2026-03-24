@@ -636,7 +636,9 @@ async function fetchCalendar(){
 function renderStrength(strength){
   const el=$('strengthContent');
   if(!strength||!Object.keys(strength).length){el.innerHTML='<div class="empty-state">No strength data</div>';return}
-  const sorted=Object.entries(strength).sort((a,b)=>b[1]-a[1]);
+  const allNull=Object.values(strength).every(v=>v===null);
+  if(allNull){el.innerHTML='<div class="empty-state">Strength data unavailable (markets may be closed)</div>';return}
+  const sorted=Object.entries(strength).filter(([,v])=>v!==null).sort((a,b)=>b[1]-a[1]);
   const colors=['#00e676','#66bb6a','#9ccc65','#ffee58','#ffa726','#ef5350','#d32f2f','#b71c1c'];
   el.innerHTML=sorted.map(([cur,val],i)=>{
     const col=colors[Math.min(i,colors.length-1)];
@@ -846,7 +848,8 @@ function init(){
   fetchMarketBundle();
   fetchIndices();
   loadNewsAndBrief();
-  scheduleDeferred(()=>{fetchCalendar();fetchCorrelation();});
+  fetchCorrelation();
+  scheduleDeferred(()=>{fetchCalendar();});
 }
 
 document.addEventListener('DOMContentLoaded',()=>{

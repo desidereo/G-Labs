@@ -12,24 +12,41 @@ if (file_exists($cachePath) && (time() - filemtime($cachePath) < $cacheTtl)) {
     if ($cached) { echo $cached; exit; }
 }
 
-$ctx = stream_context_create([
-    'http' => ['timeout' => 15, 'header' => "User-Agent: G-Labs-Intel/1.0\r\n"],
-    'ssl' => ['verify_peer' => true, 'verify_peer_name' => true]
-]);
+function corrFetch($url) {
+    if (function_exists('curl_init')) {
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT        => 20,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_USERAGENT      => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) G-Labs/1.0',
+            CURLOPT_SSL_VERIFYPEER => true,
+        ]);
+        $body = curl_exec($ch);
+        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        if ($code >= 200 && $code < 300 && $body !== false) return $body;
+    }
+    $ctx = stream_context_create([
+        'http' => ['timeout' => 20, 'header' => "User-Agent: G-Labs/1.0\r\n"],
+        'ssl'  => ['verify_peer' => true, 'verify_peer_name' => true]
+    ]);
+    return @file_get_contents($url, false, $ctx);
+}
 
 $currencies = ['EUR', 'GBP', 'JPY', 'CHF', 'CAD', 'AUD', 'NZD'];
 $endDate = date('Y-m-d');
 $startDate = date('Y-m-d', strtotime('-35 days'));
 $url = "https://api.frankfurter.app/{$startDate}..{$endDate}?from=USD&to=" . implode(',', $currencies);
-$raw = @file_get_contents($url, false, $ctx);
+$raw = corrFetch($url);
 
-if ($raw === false) {
-    echo json_encode(['status' => 'error', 'pairs' => [], 'matrix' => []]);
+if ($raw === false || $raw === '') {
+    echo json_encode(['status' => 'error', 'message' => 'fetch failed', 'pairs' => [], 'matrix' => []]);
     exit;
 }
 $data = json_decode($raw, true);
 if (!isset($data['rates']) || !is_array($data['rates'])) {
-    echo json_encode(['status' => 'error', 'pairs' => [], 'matrix' => []]);
+    echo json_encode(['status' => 'error', 'message' => 'bad response', 'pairs' => [], 'matrix' => []]);
     exit;
 }
 
@@ -37,25 +54,19 @@ $dates = array_keys($data['rates']);
 sort($dates);
 
 $pairNames = [];
-$pairReturns = [];
 foreach ($currencies as $cur) {
-    if ($cur === 'JPY') {
-        $pairNames[] = 'USD/JPY';
-    } else {
-        $pairNames[] = $cur . '/USD';
-    }
+    $pairNames[] = ($cur === 'JPY') ? 'USD/JPY' : $cur . '/USD';
 }
 
+$pairReturns = [];
 foreach ($pairNames as $idx => $pair) {
     $cur = $currencies[$idx];
     $prices = [];
     foreach ($dates as $d) {
         if (isset($data['rates'][$d][$cur])) {
-            if ($cur === 'JPY') {
-                $prices[] = floatval($data['rates'][$d][$cur]);
-            } else {
-                $prices[] = 1.0 / floatval($data['rates'][$d][$cur]);
-            }
+            $prices[] = ($cur === 'JPY')
+                ? floatval($data['rates'][$d][$cur])
+                : 1.0 / floatval($data['rates'][$d][$cur]);
         }
     }
     $returns = [];
@@ -93,18 +104,18 @@ foreach ($pairNames as $i => $p1) {
         if ($i === $j) {
             $matrix[$p1][$p2] = 1.0;
         } else {
-            $r1 = $pairReturns[$p1] ?? [];
-            $r2 = $pairReturns[$p2] ?? [];
+            $r1 = isset($pairReturns[$p1]) ? $pairReturns[$p1] : [];
+            $r2 = isset($pairReturns[$p2]) ? $pairReturns[$p2] : [];
             $matrix[$p1][$p2] = pearson($r1, $r2);
         }
     }
 }
 
 $out = json_encode([
-    'status' => 'ok',
-    'period' => '30d',
-    'pairs' => $pairNames,
-    'matrix' => $matrix,
+    'status'    => 'ok',
+    'period'    => '30d',
+    'pairs'     => $pairNames,
+    'matrix'    => $matrix,
     'updatedAt' => gmdate('c')
 ], JSON_UNESCAPED_SLASHES);
 
