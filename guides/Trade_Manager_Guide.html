@@ -4,19 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>G-Labs Trade Manager v4.0 — User Guide</title>
-<meta name="description" content="G-Labs Trade Manager v4.0 user guide covering risk settings, lot size, trade execution, and panel controls.">
-<meta name="robots" content="index, follow">
-<link rel="canonical" href="https://www.g-labs.software/guides/Trade_Manager_Guide.html">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://www.g-labs.software/guides/Trade_Manager_Guide.html">
-<meta property="og:title" content="G-Labs Trade Manager v4.0 — User Guide">
-<meta property="og:description" content="G-Labs Trade Manager v4.0 user guide covering risk settings, lot size, trade execution, and panel controls.">
-<meta property="og:image" content="https://www.g-labs.software/assets/images/btmm-state-engine-pro-lifetime.png">
-<meta property="twitter:card" content="summary_large_image">
-<meta property="twitter:url" content="https://www.g-labs.software/guides/Trade_Manager_Guide.html">
-<meta property="twitter:title" content="G-Labs Trade Manager v4.0 — User Guide">
-<meta property="twitter:description" content="G-Labs Trade Manager v4.0 user guide covering risk settings, lot size, trade execution, and panel controls.">
-<meta property="twitter:image" content="https://www.g-labs.software/assets/images/btmm-state-engine-pro-lifetime.png">
 <style>
   :root {
     --bg: #1e2030;
@@ -472,17 +459,20 @@
 
   <h3>RR Lock</h3>
   <div class="card teal-hl">
-    <p>When <strong>RR Lock</strong> is active, moving the SL (via +/&minus; buttons or dragging the chart line) automatically adjusts the TP to maintain your R:R ratio. This keeps your risk/reward ratio consistent as you fine-tune your entry.</p>
+    <p>When <strong>RR Lock</strong> is active, moving the SL (via +/&minus; buttons or dragging the chart line) automatically adjusts the TP <em>and all partial close levels</em> to maintain your R:R ratio. This keeps your entire trade structure proportional as you fine-tune your entry.</p>
   </div>
 
+  <h3>Adjusting R:R Ratio</h3>
+  <p>Use the <strong>&minus;</strong> / <strong>+</strong> buttons or type directly into the R:R field. When you change the ratio, the TP line and all partial close lines reposition automatically to match the new ratio, keeping everything in sync.</p>
+
   <h3>Partial Close (PC) Levels</h3>
-  <p>Up to 4 partial-close levels (PC1&ndash;PC4) with adjustable percentages. Toggle PC on/off, or press <strong>Reset</strong> to restore defaults (25/50/75/100%).</p>
+  <p>Up to 4 partial-close levels (PC1&ndash;PC4) with adjustable percentages. Toggle PC on/off, or press <strong>Reset</strong> to restore defaults (25/50/75/100%). Partial close lines always adjust proportionally when the TP changes &mdash; whether from dragging, RR Lock, or ratio adjustments.</p>
 
   <h3>Trade Controls Row</h3>
   <table>
     <tr><th>Button</th><th>Function</th></tr>
     <tr><td><strong>Lines</strong></td><td>Toggle draggable Entry/SL/TP/BE/PC lines on the chart</td></tr>
-    <tr><td><strong>Order Type</strong></td><td>Cycle: Market &rarr; Buy Limit &rarr; Sell Limit &rarr; Buy Stop &rarr; Sell Stop</td></tr>
+    <tr><td><strong>Order Type</strong></td><td>Cycle: Market &rarr; Buy Limit &rarr; Sell Limit &rarr; Buy Stop &rarr; Sell Stop. When a pending type is selected, a drag handle appears on the entry line and the entry stays where you place it.</td></tr>
     <tr><td><strong>FLIP</strong></td><td>Swap Buy/Sell direction while keeping SL/TP distances</td></tr>
     <tr><td><strong>VSL / Stealth SL</strong></td><td>Virtual SL hidden from broker</td></tr>
     <tr><td><strong>VTP / Stealth TP</strong></td><td>Virtual TP hidden from broker</td></tr>
@@ -491,7 +481,8 @@
   <h3>Execution Helpers</h3>
   <ul>
     <li><strong>Confirm:ON/OFF</strong> &mdash; Require two clicks to execute a trade.</li>
-    <li><strong>Snap Entry</strong> &mdash; Snap the entry line to the current market price.</li>
+    <li><strong>Snap</strong> &mdash; Snap the entry line to the current market price.</li>
+    <li><strong>Reset</strong> &mdash; Reset all trade lines back to sensible default distances from the current price (20-pip SL, TP based on R:R ratio). Useful when lines have drifted too far apart.</li>
     <li><strong>Auto SL</strong> &mdash; Cycle through auto SL modes: Off / ATR / Candle H/L.</li>
     <li><strong>Auto TP</strong> &mdash; Cycle through auto TP modes: Off / ATR / RR-based.</li>
   </ul>
@@ -509,6 +500,7 @@
 
   <h3>BUY / SELL Buttons</h3>
   <p>Large, color-coded execution buttons. Labels change based on order type (e.g., "BUY LIMIT"). When Confirm mode is on, the first click arms the button ("CONFIRM BUY"), the second click executes.</p>
+  <p>When modifying a pending order (loaded from the Positions tab or a chart envelope), the TRADE button changes to a blue <strong>MODIFY</strong> button. Adjust the entry, SL, and TP lines on the chart, then click MODIFY to apply the changes to the existing order without placing a new one.</p>
 
   <h3>CLOSE ALL</h3>
   <p>One-click button to close all open positions managed by this EA.</p>
@@ -548,14 +540,29 @@
   <p>When <strong>Lines</strong> is toggled ON, draggable horizontal lines appear on the chart:</p>
   <table>
     <tr><th>Line</th><th>Color</th><th>Purpose</th></tr>
-    <tr><td><strong>Entry</strong></td><td>Amber</td><td>The price where your order will be placed. For market orders, this is informational.</td></tr>
+    <tr><td><strong>Entry</strong></td><td>Amber</td><td>The price where your order will be placed. For market orders, this follows the current price.</td></tr>
     <tr><td><strong>SL</strong></td><td>Red</td><td>Stop Loss price. Drag to adjust; the panel recalculates lot size in real-time.</td></tr>
     <tr><td><strong>TP</strong></td><td>Green</td><td>Take Profit price. When RR Lock is on, this moves automatically with SL.</td></tr>
     <tr><td><strong>BE</strong></td><td>Blue</td><td>Breakeven trigger level (when BE is enabled).</td></tr>
     <tr><td><strong>PC1&ndash;PC4</strong></td><td>Lime shades</td><td>Partial close trigger levels.</td></tr>
   </table>
   <p>A <strong>shaded zone</strong> between SL and TP visually shows the trade's risk/reward area. A <strong>TRADE</strong> button appears on the entry line for one-click execution, and a <strong>FLIP</strong> button lets you reverse direction.</p>
-  <div class="tip">Drag the SL line and the panel instantly recalculates your lot size, risk in dollars, and (with RR Lock) your TP level.</div>
+
+  <h3>Limit &amp; Stop Order Drag Handle</h3>
+  <p>When you select a pending order type (Buy Limit, Sell Limit, Buy Stop, or Sell Stop), a <strong>drag handle</strong> appears next to the FLIP button on the entry line. This small square button (labelled with the order type and direction arrows) lets you drag the entry price to your desired level without the line snapping back to market price.</p>
+  <ul>
+    <li>Hover over the handle to see the "Drag me to move entry price" tooltip.</li>
+    <li>Click and drag the handle up or down to position the entry line exactly where you want it.</li>
+    <li>The SL, TP, and all partial close lines move together as a block when you drag from the shaded zone, keeping your entire trade structure intact.</li>
+  </ul>
+
+  <h3>Block Drag</h3>
+  <p>Click and drag anywhere inside the shaded SL/TP zone to move the <strong>entire trade block</strong> (entry, SL, TP, partial closes) together. This is particularly useful for limit and stop orders &mdash; position your whole trade setup at once without adjusting each line individually. For pending order types, the block drag preserves the order type and entry price correctly.</p>
+
+  <h3>Reset Lines</h3>
+  <p>If your trade lines have become too spread apart (e.g., after dragging on a volatile chart), click the <strong>Reset</strong> button in the execution helpers row to snap all lines back to a manageable default distance from the current price. This resets the SL to 20 pips and the TP based on your current R:R ratio, bringing everything back into view.</p>
+
+  <div class="tip">Drag the SL line and the panel instantly recalculates your lot size, risk in dollars, and (with RR Lock) your TP level. Use the Reset button any time lines drift too far apart.</div>
 </section>
 
 <!-- ============ 6. STEALTH ============ -->
@@ -643,8 +650,27 @@
   <h3>P/L Progress Bar</h3>
   <p>A thin color bar beneath each position shows where the current price sits between SL and TP. Green when in profit territory, red when closer to SL.</p>
 
+  <h3>Chart Envelopes (Open Positions)</h3>
+  <p>Every open position draws a compact <strong>envelope</strong> directly on the chart at its entry price. The envelope shows the ticket, direction, lot size, and current P/L at a glance.</p>
+  <ul>
+    <li><strong>Click</strong> the envelope to enter <em>Manage</em> mode &mdash; this loads the position's SL, TP, and entry onto the chart's draggable lines so you can adjust them visually.</li>
+    <li><strong>Drag</strong> the envelope left or right to reposition it on the chart if it overlaps with other objects.</li>
+    <li>Buy envelopes are tinted <span style="color:var(--green)">green</span>, sell envelopes are tinted <span style="color:var(--red)">red</span>.</li>
+  </ul>
+
   <h3>Pending Orders</h3>
-  <p>Listed below positions with symbol, type, price, volume, and a <strong>Delete</strong> button for each.</p>
+  <p>Listed below open positions with symbol, type, price, volume, a <strong>Mod</strong> button, and a <strong>Delete</strong> button for each.</p>
+  <ul>
+    <li><kbd>Mod</kbd> &mdash; Load the pending order onto the chart lines for visual modification. The TRADE button changes to <strong>MODIFY</strong> (blue). Drag the entry, SL, and TP lines to new levels, then click MODIFY to apply the changes.</li>
+    <li><kbd>Del</kbd> &mdash; Delete the pending order.</li>
+  </ul>
+
+  <h3>Chart Envelopes (Pending Orders)</h3>
+  <p>Pending orders also draw envelopes on the chart at their entry price level, styled in <span style="color:#4fc3f7">blue</span> (buy-side) or <span style="color:#ffb74d">amber</span> (sell-side) to distinguish them from filled positions.</p>
+  <ul>
+    <li><strong>Click</strong> a pending order envelope to load it for modification &mdash; the entry, SL, and TP lines appear on the chart, and the TRADE button changes to <strong>MODIFY</strong>.</li>
+    <li>The envelope displays the order type (Buy Limit, Sell Stop, etc.), lot size, and entry price.</li>
+  </ul>
 
   <h3>Summary</h3>
   <p>At the bottom: total open P/L, position count, win rate, profit factor, average win, and average loss for currently open positions.</p>
@@ -857,14 +883,31 @@
   <div class="card blue-hl">
     <p>Click <strong>CS</strong> on the header to open the Currency Strength Meter heatmap.</p>
     <ul>
-      <li>Displays relative strength (0&ndash;10) for 8 major currencies: USD, EUR, GBP, JPY, AUD, CAD, CHF, NZD.</li>
-      <li>Calculation uses a weighted average of RSI values across M15 and H1 timeframes.</li>
+      <li>Displays relative strength (0&ndash;10) for major currencies, crypto, and metals &mdash; all sorted from strongest to weakest.</li>
+      <li>Calculation uses a weighted average of RSI values across M15 and H1 timeframes, normalised to a 0&ndash;10 scale.</li>
       <li>Scores &gt; 7 = <span style="color:var(--green)">Strong (Green)</span></li>
       <li>Scores &lt; 3 = <span style="color:var(--red)">Weak (Red)</span></li>
+      <li>Bar lengths are <strong>proportional to strength</strong> &mdash; stronger currencies have longer bars, weaker currencies have shorter bars, giving an instant visual comparison.</li>
       <li>The heatmap window moves with the main panel.</li>
     </ul>
   </div>
-  <div class="tip">Use the CSM to identify the strongest and weakest currencies, then trade pairs where you're buying strength and selling weakness.</div>
+
+  <h3>Supported Instruments</h3>
+  <table>
+    <tr><th>Category</th><th>Instruments</th></tr>
+    <tr><td><strong>Forex Majors</strong></td><td>USD, EUR, GBP, JPY, AUD, CAD, CHF, NZD</td></tr>
+    <tr><td><strong>Crypto</strong></td><td>BTC, ETH, LTC, SOL, XRP (compared against USD)</td></tr>
+    <tr><td><strong>Metals</strong></td><td>XAU (Gold), XAG (Silver) (compared against USD)</td></tr>
+  </table>
+  <p>Exotic currencies are automatically filtered out. Only major currencies and your broker's available crypto/metal pairs are displayed, keeping the meter clean and relevant.</p>
+
+  <h3>Smart Symbol Discovery</h3>
+  <p>The meter automatically discovers crypto and metal symbols regardless of your broker's naming convention. Whether your broker lists Bitcoin as <code>BTCUSD</code>, <code>#BTCUSD</code>, <code>BTCUSD.m</code>, or <code>BITCOIN</code>, the meter will find and include it. Symbols are scanned from Market Watch first, then all broker symbols, with a final probe of common name variations.</p>
+
+  <h3>Fast Recalculation</h3>
+  <p>The symbol universe is cached after the first scan, so switching pairs or timeframes triggers an instant RSI recalculation without a full rebuild. Scores update smoothly without resetting to defaults.</p>
+
+  <div class="tip">Use the CSM to identify the strongest and weakest currencies, then trade pairs where you're buying strength and selling weakness. BTC and Gold are measured against USD, so their score reflects relative strength vs. the dollar.</div>
 </section>
 
 <!-- ============ 18. HOTKEYS ============ -->
