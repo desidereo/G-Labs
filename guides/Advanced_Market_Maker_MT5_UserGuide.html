@@ -3,15 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Advanced Market Maker MT5 — User Guide | G-Labs</title>
-<meta name="description" content="Advanced Market Maker MT5 user guide. Setup, configuration, and usage for the G-Labs Market Maker dashboard and tools on MetaTrader 5.">
-<meta name="keywords" content="Advanced Market Maker MT5, Market Maker dashboard, MT5 user guide, G-Labs MT5, MetaTrader 5 indicators, institutional trading MT5">
-<meta name="robots" content="index, follow">
-<link rel="canonical" href="https://www.g-labs.software/guides/Advanced_Market_Maker_MT5_UserGuide.html">
-<meta property="og:type" content="article">
-<meta property="og:url" content="https://www.g-labs.software/guides/Advanced_Market_Maker_MT5_UserGuide.html">
-<meta property="og:title" content="Advanced Market Maker MT5 — User Guide | G-Labs">
-<meta property="og:description" content="User guide for Advanced Market Maker MT5. Setup and configuration for the G-Labs Market Maker dashboard on MetaTrader 5.">
+<title>Advanced Market Maker MT5 &mdash; User Guide</title>
 <style>
   :root {
     --bg: #0f1117;
@@ -277,7 +269,7 @@
   <div class="subtitle" style="font-size:0.85rem;">
     <a href="https://www.g-labs.software" target="_blank">www.g-labs.software</a>
   </div>
-  <span class="version">v 1.2</span>
+  <span class="version">v 1.3</span>
 </div>
 
 <div class="wrapper">
@@ -353,11 +345,12 @@
   <strong>Advanced Market Maker MT5</strong> is a comprehensive multi-symbol chart indicator for MetaTrader 5.
   It monitors up to 28+ forex pairs simultaneously from a single chart, presenting a real-time dashboard with
   ADR analysis, trend detection, order-block breaker identification, TDI SharkFin signals, RSI divergence, stop-hunt
-  detection, and much more.
+  detection, and more. The panel footer includes a <strong>Currency Strength</strong> strip that ranks the eight major currencies
+  (USD, EUR, GBP, JPY, AUD, NZD, CAD, CHF) using H1 trend across the watched pairs &mdash; see <a href="#col-cs">Currency Strength</a> for how scores and colors work.
 </p>
 <p>The indicator consists of two main visual components:</p>
 <ol>
-  <li><strong>Dashboard Panel</strong> &mdash; A multi-column, multi-row grid pinned to the chart showing live data for every watched symbol.</li>
+  <li><strong>Dashboard Panel</strong> &mdash; A multi-column, multi-row grid pinned to the chart showing live data for every watched symbol, with the currency strength row beneath the symbol grid.</li>
   <li><strong>Chart Overlays</strong> &mdash; ATR-based bands, ADR level lines, breaker-block rectangles, divergence trendlines, and a candle countdown timer drawn on the active chart symbol.</li>
 </ol>
 
@@ -367,7 +360,8 @@
   Price Formation (PFH/PFL) labeling &bull; Order-block breaker detection on two timeframes &bull;
   TDI SharkFin signals with trend-filter confluence &bull; RSI divergence (regular &amp; hidden) &bull;
   Stop-hunt detection &bull; Yesterday H/L proximity alerts &bull; Daily candle confirmation &bull;
-  ATR channel bands &bull; Push notifications &amp; screen alerts &bull; Click-to-switch symbols.
+  ATR channel bands &bull; Currency strength (8 majors, H1-based, panel footer) &bull;
+  Push notifications &amp; screen alerts &bull; Click-to-switch symbols.
 </div>
 
 <!-- ========== INSTALLATION ========== -->
@@ -1161,7 +1155,7 @@
 </p>
 
 <div style="margin-top:60px; padding-top:24px; border-top:1px solid var(--border); color:var(--muted); font-size:0.82rem; text-align:center;">
-  Advanced Market Maker MT5 v1.2 &mdash; Copyright &copy; 2026 G-Labs &mdash;
+  Advanced Market Maker MT5 v1.3 &mdash; Copyright &copy; 2026 G-Labs &mdash;
   <a href="https://www.g-labs.software" target="_blank">www.g-labs.software</a>
 </div>
 
