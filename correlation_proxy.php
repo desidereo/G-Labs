@@ -58,15 +58,17 @@ function pearson($x, $y) {
 
 $currencies = ['EUR', 'GBP', 'JPY', 'CHF', 'CAD', 'AUD', 'NZD'];
 $allDates = null;
+$provider = 'none';
 
-// --- Provider 1: Frankfurter (fast timeout) ---
+// --- Provider 1: Frankfurter (generous timeout for 35-day range) ---
 $endDate = date('Y-m-d');
 $startDate = date('Y-m-d', strtotime('-35 days'));
-$raw = corrFetch("https://api.frankfurter.app/{$startDate}..{$endDate}?from=USD&to=" . implode(',', $currencies), 6);
+$raw = corrFetch("https://api.frankfurter.app/{$startDate}..{$endDate}?from=USD&to=" . implode(',', $currencies), 15);
 if ($raw !== false) {
     $data = json_decode($raw, true);
     if (isset($data['rates']) && is_array($data['rates']) && count($data['rates']) >= 5) {
         $allDates = $data['rates'];
+        $provider = 'frankfurter';
     }
 }
 
@@ -94,10 +96,11 @@ if (!$allDates) {
                     foreach ($dayRates as $cur => $eurRate) {
                         $usdBased[$cur] = $eurRate / $usdVal;
                     }
+                    $usdBased['EUR'] = 1.0 / $usdVal;
                     $parsed[$date] = $usdBased;
                 }
             }
-            if (count($parsed) >= 5) $allDates = $parsed;
+            if (count($parsed) >= 5) { $allDates = $parsed; $provider = 'ecb'; }
         }
     }
 }
@@ -151,6 +154,8 @@ foreach ($pairNames as $i => $p1) {
 
 $out = json_encode([
     'status'    => 'ok',
+    'provider'  => $provider,
+    'dateCount' => count($dates),
     'period'    => '30d',
     'pairs'     => $pairNames,
     'matrix'    => $matrix,

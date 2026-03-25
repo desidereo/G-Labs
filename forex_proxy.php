@@ -120,7 +120,7 @@ $result = null;
 $curs = 'EUR,GBP,JPY,CHF,CAD,AUD,NZD';
 $endDate = date('Y-m-d');
 $startDate = date('Y-m-d', strtotime('-7 days'));
-$raw = glFetch("https://api.frankfurter.app/{$startDate}..{$endDate}?from=USD&to={$curs}", 6);
+$raw = glFetch("https://api.frankfurter.app/{$startDate}..{$endDate}?from=USD&to={$curs}", 12);
 if ($raw !== false) {
     $data = json_decode($raw, true);
     if (isset($data['rates']) && is_array($data['rates']) && count($data['rates']) >= 1) {

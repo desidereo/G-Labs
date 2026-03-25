@@ -669,7 +669,8 @@ function renderStrength(strength){
   const colors=['#00e676','#66bb6a','#9ccc65','#ffee58','#ffa726','#ef5350','#d32f2f','#b71c1c'];
   el.innerHTML=sorted.map(([cur,val],i)=>{
     const col=colors[Math.min(i,colors.length-1)];
-    return`<div class="strength-row"><div class="cur-label">${esc(cur)}</div><div class="strength-bar-bg"><div class="strength-bar-fill" style="width:${val}%;background:${col}"></div></div><div style="width:32px;text-align:right;font-size:.76rem;font-weight:600;color:${col}">${fmt(val,0)}</div></div>`;
+    const barW=Math.max(val,3);
+    return`<div class="strength-row"><div class="cur-label">${esc(cur)}</div><div class="strength-bar-bg"><div class="strength-bar-fill" style="width:${barW}%;background:${col}"></div></div><div style="width:32px;text-align:right;font-size:.76rem;font-weight:600;color:${col}">${fmt(val,0)}</div></div>`;
   }).join('');
 }
 
@@ -687,7 +688,8 @@ async function fetchCorrelation(){
     pairs.forEach(p1=>{
       html+=`<tr><th>${esc(p1)}</th>`;
       pairs.forEach(p2=>{
-        const v=mx[p1]&&mx[p1][p2]!=null?mx[p1][p2]:0;
+        const v=mx[p1]&&mx[p1][p2]!=null?mx[p1][p2]:null;
+        if(v===null){html+=`<td style="background:rgba(122,139,167,0.05);color:var(--muted);font-weight:600">N/A</td>`;return;}
         const abs=Math.abs(v);
         let bg,fg;
         if(v>0.5){bg=`rgba(0,230,118,${abs*0.5})`;fg='#fff'}
