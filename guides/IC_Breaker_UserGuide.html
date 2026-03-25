@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>G-CA$H IC Breaker v4.2 — User Guide</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --red: #f85149;
+      --amber: #d29922;
+      --font: "Segoe UI", system-ui, -apple-system, sans-serif;
+      --mono: "Cascadia Code", "Consolas", monospace;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      font-size: 16px;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      min-height: 100vh;
+    }
+    @media (max-width: 960px) {
+      .layout { grid-template-columns: 1fr; }
+      aside { position: relative !important; border-right: none; border-bottom: 1px solid var(--border); }
+    }
+    aside {
+      position: sticky;
+      top: 0;
+      align-self: start;
+      max-height: 100vh;
+      overflow-y: auto;
+      padding: 1.25rem 1rem;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+    }
+    aside h2 {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin: 0 0 0.75rem;
+    }
+    nav ul { list-style: none; padding: 0; margin: 0; }
+    nav li { margin-bottom: 0.35rem; }
+    nav a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.9rem;
+      display: block;
+      padding: 0.35rem 0.5rem;
+      border-radius: 6px;
+    }
+    nav a:hover { background: rgba(88, 166, 255, 0.12); color: var(--accent); }
+    main { padding: 2rem 2.5rem 4rem; max-width: 900px; }
+    @media (max-width: 960px) { main { padding: 1.25rem; } }
+    .hero {
+      padding: 2rem;
+      background: linear-gradient(135deg, #161b22 0%, #0d1117 100%);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 2.5rem;
+    }
+    .hero h1 { margin: 0 0 0.5rem; font-size: 1.85rem; }
+    .hero .tagline { color: var(--muted); margin: 0 0 1rem; font-size: 1.05rem; }
+    .badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      background: rgba(63, 185, 80, 0.15);
+      color: var(--green);
+      border: 1px solid rgba(63, 185, 80, 0.35);
+    }
+    h2 {
+      margin-top: 2.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 1.35rem;
+    }
+    h3 { margin-top: 1.5rem; font-size: 1.1rem; color: var(--accent); }
+    p { margin: 0.75rem 0; }
+    ul, ol { padding-left: 1.35rem; }
+    li { margin: 0.4rem 0; }
+    code, .mono { font-family: var(--mono); font-size: 0.9em; }
+    .callout {
+      border-left: 4px solid var(--accent);
+      background: var(--surface);
+      padding: 1rem 1.25rem;
+      border-radius: 0 8px 8px 0;
+      margin: 1.25rem 0;
+    }
+    .callout.warn { border-left-color: var(--amber); }
+    .callout.danger { border-left-color: var(--red); }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.92rem;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.6rem 0.75rem;
+      text-align: left;
+    }
+    th { background: var(--surface); color: var(--muted); font-weight: 600; }
+    tr:nth-child(even) td { background: rgba(22, 27, 34, 0.5); }
+    .diagram {
+      margin: 1.5rem 0;
+      padding: 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow-x: auto;
+    }
+    .diagram figcaption {
+      margin-top: 0.75rem;
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+    svg { display: block; max-width: 100%; height: auto; }
+    .lsb-wrap { margin: 1.75rem 0; }
+    .lsb-caption-steps {
+      list-style: decimal;
+      margin: 0.75rem 0 0;
+      padding-left: 1.25rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    .lsb-caption-steps li { margin: 0.35rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+    @media print {
+      aside { display: none; }
+      .layout { grid-template-columns: 1fr; }
+      main { max-width: none; padding: 0; }
+      body { background: #fff; color: #000; }
+      .hero, .diagram, .callout { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside>
+      <h2>Contents</h2>
+      <nav>
+        <ul>
+          <li><a href="#intro">Introduction</a></li>
+          <li><a href="#naldo">Naldo Breaker Method</a></li>
+          <li><a href="#stepping-lsb">Source OB stepping &amp; LSB</a> · <a href="#continuation-source">continuation → next Source</a></li>
+          <li><a href="#logic">How the Indicator Works</a></li>
+          <li><a href="#install">Installation</a></li>
+          <li><a href="#params">Input Parameters</a></li>
+          <li><a href="#legend">Visual Legend</a></li>
+          <li><a href="#strategy">Trading Strategy</a></li>
+          <li><a href="#tips">Tips &amp; Best Practices</a></li>
+          <li><a href="#faq">FAQ &amp; Troubleshooting</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <main>
+      <header class="hero" id="intro">
+        <span class="badge">MetaTrader · v4.2</span>
+        <h1>G-CA$H IC Breaker</h1>
+        <p class="tagline">Source &amp; breaker order blocks across multiple timeframes — with alerts when structure breaks and when price returns to the zone.</p>
+        <p style="margin:0; font-size:0.9rem; color:var(--muted);">Copyright © 2017 G-CASH Capital LTD · <span class="mono">g-cash.net</span></p>
+      </header>
+
+      <section>
+        <h2 id="naldo">Core concept — Naldo’s breaker block method</h2>
+        <p>This indicator visualizes concepts aligned with <strong>breaker blocks</strong> and <strong>source order blocks</strong> as taught in ICT-style smart-money education (often associated with educators such as <strong>Naldo</strong>). The idea is not to predict every candle — it is to mark <em>where</em> the last opposing liquidity rested before a move, and what happens when that level is <strong>broken with a close</strong>.</p>
+
+        <h3>Source order block (Source OB)</h3>
+        <p>The <strong>Source OB</strong> is the zone the indicator draws as an <strong>outlined rectangle</strong> (per-timeframe “temporary” color — default black). It is built from the <strong>first opposite-color candle</strong> found within a lookback window after a structural break, bounded by that candle’s high and low.</p>
+
+        <h3>Breaker order block (Breaker OB)</h3>
+        <p>When price <strong>closes through</strong> the tracked structure in the direction that invalidates the prior bias, the former Source OB is treated as <strong>broken</strong> and is drawn as a <strong>filled rectangle</strong>: green for a <strong>buy / bullish breaker</strong>, red for a <strong>sell / bearish breaker</strong>. That is the “flip” from failed OB to breaker.</p>
+
+        <h3>“Last step broken — make it rich”</h3>
+        <p>Traders using this framework often say the <strong>last</strong> Source OB that gets taken out before a major expansion is the one that matters most: once it breaks, you <strong>follow the new direction</strong> and treat the zone as a potential reaction area on <strong>retests</strong> (the indicator can alert on return to the breaker via <code>UseAlertsOnTouch</code>).</p>
+
+        <figure class="diagram">
+          <svg viewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg" aria-label="Bullish breaker formation">
+            <defs>
+              <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a2332"/><stop offset="100%" stop-color="#0d1117"/></linearGradient>
+            </defs>
+            <rect width="640" height="280" fill="url(#g1)"/>
+            <line x1="40" y1="220" x2="600" y2="220" stroke="#30363d" stroke-width="1"/>
+            <text x="40" y="40" fill="#8b949e" font-size="13" font-family="Segoe UI,sans-serif">Bullish breaker (from bearish source OB)</text>
+            <!-- Candles downtrend -->
+            <g fill="#f85149">
+              <rect x="60" y="100" width="14" height="80" rx="1"/>
+              <line x1="67" y1="90" x2="67" y2="185" stroke="#f85149" stroke-width="1.5"/>
+            </g>
+            <g fill="#f85149">
+              <rect x="90" y="120" width="14" height="60" rx="1"/>
+              <line x1="97" y1="110" x2="97" y2="185" stroke="#f85149" stroke-width="1.5"/>
+            </g>
+            <!-- Source OB zone -->
+            <rect x="118" y="125" width="70" height="55" fill="none" stroke="#e6edf3" stroke-width="2" stroke-dasharray="6 4"/>
+            <text x="120" y="118" fill="#e6edf3" font-size="11" font-family="Segoe UI,sans-serif">Source OB</text>
+            <!-- Break candle -->
+            <g fill="#3fb950">
+              <rect x="200" y="70" width="14" height="100" rx="1"/>
+              <line x1="207" y1="60" x2="207" y2="175" stroke="#3fb950" stroke-width="1.5"/>
+            </g>
+            <text x="185" y="55" fill="#3fb950" font-size="11" font-family="Segoe UI,sans-serif">Close above → break</text>
+            <!-- Breaker fill -->
+            <rect x="118" y="125" width="95" height="55" fill="#3fb950" fill-opacity="0.25" stroke="#3fb950" stroke-width="1"/>
+            <text x="125" y="200" fill="#3fb950" font-size="11" font-family="Segoe UI,sans-serif">Breaker OB (support)</text>
+            <!-- Retest -->
+            <path d="M 320 90 L 360 140 L 400 100" fill="none" stroke="#58a6ff" stroke-width="2" marker-end="url(#arr)"/>
+            <defs><marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><polygon points="0,0 8,4 0,8" fill="#58a6ff"/></marker></defs>
+            <text x="330" y="165" fill="#58a6ff" font-size="11" font-family="Segoe UI,sans-serif">Retest → long bias</text>
+            <g fill="#3fb950">
+              <rect x="420" y="50" width="14" height="120" rx="1"/>
+              <line x1="427" y1="40" x2="427" y2="175" stroke="#3fb950" stroke-width="1.5"/>
+            </g>
+            <text x="450" y="120" fill="#8b949e" font-size="11" font-family="Segoe UI,sans-serif">Expansion</text>
+          </svg>
+          <figcaption>Conceptual sequence: bearish context → Source OB → bullish close through the zone → zone becomes a bullish breaker → optional retest.</figcaption>
+        </figure>
+
+        <figure class="diagram">
+          <svg viewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg" aria-label="Bearish breaker formation">
+            <rect width="640" height="280" fill="#0d1117"/>
+            <text x="40" y="40" fill="#8b949e" font-size="13" font-family="Segoe UI,sans-serif">Bearish breaker (from bullish source OB)</text>
+            <line x1="40" y1="220" x2="600" y2="220" stroke="#30363d"/>
+            <g fill="#3fb950">
+              <rect x="60" y="60" width="14" height="100" rx="1"/>
+              <line x1="67" y1="50" x2="67" y2="165" stroke="#3fb950" stroke-width="1.5"/>
+            </g>
+            <g fill="#3fb950">
+              <rect x="90" y="80" width="14" height="80" rx="1"/>
+              <line x1="97" y1="70" x2="97" y2="165" stroke="#3fb950" stroke-width="1.5"/>
+            </g>
+            <rect x="118" y="85" width="70" height="50" fill="none" stroke="#e6edf3" stroke-width="2" stroke-dasharray="6 4"/>
+            <text x="120" y="78" fill="#e6edf3" font-size="11" font-family="Segoe UI,sans-serif">Source OB</text>
+            <g fill="#f85149">
+              <rect x="200" y="120" width="14" height="90" rx="1"/>
+              <line x1="207" y1="110" x2="207" y2="215" stroke="#f85149" stroke-width="1.5"/>
+            </g>
+            <text x="175" y="245" fill="#f85149" font-size="11" font-family="Segoe UI,sans-serif">Close below → break</text>
+            <rect x="118" y="85" width="95" height="50" fill="#f85149" fill-opacity="0.25" stroke="#f85149"/>
+            <text x="125" y="155" fill="#f85149" font-size="11" font-family="Segoe UI,sans-serif">Breaker OB (resistance)</text>
+            <path d="M 330 200 L 370 150 L 410 190" fill="none" stroke="#58a6ff" stroke-width="2"/>
+            <text x="320" y="130" fill="#58a6ff" font-size="11" font-family="Segoe UI,sans-serif">Retest → short bias</text>
+          </svg>
+          <figcaption>Mirror case: bullish context → Source OB → bearish close through the zone → bearish breaker → retest toward continuation lower.</figcaption>
+        </figure>
+
+        <figure class="diagram">
+          <svg viewBox="0 0 640 240" xmlns="http://www.w3.org/2000/svg" aria-label="Source OB lifecycle">
+            <defs>
+              <marker id="lifeArrowBlue" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><polygon points="0,0 9,4 0,8" fill="#58a6ff"/></marker>
+              <marker id="lifeArrGray" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><polygon points="0,0 7,3.5 0,7" fill="#8b949e"/></marker>
+            </defs>
+            <rect width="640" height="240" fill="#161b22"/>
+            <text x="40" y="32" fill="#8b949e" font-size="13">Source OB lifecycle (schematic)</text>
+            <rect x="80" y="52" width="480" height="78" fill="none" stroke="#30363d" stroke-dasharray="4 3"/>
+            <text x="88" y="70" fill="#e6edf3" font-size="11">While bias holds: Source OB extends toward the right (time)</text>
+            <rect x="100" y="88" width="130" height="52" fill="rgba(230,237,243,0.05)" stroke="#e6edf3" stroke-width="2" stroke-dasharray="6 4"/>
+            <text x="108" y="108" fill="#e6edf3" font-size="11">Source OB</text>
+            <line x1="165" y1="175" x2="165" y2="100" stroke="#58a6ff" stroke-width="2.5" marker-end="url(#lifeArrowBlue)"/>
+            <text x="175" y="168" fill="#58a6ff" font-size="10">Close through</text>
+            <text x="175" y="182" fill="#58a6ff" font-size="10">the other side</text>
+            <rect x="300" y="88" width="130" height="52" fill="rgba(63,185,80,0.35)" stroke="#3fb950" stroke-width="2"/>
+            <text x="308" y="112" fill="#e6edf3" font-size="11">Breaker (same prices)</text>
+            <path d="M 240 114 L 288 114" stroke="#8b949e" stroke-width="1.5" marker-end="url(#lifeArrGray)"/>
+            <text x="440" y="108" fill="#8b949e" font-size="11">Then new opposite candle → new Source</text>
+            <text x="440" y="128" fill="#8b949e" font-size="11">(can sit at a different price — staircase)</text>
+          </svg>
+          <figcaption>When price <strong>closes through the opposite side</strong> of the tracked structure, that Source OB becomes a <strong>Breaker</strong> at the <strong>same price band</strong> (filled). Until then, the Source outline <strong>extends in time</strong>; after a flip, a new Source can appear at a <strong>different price</strong> — see the staircase diagram below.</figcaption>
+        </figure>
+
+        <figure class="diagram">
+          <svg viewBox="0 0 640 240" xmlns="http://www.w3.org/2000/svg" aria-label="Multi-timeframe confluence">
+            <rect width="640" height="240" fill="#0d1117"/>
+            <text x="40" y="34" fill="#8b949e" font-size="13">Multi-timeframe overlay (concept)</text>
+            <rect x="60" y="60" width="520" height="100" fill="rgba(88,166,255,0.08)" stroke="#58a6ff" stroke-opacity="0.5"/>
+            <rect x="100" y="75" width="180" height="70" fill="rgba(63,185,80,0.15)" stroke="#3fb950"/>
+            <text x="105" y="68" fill="#3fb950" font-size="11">H4 breaker zone</text>
+            <rect x="280" y="85" width="140" height="50" fill="rgba(248,81,73,0.12)" stroke="#f85149"/>
+            <text x="285" y="78" fill="#f85149" font-size="11">M15 source (nested)</text>
+            <text x="60" y="190" fill="#8b949e" font-size="12" font-family="Segoe UI,sans-serif">
+              <tspan>When </tspan>
+              <tspan font-weight="600" fill="#e6edf3">View Current Timeframe</tspan>
+              <tspan> is off, multiple TFs can stack — use toggles to reduce clutter.</tspan>
+            </text>
+          </svg>
+          <figcaption>Higher-timeframe breakers can overlap lower-timeframe sources; align bias with the timeframe you manage risk on.</figcaption>
+        </figure>
+
+        <h3 id="stepping-lsb">How the Source OB “steps” — and what <abbr title="Last Step Broken">LSB</abbr> means</h3>
+        <p>On the chart, <strong>price</strong> moves <strong>up and down</strong>. The <strong>Source OB</strong> (outlined box) is <strong>not</strong> stuck to the same vertical level as the old <strong>Breaker</strong> (solid block). As structure updates, the indicator re-anchors the Source to <strong>new</strong> opposite candles — so the outline can <strong>climb or slide</strong> with price like a <strong>staircase</strong> while the market trends. The Breaker, by contrast, stays at the <strong>price level where that old source was invalidated</strong>: a <strong>fixed horizontal zone</strong> you can come back to.</p>
+        <p>The temporary box also <strong>extends in time</strong> (right edge to the current bar) — so you get both: movement along <strong>price</strong> as new sources form, and extension along <strong>time</strong> until a close breaks the tracked extreme. When that close happens, that Source becomes a <strong>Breaker</strong> and stops moving; a <strong>new</strong> Source starts its own stair-step.</p>
+        <p><strong>LSB (Last Step Broken)</strong> — the <strong>last</strong> Source in the chain you care about before the big move: the final “step” invalidated (same idea as “last step broken — make it rich” above).</p>
+        <ul>
+          <li><strong>Source OB (dashed)</strong> — follows <strong>structure</strong>; new outline can sit <strong>higher or lower</strong> than the last breaker as price trends.</li>
+          <li><strong>Breaker (solid)</strong> — <strong>glued to its price level</strong>; does not walk up/down with price.</li>
+          <li><strong>LSB</strong> — focus on the last break in that sequence for bias and retests.</li>
+        </ul>
+
+        <h4 id="continuation-source">What creates the next Source on a continuation?</h4>
+        <p>The indicator does <strong>not</strong> only draw a new Source when a breaker forms. In a <strong>continuation</strong> (trend keeps going), the next Source appears when price <strong>prints a close beyond the tracked extreme</strong> in the direction of the move — then the script <strong>re-anchors</strong> the temporary box.</p>
+        <ul>
+          <li><strong>Bullish bias</strong> — After a bar <strong>closes above</strong> the running swing high the tool is tracking, it scans <strong>forward</strong> along the chart (a bounded window of bars) for the <strong>first bearish candle</strong> and builds the new Source OB from that candle’s high and low. Often <strong>no new breaker</strong> is created on that same step, because the prior Source was not taken out by the kind of opposite-side close that flips trend into a breaker.</li>
+          <li><strong>Bearish bias</strong> — Mirror: a <strong>close below</strong> the running swing low, then the <strong>first bullish candle</strong> in the forward window becomes the new Source anchor.</li>
+        </ul>
+        <p>On a <strong>trend flip</strong> (prior Source invalidated into a Breaker), the sequence is different: the <strong>former</strong> Source becomes a filled Breaker <strong>first</strong>, <em>then</em> the same “first opposite-colour candle” search draws the Source for the <strong>new</strong> bias. Continuation is the case where structure advances <strong>without</strong> that invalidation on the same bar — so the staircase can climb or slide with price while older breakers stay fixed below or above.</p>
+
+        <figure class="diagram lsb-wrap" aria-describedby="lsb-caption-main">
+          <svg viewBox="0 0 720 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Staircase: sources step with price; breakers fixed; close through makes breaker">
+            <defs>
+              <linearGradient id="stairBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#161b22"/><stop offset="100%" stop-color="#0d1117"/></linearGradient>
+              <marker id="stairCloseArrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><polygon points="0,0 8,4 0,8" fill="#f85149"/></marker>
+            </defs>
+            <rect width="720" height="500" fill="url(#stairBg)"/>
+            <text x="40" y="36" fill="#e6edf3" font-size="15" font-family="Segoe UI,sans-serif" font-weight="600">Staircase: Source OB moves with price — Breakers stay on their level</text>
+            <text x="40" y="56" fill="#8b949e" font-size="12" font-family="Segoe UI,sans-serif">
+              <tspan>When the Source is closed on the </tspan>
+              <tspan font-weight="600" fill="#e6edf3">other side</tspan>
+              <tspan>, that zone becomes a Breaker (filled) at that price — then a new Source can form higher or lower.</tspan>
+            </text>
+
+            <line x1="72" y1="380" x2="72" y2="88" stroke="#30363d" stroke-width="1.5"/>
+            <line x1="72" y1="380" x2="680" y2="380" stroke="#30363d" stroke-width="1.5"/>
+            <line x1="72" y1="88" x2="66" y2="88" stroke="#8b949e"/>
+            <text x="28" y="240" fill="#8b949e" font-size="11" font-family="Segoe UI,sans-serif" transform="rotate(-90 28 240)">Price ↑</text>
+            <text x="360" y="408" fill="#8b949e" font-size="11" font-family="Segoe UI,sans-serif" text-anchor="middle">Time →</text>
+
+            <rect x="72" y="318" width="520" height="26" fill="rgba(63,185,80,0.38)" stroke="#3fb950" stroke-width="1.2"/>
+            <text x="80" y="335" fill="#e6edf3" font-size="11" font-family="Segoe UI,sans-serif" font-weight="600">Breaker — fixed at this price</text>
+            <rect x="72" y="258" width="380" height="22" fill="rgba(63,185,80,0.22)" stroke="#3fb950" stroke-width="1"/>
+            <text x="80" y="273" fill="#e6edf3" font-size="9" font-family="Segoe UI,sans-serif">Earlier breaker — only on chart if settings keep past breakers (not “current only”)</text>
+
+            <polyline points="95,355 140,338 185,318 235,298 285,278 335,252 395,228 455,198 515,168 575,138"
+              fill="none" stroke="#58a6ff" stroke-width="2.5" stroke-linejoin="round"/>
+
+            <rect x="88" y="328" width="58" height="42" fill="rgba(230,237,243,0.04)" stroke="#e6edf3" stroke-width="2" stroke-dasharray="6 4"/>
+            <rect x="178" y="288" width="58" height="38" fill="rgba(230,237,243,0.04)" stroke="#e6edf3" stroke-width="2" stroke-dasharray="6 4"/>
+            <!-- Close-through arrow on one source → becomes breaker band below -->
+            <line x1="207" y1="335" x2="207" y2="305" stroke="#f85149" stroke-width="2" marker-end="url(#stairCloseArrow)"/>
+            <text x="214" y="328" fill="#f85149" font-size="9" font-family="Segoe UI,sans-serif">close</text>
+            <rect x="268" y="248" width="62" height="36" fill="rgba(230,237,243,0.04)" stroke="#e6edf3" stroke-width="2" stroke-dasharray="6 4"/>
+            <rect x="378" y="208" width="64" height="34" fill="rgba(230,237,243,0.04)" stroke="#e6edf3" stroke-width="2" stroke-dasharray="6 4"/>
+            <rect x="498" y="158" width="68" height="32" fill="rgba(88,166,255,0.12)" stroke="#58a6ff" stroke-width="2" stroke-dasharray="6 4"/>
+            <text x="505" y="150" fill="#58a6ff" font-size="10" font-family="Segoe UI,sans-serif">Current Source</text>
+
+            <text x="625" y="130" fill="#8b949e" font-size="11" font-family="Segoe UI,sans-serif">Solid = breaker</text>
+            <text x="625" y="148" fill="#8b949e" font-size="11" font-family="Segoe UI,sans-serif">fixed price</text>
+            <text x="625" y="174" fill="#58a6ff" font-size="11" font-family="Segoe UI,sans-serif">Dashed = source</text>
+            <text x="625" y="192" fill="#58a6ff" font-size="11" font-family="Segoe UI,sans-serif">steps with price</text>
+
+            <rect x="72" y="422" width="600" height="68" fill="rgba(22,27,34,0.9)" stroke="#30363d" stroke-width="1" rx="6"/>
+            <text x="84" y="442" fill="#d29922" font-size="11" font-family="Segoe UI,sans-serif" font-weight="600">Close through → same zone becomes Breaker</text>
+            <rect x="88" y="452" width="56" height="28" fill="none" stroke="#e6edf3" stroke-width="2" stroke-dasharray="5 3"/>
+            <line x1="116" y1="488" x2="116" y2="458" stroke="#f85149" stroke-width="2" marker-end="url(#stairCloseArrow)"/>
+            <text x="128" y="478" fill="#f85149" font-size="9">other side</text>
+            <path d="M 165 466 L 220 466" stroke="#8b949e" stroke-width="1.5"/>
+            <rect x="228" y="452" width="100" height="28" fill="rgba(63,185,80,0.4)" stroke="#3fb950" stroke-width="1.5"/>
+            <text x="236" y="470" fill="#e6edf3" font-size="10">Breaker at that level</text>
+            <text x="360" y="470" fill="#8b949e" font-size="10">That invalidation is what “locks” the green/red band — not a second mystery box.</text>
+
+            <text x="72" y="498" fill="#6e7681" font-size="9" font-family="Segoe UI,sans-serif">Not to scale. Downtrends: mirror with closes down through sources. Earlier breakers: see input “show current breaker only” vs keep history.</text>
+          </svg>
+          <figcaption id="lsb-caption-main">
+            <ol class="lsb-caption-steps">
+              <li><strong>Close through → Breaker:</strong> when price <strong>closes on the opposite side</strong> of the tracked zone, that Source becomes a <strong>filled Breaker</strong> at <strong>that same price band</strong> (see inset). It then stays on that row.</li>
+              <li><strong>Source (dashed):</strong> the active outline <strong>steps</strong> with structure — new sources can sit <strong>higher or lower</strong> than older breakers as price trends.</li>
+              <li><strong>Time:</strong> the live Source also <strong>extends toward the current bar</strong> until the next break.</li>
+              <li><strong>Earlier breakers on chart:</strong> you only see multiple past breakers if your <strong>settings keep history</strong> (not “current breaker only”). Otherwise only the latest is shown.</li>
+              <li><strong>LSB:</strong> the last invalidation in the sequence you care about for the setup.</li>
+            </ol>
+          </figcaption>
+        </figure>
+      </section>
+
+      <section>
+        <h2 id="logic">How the indicator works</h2>
+        <p>This is what the tool is doing under the hood, in plain terms (each enabled timeframe is handled the same way).</p>
+        <ol>
+          <li><strong>Starting bias</strong> — It looks at recent bars and decides whether the market is leaning bullish or bearish by comparing where the last swing high vs. swing low (by close) formed.</li>
+          <li><strong>Updating swings</strong> — While in a sell bias it tracks the running low; wicks can extend the low if price dips and then closes back above. The mirror happens in a buy bias for the running high.</li>
+          <li><strong>Bullish break</strong> — When price <strong>closes</strong> through the upside (per the rules above), the previous Source zone can flip into a <strong>buy-side Breaker</strong> (green) for that segment of the chart.</li>
+          <li><strong>Bearish break</strong> — When price <strong>closes</strong> through the downside, the previous Source can flip into a <strong>sell-side Breaker</strong> (red).</li>
+          <li><strong>New Source</strong> — After a structural trigger (either a <strong>trend flip</strong> or a <strong>continuation</strong> close past the tracked high/low — see <a href="#continuation-source">continuation → next Source</a>), it searches a short forward stretch of bars for the <strong>first “opposite colour” candle</strong> and draws a <strong>new</strong> Source OB from that candle’s range — which can sit at a <strong>different price</strong> (the staircase effect).</li>
+          <li><strong>Live update</strong> — The temporary Source outline keeps its right edge up to date with the chart so the zone stays current until the next break.</li>
+        </ol>
+        <div class="callout">
+          <strong>Alerts:</strong> Pop-up alerts are meant for live bars so you are not flooded on history load. Optional email alerts use your platform’s email settings, if you enable them.
+        </div>
+      </section>
+
+      <section>
+        <h2 id="install">Installation</h2>
+        <p>Use the <strong>compiled indicator package</strong> from your vendor — you do <strong>not</strong> need source code to run it.</p>
+        <ol>
+          <li>Follow the seller’s instructions (some provide an installer; others ask you to place the indicator file in the platform’s <strong>Indicators</strong> folder).</li>
+          <li>In <strong>MetaTrader</strong>: open <strong>Navigator</strong>, expand <strong>Indicators → Custom</strong>, and drag the indicator onto your chart — or use <strong>Insert → Indicators → Custom</strong>.</li>
+          <li>Adjust inputs (see below). If zones do not show, check <strong>Chart → Properties → Common</strong> and allow chart objects / “Show” as needed.</li>
+        </ol>
+      </section>
+
+      <section>
+        <h2 id="params">Input parameters reference</h2>
+        <table>
+          <thead>
+            <tr><th>Input</th><th>Type</th><th>Default</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>HistoryBars</code></td><td>int</td><td>5000</td><td>Bars of history to process. Use <strong>0</strong> for “all” (may still use a deep lookback with a safety margin).</td></tr>
+            <tr><td><code>UseAlerts</code></td><td>bool</td><td>true</td><td>Popup alerts on new breaker events (live).</td></tr>
+            <tr><td><code>UseEmailAlerts</code></td><td>bool</td><td>true</td><td>Send email on breaker events if your platform email is configured.</td></tr>
+            <tr><td><code>UseAlertsOnTouch</code></td><td>bool</td><td>true</td><td>Alert when price returns through the prior Source OB edge after a breaker forms (“Return to breaker”).</td></tr>
+            <tr><td><code>ShowCurrentBreaker</code></td><td>bool</td><td>true</td><td>If <strong>true</strong>, only the <strong>latest</strong> breaker is drawn per timeframe (clean chart). If <strong>false</strong>, <strong>past breakers stay on the chart</strong> so you can see earlier invalidations — uses more history.</td></tr>
+            <tr><td><code>ViewCurrentTimeframe</code></td><td>bool</td><td>false</td><td>If true, only the timeframe that matches the chart is calculated/drawn. If false, every enabled TF below is drawn on the same chart.</td></tr>
+            <tr><td><code>SolidBreakerBlock</code></td><td>bool</td><td>true</td><td>If <strong>true</strong>, breaker zones are <strong>filled</strong> (solid). If <strong>false</strong>, breakers are drawn as <strong>outline only</strong> (same colours, no fill).</td></tr>
+          </tbody>
+        </table>
+        <p>Per timeframe (<strong>M1, M5, M15, M30, H1, H4, D1, W1, MN</strong>):</p>
+        <ul>
+          <li><code>Show*</code> — turn drawing on/off for that TF.</li>
+          <li><code>*TemporaryColor</code> — Source OB outline color.</li>
+          <li><code>*BuyPermanentColor</code> — bullish breaker fill/outline.</li>
+          <li><code>*SellPermanentColor</code> — bearish breaker fill/outline.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 id="legend">Visual legend</h2>
+        <figure class="diagram">
+          <svg viewBox="0 0 560 160" xmlns="http://www.w3.org/2000/svg">
+            <rect width="560" height="160" fill="#161b22"/>
+            <rect x="40" y="50" width="100" height="60" fill="none" stroke="#e6edf3" stroke-width="3"/>
+            <text x="40" y="40" fill="#e6edf3" font-size="12" font-family="Segoe UI,sans-serif">Source OB</text>
+            <text x="40" y="130" fill="#8b949e" font-size="11">Outlined rectangle · extends with price</text>
+            <rect x="220" y="50" width="100" height="60" fill="#3fb950" fill-opacity="0.35" stroke="#3fb950"/>
+            <text x="220" y="40" fill="#3fb950" font-size="12">Buy breaker</text>
+            <text x="220" y="130" fill="#8b949e" font-size="11">Filled green · bullish invalidation</text>
+            <rect x="400" y="50" width="100" height="60" fill="#f85149" fill-opacity="0.35" stroke="#f85149"/>
+            <text x="400" y="40" fill="#f85149" font-size="12">Sell breaker</text>
+            <text x="400" y="130" fill="#8b949e" font-size="11">Filled red · bearish invalidation</text>
+          </svg>
+          <figcaption>Match these visuals to your chart; customize colors per TF in inputs when stacking multiple timeframes.</figcaption>
+        </figure>
+      </section>
+
+      <section>
+        <h2 id="strategy">Trading strategy — using the indicator</h2>
+        <p><strong>Disclaimer:</strong> This guide is educational. Futures, forex, and CFDs carry risk. Past performance does not guarantee future results.</p>
+        <ol>
+          <li><strong>Define bias</strong> — Use a higher timeframe (e.g. H4/D1) for direction; use the indicator’s breaker color on that TF as a bias filter.</li>
+          <li><strong>Mark the zone</strong> — When a Source OB flips to a breaker, note the rectangle: that is the theoretical reaction pocket.</li>
+          <li><strong>Wait for interaction</strong> — Many traders wait for a <strong>retest</strong> of the breaker (the indicator can alert via “Return to breaker”).</li>
+          <li><strong>Confirm</strong> — Add your own rules: lower-TF structure, session time, liquidity sweeps, or volume/profile if available.</li>
+          <li><strong>Stops &amp; targets</strong> — A common approach: stop beyond the breaker / invalidation side; targets at prior highs/lows or fixed R-multiples. Adapt to your plan.</li>
+        </ol>
+        <h3>Alerts</h3>
+        <ul>
+          <li><strong>Order Block Breaker Alert</strong> — fires when a new breaker is recognized on the live bar (per enabled TF).</li>
+          <li><strong>Return to breaker</strong> — fires when price crosses back through the recorded Source OB boundary after the breaker event (useful for retest ideas).</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 id="tips">Tips &amp; best practices</h2>
+        <ul>
+          <li><strong>Reduce clutter:</strong> Disable lower timeframes when analyzing one primary TF; or enable <code>ViewCurrentTimeframe</code> to only show the chart’s TF.</li>
+          <li><strong>HistoryBars:</strong> Lower values load faster; raise for more historical breakers (if <code>ShowCurrentBreaker</code> is false).</li>
+          <li><strong>Confluence:</strong> Combine breaker zones with session opens, equal highs/lows, and higher-TF trends.</li>
+          <li><strong>Chart objects:</strong> Use the indicator’s own inputs for colours and visibility rather than trying to edit zones by hand.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 id="faq">FAQ &amp; troubleshooting</h2>
+        <h3>Why don’t I see all historical breakers?</h3>
+        <p>Enable <code>ShowCurrentBreaker = false</code> to keep historical breaker rectangles. When true, older breakers are replaced by the latest.</p>
+        <h3>Why are so many lines on my chart?</h3>
+        <p>Turn off unused timeframes in inputs or enable <code>ViewCurrentTimeframe</code>.</p>
+        <h3>Emails don’t send</h3>
+        <p>Configure email in your <strong>MetaTrader</strong> options (per your broker’s instructions). Turn off email alerts in the indicator inputs if you only want pop-ups.</p>
+        <h3>Indicator missing or won’t load</h3>
+        <p>Reinstall from your vendor’s package, restart the platform, and confirm you are on a supported build. Contact the seller’s support if the problem persists — end users normally use the compiled product only.</p>
+        <div class="callout danger">
+          <strong>Risk warning:</strong> Automated drawings are not trade signals. Always validate with your trading plan and risk rules.
+        </div>
+      </section>
+
+      <footer>
+        <p>G-CA$H IC Breaker v4.2 User Guide — single-file HTML for offline use. © indicator logic belongs to original authors; guide text provided as-is for documentation.</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>
