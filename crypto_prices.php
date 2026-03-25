@@ -12,11 +12,30 @@ if (file_exists($cachePath) && (time() - filemtime($cachePath) < $cacheTtl)) {
 
 $ids = 'bitcoin,ethereum,solana,binancecoin,ripple,cardano,dogecoin,avalanche-2,chainlink,polygon';
 $url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids={$ids}&order=market_cap_desc&per_page=10&page=1&sparkline=false&price_change_percentage=1h,24h,7d";
-$ctx = stream_context_create([
-    'http' => ['timeout' => 10, 'header' => "User-Agent: G-Labs-Intel/1.0\r\nAccept: application/json\r\n"],
-    'ssl' => ['verify_peer' => true, 'verify_peer_name' => true]
-]);
-$raw = @file_get_contents($url, false, $ctx);
+$raw = false;
+if (function_exists('curl_init')) {
+    $ch = curl_init($url);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT        => 10,
+        CURLOPT_CONNECTTIMEOUT => 5,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_USERAGENT      => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) G-Labs/1.0',
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_HTTPHEADER     => ['Accept: application/json'],
+    ]);
+    $body = curl_exec($ch);
+    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    if ($code >= 200 && $code < 300 && $body) $raw = $body;
+}
+if ($raw === false) {
+    $ctx = stream_context_create([
+        'http' => ['timeout' => 10, 'header' => "User-Agent: G-Labs/1.0\r\nAccept: application/json\r\n"],
+        'ssl' => ['verify_peer' => false, 'verify_peer_name' => false]
+    ]);
+    $raw = @file_get_contents($url, false, $ctx);
+}
 if ($raw === false) {
     echo json_encode(['status' => 'error', 'coins' => []]);
     exit;

@@ -4,6 +4,7 @@ header('Cache-Control: public, max-age=3600');
 header('Access-Control-Allow-Origin: *');
 error_reporting(0);
 ini_set('display_errors', 0);
+set_time_limit(30);
 
 $cachePath = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'g_labs_correlation.json';
 $cacheTtl = 3600;
@@ -12,26 +13,32 @@ if (file_exists($cachePath) && (time() - filemtime($cachePath) < $cacheTtl)) {
     if ($cached) { echo $cached; exit; }
 }
 
+$useCurl = function_exists('curl_init');
+
 function corrFetch($url) {
-    if (function_exists('curl_init')) {
+    global $useCurl;
+    if ($useCurl) {
         $ch = curl_init($url);
         curl_setopt_array($ch, [
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT        => 20,
+            CURLOPT_TIMEOUT        => 10,
+            CURLOPT_CONNECTTIMEOUT => 5,
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_USERAGENT      => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) G-Labs/1.0',
-            CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_SSL_VERIFYPEER => false,
         ]);
         $body = curl_exec($ch);
         $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
-        if ($code >= 200 && $code < 300 && $body !== false) return $body;
+        if ($code >= 200 && $code < 300 && $body !== false && $body !== '') return $body;
+        $useCurl = false;
     }
     $ctx = stream_context_create([
-        'http' => ['timeout' => 20, 'header' => "User-Agent: G-Labs/1.0\r\n"],
-        'ssl'  => ['verify_peer' => true, 'verify_peer_name' => true]
+        'http' => ['timeout' => 10, 'header' => "User-Agent: G-Labs/1.0\r\n"],
+        'ssl'  => ['verify_peer' => false, 'verify_peer_name' => false]
     ]);
-    return @file_get_contents($url, false, $ctx);
+    $r = @file_get_contents($url, false, $ctx);
+    return ($r !== false && $r !== '') ? $r : false;
 }
 
 $currencies = ['EUR', 'GBP', 'JPY', 'CHF', 'CAD', 'AUD', 'NZD'];
@@ -40,7 +47,7 @@ $startDate = date('Y-m-d', strtotime('-35 days'));
 $url = "https://api.frankfurter.app/{$startDate}..{$endDate}?from=USD&to=" . implode(',', $currencies);
 $raw = corrFetch($url);
 
-if ($raw === false || $raw === '') {
+if ($raw === false) {
     echo json_encode(['status' => 'error', 'message' => 'fetch failed', 'pairs' => [], 'matrix' => []]);
     exit;
 }

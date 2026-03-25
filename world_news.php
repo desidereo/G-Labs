@@ -130,7 +130,7 @@ if (function_exists('curl_multi_init')) {
             CURLOPT_MAXREDIRS      => 3,
             CURLOPT_USERAGENT      => $ua,
             CURLOPT_HTTPHEADER     => ['Accept: application/rss+xml, application/xml, text/xml, */*'],
-            CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_ENCODING       => '',
         ]);
         curl_multi_add_handle($mh, $ch);
@@ -163,7 +163,7 @@ if (function_exists('curl_multi_init')) {
             CURLOPT_CONNECTTIMEOUT => 3,
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_USERAGENT      => $ua,
-            CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_ENCODING       => '',
         ]);
         $body = curl_exec($ch);
@@ -181,7 +181,7 @@ if (function_exists('curl_multi_init')) {
             'header' => "User-Agent: $ua\r\nAccept: application/rss+xml, application/xml, text/xml\r\n",
             'ignore_errors' => true
         ],
-        'ssl' => ['verify_peer' => true, 'verify_peer_name' => true]
+        'ssl' => ['verify_peer' => false, 'verify_peer_name' => false]
     ]);
     foreach ($selectedFeeds as $source => $url) {
         $xml = @file_get_contents($url, false, $ctx);

@@ -33,7 +33,7 @@ function curlGet($url, $ua, $timeout = 8) {
             CURLOPT_CONNECTTIMEOUT => 4,
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_USERAGENT      => $ua,
-            CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_ENCODING       => '',
         ]);
         $body = curl_exec($ch);
@@ -43,7 +43,7 @@ function curlGet($url, $ua, $timeout = 8) {
     }
     $ctx = stream_context_create([
         'http' => ['timeout' => $timeout, 'header' => "User-Agent: $ua\r\n", 'ignore_errors' => true],
-        'ssl' => ['verify_peer' => true, 'verify_peer_name' => true]
+        'ssl' => ['verify_peer' => false, 'verify_peer_name' => false]
     ]);
     return @file_get_contents($url, false, $ctx);
 }
