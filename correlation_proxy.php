@@ -13,15 +13,12 @@ if (file_exists($cachePath) && (time() - filemtime($cachePath) < $cacheTtl)) {
     if ($cached) { echo $cached; exit; }
 }
 
-$useCurl = function_exists('curl_init');
-
-function corrFetch($url) {
-    global $useCurl;
-    if ($useCurl) {
+function corrFetch($url, $timeout = 10) {
+    if (function_exists('curl_init')) {
         $ch = curl_init($url);
         curl_setopt_array($ch, [
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT        => 10,
+            CURLOPT_TIMEOUT        => $timeout,
             CURLOPT_CONNECTTIMEOUT => 5,
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_USERAGENT      => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) G-Labs/1.0',
@@ -31,58 +28,13 @@ function corrFetch($url) {
         $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
         if ($code >= 200 && $code < 300 && $body !== false && $body !== '') return $body;
-        $useCurl = false;
     }
     $ctx = stream_context_create([
-        'http' => ['timeout' => 10, 'header' => "User-Agent: G-Labs/1.0\r\n"],
+        'http' => ['timeout' => $timeout, 'header' => "User-Agent: G-Labs/1.0\r\n"],
         'ssl'  => ['verify_peer' => false, 'verify_peer_name' => false]
     ]);
     $r = @file_get_contents($url, false, $ctx);
     return ($r !== false && $r !== '') ? $r : false;
-}
-
-$currencies = ['EUR', 'GBP', 'JPY', 'CHF', 'CAD', 'AUD', 'NZD'];
-$endDate = date('Y-m-d');
-$startDate = date('Y-m-d', strtotime('-35 days'));
-$url = "https://api.frankfurter.app/{$startDate}..{$endDate}?from=USD&to=" . implode(',', $currencies);
-$raw = corrFetch($url);
-
-if ($raw === false) {
-    echo json_encode(['status' => 'error', 'message' => 'fetch failed', 'pairs' => [], 'matrix' => []]);
-    exit;
-}
-$data = json_decode($raw, true);
-if (!isset($data['rates']) || !is_array($data['rates'])) {
-    echo json_encode(['status' => 'error', 'message' => 'bad response', 'pairs' => [], 'matrix' => []]);
-    exit;
-}
-
-$dates = array_keys($data['rates']);
-sort($dates);
-
-$pairNames = [];
-foreach ($currencies as $cur) {
-    $pairNames[] = ($cur === 'JPY') ? 'USD/JPY' : $cur . '/USD';
-}
-
-$pairReturns = [];
-foreach ($pairNames as $idx => $pair) {
-    $cur = $currencies[$idx];
-    $prices = [];
-    foreach ($dates as $d) {
-        if (isset($data['rates'][$d][$cur])) {
-            $prices[] = ($cur === 'JPY')
-                ? floatval($data['rates'][$d][$cur])
-                : 1.0 / floatval($data['rates'][$d][$cur]);
-        }
-    }
-    $returns = [];
-    for ($i = 1; $i < count($prices); $i++) {
-        if ($prices[$i - 1] != 0) {
-            $returns[] = ($prices[$i] - $prices[$i - 1]) / $prices[$i - 1];
-        }
-    }
-    $pairReturns[$pair] = $returns;
 }
 
 function pearson($x, $y) {
@@ -102,6 +54,85 @@ function pearson($x, $y) {
     }
     $denom = sqrt($dx * $dy);
     return $denom > 0 ? round($num / $denom, 3) : 0;
+}
+
+$currencies = ['EUR', 'GBP', 'JPY', 'CHF', 'CAD', 'AUD', 'NZD'];
+$allDates = null;
+
+// --- Provider 1: Frankfurter (fast timeout) ---
+$endDate = date('Y-m-d');
+$startDate = date('Y-m-d', strtotime('-35 days'));
+$raw = corrFetch("https://api.frankfurter.app/{$startDate}..{$endDate}?from=USD&to=" . implode(',', $currencies), 6);
+if ($raw !== false) {
+    $data = json_decode($raw, true);
+    if (isset($data['rates']) && is_array($data['rates']) && count($data['rates']) >= 5) {
+        $allDates = $data['rates'];
+    }
+}
+
+// --- Provider 2: ECB 90-day XML ---
+if (!$allDates) {
+    $ecbXml = corrFetch('https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml', 10);
+    if ($ecbXml !== false) {
+        libxml_use_internal_errors(true);
+        $doc = @simplexml_load_string($ecbXml);
+        if ($doc) {
+            $parsed = [];
+            foreach ($doc->Cube->Cube as $dayCube) {
+                $date = (string)$dayCube['time'];
+                if (!$date) continue;
+                $dayRates = [];
+                $usdVal = 0;
+                foreach ($dayCube->Cube as $c) {
+                    $cur = (string)$c['currency'];
+                    $rate = (float)$c['rate'];
+                    if ($cur === 'USD') $usdVal = $rate;
+                    if (in_array($cur, $currencies)) $dayRates[$cur] = $rate;
+                }
+                if ($usdVal > 0 && count($dayRates) > 0) {
+                    $usdBased = [];
+                    foreach ($dayRates as $cur => $eurRate) {
+                        $usdBased[$cur] = $eurRate / $usdVal;
+                    }
+                    $parsed[$date] = $usdBased;
+                }
+            }
+            if (count($parsed) >= 5) $allDates = $parsed;
+        }
+    }
+}
+
+if (!$allDates || count($allDates) < 5) {
+    echo json_encode(['status' => 'error', 'message' => 'no data from any provider', 'pairs' => [], 'matrix' => []]);
+    exit;
+}
+
+ksort($allDates);
+$dates = array_keys($allDates);
+
+$pairNames = [];
+foreach ($currencies as $cur) {
+    $pairNames[] = ($cur === 'JPY') ? 'USD/JPY' : $cur . '/USD';
+}
+
+$pairReturns = [];
+foreach ($pairNames as $idx => $pair) {
+    $cur = $currencies[$idx];
+    $prices = [];
+    foreach ($dates as $d) {
+        if (isset($allDates[$d][$cur])) {
+            $prices[] = ($cur === 'JPY')
+                ? floatval($allDates[$d][$cur])
+                : 1.0 / floatval($allDates[$d][$cur]);
+        }
+    }
+    $returns = [];
+    for ($i = 1; $i < count($prices); $i++) {
+        if ($prices[$i - 1] != 0) {
+            $returns[] = ($prices[$i] - $prices[$i - 1]) / $prices[$i - 1];
+        }
+    }
+    $pairReturns[$pair] = $returns;
 }
 
 $matrix = [];
