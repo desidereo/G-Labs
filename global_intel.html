@@ -515,7 +515,7 @@ async function fetchMarketBundle(){
     if(!forexPairs.length){tb.innerHTML='<tr><td colspan="3"><div class="empty-state">No data</div></td></tr>';}
     else{
       tb.innerHTML=forexPairs.map(p=>`<tr><td style="font-weight:600">${esc(p.pair)}</td><td>${fmt(p.rate,p.pair.includes('JPY')?3:5)}</td><td class="${p.change>=0?'green':'red'}">${chgSign(p.change,3)}</td></tr>`).join('');
-      if(fxRes.strength)renderStrength(fxRes.strength);
+      renderStrength(fxRes.strength||{});
     }
     cryptoCoins=crRes&&crRes.coins?crRes.coins:[];
     const ct=$('cryptoTable').querySelector('tbody');
@@ -633,12 +633,39 @@ async function fetchCalendar(){
 }
 
 /* ────────────────────────── Currency Strength ────────────────────────── */
+function calcStrengthFromPairs(pairs){
+  const scores={};
+  pairs.forEach(p=>{
+    if(p.change==null)return;
+    const [base,quote]=p.pair.split('/');
+    if(!scores[base])scores[base]=[];
+    if(!scores[quote])scores[quote]=[];
+    scores[base].push(p.change);
+    scores[quote].push(-p.change);
+  });
+  const avg={};let hasAny=false;
+  for(const [cur,moves] of Object.entries(scores)){
+    avg[cur]=moves.length?moves.reduce((a,b)=>a+b,0)/moves.length:0;
+    if(moves.length)hasAny=true;
+  }
+  if(!hasAny)return null;
+  const vals=Object.values(avg);
+  const mn=Math.min(...vals),mx=Math.max(...vals),rng=mx-mn;
+  const out={};
+  for(const [cur,v] of Object.entries(avg)){
+    out[cur]=rng>0?Math.round((v-mn)/rng*1000)/10:50+Math.round(v*100)/10;
+  }
+  return out;
+}
 function renderStrength(strength){
   const el=$('strengthContent');
-  if(!strength||!Object.keys(strength).length){el.innerHTML='<div class="empty-state">No strength data</div>';return}
-  const allNull=Object.values(strength).every(v=>v===null);
-  if(allNull){el.innerHTML='<div class="empty-state">Strength data unavailable (markets may be closed)</div>';return}
+  if(!strength||!Object.keys(strength).length||Object.values(strength).every(v=>v===null)){
+    const fallback=calcStrengthFromPairs(forexPairs);
+    if(fallback){strength=fallback;}
+    else{el.innerHTML='<div class="empty-state">Strength data unavailable</div>';return;}
+  }
   const sorted=Object.entries(strength).filter(([,v])=>v!==null).sort((a,b)=>b[1]-a[1]);
+  if(!sorted.length){el.innerHTML='<div class="empty-state">No strength data</div>';return}
   const colors=['#00e676','#66bb6a','#9ccc65','#ffee58','#ffa726','#ef5350','#d32f2f','#b71c1c'];
   el.innerHTML=sorted.map(([cur,val],i)=>{
     const col=colors[Math.min(i,colors.length-1)];
