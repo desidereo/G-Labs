@@ -321,7 +321,7 @@
 <!-- ============ HERO ============ -->
 <div class="hero" id="top">
   <h1>G-Labs Trade Manager v4.0</h1>
-  <p class="subtitle">The Ultimate MT5 Trade Management Panel</p>
+  <p class="subtitle">The Ultimate Trade Management Panel for MT5 &amp; MT4</p>
   <p style="color:var(--text3); font-size:0.88rem; margin-bottom:0;">
     Pure UI &mdash; No BMP Dependencies &mdash; Zero DLL
   </p>
@@ -370,12 +370,14 @@
     <li><a href="#notifications">Notifications</a></li>
     <li><a href="#profiles">Profiles &amp; Persistence</a></li>
     <li><a href="#inputs">Input Parameters Reference</a></li>
+    <li><a href="#mt4-vs-mt5">MT4 vs MT5 Differences</a></li>
   </ol>
 </nav>
 
 <!-- ============ 1. INSTALLATION ============ -->
 <section id="installation">
   <h2><span class="num">1</span>Installation &amp; Setup</h2>
+  <h3>MetaTrader 5</h3>
   <div class="card highlight">
     <ol>
       <li>Copy <strong>G-Labs Trade Manager v3.0.mq5</strong> into your <code>MQL5/Experts/</code> folder inside the MetaTrader 5 data directory.</li>
@@ -386,13 +388,26 @@
       <li>Make sure <strong>AutoTrading</strong> is enabled (green play button on the toolbar).</li>
     </ol>
   </div>
+
+  <h3>MetaTrader 4</h3>
+  <div class="card highlight">
+    <ol>
+      <li>Copy <strong>G-Labs Trade Manager v4.0.mq4</strong> into your <code>MQL4/Experts/</code> folder inside the MetaTrader 4 data directory.</li>
+      <li>Restart MetaTrader 4 or press <kbd>Ctrl</kbd>+<kbd>N</kbd> to refresh the Navigator.</li>
+      <li>Drag the Expert Advisor onto any chart.</li>
+      <li>In the Inputs tab, configure your preferred settings (Magic Number, risk %, hotkeys, etc.).</li>
+      <li>Click <strong>OK</strong>. The panel will appear in the top-left corner of your chart.</li>
+      <li>Make sure <strong>AutoTrading</strong> is enabled (green play button on the toolbar).</li>
+    </ol>
+  </div>
+  <div class="tip">See <a href="#mt4-vs-mt5">Section 23: MT4 vs MT5 Differences</a> for a full comparison between the two versions.</div>
   <div class="tip">The panel position is saved automatically. Drag the header bar to reposition it anywhere on your chart.</div>
 </section>
 
 <!-- ============ 2. OVERVIEW ============ -->
 <section id="overview">
   <h2><span class="num">2</span>Panel Overview</h2>
-  <p>The panel is divided into <strong>7 tabs</strong>, a <strong>header bar</strong>, and a <strong>status bar</strong>.</p>
+  <p>The panel is divided into a <strong>header bar</strong>, a <strong>tab bar</strong>, and a <strong>status bar</strong>. The MT5 version has <strong>7 tabs</strong> (Trade, Pos, Tools, News, Alerts, Stats, Config). The MT4 version has <strong>6 tabs</strong> (the News tab is not available on MT4).</p>
 
   <h3>Header Bar</h3>
   <ul>
@@ -405,7 +420,8 @@
   </ul>
 
   <h3>Tab Bar</h3>
-  <p>Seven tabs across the top: <strong>Trade</strong>, <strong>Pos</strong>, <strong>Tools</strong>, <strong>News</strong>, <strong>Alerts</strong>, <strong>Stats</strong>, <strong>Config</strong>. Click to switch, or press <kbd>1</kbd>&ndash;<kbd>7</kbd>.</p>
+  <p><strong>MT5:</strong> Seven tabs &mdash; <strong>Trade</strong>, <strong>Pos</strong>, <strong>Tools</strong>, <strong>News</strong>, <strong>Alerts</strong>, <strong>Stats</strong>, <strong>Config</strong>. Click to switch, or press <kbd>1</kbd>&ndash;<kbd>7</kbd>.</p>
+  <p><strong>MT4:</strong> Six tabs &mdash; <strong>Trade</strong>, <strong>Pos</strong>, <strong>Tools</strong>, <strong>Alerts</strong>, <strong>Stats</strong>, <strong>Config</strong>. Press <kbd>1</kbd>&ndash;<kbd>6</kbd>.</p>
 
   <h3>Status Bar</h3>
   <p>The bottom bar shows live data at a glance:</p>
@@ -732,8 +748,8 @@
 
 <!-- ============ 10. NEWS ============ -->
 <section id="news-tab">
-  <h2><span class="num">10</span>News Calendar Tab</h2>
-  <p>Displays upcoming economic events from the built-in MetaTrader 5 calendar.</p>
+  <h2><span class="num">10</span>News Calendar Tab <span class="badge amber" style="font-size:0.7rem; vertical-align:middle;">MT5 Only</span></h2>
+  <p>Displays upcoming economic events from the built-in MetaTrader 5 calendar. This feature uses the MT5 <code>CalendarValueHistory</code> API and is <strong>not available in the MT4 version</strong> (MetaTrader 4 does not provide a built-in economic calendar).</p>
   <h3>Filters</h3>
   <ul>
     <li><strong>Impact</strong> &mdash; Low / Medium / High</li>
@@ -823,10 +839,11 @@
     <li><strong>Max Daily DD %</strong> &mdash; Toggle on/off and set the maximum daily drawdown percentage. Trading locks automatically if breached.</li>
     <li><strong>Profit Target %</strong> &mdash; Toggle on/off and set a daily profit target. Trading locks when reached.</li>
   </ul>
-  <h3>News Filter</h3>
+  <h3>News Filter <span class="badge amber" style="font-size:0.65rem; vertical-align:middle;">MT5 Only</span></h3>
   <ul>
     <li>Toggle the news trading block on/off.</li>
     <li>Set minutes to block <strong>before</strong> and <strong>after</strong> high-impact news.</li>
+    <li><em>This section is not present on the MT4 version (no calendar data available).</em></li>
   </ul>
   <h3>Trade Filters</h3>
   <ul>
@@ -1090,13 +1107,75 @@
   </table>
 </section>
 
+<!-- ============ 23. MT4 vs MT5 ============ -->
+<section id="mt4-vs-mt5">
+  <h2><span class="num">23</span>MT4 vs MT5 Differences</h2>
+  <p>G-Labs Trade Manager is available for both MetaTrader 4 and MetaTrader 5. The two versions share the same design, layout, and feature set wherever the platform allows. The differences below are caused by API and architectural differences between MetaTrader 4 and MetaTrader 5.</p>
+
+  <h3>Feature Comparison</h3>
+  <table>
+    <tr><th style="width:40%">Feature</th><th style="width:30%">MT5</th><th style="width:30%">MT4</th></tr>
+    <tr><td><strong>Trade Tab</strong> &mdash; Risk modes, SL/TP, RR Lock, partial closes, breakeven, trailing, stealth SL/TP</td><td style="color:var(--green)">&#10003; Full</td><td style="color:var(--green)">&#10003; Full</td></tr>
+    <tr><td><strong>Chart Trade Lines</strong> &mdash; Drag handle, block drag, reset, shaded zone</td><td style="color:var(--green)">&#10003; Full</td><td style="color:var(--green)">&#10003; Full</td></tr>
+    <tr><td><strong>Positions Tab</strong> &mdash; Open trades, quick actions, chart envelopes, pending order modify</td><td style="color:var(--green)">&#10003; Full</td><td style="color:var(--green)">&#10003; Full</td></tr>
+    <tr><td><strong>Tools Tab</strong> &mdash; Bulk close, scale out, basket, grid, close at time</td><td style="color:var(--green)">&#10003; Full</td><td style="color:var(--green)">&#10003; Full</td></tr>
+    <tr><td><strong>News Calendar Tab</strong> &mdash; Economic calendar, filters, chart markers, news-based trade blocking</td><td style="color:var(--green)">&#10003; Full</td><td style="color:var(--red)">&#10007; Not available</td></tr>
+    <tr><td><strong>Alerts &amp; Scheduler Tab</strong> &mdash; Price alerts, task scheduler, over-trading monitor</td><td style="color:var(--green)">&#10003; Full</td><td style="color:var(--green)">&#10003; Full</td></tr>
+    <tr><td><strong>Stats Dashboard</strong> &mdash; Performance metrics, equity curve, CSV export</td><td style="color:var(--green)">&#10003; Full</td><td style="color:var(--green)">&#10003; Full</td></tr>
+    <tr><td><strong>Settings Tab</strong> &mdash; DD protection, profit target, spread/slippage filters, save/load</td><td style="color:var(--green)">&#10003; Full</td><td style="color:var(--green)">&#10003; Full</td></tr>
+    <tr><td><strong>Currency Strength Meter</strong> &mdash; Forex, crypto, metals, proportional bars</td><td style="color:var(--green)">&#10003; Full</td><td style="color:var(--green)">&#10003; Full</td></tr>
+    <tr><td><strong>OCO Breakout</strong> &mdash; Hedge box, paired orders</td><td style="color:var(--green)">&#10003; Full</td><td style="color:var(--green)">&#10003; Full</td></tr>
+    <tr><td><strong>Hotkeys</strong></td><td style="color:var(--green)">&#10003; Full</td><td style="color:var(--green)">&#10003; Full</td></tr>
+    <tr><td><strong>Notifications</strong> &mdash; Push, email, sound, screenshot, toast</td><td style="color:var(--green)">&#10003; Full</td><td style="color:var(--green)">&#10003; Full</td></tr>
+    <tr><td><strong>Profiles &amp; Persistence</strong></td><td style="color:var(--green)">&#10003; Full</td><td style="color:var(--green)">&#10003; Full</td></tr>
+  </table>
+
+  <h3>Tab Layout</h3>
+  <table>
+    <tr><th>MT5 (7 tabs)</th><th>MT4 (6 tabs)</th></tr>
+    <tr><td>Trade</td><td>Trade</td></tr>
+    <tr><td>Pos</td><td>Pos</td></tr>
+    <tr><td>Tools</td><td>Tools</td></tr>
+    <tr><td>News</td><td>&mdash;</td></tr>
+    <tr><td>Alerts</td><td>Alerts</td></tr>
+    <tr><td>Stats</td><td>Stats</td></tr>
+    <tr><td>Config</td><td>Config</td></tr>
+  </table>
+  <p>The MT4 version has 6 tabs. The News tab is removed because MetaTrader 4 does not provide a built-in economic calendar API.</p>
+
+  <h3>Why No News Calendar on MT4?</h3>
+  <div class="card blue-hl">
+    <p>MetaTrader 5 includes a native <code>CalendarValueHistory</code> function that provides real-time economic event data directly from MetaQuotes servers. MetaTrader 4 has no equivalent API. Rather than displaying an empty or non-functional tab, the MT4 build removes the News tab entirely and gives you a clean 6-tab layout.</p>
+  </div>
+
+  <h3>Other Technical Differences</h3>
+  <table>
+    <tr><th>Area</th><th>MT5</th><th>MT4</th></tr>
+    <tr><td><strong>Order API</strong></td><td>Uses <code>CTrade</code> class, <code>PositionSelect</code>, <code>OrderSend</code> with request struct</td><td>Uses classic <code>OrderSend()</code>, <code>OrderSelect()</code>, <code>OrderModify()</code></td></tr>
+    <tr><td><strong>Position model</strong></td><td>Netting or hedging (broker-dependent)</td><td>Always hedging (multiple positions per symbol)</td></tr>
+    <tr><td><strong>Ticket type</strong></td><td><code>ulong</code> (64-bit)</td><td><code>int</code> (32-bit)</td></tr>
+    <tr><td><strong>Symbol info</strong></td><td><code>SymbolInfoDouble()</code>, <code>SymbolInfoString()</code></td><td><code>MarketInfo()</code></td></tr>
+    <tr><td><strong>Input groups</strong></td><td><code>input group "..."</code> supported</td><td>No input groups (flat parameter list)</td></tr>
+    <tr><td><strong>News-based trade block</strong></td><td>Blocks trading before/after high-impact events</td><td>Not active (no calendar data source)</td></tr>
+  </table>
+
+  <h3>Installation Paths</h3>
+  <table>
+    <tr><th>Version</th><th>File</th><th>Install Location</th></tr>
+    <tr><td><strong>MT5</strong></td><td><code>G-Labs Trade Manager v3.0.mq5</code></td><td><code>MQL5/Experts/</code></td></tr>
+    <tr><td><strong>MT4</strong></td><td><code>G-Labs Trade Manager v4.0.mq4</code></td><td><code>MQL4/Experts/</code></td></tr>
+  </table>
+
+  <div class="tip">Apart from the News Calendar, the MT4 and MT5 versions are functionally identical. All trading features, risk management, visual tools, currency strength, and panel controls work the same way on both platforms.</div>
+</section>
+
 <div class="back-top"><a href="#top">&uarr; Back to top</a></div>
 
 </div>
 
 <footer>
   <p><strong>G-Labs Trade Manager v4.0</strong> &mdash; G-Labs Trading Technologies</p>
-  <p>Pure UI &bull; No BMP &bull; Zero DLL &bull; Built for MetaTrader 5</p>
+  <p>Pure UI &bull; No BMP &bull; Zero DLL &bull; Built for MetaTrader 5 &amp; MetaTrader 4</p>
 </footer>
 
 </body>
