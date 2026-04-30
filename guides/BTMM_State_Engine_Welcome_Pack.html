@@ -611,10 +611,10 @@
 <!-- ========== COVER PAGE ========== -->
 <div class="page cover">
 <div class="hero">
-  <div class="hero-badge">MetaTrader 5 &amp; MetaTrader 4</div>
+  <div class="hero-badge">MetaTrader 5 &amp; MetaTrader 4 &nbsp;·&nbsp; v1.63</div>
   <h1>BTMM STATE ENGINE PRO</h1>
   <div class="subtitle">The Professional Market Maker Cycle Tracker</div>
-  <div class="version">Powered by the Beat The Market Maker Methodology — Automated by G-Labs<br>Available on MetaTrader 4 &amp; MetaTrader 5</div>
+  <div class="version">Powered by the Beat The Market Maker Methodology — Automated by G-Labs<br>Available on MetaTrader 4 &amp; MetaTrader 5 &nbsp;·&nbsp; <strong style="color:var(--gold);">v1.63 — UI scaling, alert price levels, per-signal level filter</strong></div>
 
   <div class="hero-features">
     <div class="hero-feature">
@@ -645,6 +645,46 @@
   </div>
 </div>
 </div><!-- /page cover -->
+
+<!-- ========== WHAT'S NEW IN v1.63 ========== -->
+<div class="page accent">
+<section>
+  <h2><span class="part-num" style="color:var(--gold);">v1.63</span>What's New in This Release</h2>
+  <p style="font-size:13px; color:var(--text-light);">Six headline upgrades focused on usability, screen-fit, and making alerts useful enough to trade from. Defaults match v1.62 behaviour — every change is opt-in via inputs.</p>
+
+  <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:14px; margin-top:18px;">
+    <div style="background:white; border:1px solid var(--border); border-radius:10px; padding:16px;">
+      <div style="font-weight:700; color:var(--blue); margin-bottom:6px;">📐 UI scale &amp; per-area fonts</div>
+      <div style="font-size:12px; color:var(--text-light);">One knob (<code>InpUIGlobalScalePct</code> 50–200) scales every pixel and default font. Plus 17 per-area font-point overrides for HiDPI / 4K / Mac users. Two cross-platform font-family inputs.</div>
+    </div>
+    <div style="background:white; border:1px solid var(--border); border-radius:10px; padding:16px;">
+      <div style="font-weight:700; color:var(--blue); margin-bottom:6px;">🔔 Entry levels in alerts</div>
+      <div style="font-size:12px; color:var(--text-light);">Scanner SIG and chart entry alerts now append <code>E:price SL:price TP1:price TP2:price</code> at each symbol's correct precision. Toggle: <code>InpAlertIncludeLevels</code>.</div>
+    </div>
+    <div style="background:white; border:1px solid var(--border); border-radius:10px; padding:16px;">
+      <div style="font-weight:700; color:var(--blue); margin-bottom:6px;">🎚️ Per-signal level filter</div>
+      <div style="font-size:12px; color:var(--text-light);">Restrict T1/T2/T3, ID50, and Safety alerts to specific cycle-level ranges via <code>InpAlert*MinLevel</code> / <code>*MaxLevel</code>. Defaults <code>1/9</code> = any level.</div>
+    </div>
+    <div style="background:white; border:1px solid var(--border); border-radius:10px; padding:16px;">
+      <div style="font-weight:700; color:var(--blue); margin-bottom:6px;">📊 Plain-English status line</div>
+      <div style="font-size:12px; color:var(--text-light);">"L2 UP PFL | Today 65 / Avg 120 pips (54%) | Local 14:32 Broker 16:32" — anchored to the dashboard layout so it never drifts. PFL on buy cycles, PFH on sell cycles.</div>
+    </div>
+    <div style="background:white; border:1px solid var(--border); border-radius:10px; padding:16px;">
+      <div style="font-weight:700; color:var(--blue); margin-bottom:6px;">📖 Paginated scanner ? legend</div>
+      <div style="font-size:12px; color:var(--text-light);">Click the legend title to flip Page 1 / 2. Self-sizing background, widened to 440 px. F1 dashboard guide widened too with a UI Scale &amp; Fonts block added.</div>
+    </div>
+    <div style="background:white; border:1px solid var(--border); border-radius:10px; padding:16px;">
+      <div style="font-weight:700; color:var(--blue); margin-bottom:6px;">⚡ HTF / scanner performance</div>
+      <div style="font-size:12px; color:var(--text-light);">Chart HTF panel cached per H4/D1 bar. Per-symbol H4/D1 trends cached on <code>SymbolState</code> so the scanner HTF column and Top Confluence skip indicator reads on every refresh. Faster initial load.</div>
+    </div>
+  </div>
+
+  <div class="callout success" style="margin-top:18px;">
+    <strong>Safe upgrade</strong>
+    All v1.63 inputs default to existing v1.62 behaviour. Recompile <code>.ex5</code> / <code>.ex4</code>, reload the chart — nothing else needs changing unless you want the new features.
+  </div>
+</section>
+</div><!-- /page -->
 
 <!-- ========== PART 1: THE BTMM METHODOLOGY ========== -->
 <div class="page">
@@ -1362,6 +1402,22 @@
     <strong>First-time setup</strong>
     When you attach the indicator, <strong>keep the standard (default) settings</strong> and click OK. You can fine-tune layout, symbols, or sessions later in <strong>Properties → Inputs</strong> once you understand what each option does (see Part 15).
   </div>
+
+  <h3 style="margin-top:30px; color:var(--blue);">Two things to check after first install</h3>
+  <p style="font-size:13px; color:var(--text-light);">If the scanner table looks blank or the dashboard text feels too small / too big, you'll fix it with one of two settings. Both are explained in detail in the troubleshooting section, but here's the short version so first-time users don't get stuck.</p>
+
+  <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:14px; margin:18px 0;">
+    <div style="background:white; border:1px solid var(--border); border-radius:10px; padding:18px;">
+      <div style="font-weight:700; color:var(--red); margin-bottom:8px;">1. Broker symbol suffix</div>
+      <p style="font-size:12px; color:var(--text-light); margin-bottom:10px;">Many brokers add a suffix like <code>.m</code>, <code>.r</code>, <code>-ECN</code>, or <code>#</code> to symbol names (e.g. <code>EURUSDm</code>). If the scanner shows grey rows, your broker uses a suffix.</p>
+      <p style="font-size:12px; color:var(--text-light);">Open <strong>View → Market Watch</strong>, see what your broker actually calls EURUSD, then set <strong><code>InpSymbolSuffix</code></strong> to that suffix (e.g. <code>.m</code>). Hit OK — the indicator appends it to every scanner symbol automatically. No need to retype the whole list.</p>
+    </div>
+    <div style="background:white; border:1px solid var(--border); border-radius:10px; padding:18px;">
+      <div style="font-weight:700; color:var(--blue); margin-bottom:8px;">2. Screen size / Mac / 4K / Parallels</div>
+      <p style="font-size:12px; color:var(--text-light); margin-bottom:10px;">If the dashboard text looks too small (HiDPI / 4K / Mac Retina) or too big (small laptop), change one input.</p>
+      <p style="font-size:12px; color:var(--text-light);">In the indicator inputs, set <strong><code>InpUIGlobalScalePct</code></strong>. Defaults to <strong>100</strong>. Try <strong>115–130</strong> on Mac / Retina / 4K, <strong>80–90</strong> on small laptops, <strong>100</strong> on a typical Windows VPS or Parallels guest. It scales every layout pixel and default font in lockstep, so proportions stay correct everywhere.</p>
+    </div>
+  </div>
 </section>
 
 <!-- ========== PART 3: ASIAN RANGE ========== -->
@@ -2074,12 +2130,12 @@
 
   <h3>Status Bar</h3>
   <div style="background:#0D0D0D; border-radius:8px; padding:10px 16px; font-family:'JetBrains Mono',monospace; font-size:13px; color:#60A5FA; margin:15px 0;">
-    L2(UP) Trend |W Y Z | ADR:85/120 | LC:14:32|SRV:16:32
+    L2 UP PFL&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Today 65 / Avg 120 pips (54%)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Local 14:32&nbsp; Broker 16:32
   </div>
-  <p>Level, direction, phase, active layers, ADR, and both local + server time — all in one line with a dark background for readability.</p>
+  <p>Plain-English line under the toggles: cycle level + direction + the peak formation that started the cycle (<code>PFL</code> on buy cycles, <code>PFH</code> on sell cycles), today's range vs 10-day average ADR with a percent, and your local clock alongside the broker server clock. A trailing <code>?</code> appears when an unconfirmed peak has just been spotted (e.g. <code>L3 UP PFL?</code>).</p>
 
   <h3>Alert System</h3>
-  <p>Alerts fire across <strong>three channels simultaneously</strong>: MT popup, phone push notification, and on-chart toast.</p>
+  <p>Alerts fire across <strong>three channels simultaneously</strong>: MT popup, phone push notification, and on-chart toast. Every alert is tagged with the cycle context (e.g. <code>[L3 PFH]</code>) so you can read the message and know exactly where in the cycle the signal fired.</p>
   <table>
     <thead><tr><th>Alert</th><th>Trigger</th><th>Toggle</th></tr></thead>
     <tbody>
@@ -2088,12 +2144,32 @@
       <tr><td>NY KZ Start</td><td>NY Killzone opens</td><td><code>InpAlertNYKZStart</code></td></tr>
       <tr><td>Scanner Signal</td><td>Any pair fires a crossover</td><td><code>InpAlertScannerSignal</code></td></tr>
       <tr><td>Scanner PF</td><td>Any pair confirms PFH/PFL</td><td><code>InpAlertScannerPF</code></td></tr>
+      <tr><td>Chart Entry Signal</td><td>Active chart fires Type 1 / 2 / Safety / ID50</td><td><code>InpAlertEntrySignal</code></td></tr>
     </tbody>
   </table>
 
+  <h3 style="margin-top:18px;">Entry Price Levels in Alerts <span style="font-size:11px; color:var(--cyan); font-weight:600;">v1.63</span></h3>
+  <p>Scanner SIG and chart entry alerts now append the actual prices so you can act straight from the message — no need to open the chart to read SL/TP.</p>
+  <div style="background:#0D0D0D; border-radius:8px; padding:10px 16px; font-family:'JetBrains Mono',monospace; font-size:12px; color:#FFD700; margin:10px 0;">
+    BTMM Scanner: EURUSD BUY T1 [KZ] [H4:Bullish D1:Bullish] [L2 PFL] | E:1.08423 SL:1.08124 TP1:1.08714 TP2:1.09005
+  </div>
+  <p>Toggle with <code>InpAlertIncludeLevels</code> (default <strong>on</strong>). Each symbol uses its own digit precision (FX, JPY, XAU, BTC).</p>
+
+  <h3 style="margin-top:18px;">Per-Signal Level Filter <span style="font-size:11px; color:var(--cyan); font-weight:600;">v1.63</span></h3>
+  <p>Keep every signal type <strong>on</strong> by default but suppress noisy levels per signal class. Defaults <code>1 / 9</code> mean any cycle level alerts.</p>
+  <table>
+    <thead><tr><th>Signal class</th><th>Min level input</th><th>Max level input</th></tr></thead>
+    <tbody>
+      <tr><td>T1 / T2 / T3</td><td><code>InpAlertT123MinLevel</code></td><td><code>InpAlertT123MaxLevel</code></td></tr>
+      <tr><td>ID50</td><td><code>InpAlertID50MinLevel</code></td><td><code>InpAlertID50MaxLevel</code></td></tr>
+      <tr><td>Safety</td><td><code>InpAlertSafetyMinLevel</code></td><td><code>InpAlertSafetyMaxLevel</code></td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:12px; color:var(--text-light); margin-top:8px;">Examples: <em>"ID50 only at L1–L2"</em> → <code>InpAlertID50MaxLevel = 2</code>. <em>"Skip L1 chop on T1/T2/T3"</em> → <code>InpAlertT123MinLevel = 2</code>. <em>"Mute everything at L3+ peaks"</em> → set every <code>*MaxLevel = 2</code>.</p>
+
   <div class="callout info">
     <strong>Alert Intelligence</strong>
-    Weekend suppression, per-symbol cooldown, KZ-only filter — no noise, no spam.
+    Weekend suppression, per-symbol cooldown, KZ-only filter, per-signal level range — no noise, no spam.
   </div>
 </section>
 
@@ -2266,14 +2342,44 @@
         <tr><td><code>InpAlertEntrySignal</code></td><td>true</td><td>Alert when an entry signal fires on the main chart.</td></tr>
         <tr><td><code>InpAlertScannerSignal</code></td><td>true</td><td>Alert when any scanner pair fires a crossover signal.</td></tr>
         <tr><td><code>InpAlertScannerPF</code></td><td>true</td><td>Alert when any scanner pair confirms a Peak Formation.</td></tr>
-        <tr><td><code>InpAlertScannerKZOnly</code></td><td>true</td><td>Scanner signal alerts only during active Killzones — kills noise outside session hours.</td></tr>
+        <tr><td><code>InpAlertScannerKZOnly</code></td><td>false</td><td>If true, scanner trade alerts fire only during active Killzones. Off by default so you don't miss Asian-session setups.</td></tr>
         <tr><td><code>InpAlertLondonKZStart</code></td><td>true</td><td>"London Killzone is open" reminder.</td></tr>
         <tr><td><code>InpAlertNYKZStart</code></td><td>true</td><td>"NY Killzone is open" reminder.</td></tr>
+        <tr><td><code>InpAlertID50</code></td><td>true</td><td>Include ID50 in scanner / entry alerts (needs the master toggle on).</td></tr>
+        <tr><td><code>InpAlertSafety</code></td><td>true</td><td>Include Safety in scanner / entry alerts (needs the master toggle on).</td></tr>
+        <tr><td><code>InpShowHTFInAlerts</code></td><td>true</td><td>Append <code>[H4:… D1:…]</code> trend status to alert messages.</td></tr>
+        <tr><td><code>InpAlertIncludeLevels</code> <span style="color:var(--cyan); font-size:11px; font-weight:600;">v1.63</span></td><td>true</td><td>Append <code>E:price SL:price TP1:price TP2:price</code> to scanner SIG and chart entry alerts at each symbol's correct digit precision (FX, JPY, XAU, BTC).</td></tr>
         <tr><td><code>InpAlertCooldownMins</code></td><td>15</td><td>Minimum minutes between repeated alerts for the same symbol.</td></tr>
         <tr><td><code>InpAlertPopup</code></td><td>true</td><td>Show the on-chart popup toast.</td></tr>
         <tr><td><code>InpAlertPopupSeconds</code></td><td>10</td><td>How long the popup toast stays visible.</td></tr>
       </tbody>
     </table>
+
+    <h3 style="color:var(--gold);">Per-Signal Level Filter <span style="color:var(--cyan); font-size:11px; font-weight:700;">v1.63</span></h3>
+    <p style="color:rgba(255,255,255,0.75); font-size:13px;">Constrain which cycle levels are allowed per signal class. Defaults preserve current behaviour (any level alerts). Lower the max to skip late peaks; raise the min to skip L1 chop.</p>
+    <table style="color:var(--text);">
+      <thead><tr><th>Input</th><th>Default</th><th>Effect</th></tr></thead>
+      <tbody>
+        <tr><td><code>InpAlertT123MinLevel</code></td><td>1</td><td>T1 / T2 / T3 alerts: only when cycle level &gt;= this.</td></tr>
+        <tr><td><code>InpAlertT123MaxLevel</code></td><td>9</td><td>T1 / T2 / T3 alerts: only when cycle level &lt;= this.</td></tr>
+        <tr><td><code>InpAlertID50MinLevel</code></td><td>1</td><td>ID50 alerts: only when cycle level &gt;= this.</td></tr>
+        <tr><td><code>InpAlertID50MaxLevel</code></td><td>9</td><td>ID50 alerts: only when cycle level &lt;= this.</td></tr>
+        <tr><td><code>InpAlertSafetyMinLevel</code></td><td>1</td><td>Safety alerts: only when cycle level &gt;= this.</td></tr>
+        <tr><td><code>InpAlertSafetyMaxLevel</code></td><td>9</td><td>Safety alerts: only when cycle level &lt;= this.</td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="color:var(--gold);">UI Scale &amp; Fonts (Mac / HiDPI / 4K) <span style="color:var(--cyan); font-size:11px; font-weight:700;">v1.63</span></h3>
+    <p style="color:rgba(255,255,255,0.75); font-size:13px;">One global knob plus per-area font-point overrides means the dashboard always fits on any screen. If anything looks cramped or oversized after attaching the indicator, change <code>InpUIGlobalScalePct</code> first — it's almost always the only setting you need.</p>
+    <table style="color:var(--text);">
+      <thead><tr><th>Input</th><th>Default</th><th>What It Controls</th></tr></thead>
+      <tbody>
+        <tr><td><code>InpUIGlobalScalePct</code></td><td>100</td><td>One global knob (50–200). Scales every layout pixel <strong>and</strong> default font in lockstep. HiDPI / Mac: try <strong>115–130</strong>. Tiny laptops: <strong>80–90</strong>.</td></tr>
+        <tr><td><code>InpUIFontProp</code></td><td>"Arial"</td><td>Proportional font family for buttons / labels / titles. Mac users who prefer native: <code>"Helvetica"</code>.</td></tr>
+        <tr><td><code>InpUIFontMono</code></td><td>"Courier New"</td><td>Monospace family for the status line, HTF rows, F1 help, room labels. Mac native alternatives: <code>"Menlo"</code> or <code>"Monaco"</code>.</td></tr>
+      </tbody>
+    </table>
+    <p style="color:rgba(255,255,255,0.65); font-size:12px; margin-top:10px;">Plus 17 per-area font-point overrides (default <code>0</code> = follow scaled default; <code>&gt;0</code> = fixed point size, clamped 6–24): <code>InpUIFontScanner</code>, <code>InpUIFontHTF</code>, <code>InpUIFontCurrency</code>, <code>InpUIFontTopConf</code>, <code>InpUIFontDashTF</code>, <code>InpUIFontDashToggle</code>, <code>InpUIFontDashTitle</code>, <code>InpUIFontDashMin</code>, <code>InpUIFontDashHelp</code>, <code>InpUIFontDashStatus</code>, <code>InpUIFontHelpF1</code>, <code>InpUIFontScanHelp</code>, <code>InpUIFontTradeLatest</code>, <code>InpUIFontTradeHist</code>, <code>InpUIFontStatLine</code>, <code>InpUIFontToast</code>, <code>InpUIFontCycleLbl</code>.</p>
 
     <h3 style="color:var(--gold);">Higher Timeframe Panel</h3>
     <table style="color:var(--text);">
@@ -2289,7 +2395,8 @@
     <table style="color:var(--text);">
       <thead><tr><th>Input</th><th>Default</th><th>What It Controls</th></tr></thead>
       <tbody>
-        <tr><td><code>InpShowCurrencyStrength</code></td><td>true</td><td>Show or hide the Currency Strength and Top Confluence panels below the scanner.</td></tr>
+        <tr><td><code>InpShowCurrencyStrength</code></td><td>true</td><td>Show or hide the Currency Strength strip below the scanner.</td></tr>
+        <tr><td><code>InpShowTopConfluence</code></td><td>true</td><td>Show or hide the Top Confluence panel — independent toggle from Currency Strength.</td></tr>
         <tr><td><code>InpScannerSigFilterToPeak</code></td><td>false</td><td>When enabled, scanner signals only appear when they align with the peak formation direction — reduces noise but may hide valid setups.</td></tr>
         <tr><td><code>InpMaxBoxesPerLevel</code></td><td>5</td><td>Maximum boxes allowed at the same level before the cycle is flagged <strong>STALE</strong> and resets. Lower values detect ranging markets sooner.</td></tr>
       </tbody>
@@ -2357,9 +2464,70 @@
       </div></div>
       <div class="step"><div class="step-content"><h4>Click OK and wait</h4><p>The scanner will reload. All 28 rows should populate with coloured data within a few seconds.</p></div></div>
     </div>
-    <div class="callout warning">
+    <div class="callout success">
+      <strong>Easier method — InpSymbolSuffix</strong>
+      Instead of retyping every symbol, just leave <code>InpSymbols</code> as-is and set <strong><code>InpSymbolSuffix</code></strong> to your broker's suffix (e.g. <code>.m</code>, <code>.r</code>, <code>-ECN</code>, <code>#</code>). The indicator appends it to every symbol automatically and skips ones the broker doesn't have. This is the recommended approach.
+    </div>
+    <div class="callout warning" style="margin-top:8px;">
       <strong>Gold / XAUUSD</strong>
-      Some brokers name Gold differently — <code>GOLD</code>, <code>XAUUSD</code>, <code>XAUUSDm</code>, or <code>Gold.r</code>. Check your Market Watch and update the last entry in InpSymbols to match. If your broker doesn't offer a symbol, simply remove it from the list.
+      Some brokers name Gold differently — <code>GOLD</code>, <code>XAUUSD</code>, <code>XAUUSDm</code>, or <code>Gold.r</code>. Check your Market Watch and update the last entry in InpSymbols to match. If your broker doesn't offer a symbol, simply remove it from the list. Currency Strength panel parses <strong>XAU*</strong> / <strong>GOLD*</strong> / <strong>BTC*</strong> / <strong>USDT</strong> automatically.
+    </div>
+  </div>
+
+  <!-- ISSUE 1B: SCREEN SIZE / SCALING -->
+  <div style="background:white; border:1px solid var(--border); border-radius:12px; padding:25px; margin:20px 0; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+    <div style="display:flex; gap:12px; align-items:center; margin-bottom:12px;">
+      <div style="background:var(--blue); color:white; border-radius:8px; width:36px; height:36px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px; flex-shrink:0;">⛶</div>
+      <h3 style="margin:0; font-size:18px;">Dashboard text too small / too big — Mac, 4K, VPS, Parallels <span style="color:var(--cyan); font-size:11px; font-weight:700;">v1.63</span></h3>
+    </div>
+    <p>The default size is tuned for a <strong>1920×1080 Windows display</strong> at 100% Windows scaling. On any other setup — Mac Retina, 4K monitors, ultrawides, small laptops, Parallels VMs, remote VPS, or Windows DPI scaling above 100% — the dashboard can look too small, too big, or have clipped text. Fix it in the indicator inputs.</p>
+
+    <h4 style="margin-top:15px;">Step 1 — One global knob</h4>
+    <p style="font-size:13px;">Set <code>InpUIGlobalScalePct</code> (range 50–200) and reload the chart. This scales every layout pixel <strong>and</strong> every default font in lockstep, so columns, rows, and fonts grow / shrink together.</p>
+    <table>
+      <thead><tr><th>Setup</th><th>Try this value</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Standard Windows 1080p</td><td><strong>100</strong></td><td>Default. Don't change.</td></tr>
+        <tr><td>4K / 1440p / HiDPI Windows</td><td><strong>115–130</strong></td><td>If Windows display scaling is set to 125% or 150%, the indicator already looks the right size at 100; only bump if text feels small.</td></tr>
+        <tr><td>Mac Retina (native MT5 / MT4)</td><td><strong>115–130</strong></td><td>Mac Retina renders MT at 2x — text at 100 is readable but tight. 120 is the sweet spot for most.</td></tr>
+        <tr><td>Mac Parallels / VMware (Windows guest)</td><td><strong>100–115</strong></td><td>Behaves like Windows. If the Parallels guest is set to "Best for Retina display", treat it like 4K and use 115–125.</td></tr>
+        <tr><td>VPS / RDP from a HiDPI client</td><td><strong>100</strong></td><td>The VPS itself is usually 1080p — keep at 100. The RDP client handles your local scaling separately.</td></tr>
+        <tr><td>Small laptop (13" or below)</td><td><strong>80–90</strong></td><td>Frees screen real estate so the scanner doesn't push the chart out.</td></tr>
+        <tr><td>External 4K with sharp eyes</td><td><strong>90–95</strong></td><td>Fits more pairs without scrolling.</td></tr>
+      </tbody>
+    </table>
+
+    <h4 style="margin-top:15px;">Step 2 — Per-area font overrides (optional)</h4>
+    <p style="font-size:13px;">If a specific area is still off after the global scaler, override just that area. Default <code>0</code> = follow the scaled default; set <code>&gt;0</code> for a fixed point size (clamped 6–24).</p>
+    <table>
+      <thead><tr><th>What's wrong</th><th>Input to set</th></tr></thead>
+      <tbody>
+        <tr><td>Scanner table cramped or oversized</td><td><code>InpUIFontScanner</code></td></tr>
+        <tr><td>HTF context panel</td><td><code>InpUIFontHTF</code></td></tr>
+        <tr><td>Currency strength strip</td><td><code>InpUIFontCurrency</code></td></tr>
+        <tr><td>Top confluence panel</td><td><code>InpUIFontTopConf</code></td></tr>
+        <tr><td>Dashboard TF / toggle buttons</td><td><code>InpUIFontDashTF</code> / <code>InpUIFontDashToggle</code></td></tr>
+        <tr><td>Status line under toggles</td><td><code>InpUIFontDashStatus</code></td></tr>
+        <tr><td>F1 user guide popup</td><td><code>InpUIFontHelpF1</code></td></tr>
+        <tr><td>Scanner ? legend popup</td><td><code>InpUIFontScanHelp</code></td></tr>
+        <tr><td>Toast alert banner</td><td><code>InpUIFontToast</code></td></tr>
+        <tr><td>On-chart entry / SL / TP labels</td><td><code>InpUIFontTradeLatest</code> / <code>InpUIFontTradeHist</code></td></tr>
+      </tbody>
+    </table>
+
+    <h4 style="margin-top:15px;">Step 3 — Font family for Mac users</h4>
+    <p style="font-size:13px;">Defaults are <strong>Arial</strong> + <strong>Courier New</strong> (both ship on Mac and Windows). Mac users who prefer native fonts can change them:</p>
+    <ul style="font-size:13px; padding-left:20px;">
+      <li><code>InpUIFontProp = "Helvetica"</code> — proportional family (buttons, labels, titles).</li>
+      <li><code>InpUIFontMono = "Menlo"</code> or <code>"Monaco"</code> — monospace family (status line, HTF rows, F1 help, room labels).</li>
+    </ul>
+
+    <h4 style="margin-top:15px;">Drag to position</h4>
+    <p style="font-size:13px;">If the dashboard / scanner blocks something on your chart, just <strong>click-drag the scanner header</strong> — the whole stack (scanner, HTF, currency strength, top confluence) moves together. Position is remembered for that chart while the indicator is loaded.</p>
+
+    <div class="callout info" style="margin-top:14px;">
+      <strong>If text disappears entirely</strong>
+      You probably set a per-area override too small (below 6pt). Set the offending input back to <code>0</code> to follow the scaled default and the area will reappear.
     </div>
   </div>
 
@@ -2440,7 +2608,20 @@
         <tr><td><strong>Reduce history if slow</strong></td><td>Lower <code>InpHistoryDays</code> from 60 to 30 if your terminal feels sluggish on older hardware.</td></tr>
         <tr><td><strong>Remove unused pairs</strong></td><td>If you only trade majors, trim the <code>InpSymbols</code> list to reduce CPU usage.</td></tr>
         <tr><td><strong>Close other indicators</strong></td><td>Heavy indicators on the same chart can slow down rendering. The State Engine draws many objects — give it space.</td></tr>
+        <tr><td><strong>Built-in throttling <span style="color:var(--cyan); font-size:11px;">v1.63</span></strong></td><td>Scanner table redraws every 2 s, HTF context every 5 s, currency strength + top confluence every 15 s. HTF panel text caches per H4/D1 bar. Per-symbol H4/D1 trends are cached on the symbol state so the scanner HTF column and Top Confluence panel skip redundant indicator reads on every refresh.</td></tr>
         <tr><td><strong>Optimised Code</strong></td><td>Full Strategy Tester optimisation: the indicator detects tester mode and skips heavy graphical operations.</td></tr>
+      </tbody>
+    </table>
+
+    <h4 style="margin-top:15px;">Mac, VPS, Parallels — what to expect</h4>
+    <table>
+      <thead><tr><th>Setup</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Mac (native MT5 / MT4)</strong></td><td>Works fine. The indicator uses <strong>Arial</strong> + <strong>Courier New</strong> by default — both fonts ship on macOS. If you prefer native fonts, set <code>InpUIFontProp = "Helvetica"</code> and <code>InpUIFontMono = "Menlo"</code>. For Retina screens, set <code>InpUIGlobalScalePct = 115–130</code>.</td></tr>
+        <tr><td><strong>Mac via Parallels / VMware</strong></td><td>Behaves like a Windows PC inside the VM. If Parallels is set to "Best for Retina", the guest sees a HiDPI screen — set <code>InpUIGlobalScalePct = 115–125</code>. Otherwise leave at 100.</td></tr>
+        <tr><td><strong>Windows VPS / RDP</strong></td><td>Recommended for 24/5 alerts and push notifications. Most VPS providers run 1080p — keep the scaler at 100. Push only fires while the desktop terminal is connected — VPS keeps it online.</td></tr>
+        <tr><td><strong>4K / Ultrawide</strong></td><td>Either turn Windows display scaling up to 125%/150% (then keep <code>InpUIGlobalScalePct = 100</code>), or leave Windows at 100% and set <code>InpUIGlobalScalePct = 115–130</code>. Both work — pick whichever looks cleaner.</td></tr>
+        <tr><td><strong>Tester mode</strong></td><td>The indicator auto-detects Strategy Tester and skips dashboards, scanner, and HTF panels. No setup needed.</td></tr>
       </tbody>
     </table>
   </div>
