@@ -132,6 +132,144 @@
   .badge-bull { background: #0a3a2a; color: var(--accent); }
   .badge-bear { background: #3a0a0a; color: var(--bear); }
   .badge-gold { background: #3a3a0a; color: var(--gold); }
+  /* Annotated dashboard diagram (Section 2 — video / screenshot friendly) */
+  .dash-diagram-wrap {
+    background: #0a0a10;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px 20px 24px;
+    margin: 28px 0;
+    overflow-x: auto;
+  }
+  .dash-diagram-wrap .diagram-caption {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.92em;
+    margin-bottom: 20px;
+  }
+  .dash-annotated {
+    position: relative;
+    width: 520px;
+    max-width: 100%;
+    margin: 0 auto 24px;
+    min-height: 420px;
+  }
+  .dash-panel-mock {
+    position: absolute;
+    left: 50%;
+    top: 58px;
+    transform: translateX(-50%);
+    width: 300px;
+    background: #19191f;
+    border: 1px solid #444;
+    border-radius: 6px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.55);
+    font-size: 10px;
+    line-height: 1.35;
+    z-index: 1;
+  }
+  .dash-panel-mock .d-hdr {
+    background: #26a69a;
+    color: #111;
+    font-weight: bold;
+    padding: 6px 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 5px 5px 0 0;
+    font-size: 10px;
+  }
+  .dash-panel-mock .d-timer { color: #222; font-family: Consolas, monospace; font-weight: bold; }
+  .dash-panel-mock .d-body { padding: 8px; color: #ccc; }
+  .dash-panel-mock .d-row { margin-bottom: 5px; }
+  .dash-panel-mock .d-trend { color: #26a69a; font-weight: bold; }
+  .dash-panel-mock .d-int { color: #0bb; }
+  .dash-panel-mock .d-muted { color: #888; font-size: 9px; }
+  .dash-panel-mock .d-conf { color: #ffc107; font-size: 9px; margin: 6px 0 8px; }
+  .dash-panel-mock .d-btns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; margin-bottom: 3px; }
+  .dash-panel-mock .d-btn {
+    text-align: center;
+    padding: 3px 1px;
+    border-radius: 3px;
+    font-size: 7.5px;
+    font-weight: bold;
+    border: 1px solid #333;
+  }
+  .dash-panel-mock .d-btn.on { background: #1b5e20; color: #a5d6a7; }
+  .dash-panel-mock .d-btn.off { background: #2d2d35; color: #777; }
+  .dash-panel-mock .d-btn.gold { background: #665500; color: #ffc107; }
+  .dash-panel-mock .d-btn.blue { background: #1a3050; color: #6495ed; }
+  .dash-panel-mock .d-special { display: flex; gap: 4px; margin-top: 6px; }
+  .dash-panel-mock .d-special .d-btn { flex: 1; padding: 5px 2px; font-size: 8px; }
+  .dash-panel-mock .d-strip-label { color: #ffc107; font-size: 8px; margin: 8px 0 4px; }
+  .dash-panel-mock .d-strip { display: flex; gap: 3px; flex-wrap: wrap; }
+  .dash-panel-mock .d-pair {
+    padding: 3px 6px;
+    border-radius: 3px;
+    font-size: 7px;
+    background: #2d2d35;
+    color: #aaa;
+    border: 1px solid #444;
+  }
+  .dash-panel-mock .d-pair.active { background: #26a69a; color: #fff; border-color: #26a69a; }
+  .dash-callout {
+    position: absolute;
+    z-index: 2;
+    max-width: 118px;
+  }
+  .dash-callout .dc-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #ffc107;
+    color: #111;
+    font-weight: bold;
+    font-size: 11px;
+    margin-bottom: 4px;
+  }
+  .dash-callout .dc-text {
+    background: rgba(22, 22, 30, 0.95);
+    border: 1px solid #ffc107;
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-size: 11px;
+    line-height: 1.35;
+    color: #e0e0e0;
+  }
+  .dash-callout .dc-text strong { color: #ffc107; display: block; font-size: 10px; margin-bottom: 2px; }
+  .dash-callout svg line { stroke: #ffc107; stroke-width: 1.5; opacity: 0.85; }
+  .dash-callout.c1 { left: 0; top: 52px; }
+  .dash-callout.c2 { right: 0; top: 48px; text-align: right; }
+  .dash-callout.c2 .dc-num { margin-left: auto; }
+  .dash-callout.c3 { left: 0; top: 118px; }
+  .dash-callout.c4 { right: 0; top: 112px; text-align: right; }
+  .dash-callout.c4 .dc-num { margin-left: auto; }
+  .dash-callout.c5 { left: 0; top: 168px; }
+  .dash-callout.c6 { right: 0; top: 162px; text-align: right; }
+  .dash-callout.c6 .dc-num { margin-left: auto; }
+  .dash-callout.c7 { left: 0; top: 218px; }
+  .dash-callout.c8 { right: 0; top: 248px; text-align: right; }
+  .dash-callout.c8 .dc-num { margin-left: auto; }
+  .dash-callout.c9 { left: 50%; transform: translateX(-50%); bottom: 0; text-align: center; max-width: 200px; }
+  .dash-callout.c9 .dc-num { margin: 0 auto 4px; }
+  .dash-legend {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 8px 16px;
+    margin-top: 8px;
+    font-size: 0.88em;
+  }
+  .dash-legend div { padding: 6px 10px; background: #16161e; border-radius: 6px; border: 1px solid var(--border); }
+  .dash-legend span { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 50%; background: #ffc107; color: #111; font-weight: bold; font-size: 10px; margin-right: 8px; }
+  @media (max-width: 900px) {
+    .dash-annotated { width: 100%; min-height: 680px; }
+    .dash-callout { max-width: 140px; }
+    .dash-callout.c2, .dash-callout.c4, .dash-callout.c6, .dash-callout.c8 { right: 4px; }
+    .dash-callout.c1, .dash-callout.c3, .dash-callout.c5, .dash-callout.c7 { left: 4px; }
+  }
   footer {
     text-align: center;
     padding: 40px;
@@ -271,7 +409,113 @@
 <!-- 2. DASHBOARD -->
 <section id="dashboard">
   <h2>2. Dashboard &amp; Controls</h2>
-  <p>The dashboard panel shows real-time information and gives you full control over every feature with toggle buttons.</p>
+  <p>The dashboard panel shows real-time information and gives you full control over every feature with toggle buttons. This is the same single-chart dashboard built into the scanner edition &mdash; the multi-symbol grid is a separate panel (see <a href="#scanner">Section 16</a>).</p>
+
+  <h3>Annotated Dashboard (for video / reference)</h3>
+  <p>Use the diagram below in walkthrough videos or training. Each numbered callout matches a region on the live panel. Open the guide full-screen (browser F11) for a clean screenshot.</p>
+
+  <div class="dash-diagram-wrap">
+    <p class="diagram-caption"><strong>SMC Pro Dashboard</strong> &mdash; labeled overview (single-chart panel, included in both guide editions)</p>
+
+    <div class="dash-annotated">
+      <!-- Callout 1: Title -->
+      <div class="dash-callout c1">
+        <div class="dc-num">1</div>
+        <div class="dc-text"><strong>Title bar</strong>Product name + active symbol</div>
+      </div>
+      <!-- Callout 2: Timer -->
+      <div class="dash-callout c2">
+        <div class="dc-num">2</div>
+        <div class="dc-text"><strong>Candle timer</strong>Time left on current bar (MM:SS)</div>
+      </div>
+      <!-- Callout 3: Ext trend -->
+      <div class="dash-callout c3">
+        <div class="dc-num">3</div>
+        <div class="dc-text"><strong>Ext trend</strong>HTF structure direction (BOS/CHoCH)</div>
+      </div>
+      <!-- Callout 4: Int trend -->
+      <div class="dash-callout c4">
+        <div class="dc-num">4</div>
+        <div class="dc-text"><strong>Int trend</strong>LTF structure for entry timing</div>
+      </div>
+      <!-- Callout 5: Time + Session -->
+      <div class="dash-callout c5">
+        <div class="dc-num">5</div>
+        <div class="dc-text"><strong>Time &amp; session</strong>Local + server clock; Asia / London / NY / SB / off-hours</div>
+      </div>
+      <!-- Callout 6: Confluence -->
+      <div class="dash-callout c6">
+        <div class="dc-num">6</div>
+        <div class="dc-text"><strong>Confluence meter</strong>Setup quality score 0&ndash;10 with bar</div>
+      </div>
+      <!-- Callout 7: Toggle grid -->
+      <div class="dash-callout c7">
+        <div class="dc-num">7</div>
+        <div class="dc-text"><strong>Layer toggles</strong>28 buttons &mdash; green/coloured = ON, grey = OFF</div>
+      </div>
+      <!-- Callout 8: Special row -->
+      <div class="dash-callout c8">
+        <div class="dc-num">8</div>
+        <div class="dc-text"><strong>+Alert</strong>Drag a manual price alert line onto chart</div>
+      </div>
+      <!-- Callout 9: Bottom actions -->
+      <div class="dash-callout c9">
+        <div class="dc-num">9</div>
+        <div class="dc-text"><strong>AI Trade Idea</strong> &nbsp;|&nbsp; <strong>User Guide</strong> &nbsp;|&nbsp; <strong>Quick Switch</strong> pair strip</div>
+      </div>
+
+      <!-- Panel mockup -->
+      <div class="dash-panel-mock">
+        <div class="d-hdr">
+          <span>SMC Pro v2.82 | EURUSD</span>
+          <span class="d-timer">04:32</span>
+        </div>
+        <div class="d-body">
+          <div class="d-row"><span class="d-trend">Ext: BULLISH</span> &nbsp; <span class="d-int">Int: BULLISH</span></div>
+          <div class="d-row d-muted">14:32 (Loc) &nbsp; 16:32 (Srv)</div>
+          <div class="d-row d-muted">Session: London Killzone</div>
+          <div class="d-conf">Confluence: [||||||....] 6/10</div>
+          <div class="d-btns">
+            <div class="d-btn on">Struct</div><div class="d-btn on">Int.S</div><div class="d-btn on">FVG</div><div class="d-btn off">IFVG</div>
+            <div class="d-btn on">OB</div><div class="d-btn off">Breaker</div><div class="d-btn off">Mitig</div><div class="d-btn off">Reject</div>
+            <div class="d-btn on">P/D</div><div class="d-btn on">EQH/L</div><div class="d-btn on">Sweeps</div><div class="d-btn on">Labels</div>
+            <div class="d-btn off">Sessions</div><div class="d-btn off">SB</div><div class="d-btn off">Macros</div><div class="d-btn off">CBDR</div>
+            <div class="d-btn off">Prev HL</div><div class="d-btn off">M/W Op</div><div class="d-btn off">Vol</div><div class="d-btn off">MTF</div>
+            <div class="d-btn off">NY Open</div><div class="d-btn off">ATR</div><div class="d-btn off">NDOG</div><div class="d-btn off">NWOG</div>
+            <div class="d-btn off">Patterns</div><div class="d-btn off">Wicks</div><div class="d-btn off">Voids</div><div class="d-btn off">SMT</div>
+            <div class="d-btn off" style="grid-column: span 1;">+Alert</div>
+          </div>
+          <div class="d-special">
+            <div class="d-btn gold">AI Trade Idea</div>
+            <div class="d-btn blue">User Guide</div>
+          </div>
+          <div class="d-strip-label">Quick Switch:</div>
+          <div class="d-strip">
+            <span class="d-pair active">EURUSD</span>
+            <span class="d-pair">GBPUSD</span>
+            <span class="d-pair">USDJPY</span>
+            <span class="d-pair">XAUUSD</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dash-legend">
+      <div><span>1</span>Title &mdash; version + chart symbol</div>
+      <div><span>2</span>Candle timer &mdash; countdown to bar close</div>
+      <div><span>3</span>External trend &mdash; major structure bias</div>
+      <div><span>4</span>Internal trend &mdash; precision entry bias</div>
+      <div><span>5</span>Clocks + active ICT session</div>
+      <div><span>6</span>Confluence score &mdash; same engine as AI Trade Idea</div>
+      <div><span>7</span>Feature toggles &mdash; see table below for every button</div>
+      <div><span>8</span>+Alert &mdash; place draggable alert line</div>
+      <div><span>9</span>AI Trade Idea panel | in-chart help | jump pairs</div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <strong>Video tip:</strong> Pause on this diagram while narrating, then cut to your live MT5 chart and point to the same numbered areas in order (title &rarr; timer &rarr; trends &rarr; confluence &rarr; toggles &rarr; AI Idea). When covering the scanner edition, follow with <a href="#scanner">Section 16</a> for the separate traffic-light grid.
+  </div>
 
   <h3>Information Display</h3>
   <ul>
@@ -329,10 +573,10 @@
 
   <h3>Special Buttons</h3>
   <ul>
-    <li><span class="gold">AI Idea</span> &mdash; Opens the AI Trade Idea panel (see Section 15).</li>
-    <li><span class="gold">Scanner</span> &mdash; Show/hide the multi-symbol scanner grid (see Section 16). When hidden, a floating <strong>Show SMC Scanner</strong> button appears bottom-right.</li>
+    <li><span class="gold">AI Idea</span> &mdash; Opens the AI Trade Idea panel (see Section 15). Shows BUY/SELL/WAIT, setup grade, Entry/SL/TP lines, and lot-size calculator.</li>
     <li><span style="color:#6495ED">User Guide</span> &mdash; Opens the in-chart help window with button cheat sheet.</li>
   </ul>
+  <p>When the scanner is enabled (<code>InpScnEnabled</code>), the multi-symbol grid appears as its own floating panel with <strong>Hide</strong> / <strong>Show SMC Scanner</strong> controls &mdash; see <a href="#scanner">Section 16</a>.</p>
 </section>
 
 <!-- 3. MARKET STRUCTURE -->
