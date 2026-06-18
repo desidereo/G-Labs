@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SMC Pro v2.82 - Complete User Guide</title>
+<title>SMC Pro v2.82 - Complete User Guide (with Multi-Symbol Scanner)</title>
 <style>
   :root {
     --bg: #0d0d12;
@@ -142,16 +142,40 @@
     .hero h1 { font-size: 2em; }
     .container { padding: 20px 15px; }
     section { padding: 20px; }
+    .scanner-mock .scn-grid { font-size: 10px; }
   }
+  /* Scanner diagrams */
+  .scanner-mock { background: #121218; border: 1px solid #333; border-radius: 10px; overflow: hidden; margin: 20px 0; font-size: 13px; }
+  .scanner-mock .scn-head { background: #1e1e26; padding: 10px 14px; color: var(--gold); font-weight: bold; display: flex; justify-content: space-between; }
+  .scanner-mock .scn-best { background: #2a2200; border-bottom: 1px solid #665500; padding: 8px 14px; color: var(--gold); font-size: 12px; }
+  .scanner-mock .scn-grid { display: grid; grid-template-columns: 88px repeat(4, 1fr); gap: 4px; padding: 10px; }
+  .scanner-mock .scn-hdr { color: #666; font-weight: bold; text-align: center; padding: 4px; font-size: 11px; }
+  .scanner-mock .scn-sym { color: #ccc; font-weight: bold; padding: 8px 4px; }
+  .scanner-mock .scn-cell { text-align: center; padding: 8px 4px; border-radius: 4px; font-weight: bold; font-size: 11px; }
+  .scn-buy { background: #1b5e20; color: #a5d6a7; }
+  .scn-sell { background: #7f1d1d; color: #ef9a9a; }
+  .scn-wait { background: #37474f; color: #b0bec5; }
+  .scn-highlight { outline: 2px solid var(--gold); box-shadow: 0 0 8px rgba(255,193,7,0.4); }
+  .scanner-mock .scn-filters { display: flex; gap: 4px; padding: 8px 10px; border-top: 1px solid #333; }
+  .scanner-mock .scn-fbtn { flex: 1; text-align: center; padding: 5px; border-radius: 4px; font-size: 10px; font-weight: bold; }
+  .scanner-mock .scn-legend { padding: 6px 14px; font-size: 11px; color: #666; border-top: 1px solid #333; }
+  .flow { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 20px 0; }
+  .flow-step { background: #1a2a2a; border: 1px solid var(--border); border-radius: 10px; padding: 16px; text-align: center; min-width: 130px; flex: 1; max-width: 160px; }
+  .flow-step .n { background: var(--accent); color: #fff; width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; margin-bottom: 8px; font-size: 13px; }
+  .cheat { display: grid; grid-template-columns: 130px 1fr; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin: 15px 0; }
+  .cheat > div { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  .cheat > div:nth-child(odd) { background: #1a1a25; color: var(--gold); font-weight: bold; }
+  .svg-diagram { text-align: center; margin: 20px 0; }
+  .svg-diagram svg { max-width: 100%; height: auto; }
 </style>
 </head>
 <body>
 
 <div class="hero">
   <h1>SMC Pro v2.82</h1>
-  <div class="sub">The Ultimate Smart Money Concepts &amp; ICT Trading Toolkit</div>
-  <p>A comprehensive institutional trading indicator featuring Internal &amp; External Market Structure, BOS/CHoCH with Wick/Body/2-Candle confirmation, Candle Patterns, Liquidity Voids, NDOG/NWOG, SMT Divergence, FVG/IFVG, Order Blocks, OTE Fibonacci, ICT Time Models, ADR, MTF Trend Dashboard, Confluence Scoring, and the AI Trade Idea panel with structure-aware entries.</p>
-  <p style="margin-top:14px;font-size:0.95em;color:var(--muted);">This edition covers the <strong style="color:var(--heading);">single-chart toolkit</strong>. For the built-in multi-symbol scanner grid, see the <a href="Smart_Market_Structure_Guide_With_Scanner.html" style="color:var(--gold);">SMC Pro Guide with Scanner</a>.</p>
+  <div class="sub">Complete SMC / ICT Toolkit + Built-in Multi-Symbol Scanner</div>
+  <p>Everything in the standard SMC Pro guide <strong>plus</strong> the traffic-light multi-symbol scanner: monitor up to 30 pairs across M15, H1, H4 and D1, click any cell to open that chart, and every verdict stays aligned with the dashboard and AI Trade Idea panel.</p>
+  <p style="margin-top:14px;font-size:0.95em;color:var(--muted);">Using the indicator without the scanner grid? See the <a href="Smart_Market_Structure_Guide.html" style="color:var(--gold);">Single-Chart Edition</a> of this guide.</p>
 </div>
 
 <div class="container">
@@ -176,6 +200,7 @@
     <li><a href="#volume">Volume Profile &amp; ADR</a></li>
     <li><a href="#confluence">Confluence Scoring System</a></li>
     <li><a href="#ai">AI Trade Idea Panel</a></li>
+    <li><a href="#scanner">Multi-Symbol Scanner</a></li>
     <li><a href="#alerts">Alerts &amp; Notifications</a></li>
     <li><a href="#model">The Complete Trading Model</a></li>
     <li><a href="#risk">Risk Management &amp; Position Sizing</a></li>
@@ -187,15 +212,17 @@
 <!-- WHAT'S NEW -->
 <section id="whatsnew">
   <h2>What's New in v2.82</h2>
-  <p>Key improvements to the <strong>single-chart</strong> SMC Pro experience (excluding the optional multi-symbol scanner, which is documented in the <a href="Smart_Market_Structure_Guide_With_Scanner.html" style="color:var(--gold);">Scanner edition</a> of this guide):</p>
+  <p>Key improvements in v2.82 including the <strong>built-in multi-symbol scanner</strong>:</p>
   <table>
     <tr><th>Feature</th><th>What changed</th></tr>
-    <tr><td><strong>AI Trade Idea</strong></td><td>Renamed and redesigned from "AI Scan". Large action banner (BUY/SELL/WAIT), setup grade 0&ndash;10, plain-English reason, and Entry/SL/TP lines drawn on chart with structure-aware stop placement.</td></tr>
-    <tr><td><strong>Unified verdict logic</strong></td><td>New <code>GetAIVerdict()</code> engine: BUY only when bullish trend + Discount + score &ge; 5; SELL only when bearish + Premium + score &ge; 5; otherwise WAIT with a clear reason (e.g. "in Premium - wait for pullback").</td></tr>
-    <tr><td><strong>Premium/Discount gating</strong></td><td>Single source of truth for dealing-range midline via <code>ComputePDState()</code> &mdash; dashboard, confluence, and AI Trade Idea can no longer disagree on zone.</td></tr>
-    <tr><td><strong>Quick Symbol Switcher</strong></td><td>8-button pair strip on dashboard for instant navigation. Broker suffix auto-detect. Optional mirror of scanner symbol list (scanner edition only).</td></tr>
-    <tr><td><strong>Alert stability</strong></td><td>Duplicate alerts when switching pairs via Quick Switch are suppressed during the transition.</td></tr>
-    <tr><td><strong>User Guide in-chart</strong></td><td>Expanded help popup with beginner-friendly button explanations and cheat-sheet style tips.</td></tr>
+    <tr><td><strong>Built-in scanner</strong></td><td>Traffic-light grid (BUY/SELL/WAIT + score) for up to 30 symbols &times; 4 timeframes. No separate .ex5 required. Toggle via <code>InpScnEnabled</code>.</td></tr>
+    <tr><td><strong>Full alignment</strong></td><td>Current-chart cell reads live engine via <code>GetAIVerdict()</code> &mdash; same verdict, score, and reason as dashboard + AI Trade Idea. Off-chart cells use identical rules.</td></tr>
+    <tr><td><strong>Why this score?</strong></td><td>Per-cell ? popup with plain-English breakdown. Grid minimises while popup is open.</td></tr>
+    <tr><td><strong>BEST filter</strong></td><td>Always shows top setups via <code>InpScnBestTopN</code> / <code>InpScnBestMinScore</code>.</td></tr>
+    <tr><td><strong>Hide / Show</strong></td><td>Per-chart visibility memory. Slave charts default hidden. Floating "Show SMC Scanner" button.</td></tr>
+    <tr><td><strong>AI Trade Idea</strong></td><td>Renamed from AI Scan. Action banner, setup grade, structure-aware SL, unified P/D gating.</td></tr>
+    <tr><td><strong>Quick Switch</strong></td><td>8-pair strip; optional <code>InpPairStripFollowScanner</code> mirrors first 8 scanner symbols.</td></tr>
+    <tr><td><strong>Stability</strong></td><td>Fixed object-prefix collisions, popup persistence, duplicate alerts on pair change suppressed.</td></tr>
   </table>
 </section>
 
@@ -302,7 +329,8 @@
 
   <h3>Special Buttons</h3>
   <ul>
-    <li><span class="gold">AI Idea</span> &mdash; Opens the AI Trade Idea panel (see Section 15). Shows BUY/SELL/WAIT, setup grade, Entry/SL/TP lines, and lot-size calculator.</li>
+    <li><span class="gold">AI Idea</span> &mdash; Opens the AI Trade Idea panel (see Section 15).</li>
+    <li><span class="gold">Scanner</span> &mdash; Show/hide the multi-symbol scanner grid (see Section 16). When hidden, a floating <strong>Show SMC Scanner</strong> button appears bottom-right.</li>
     <li><span style="color:#6495ED">User Guide</span> &mdash; Opens the in-chart help window with button cheat sheet.</li>
   </ul>
 </section>
@@ -809,9 +837,155 @@
   <p>Click <strong>"Backtest"</strong> to test the OTE strategy on the last 50 swing cycles: total trades, wins, losses, open trades, and win rate %.</p>
 </section>
 
-<!-- 16. ALERTS -->
+<!-- 16. MULTI-SYMBOL SCANNER -->
+<section id="scanner">
+  <h2>16. Multi-Symbol Scanner</h2>
+  <p>The built-in scanner watches multiple symbols and timeframes simultaneously and displays a <strong>traffic-light grid</strong> so you can find setups without opening dozens of charts.</p>
+
+  <div class="key">
+    <strong>One brain, three views:</strong> Scanner cells, dashboard confluence, and AI Trade Idea all use the same engine. A cell that says <span class="bull">BUY 7</span> on GBPUSD H4 will still read BUY when you click it and open that chart.
+  </div>
+
+  <h3>Panel Layout (Annotated)</h3>
+  <div class="scanner-mock">
+    <div class="scn-head"><span>SMC SCANNER</span><span style="color:#888;font-weight:normal;">? &nbsp; Hide</span></div>
+    <div class="scn-best">&#9733; BEST: BUY GBPUSD on H4 &mdash; score 7/10</div>
+    <div class="scn-grid">
+      <div class="scn-hdr">PAIR</div><div class="scn-hdr">M15</div><div class="scn-hdr">H1</div><div class="scn-hdr">H4</div><div class="scn-hdr">D1</div>
+      <div class="scn-sym">EURUSD</div>
+      <div class="scn-cell scn-wait">WAIT 3</div><div class="scn-cell scn-wait">WAIT 2</div>
+      <div class="scn-cell scn-sell">SELL 6</div><div class="scn-cell scn-wait">WAIT 4</div>
+      <div class="scn-sym">GBPUSD</div>
+      <div class="scn-cell scn-wait">WAIT 2</div><div class="scn-cell scn-buy">BUY 5</div>
+      <div class="scn-cell scn-buy scn-highlight">BUY 7</div><div class="scn-cell scn-wait">WAIT 3</div>
+      <div class="scn-sym">XAUUSD</div>
+      <div class="scn-cell scn-buy">BUY 6</div><div class="scn-cell scn-wait">WAIT 4</div>
+      <div class="scn-cell scn-wait">WAIT 2</div><div class="scn-cell scn-sell">SELL 5</div>
+    </div>
+    <div class="scn-filters">
+      <div class="scn-fbtn" style="background:#665500;color:#ffc107;">ALL</div>
+      <div class="scn-fbtn" style="background:#1b5e20;color:#fff;">BUY</div>
+      <div class="scn-fbtn" style="background:#7f1d1d;color:#fff;">SELL</div>
+      <div class="scn-fbtn" style="background:#ffc107;color:#000;">BEST</div>
+      <div class="scn-fbtn" style="background:#333;color:#aaa;">SORT</div>
+      <div class="scn-fbtn" style="background:#333;color:#aaa;">RFRSH</div>
+    </div>
+    <div class="scn-legend">Green=BUY &nbsp; Red=SELL &nbsp; Grey=WAIT &nbsp;|&nbsp; Number=score 0-10 &nbsp;|&nbsp; Click cell=open chart &nbsp;|&nbsp; ~ = synced with live chart</div>
+  </div>
+
+  <h3>How to Enable</h3>
+  <ol>
+    <li>Attach SMC Pro to any chart (scanner is on by default: <code>InpScnEnabled = true</code>).</li>
+    <li>Click <strong>Scanner</strong> on the dashboard, or set <code>InpScnDefaultVisible = true</code> to show the grid immediately.</li>
+    <li>Wait 10&ndash;30 seconds on first load while history preloads for all symbols/timeframes.</li>
+    <li>Press <strong>?</strong> on the scanner header for the built-in Quick Guide.</li>
+  </ol>
+
+  <h3>Reading a Cell</h3>
+  <table>
+    <tr><th>Display</th><th>Meaning</th></tr>
+    <tr><td><span class="badge badge-bull">BUY 7</span></td><td>Bullish trend + Discount + score &ge; 5. Actionable long setup.</td></tr>
+    <tr><td><span class="badge badge-bear">SELL 6</span></td><td>Bearish trend + Premium + score &ge; 5. Actionable short setup.</td></tr>
+    <tr><td><span class="badge badge-gold">WAIT 4</span></td><td>Direction seen but zone or score not ready. Watchlist only.</td></tr>
+    <tr><td><span class="gold">BOS 3b</span> / <span class="gold">CHoCH 2b</span></td><td>Last structure event and how many bars ago (freshness).</td></tr>
+    <tr><td><strong>~</strong> marker</td><td>Current chart's cell &mdash; live-synced with dashboard / AI Trade Idea.</td></tr>
+    <tr><td><strong>*</strong> marker</td><td>Strongest cell on the entire panel (also shown in BEST banner).</td></tr>
+  </table>
+
+  <h3>Filter Buttons</h3>
+  <div class="cheat">
+    <div>ALL</div><div>Every symbol row (default)</div>
+    <div>BUY</div><div>Only symbols with at least one green BUY cell</div>
+    <div>SELL</div><div>Only symbols with at least one red SELL cell</div>
+    <div>BEST</div><div>Top N setups by score (see <code>InpScnBestTopN</code>, default 5)</div>
+    <div>SORT</div><div>Re-order rows by score or symbol</div>
+    <div>RFRSH</div><div>Force immediate full re-scan</div>
+    <div>Hide</div><div>Collapse grid; floating Show button reappears</div>
+  </div>
+
+  <h3>Why This Score? Popup</h3>
+  <p>Click the <strong>?</strong> next to any cell (or use the cell explain button) to open a four-section popup:</p>
+  <ol>
+    <li><strong>What's happening</strong> &mdash; trend, last BOS/CHoCH, sweep, FVG state in plain English</li>
+    <li><strong>How the score was built</strong> &mdash; itemised +2 trend, +2 P/D, +2 OB, etc.</li>
+    <li><strong>What to look for</strong> &mdash; verdict-aware (never says "go long" when WAIT)</li>
+    <li><strong>Things to watch out for</strong> &mdash; stale events, wrong zone, mixed structure</li>
+  </ol>
+  <p>On the current chart's cell, an extra line shows the exact AI Trade Idea reason string. The grid auto-minimises while the popup is open (<code>InpScnMinimizeForPopup</code>, default on).</p>
+
+  <h3>Click Cell = Open Chart</h3>
+  <p>Clicking any cell opens that symbol and timeframe in a new chart tab with SMC Pro loaded. The cell for that chart switches to <strong>live-engine mode</strong> (~ marker) and should match what you saw before opening.</p>
+
+  <div class="svg-diagram">
+    <svg viewBox="0 0 680 120" width="660">
+      <rect x="10" y="20" width="140" height="80" rx="8" fill="#1a2a2a" stroke="#26a69a"/>
+      <text x="80" y="55" fill="#26a69a" text-anchor="middle" font-size="13" font-weight="bold">Scanner Grid</text>
+      <text x="80" y="75" fill="#888" text-anchor="middle" font-size="11">BUY 7 H4</text>
+      <text x="165" y="65" fill="#ffc107" font-size="22">&#8594;</text>
+      <rect x="190" y="20" width="140" height="80" rx="8" fill="#1a2a2a" stroke="#ffc107"/>
+      <text x="260" y="55" fill="#ffc107" text-anchor="middle" font-size="13" font-weight="bold">Click Cell</text>
+      <text x="260" y="75" fill="#888" text-anchor="middle" font-size="11">Opens chart</text>
+      <text x="345" y="65" fill="#ffc107" font-size="22">&#8594;</text>
+      <rect x="370" y="20" width="140" height="80" rx="8" fill="#1a2a2a" stroke="#26a69a"/>
+      <text x="440" y="50" fill="#26a69a" text-anchor="middle" font-size="12" font-weight="bold">Dashboard</text>
+      <text x="440" y="68" fill="#a5d6a7" text-anchor="middle" font-size="11">BULLISH 7/10</text>
+      <text x="440" y="85" fill="#888" text-anchor="middle" font-size="10">Same verdict</text>
+      <text x="525" y="65" fill="#ffc107" font-size="22">&#8594;</text>
+      <rect x="550" y="20" width="120" height="80" rx="8" fill="#1b5e20" stroke="#26a69a"/>
+      <text x="610" y="55" fill="#fff" text-anchor="middle" font-size="14" font-weight="bold">AI Trade Idea</text>
+      <text x="610" y="75" fill="#a5d6a7" text-anchor="middle" font-size="11">BUY + Entry/SL/TP</text>
+    </svg>
+  </div>
+
+  <h3>5-Step Scanner Workflow</h3>
+  <div class="flow">
+    <div class="flow-step"><div class="n">1</div><strong>Scan</strong><br><small>BEST filter or green/red cells</small></div>
+    <div class="flow-step"><div class="n">2</div><strong>Click</strong><br><small>Open pair + TF</small></div>
+    <div class="flow-step"><div class="n">3</div><strong>Confirm</strong><br><small>Dashboard + P/D zone</small></div>
+    <div class="flow-step"><div class="n">4</div><strong>Trigger</strong><br><small>Internal CHoCH at OB/FVG</small></div>
+    <div class="flow-step"><div class="n">5</div><strong>Execute</strong><br><small>AI Trade Idea levels</small></div>
+  </div>
+
+  <h3>Scanner Settings (Inputs)</h3>
+  <table>
+    <tr><th>Input group</th><th>Key settings</th></tr>
+    <tr><td>Multi-Symbol Scanner</td><td><code>InpScnEnabled</code>, <code>InpScnDefaultVisible</code>, <code>InpScnScanWhenHidden</code></td></tr>
+    <tr><td>Symbols &amp; Timeframes</td><td><code>InpScnSymbols</code> (max 30), <code>InpScnSymSuffix</code> (AUTO/m/.a), TF1&ndash;TF4 (default M15/H1/H4/D1)</td></tr>
+    <tr><td>Display</td><td>Panel X/Y, column widths, <code>InpScnMinimizeForPopup</code></td></tr>
+    <tr><td>Refresh</td><td><code>InpScnTimerSeconds</code> (2s), <code>InpScnRefreshSec</code> (20s full refresh)</td></tr>
+    <tr><td>BEST filter</td><td><code>InpScnBestTopN</code> (5), <code>InpScnBestMinScore</code> (3)</td></tr>
+    <tr><td>Alerts</td><td><code>InpScnAlertScore</code> (7), popup/sound/push toggles</td></tr>
+    <tr><td>Quick Switch mirror</td><td><code>InpPairStripFollowScanner</code> &mdash; strip mirrors first 8 scanner symbols</td></tr>
+  </table>
+
+  <h3>Multi-Chart Setup</h3>
+  <ul>
+    <li><strong>Master chart:</strong> Scanner visible, watches all pairs.</li>
+    <li><strong>Slave charts:</strong> Opened by clicking cells &mdash; scanner defaults <strong>hidden</strong> on these charts to reduce clutter. Click Show SMC Scanner if needed.</li>
+    <li>Set <code>InpScnScanWhenHidden = false</code> on slave charts to save CPU when grid is hidden.</li>
+  </ul>
+
+  <h3>Scanner Alerts</h3>
+  <p>When any cell score crosses <code>InpScnAlertScore</code> (default 7), optional popup/sound/push alerts fire. Alerts trigger on score <em>increase</em> to threshold, not every refresh tick.</p>
+
+  <div class="warn">
+    <strong>Why WAIT is good:</strong> Grey cells protect you from bad entries. Bullish + Premium = WAIT (wait for Discount). Bearish + Discount = WAIT (wait for Premium). Score &lt; 5 = WAIT even in the right zone.
+  </div>
+
+  <h3>Scanner Troubleshooting</h3>
+  <table>
+    <tr><th>Issue</th><th>Fix</th></tr>
+    <tr><td>All cells WAIT 0 / empty</td><td>Wait for history preload. Check Market Watch symbols. Press RFRSH. Verify broker suffix.</td></tr>
+    <tr><td>Wrong symbol names</td><td>Set <code>InpScnSymSuffix</code> to AUTO or your broker suffix (m, .a, -pro).</td></tr>
+    <tr><td>Cell changed after click</td><td>Should match in v2.82+. Reload latest build. Small score wobble (&plusmn;1) possible if price moved.</td></tr>
+    <tr><td>Grid covers popup</td><td>Enable <code>InpScnMinimizeForPopup</code> (default on).</td></tr>
+    <tr><td>Show button flashing</td><td>Fixed in v2.82 (object prefix collision). Update indicator.</td></tr>
+  </table>
+</section>
+
+<!-- 17. ALERTS -->
 <section id="alerts">
-  <h2>16. Alerts &amp; Notifications</h2>
+  <h2>17. Alerts &amp; Notifications</h2>
 
   <h3>Automatic Alerts</h3>
   <table>
@@ -820,6 +994,7 @@
     <tr><td>CHoCH</td><td>Alert on CHoCH</td><td>Fires when a Change of Character occurs (potential reversal)</td></tr>
     <tr><td>Liquidity Sweep</td><td>Alert on Sweep</td><td>Fires when a stop hunt is detected with reversal</td></tr>
     <tr><td>OB Touch</td><td>Alert on OB Touch</td><td>Fires when price enters an unmitigated order block</td></tr>
+    <tr><td>Scanner score</td><td>InpScnAlertScore</td><td>Fires when any scanner cell reaches score &ge; N (default 7)</td></tr>
   </table>
 
   <h3>Alert Delivery</h3>
@@ -839,14 +1014,14 @@
 
 <!-- 17. THE MODEL -->
 <section id="model">
-  <h2>17. The Complete Trading Model</h2>
+  <h2>18. The Complete Trading Model</h2>
   <p>This is the step-by-step process for finding and executing A+ setups using SMC Pro v2.82:</p>
 
-  <h3>Step 1: Determine Bias (HTF Analysis)</h3>
+  <h3>Step 1: Find Setups (Scanner or HTF Analysis)</h3>
   <ol>
-    <li>Look at External Structure. Is it making HH/HL (bullish) or LH/LL (bearish)?</li>
-    <li>Check the Monthly and Weekly Opens. Is price above or below?</li>
-    <li>Note the previous day/week high/low as liquidity targets.</li>
+    <li>Open the scanner grid and press <strong>BEST</strong>, or scan for green/red cells with score &ge; 5.</li>
+    <li>Click the strongest cell to open that pair/timeframe, OR manually analyse External Structure on your chart.</li>
+    <li>Confirm HTF bias: HH/HL (bullish) or LH/LL (bearish). Check Monthly/Weekly opens and PDH/PDL as liquidity targets.</li>
   </ol>
 
   <h3>Step 2: Identify the Dealing Range</h3>
@@ -904,7 +1079,7 @@
 
 <!-- 18. RISK MANAGEMENT -->
 <section id="risk">
-  <h2>18. Risk Management &amp; Position Sizing</h2>
+  <h2>19. Risk Management &amp; Position Sizing</h2>
 
   <h3>The 1% Rule</h3>
   <p>Never risk more than <strong>1-2% of your account balance</strong> on a single trade. The AI Trade Idea panel automatically calculates the correct lot size based on your risk input.</p>
@@ -933,7 +1108,7 @@
 
 <!-- 19. PRO TIPS -->
 <section id="tips">
-  <h2>19. Pro Tips &amp; Best Practices</h2>
+  <h2>20. Pro Tips &amp; Best Practices</h2>
 
   <h3>Chart Setup</h3>
   <ul>
@@ -988,7 +1163,7 @@
 
 <!-- 20. FAQ -->
 <section id="faq">
-  <h2>20. FAQ &amp; Troubleshooting</h2>
+  <h2>21. FAQ &amp; Troubleshooting</h2>
 
   <h3>Q: The indicator is slow / chart is lagging</h3>
   <p>Reduce "Max History Bars" to 500 or less. Disable features you don't need (especially Volume Profile and MTF). Close the AI panel when not in use.</p>
@@ -1027,18 +1202,18 @@
   <p><strong>MT5:</strong> Download the latest <code>.ex5</code> file. Replace the old file in your <code>MQL5/Indicators/</code> folder. Restart MT5 or refresh the indicators list.</p>
   <p><strong>MT4:</strong> Download the latest <code>.ex4</code> file. Replace the old file in your <code>MQL4/Indicators/</code> folder. Restart MT4 or refresh the indicators list.</p>
 
-  <h3>Q: What is the Standard layout?</h3>
-  <p>On first load, SMC Pro activates a clean Standard layout with 8 essential features: External Structure, Internal Structure, FVG, Order Blocks, Equal Highs/Lows, Liquidity Sweeps, Premium/Discount, and Labels. All other features (Breaker, OTE, Sessions, Patterns, NDOG/NWOG, MTF, SMT, etc.) are OFF by default but can be toggled on from the dashboard at any time. Your preferences are saved automatically.</p>
+  <h3>Q: Scanner cell disagrees with chart</h3>
+  <p>On the <strong>same symbol and timeframe</strong>, v2.82 guarantees alignment via <code>GetAIVerdict()</code>. Remove and re-attach the indicator if you are on an older build. Comparing M15 cell while viewing H4 chart will naturally differ &mdash; each cell is independent.</p>
 
-  <h3>Q: Where is the multi-symbol scanner documented?</h3>
-  <p>The built-in traffic-light scanner (30 pairs &times; 4 timeframes) is covered in the separate <a href="Smart_Market_Structure_Guide_With_Scanner.html" style="color:var(--gold);">SMC Pro Guide with Scanner</a>. This guide focuses on the single-chart toolkit only.</p>
+  <h3>Q: What is the Standard layout?</h3>
+  <p>On first load, SMC Pro activates a clean Standard layout with 8 essential features: External Structure, Internal Structure, FVG, Order Blocks, Equal Highs/Lows, Liquidity Sweeps, Premium/Discount, and Labels. All other features are OFF by default but can be toggled on. Preferences save automatically.</p>
 </section>
 
 </div>
 
 <footer>
-  <p><strong>SMC Pro v2.82</strong> &mdash; Smart Market Structure Pro for MT4 &amp; MT5 (Single-Chart Edition)</p>
-  <p style="margin-top:8px;"><a href="Smart_Market_Structure_Guide_With_Scanner.html" style="color:var(--gold);">Also available: Full Guide with Multi-Symbol Scanner &rarr;</a></p>
+  <p><strong>SMC Pro v2.82</strong> &mdash; Complete Guide with Multi-Symbol Scanner (MT4 &amp; MT5)</p>
+  <p style="margin-top:8px;"><a href="Smart_Market_Structure_Guide.html" style="color:var(--gold);">Single-Chart Edition (no scanner section) &rarr;</a></p>
   <p>Built by G-Labs &bull; &copy; 2024-2026</p>
   <p style="margin-top:10px;">
     <a href="https://www.g-labs.software" style="color:var(--accent); text-decoration:none;">www.g-labs.software</a> &bull;
