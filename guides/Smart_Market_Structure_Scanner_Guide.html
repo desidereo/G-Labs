@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SMC Pro Scanner v2.82 - Multi-Symbol Scanner Guide</title>
+<style>
+  :root {
+    --bg: #0d0d12;
+    --card: #16161e;
+    --border: #2a2a35;
+    --accent: #26a69a;
+    --bear: #ef5350;
+    --gold: #ffc107;
+    --text: #e0e0e0;
+    --muted: #888;
+    --heading: #fff;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    line-height: 1.7;
+    padding: 0;
+  }
+  .hero {
+    background: linear-gradient(135deg, #0a1628 0%, #0d2818 50%, #1a0a28 100%);
+    padding: 80px 40px;
+    text-align: center;
+    border-bottom: 2px solid var(--accent);
+  }
+  .hero h1 { font-size: 2.8em; color: var(--accent); margin-bottom: 10px; letter-spacing: 1px; }
+  .hero .sub { font-size: 1.25em; color: var(--gold); margin-bottom: 20px; }
+  .hero p { color: var(--muted); max-width: 760px; margin: 0 auto; font-size: 1.05em; }
+  .hero .version { display: inline-block; margin-top: 16px; padding: 6px 16px; background: rgba(38,166,154,0.2); border: 1px solid var(--accent); border-radius: 20px; color: var(--accent); font-size: 0.9em; font-weight: bold; }
+  .container { max-width: 960px; margin: 0 auto; padding: 40px 30px; }
+  .toc { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 30px; margin-bottom: 50px; }
+  .toc h2 { color: var(--accent); margin-bottom: 15px; font-size: 1.5em; }
+  .toc ol { padding-left: 25px; }
+  .toc li { margin: 6px 0; }
+  .toc a { color: var(--gold); text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+  section { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 35px; margin-bottom: 30px; }
+  h2 { color: var(--accent); font-size: 1.6em; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  h3 { color: var(--gold); font-size: 1.15em; margin: 20px 0 10px; }
+  p { margin-bottom: 12px; }
+  ul, ol { padding-left: 25px; margin-bottom: 15px; }
+  li { margin: 5px 0; }
+  strong { color: var(--heading); }
+  .bull { color: var(--accent); font-weight: bold; }
+  .bear { color: var(--bear); font-weight: bold; }
+  .gold { color: var(--gold); font-weight: bold; }
+  .tip { background: #1a2a1a; border-left: 4px solid var(--accent); padding: 15px 20px; border-radius: 0 8px 8px 0; margin: 15px 0; }
+  .warn { background: #2a1a1a; border-left: 4px solid var(--bear); padding: 15px 20px; border-radius: 0 8px 8px 0; margin: 15px 0; }
+  .key { background: #1a1a2a; border-left: 4px solid var(--gold); padding: 15px 20px; border-radius: 0 8px 8px 0; margin: 15px 0; }
+  table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+  th, td { padding: 10px 14px; border: 1px solid var(--border); text-align: left; }
+  th { background: #1a1a25; color: var(--accent); }
+  code { background: #1e1e2e; padding: 2px 8px; border-radius: 4px; font-family: 'Consolas', monospace; color: var(--gold); }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.85em; font-weight: bold; }
+  .badge-bull { background: #0a3a2a; color: var(--accent); }
+  .badge-bear { background: #3a0a0a; color: var(--bear); }
+  .badge-gold { background: #3a3a0a; color: var(--gold); }
+  footer { text-align: center; padding: 40px; color: var(--muted); border-top: 1px solid var(--border); }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  /* Scanner mockup */
+  .scanner-mock {
+    background: #121218;
+    border: 1px solid #333;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 20px 0;
+    font-size: 13px;
+  }
+  .scanner-mock .scn-head {
+    background: #1e1e26;
+    padding: 10px 14px;
+    color: var(--gold);
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+  }
+  .scanner-mock .scn-best {
+    background: #2a2200;
+    border-bottom: 1px solid #665500;
+    padding: 8px 14px;
+    color: var(--gold);
+    font-size: 12px;
+  }
+  .scanner-mock .scn-grid {
+    display: grid;
+    grid-template-columns: 88px repeat(4, 1fr);
+    gap: 4px;
+    padding: 10px;
+  }
+  .scanner-mock .scn-hdr { color: #666; font-weight: bold; text-align: center; padding: 4px; font-size: 11px; }
+  .scanner-mock .scn-sym { color: #ccc; font-weight: bold; padding: 8px 4px; }
+  .scanner-mock .scn-cell {
+    text-align: center;
+    padding: 8px 4px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 11px;
+  }
+  .scn-buy  { background: #1b5e20; color: #a5d6a7; }
+  .scn-sell { background: #7f1d1d; color: #ef9a9a; }
+  .scn-wait { background: #37474f; color: #b0bec5; }
+  .scn-highlight { outline: 2px solid var(--gold); box-shadow: 0 0 8px rgba(255,193,7,0.4); }
+  .scanner-mock .scn-filters {
+    display: flex;
+    gap: 4px;
+    padding: 8px 10px;
+    border-top: 1px solid #333;
+  }
+  .scanner-mock .scn-fbtn {
+    flex: 1;
+    text-align: center;
+    padding: 5px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: bold;
+  }
+  .scanner-mock .scn-legend {
+    padding: 6px 14px;
+    font-size: 11px;
+    color: #666;
+    border-top: 1px solid #333;
+  }
+  .flow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  .flow-step {
+    background: #1a2a2a;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+    min-width: 130px;
+    flex: 1;
+    max-width: 160px;
+  }
+  .flow-step .n {
+    background: var(--accent);
+    color: #fff;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 13px;
+  }
+  .cheat { display: grid; grid-template-columns: 130px 1fr; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin: 15px 0; }
+  .cheat > div { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  .cheat > div:nth-child(odd) { background: #1a1a25; color: var(--gold); font-weight: bold; }
+  @media (max-width: 768px) {
+    .hero h1 { font-size: 2em; }
+    .container { padding: 20px 15px; }
+    section { padding: 20px; }
+    .scanner-mock .scn-grid { font-size: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>SMC Pro Multi-Symbol Scanner</h1>
+  <div class="sub">Traffic-light setup finder built into Smart Market Structure Pro</div>
+  <p>Watch up to 30 pairs across four timeframes at once. Every cell shows <strong>BUY</strong>, <strong>SELL</strong>, or <strong>WAIT</strong> with a confluence score from 0&ndash;10 &mdash; using the same engine as the chart, dashboard, and AI Trade Idea panel.</p>
+  <div class="version">v2.82 &mdash; MT4 &amp; MT5</div>
+</div>
+
+<div class="container">
+
+<div class="toc">
+  <h2>Table of Contents</h2>
+  <ol>
+    <li><a href="#overview">What Is the SMC Scanner?</a></li>
+    <li><a href="#quickstart">Quick Start (60 Seconds)</a></li>
+    <li><a href="#grid">Reading the Grid</a></li>
+    <li><a href="#filters">Filters &amp; Buttons</a></li>
+    <li><a href="#confluence">Confluence Score &amp; Signals</a></li>
+    <li><a href="#alignment">Chart &amp; Scanner Alignment</a></li>
+    <li><a href="#ai">AI Trade Idea Panel</a></li>
+    <li><a href="#workflow">5-Step Trading Workflow</a></li>
+    <li><a href="#settings">Scanner Settings Reference</a></li>
+    <li><a href="#multichart">Multi-Chart Setup</a></li>
+    <li><a href="#alerts">Scanner Alerts</a></li>
+    <li><a href="#faq">FAQ &amp; Troubleshooting</a></li>
+    <li><a href="#fullguide">Full SMC Pro Guide</a></li>
+  </ol>
+</div>
+
+<section id="overview">
+  <h2>1. What Is the SMC Scanner?</h2>
+  <p>From <strong>v2.81</strong> onward, Smart Market Structure Pro includes a built-in <strong>multi-symbol scanner</strong>. It is not a separate product &mdash; it lives inside the main indicator and reads the same Smart Money Concepts logic you see on the chart.</p>
+
+  <h3>What it does</h3>
+  <ul>
+    <li>Monitors up to <strong>30 symbols</strong> (default: 12 majors + XAUUSD, XAGUSD, US500)</li>
+    <li>Scans <strong>4 timeframes</strong> per symbol (default: M15, H1, H4, D1)</li>
+    <li>Shows a <strong>traffic-light cell</strong> for each pair/timeframe: green BUY, red SELL, grey WAIT</li>
+    <li>Displays a <strong>confluence score 0&ndash;10</strong> in every cell</li>
+    <li>Highlights the <strong>BEST</strong> setup in the banner at the top</li>
+    <li><strong>Click any cell</strong> to open that symbol and timeframe on a new chart</li>
+  </ul>
+
+  <div class="key">
+    <strong>One brain, three views:</strong> The scanner grid, the dashboard confluence meter, and the AI Trade Idea panel all use the same verdict rules. A cell that says <span class="bull">BUY 6</span> on GBPUSD H4 will still say BUY when you open that chart (not flip to WAIT unless market conditions genuinely change).
+  </div>
+
+  <div class="scanner-mock">
+    <div class="scn-head"><span>SMC SCANNER</span><span style="color:#888;font-weight:normal;">? &nbsp; Hide</span></div>
+    <div class="scn-best">&#9733; BEST: BUY GBPUSD on H4 &mdash; score 7/10</div>
+    <div class="scn-grid">
+      <div class="scn-hdr">PAIR</div><div class="scn-hdr">M15</div><div class="scn-hdr">H1</div><div class="scn-hdr">H4</div><div class="scn-hdr">D1</div>
+      <div class="scn-sym">EURUSD</div>
+      <div class="scn-cell scn-wait">WAIT 3</div><div class="scn-cell scn-wait">WAIT 2</div>
+      <div class="scn-cell scn-sell">SELL 6</div><div class="scn-cell scn-wait">WAIT 4</div>
+      <div class="scn-sym">GBPUSD</div>
+      <div class="scn-cell scn-wait">WAIT 2</div><div class="scn-cell scn-buy">BUY 5</div>
+      <div class="scn-cell scn-buy scn-highlight">BUY 7</div><div class="scn-cell scn-wait">WAIT 3</div>
+      <div class="scn-sym">XAUUSD</div>
+      <div class="scn-cell scn-buy">BUY 6</div><div class="scn-cell scn-wait">WAIT 4</div>
+      <div class="scn-cell scn-wait">WAIT 2</div><div class="scn-cell scn-sell">SELL 5</div>
+    </div>
+    <div class="scn-filters">
+      <div class="scn-fbtn" style="background:#665500;color:#ffc107;">ALL</div>
+      <div class="scn-fbtn" style="background:#1b5e20;color:#fff;">BUY</div>
+      <div class="scn-fbtn" style="background:#7f1d1d;color:#fff;">SELL</div>
+      <div class="scn-fbtn" style="background:#ffc107;color:#000;">BEST</div>
+      <div class="scn-fbtn" style="background:#333;color:#aaa;">SORT</div>
+      <div class="scn-fbtn" style="background:#333;color:#aaa;">RFRSH</div>
+    </div>
+    <div class="scn-legend">Green = BUY &nbsp; Red = SELL &nbsp; Grey = WAIT &nbsp;|&nbsp; Number = score 0&ndash;10 &nbsp;|&nbsp; Click cell = open chart</div>
+  </div>
+</section>
+
+<section id="quickstart">
+  <h2>2. Quick Start (60 Seconds)</h2>
+  <ol>
+    <li>Install <code>SmartMarketStructure.ex5</code> (MT5) or <code>SmartMarketStructure_MT4.ex4</code> (MT4) and drag it onto any chart.</li>
+    <li>On the dashboard, click the <span class="gold">Scanner</span> button (or set <code>InpScnDefaultVisible = true</code> in inputs to show it on load).</li>
+    <li>Wait a few seconds for history to preload for all symbols and timeframes.</li>
+    <li>Look for <span class="bull">green</span> or <span class="bear">red</span> cells with score <strong>5 or higher</strong>.</li>
+    <li>Read the gold <strong>BEST</strong> banner for the strongest setup right now.</li>
+    <li>Click that cell to open the chart and confirm with the AI Trade Idea panel.</li>
+  </ol>
+  <div class="tip">
+    <strong>First time?</strong> Press <strong>?</strong> on the scanner header for the built-in Quick Guide. The grid minimises automatically while the popup is open so you can read it clearly.
+  </div>
+</section>
+
+<section id="grid">
+  <h2>3. Reading the Grid</h2>
+  <p>Each cell is one symbol + one timeframe. The text tells you everything in plain English:</p>
+
+  <table>
+    <tr><th>Cell shows</th><th>Meaning</th><th>What to do</th></tr>
+    <tr>
+      <td><span class="badge badge-bull">BUY 7</span></td>
+      <td>Bullish structure + price in Discount + score &ge; 5</td>
+      <td>Click to open chart. Confirm OB/FVG and use AI Trade Idea for Entry/SL/TP.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-bear">SELL 6</span></td>
+      <td>Bearish structure + price in Premium + score &ge; 5</td>
+      <td>Same &mdash; open chart and verify before entry.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-gold">WAIT 4</span></td>
+      <td>Trend direction seen but zone or score not ready</td>
+      <td>Watchlist only. Do not force the trade.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-gold">WAIT 2</span></td>
+      <td>Often: correct trend but wrong Premium/Discount side</td>
+      <td>Wait for pullback (e.g. bullish trend but price still in Premium).</td>
+    </tr>
+  </table>
+
+  <h3>Legend explained</h3>
+  <ul>
+    <li><strong>Green background</strong> = actionable BUY setup (score &ge; 5, in Discount)</li>
+    <li><strong>Red background</strong> = actionable SELL setup (score &ge; 5, in Premium)</li>
+    <li><strong>Grey background</strong> = WAIT &mdash; conditions not met yet</li>
+    <li><strong>Number (0&ndash;10)</strong> = confluence score for that cell</li>
+    <li><strong>Gold outline</strong> = current BEST pick (also shown in the banner)</li>
+    <li><strong>3b</strong> in the Why popup = last BOS/CHoCH was 3 bars ago (freshness hint)</li>
+  </ul>
+
+  <div class="tip">
+    Press the small <strong>?</strong> next to any setup (via the Why popup) for a plain-English breakdown: trend, Premium/Discount zone, Order Block, FVG, session windows, and why the score is what it is.
+  </div>
+</section>
+
+<section id="filters">
+  <h2>4. Filters &amp; Buttons</h2>
+
+  <div class="cheat">
+    <div>ALL</div><div>Show every symbol row (default view)</div>
+    <div>BUY</div><div>Only symbols with at least one green BUY cell</div>
+    <div>SELL</div><div>Only symbols with at least one red SELL cell</div>
+    <div>BEST</div><div>Top setups by score &mdash; pairs with the strongest actionable cells</div>
+    <div>SORT</div><div>Re-order rows (by score, symbol name, etc. &mdash; per input setting)</div>
+    <div>RFRSH</div><div>Force an immediate full re-scan of all cells</div>
+    <div>Hide</div><div>Collapse the scanner grid (Show Scanner button reappears)</div>
+    <div>?</div><div>Open the built-in Quick Guide for the scanner</div>
+  </div>
+
+  <div class="key">
+    <strong>BEST filter tip:</strong> Use BEST when you want one answer: &ldquo;What should I look at right now?&rdquo; The gold banner always shows the top pick even in ALL mode.
+  </div>
+</section>
+
+<section id="confluence">
+  <h2>5. Confluence Score &amp; Signals</h2>
+  <p>Every cell score uses the same confluence engine as the dashboard. Points are added when factors align with the trade direction:</p>
+
+  <table class="score-table">
+    <tr><th>Factor</th><th>Points</th><th>Description</th></tr>
+    <tr><td>Trend alignment</td><td>+2</td><td>External structure confirms direction (last confirmed BOS/CHoCH)</td></tr>
+    <tr><td>Premium / Discount</td><td>+2</td><td>Discount for buys, Premium for sells</td></tr>
+    <tr><td>Inside Order Block</td><td>+2</td><td>Price touching fresh OB from the last structure break</td></tr>
+    <tr><td>Liquidity sweep</td><td>+2</td><td>Recent sweep in your direction (&lt; 30 bars)</td></tr>
+    <tr><td>Inside FVG</td><td>+1</td><td>Price inside an unmitigated fair value gap</td></tr>
+    <tr><td>Killzone</td><td>+1</td><td>London or New York session window</td></tr>
+    <tr><td>Silver Bullet</td><td>+1</td><td>ICT Silver Bullet time window</td></tr>
+  </table>
+
+  <table>
+    <tr><th>Score</th><th>Rating</th><th>Action</th></tr>
+    <tr><td>0&ndash;4</td><td class="bear">Low</td><td>No trade. Cell shows WAIT.</td></tr>
+    <tr><td>5&ndash;6</td><td class="gold">Minimum</td><td>BUY/SELL signal possible if zone is correct.</td></tr>
+    <tr><td>7&ndash;10</td><td class="bull">High</td><td>A+ setup. BEST filter targets these.</td></tr>
+  </table>
+
+  <div class="warn">
+    <strong>Rule of thumb:</strong> Never take a trade below score 5. The scanner enforces this automatically &mdash; sub-5 setups always show as WAIT even if trend is clear.
+  </div>
+</section>
+
+<section id="alignment">
+  <h2>6. Chart &amp; Scanner Alignment</h2>
+  <p>A common question: <em>&ldquo;The scanner showed BUY 6 from my H4 chart, but when I opened M15 it changed.&rdquo;</em> From v2.82, the scanner and chart are designed to agree:</p>
+
+  <ul>
+    <li><strong>Current-chart cell</strong> (the row/column matching the chart you are on) reads directly from the live engine &mdash; identical to the dashboard and AI Trade Idea.</li>
+    <li><strong>Off-chart cells</strong> use the same trend rules (confirmed BOS/CHoCH), Premium/Discount gates, and confluence weights as the main indicator.</li>
+    <li>Clicking a cell opens that exact symbol + timeframe. The cell for that chart then switches to live-engine mode and should match what you saw before opening (unless price moved).</li>
+  </ul>
+
+  <div class="tip">
+    <strong>How to verify:</strong> Note a cell (e.g. GBPUSD H4 BUY 7) from another chart. Click it. The H4 cell on the new chart should still read BUY 7 and the dashboard should show BULLISH with a similar confluence score.
+  </div>
+
+  <h3>When WAIT is correct (not a bug)</h3>
+  <ul>
+    <li>Bullish trend but price in <strong>Premium</strong> (wait for Discount pullback)</li>
+    <li>Bearish trend but price in <strong>Discount</strong> (wait for Premium rally)</li>
+    <li>Right zone but score still building (&lt; 5)</li>
+    <li>Off-hours with no killzone/Silver Bullet bonus</li>
+  </ul>
+</section>
+
+<section id="ai">
+  <h2>7. AI Trade Idea Panel</h2>
+  <p>The <strong>AI Trade Idea</strong> panel (dashboard button) is the single-chart version of what the scanner finds across many pairs. They share the same verdict engine.</p>
+
+  <table>
+    <tr><th>Signal</th><th>Meaning</th></tr>
+    <tr><td><span class="bull">BUY</span></td><td>Active buy setup. Confluence &ge; 5. Entry, Stop Loss, and Take Profit lines drawn on chart.</td></tr>
+    <tr><td><span class="bear">SELL</span></td><td>Active sell setup. Confluence &ge; 5. Entry/SL/TP shown.</td></tr>
+    <tr><td><span class="gold">WAIT</span></td><td>Direction identified but conditions not met. Levels may still show as targets.</td></tr>
+  </table>
+
+  <p>The panel also includes:</p>
+  <ul>
+    <li><strong>Setup grade</strong> (0&ndash;10) matching the scanner cell score</li>
+    <li><strong>Plain-English reason</strong> (e.g. &ldquo;Bullish trend + price in Discount + confluence&rdquo;)</li>
+    <li><strong>Risk calculator</strong> &mdash; lot size from your balance and risk %</li>
+    <li>Structure-aware stop placement below/above protective swings</li>
+  </ul>
+
+  <div class="key">
+    <strong>Workflow:</strong> Scanner finds the pair &rarr; you click the cell &rarr; AI Trade Idea confirms and gives you Entry/SL/TP.
+  </div>
+</section>
+
+<section id="workflow">
+  <h2>8. 5-Step Trading Workflow</h2>
+  <div class="flow">
+    <div class="flow-step"><div class="n">1</div><strong>Scan</strong><br><small>BEST filter or green/red cells</small></div>
+    <div class="flow-step"><div class="n">2</div><strong>Click</strong><br><small>Open that pair + TF</small></div>
+    <div class="flow-step"><div class="n">3</div><strong>Confirm</strong><br><small>Dashboard trend + P/D zone</small></div>
+    <div class="flow-step"><div class="n">4</div><strong>Trigger</strong><br><small>CHoCH on internal + OB/FVG</small></div>
+    <div class="flow-step"><div class="n">5</div><strong>Execute</strong><br><small>AI Idea Entry/SL/TP</small></div>
+  </div>
+  <p>For the full SMC methodology (structure, zones, liquidity, ICT time, risk rules), see the <a href="Smart_Market_Structure_Guide.html" style="color:var(--gold);">complete SMC Pro user guide</a>.</p>
+</section>
+
+<section id="settings">
+  <h2>9. Scanner Settings Reference</h2>
+  <p>Right-click chart &rarr; <strong>Indicators List</strong> &rarr; SmartMarketStructure &rarr; <strong>Inputs</strong>. Scroll to the scanner sections:</p>
+
+  <h3>Multi-Symbol Scanner</h3>
+  <table>
+    <tr><th>Input</th><th>Default</th><th>Description</th></tr>
+    <tr><td>Enable scanner</td><td>true</td><td>Master on/off switch</td></tr>
+    <tr><td>Visible by default</td><td>false</td><td>Show grid immediately on attach</td></tr>
+    <tr><td>Scan when hidden</td><td>false</td><td>Off saves CPU on slave charts</td></tr>
+  </table>
+
+  <h3>Symbols &amp; Timeframes</h3>
+  <table>
+    <tr><th>Input</th><th>Description</th></tr>
+    <tr><td>Symbols</td><td>Comma-separated list, max 30 (e.g. EURUSD,GBPUSD,XAUUSD)</td></tr>
+    <tr><td>Broker suffix</td><td><code>AUTO</code> detects suffix, or set <code>m</code>, <code>.a</code>, <code>-pro</code>, etc.</td></tr>
+    <tr><td>TF1&ndash;TF4</td><td>Enable/disable each column and pick timeframe (default M15, H1, H4, D1)</td></tr>
+  </table>
+
+  <h3>Display &amp; Refresh</h3>
+  <table>
+    <tr><th>Input</th><th>Default</th><th>Description</th></tr>
+    <tr><td>Panel X / Y</td><td>290 / 40</td><td>Scanner position on chart</td></tr>
+    <tr><td>Minimize for popup</td><td>true</td><td>Grid hides while ? or Why popup is open</td></tr>
+    <tr><td>Timer interval</td><td>2 sec</td><td>How often cells refresh</td></tr>
+    <tr><td>Force refresh</td><td>20 sec</td><td>Full re-scan interval</td></tr>
+    <tr><td>BEST top N</td><td>5</td><td>How many symbols BEST filter considers</td></tr>
+    <tr><td>BEST min score</td><td>3</td><td>Floor score for BEST filter rows</td></tr>
+  </table>
+
+  <h3>Alerts</h3>
+  <table>
+    <tr><th>Input</th><th>Default</th><th>Description</th></tr>
+    <tr><td>Alert enabled</td><td>true</td><td>Master alert switch</td></tr>
+    <tr><td>Alert score</td><td>7</td><td>Fire alert when a cell reaches this score</td></tr>
+    <tr><td>Popup / Sound / Push</td><td>varies</td><td>Notification types</td></tr>
+  </table>
+</section>
+
+<section id="multichart">
+  <h2>10. Multi-Chart Setup</h2>
+  <p>Many traders run one <strong>master chart</strong> with the scanner visible and several <strong>slave charts</strong> for individual pairs.</p>
+  <ul>
+    <li><strong>Master chart:</strong> <code>InpScnDefaultVisible = true</code>, scanner on, full symbol list.</li>
+    <li><strong>Slave charts:</strong> Click <strong>Hide</strong> on the scanner, or set <code>Scan when hidden = false</code> to save CPU.</li>
+    <li>Use <strong>Quick Switch</strong> buttons on the dashboard to jump pairs without the Navigator.</li>
+    <li>Optional: <code>InpPairStripFollowScanner</code> mirrors the first 8 scanner symbols on the dashboard strip.</li>
+  </ul>
+  <div class="tip">
+    The floating <strong>Show Scanner</strong> button appears when the grid is hidden &mdash; one click restores it on that chart only.
+  </div>
+</section>
+
+<section id="alerts">
+  <h2>11. Scanner Alerts</h2>
+  <p>When a cell score crosses your alert threshold (default <strong>7</strong>), the scanner can notify you via:</p>
+  <ul>
+    <li>MT5 popup alert</li>
+    <li>Sound</li>
+    <li>Push notification (if enabled and configured in MT5)</li>
+  </ul>
+  <p>Alerts fire when score <strong>increases to</strong> the threshold, not on every refresh, to avoid spam. Changing pairs on the dashboard temporarily suppresses duplicate alerts for the same symbol.</p>
+</section>
+
+<section id="faq">
+  <h2>12. FAQ &amp; Troubleshooting</h2>
+
+  <h3>Q: All cells show WAIT 0 or grey empty cells</h3>
+  <p>History may still be downloading. Wait 10&ndash;30 seconds after attach. If H1 stays empty, check <strong>Market Watch</strong> &mdash; symbols must be visible. Try pressing <strong>RFRSH</strong>.</p>
+
+  <h3>Q: Scanner rows are blank / wrong symbols</h3>
+  <p>Your broker likely uses a suffix (e.g. <code>EURUSDm</code>). Set <code>Broker suffix</code> to <code>AUTO</code> or your broker&rsquo;s suffix in scanner inputs.</p>
+
+  <h3>Q: Scanner says BUY but dashboard says WAIT</h3>
+  <p>From v2.82 this should not happen on the <strong>same symbol and timeframe</strong>. If it does, remove and re-attach the indicator to load the latest build. Make sure chart timeframe matches the cell you are comparing.</p>
+
+  <h3>Q: Cell changed after I clicked it</h3>
+  <p>If score dropped slightly (e.g. BUY 6 &rarr; WAIT 4), price may have moved out of Discount/Premium or an Order Block was mitigated. Small score wobble (&plusmn;1) is possible; direction flips on the same bar are not expected in v2.82+.</p>
+
+  <h3>Q: Can I use the scanner without the chart drawings?</h3>
+  <p>Yes. Hide individual layers (OB, FVG, etc.) via dashboard toggles. The scanner still analyses structure internally. For the cleanest view, use Standard layout on the main guide.</p>
+
+  <h3>Q: Is there a standalone scanner indicator?</h3>
+  <p>The recommended setup is the <strong>built-in scanner inside SMC Pro v2.82+</strong> so chart, scanner, and AI Trade Idea stay aligned. A legacy standalone scanner file exists for development but the embedded version is what ships with the main product.</p>
+
+  <h3>Q: Scanner covers my help popup</h3>
+  <p>Enable <code>Minimize for popup</code> (default on). The grid collapses while Quick Guide or Why-this-score is open.</p>
+</section>
+
+<section id="fullguide">
+  <h2>13. Full SMC Pro Guide</h2>
+  <p>This guide covers the <strong>multi-symbol scanner only</strong>. For the complete Smart Market Structure toolkit &mdash; BOS/CHoCH, Order Blocks, FVG, liquidity sweeps, ICT sessions, OTE, MTF dashboard, candle patterns, and the full trading model:</p>
+  <p style="margin-top:16px;">
+    <a href="Smart_Market_Structure_Guide.html" style="display:inline-block;background:var(--accent);color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:bold;">Open Complete SMC Pro User Guide &rarr;</a>
+  </p>
+  <p style="margin-top:20px;">Product page: <a href="https://www.mql5.com/en/market/product/165678" style="color:var(--gold);">Smart Market Structure Pro on MQL5 Market</a></p>
+</section>
+
+</div>
+
+<footer>
+  <p><strong>SMC Pro Multi-Symbol Scanner v2.82</strong> &mdash; Built into Smart Market Structure Pro for MT4 &amp; MT5</p>
+  <p>Built by G-Labs &bull; &copy; 2024&ndash;2026</p>
+  <p style="margin-top:10px;">
+    <a href="https://www.g-labs.software">www.g-labs.software</a> &bull;
+    <a href="mailto:info@g-labs.software">info@g-labs.software</a> &bull;
+    <a href="Smart_Market_Structure_Guide.html">Full SMC Guide</a>
+  </p>
+  <p style="margin-top:10px; font-size:0.9em;">
+    <strong>Disclaimer:</strong> This indicator is an analysis tool, not financial advice. Trading involves substantial risk of loss. Always use proper risk management.
+  </p>
+</footer>
+
+</body>
+</html>
