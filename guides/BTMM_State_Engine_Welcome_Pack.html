@@ -611,10 +611,10 @@
 <!-- ========== COVER PAGE ========== -->
 <div class="page cover">
 <div class="hero">
-  <div class="hero-badge">MetaTrader 5 &amp; MetaTrader 4 &nbsp;·&nbsp; v1.63</div>
+  <div class="hero-badge">MetaTrader 5 &amp; MetaTrader 4 &nbsp;·&nbsp; v1.64</div>
   <h1>BTMM STATE ENGINE PRO</h1>
   <div class="subtitle">The Professional Market Maker Cycle Tracker</div>
-  <div class="version">Powered by the Beat The Market Maker Methodology — Automated by G-Labs<br>Available on MetaTrader 4 &amp; MetaTrader 5 &nbsp;·&nbsp; <strong style="color:var(--gold);">v1.63 — UI scaling, alert price levels, per-signal level filter</strong></div>
+  <div class="version">Powered by the Beat The Market Maker Methodology — Automated by G-Labs<br>Available on MetaTrader 4 &amp; MetaTrader 5 &nbsp;·&nbsp; <strong style="color:var(--gold);">v1.64 — DST-aware killzones, live ADR targets, clearer scores &amp; help</strong></div>
 
   <div class="hero-features">
     <div class="hero-feature">
@@ -646,42 +646,47 @@
 </div>
 </div><!-- /page cover -->
 
-<!-- ========== WHAT'S NEW IN v1.63 ========== -->
+<!-- ========== WHAT'S NEW IN v1.64 ========== -->
 <div class="page accent">
 <section>
-  <h2><span class="part-num" style="color:var(--gold);">v1.63</span>What's New in This Release</h2>
-  <p style="font-size:13px; color:var(--text-light);">Six headline upgrades focused on usability, screen-fit, and making alerts useful enough to trade from. Defaults match v1.62 behaviour — every change is opt-in via inputs.</p>
+  <h2><span class="part-num" style="color:var(--gold);">v1.64</span>What's New in This Release</h2>
+  <p style="font-size:13px; color:var(--text-light);">Six headline upgrades focused on correct session timing year-round, live trade targets, and clearer on-chart guidance. Defaults match prior out-of-box behaviour — reload after DST changeovers to pick up new offsets.</p>
 
   <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:14px; margin-top:18px;">
     <div style="background:white; border:1px solid var(--border); border-radius:10px; padding:16px;">
-      <div style="font-weight:700; color:var(--blue); margin-bottom:6px;">📐 UI scale &amp; per-area fonts</div>
-      <div style="font-size:12px; color:var(--text-light);">One knob (<code>InpUIGlobalScalePct</code> 50–200) scales every pixel and default font. Plus 17 per-area font-point overrides for HiDPI / 4K / Mac users. Two cross-platform font-family inputs.</div>
+      <div style="font-weight:700; color:var(--blue); margin-bottom:6px;">🌍 DST-aware killzones</div>
+      <div style="font-size:12px; color:var(--text-light);">London and NY killzone shading now shifts for <strong>BST / EDT</strong> summer time. Anchors stay on GMT so sessions fire at the same real-world moment worldwide — winter behaviour unchanged.</div>
     </div>
     <div style="background:white; border:1px solid var(--border); border-radius:10px; padding:16px;">
-      <div style="font-weight:700; color:var(--blue); margin-bottom:6px;">🔔 Entry levels in alerts</div>
-      <div style="font-size:12px; color:var(--text-light);">Scanner SIG and chart entry alerts now append <code>E:price SL:price TP1:price TP2:price</code> at each symbol's correct precision. Toggle: <code>InpAlertIncludeLevels</code>.</div>
+      <div style="font-weight:700; color:var(--blue); margin-bottom:6px;">⏱️ Auto vs Manual sessions</div>
+      <div style="font-size:12px; color:var(--text-light);">New master switch <code>InpAutoSessionTimes</code> (default <strong>ON</strong>). OFF = hour inputs are used exactly as entered in <strong>broker server time</strong>. Startup log prints detected sessions for support checks.</div>
     </div>
     <div style="background:white; border:1px solid var(--border); border-radius:10px; padding:16px;">
-      <div style="font-weight:700; color:var(--blue); margin-bottom:6px;">🎚️ Per-signal level filter</div>
-      <div style="font-size:12px; color:var(--text-light);">Restrict T1/T2/T3, ID50, and Safety alerts to specific cycle-level ranges via <code>InpAlert*MinLevel</code> / <code>*MaxLevel</code>. Defaults <code>1/9</code> = any level.</div>
+      <div style="font-weight:700; color:var(--blue); margin-bottom:6px;">🎯 Live ADR entry targets</div>
+      <div style="font-size:12px; color:var(--text-light);"><strong>Grey [ADR] off:</strong> TP1/TP2 from live Asian range (1× and 2× from entry). <strong>Blue [ADR] on:</strong> TP1 from today's low/high ± 1 ADR; TP2 another 0.5 ADR beyond. Lines update when you toggle — no stale cached TPs.</div>
     </div>
     <div style="background:white; border:1px solid var(--border); border-radius:10px; padding:16px;">
-      <div style="font-weight:700; color:var(--blue); margin-bottom:6px;">📊 Plain-English status line</div>
-      <div style="font-size:12px; color:var(--text-light);">"L2 UP PFL | Today 65 / Avg 120 pips (54%) | Local 14:32 Broker 16:32" — anchored to the dashboard layout so it never drifts. PFL on buy cycles, PFH on sell cycles.</div>
+      <div style="font-weight:700; color:var(--blue); margin-bottom:6px;">🕐 Steady status clocks</div>
+      <div style="font-size:12px; color:var(--text-light);">Compact format: <code>Loc HH:MM  Brk HH:MM</code> — <strong>Loc</strong> = your PC time, <strong>Brk</strong> = broker server time. Refreshes on a steady timer so clocks no longer cut off mid-string.</div>
     </div>
     <div style="background:white; border:1px solid var(--border); border-radius:10px; padding:16px;">
-      <div style="font-weight:700; color:var(--blue); margin-bottom:6px;">📖 Paginated scanner ? legend</div>
-      <div style="font-size:12px; color:var(--text-light);">Click the legend title to flip Page 1 / 2. Self-sizing background, widened to 440 px. F1 dashboard guide widened too with a UI Scale &amp; Fonts block added.</div>
+      <div style="font-weight:700; color:var(--blue); margin-bottom:6px;">📖 3-page built-in help</div>
+      <div style="font-size:12px; color:var(--text-light);">Scanner <code>?</code> legend and dashboard F1 guide are now <strong>3 pages</strong> — click the title bar to flip. Page 2 explains Currency Strength numbers and Top Confluence scores in plain English.</div>
     </div>
     <div style="background:white; border:1px solid var(--border); border-radius:10px; padding:16px;">
-      <div style="font-weight:700; color:var(--blue); margin-bottom:6px;">⚡ HTF / scanner performance</div>
-      <div style="font-size:12px; color:var(--text-light);">Chart HTF panel cached per H4/D1 bar. Per-symbol H4/D1 trends cached on <code>SymbolState</code> so the scanner HTF column and Top Confluence skip indicator reads on every refresh. Faster initial load.</div>
+      <div style="font-weight:700; color:var(--blue); margin-bottom:6px;">✕ Quick remove + score clarity</div>
+      <div style="font-size:12px; color:var(--text-light);">Red <strong>[X]</strong> on the dashboard removes the indicator in one click. Currency Strength shows 0–1 strength with colour = direction. Top Confluence score = checklist points, not a win %.</div>
     </div>
   </div>
 
   <div class="callout success" style="margin-top:18px;">
     <strong>Safe upgrade</strong>
-    All v1.63 inputs default to existing v1.62 behaviour. Recompile <code>.ex5</code> / <code>.ex4</code>, reload the chart — nothing else needs changing unless you want the new features.
+    Everyone on default settings is unaffected. If you previously used <em>custom</em> session hours, set <code>InpAutoSessionTimes = false</code> so those manual hours take effect. Recompile <code>.ex5</code> / <code>.ex4</code> and reload the chart after a DST changeover.
+  </div>
+
+  <div class="callout info" style="margin-top:14px;">
+    <strong>Also in v1.63</strong>
+    UI scale &amp; per-area fonts, entry price levels in alerts, per-signal level filter, HTF caching, and Mac / 4K / VPS screen-setup guidance — all documented in Parts 11 and 15 below.
   </div>
 </section>
 </div><!-- /page -->
@@ -1643,7 +1648,7 @@
     <div style="font-size:11px; color:rgba(255,255,255,0.4); margin-bottom:8px;">TOOLBAR PREVIEW</div>
     <div class="btn-bar">
       <div class="btn-mock off">MA</div>
-      <div class="btn-mock on">W</div>
+      <div class="btn-mock on">M</div>
       <div class="btn-mock on">Y</div>
       <div class="btn-mock off">P</div>
       <div class="btn-mock on">Z</div>
@@ -1651,8 +1656,9 @@
       <div class="btn-mock on">E</div>
       <div class="btn-mock off">EH</div>
       <div class="btn-mock off">ADR</div>
-      <div class="btn-mock off">ALL</div>
+      <div class="btn-mock off">LVL</div>
       <div class="btn-mock help">?</div>
+      <div class="btn-mock" style="background:#DC3545; color:white;">X</div>
     </div>
     <div style="font-size:11px; color:rgba(255,255,255,0.3); margin-top:8px;">Blue = ON &nbsp;|&nbsp; Grey = OFF &nbsp;|&nbsp; States persist across chart switches</div>
   </div>
@@ -1664,13 +1670,14 @@
       <tr><td><strong>M</strong></td><td>Mayo Line</td><td>200 EMA horizontal reference — the institutional "mayo level"</td></tr>
       <tr><td><strong>Y</strong></td><td>Yesterday</td><td>Yesterday's High and Low as dashed reference lines</td></tr>
       <tr><td><strong>P</strong></td><td>Psychological</td><td>Round-number levels (00, 25, 50, 75 pip increments)</td></tr>
-      <tr><td><strong>Z</strong></td><td>Killzones</td><td>Coloured strips marking London (green) and NY (orange) windows</td></tr>
+      <tr><td><strong>Z</strong></td><td>Killzones</td><td>Coloured strips marking London (green) and NY (orange) windows — DST-aware in Auto mode</td></tr>
       <tr><td><strong>ZN</strong></td><td>Level Zones</td><td>Cycles: Off → ZN1 (AR union) → ZN2 (true candle range)</td></tr>
-      <tr><td><strong>E</strong></td><td>Entry Signals</td><td>Draws entry/SL/TP lines from the scanner's unified engine. Falls back to its own M15 scan if the scanner signal has expired</td></tr>
+      <tr><td><strong>E</strong></td><td>Entry Signals</td><td>Draws entry/SL/TP lines from the scanner's unified engine. TP1/TP2 recompute live when you toggle ADR</td></tr>
       <tr><td><strong>EH</strong></td><td>Entry History</td><td>Historical entry signals across all visible sessions</td></tr>
-      <tr><td><strong>ADR</strong></td><td>Daily Range</td><td>ADR-based TP projection + DR/ADR in status bar</td></tr>
+      <tr><td><strong>ADR</strong></td><td>Daily Range</td><td><strong>Grey (off):</strong> TP from live Asian range (1× / 2×). <strong>Blue (on):</strong> TP from today's low/high ± ADR. Also shows DR/ADR in status bar</td></tr>
       <tr><td><strong>LVL</strong></td><td>Level Filter</td><td>Filter scanner: ALL → L1-2 → L2-3 → L1-3</td></tr>
-      <tr><td><strong>?</strong></td><td>Help</td><td>In-chart quick reference overlay</td></tr>
+      <tr><td><strong>?</strong></td><td>Help</td><td>3-page in-chart quick reference — click the title bar to flip pages</td></tr>
+      <tr><td><strong>X</strong></td><td>Remove</td><td>Removes the indicator from the chart in one click (also visible when minimised)</td></tr>
     </tbody>
   </table>
 </section>
@@ -1933,33 +1940,37 @@
   <h2><span class="part-num">Part 9A</span>Currency Strength Panel</h2>
   <p>A real-time strength meter for the 8 major currencies, derived directly from the scanner's own bias data across all 28 pairs. No external feeds — it's built from the same engine that powers the scanner.</p>
 
-  <div style="background:#0D0D0D; border-radius:8px; padding:12px 16px; font-family:'JetBrains Mono',monospace; font-size:12px; margin:20px 0; max-width:240px;">
-    <div style="background:#555; color:white; padding:4px 10px; border-radius:3px; font-size:11px; text-align:center; margin-bottom:6px;">CURRENCY STRENGTH</div>
-    <div style="color:#5CDB5C; padding:3px 10px; background:#111; margin-bottom:2px; border-radius:3px;">USD &nbsp; <strong>+5</strong></div>
-    <div style="color:#5CDB5C; padding:3px 10px; background:#111; margin-bottom:2px; border-radius:3px;">GBP &nbsp; <strong>+3</strong></div>
-    <div style="color:#888; padding:3px 10px; background:#111; margin-bottom:2px; border-radius:3px;">EUR &nbsp; <strong>0</strong></div>
-    <div style="color:#888; padding:3px 10px; background:#111; margin-bottom:2px; border-radius:3px;">CHF &nbsp; <strong>0</strong></div>
-    <div style="color:#FF6B7A; padding:3px 10px; background:#111; margin-bottom:2px; border-radius:3px;">AUD &nbsp; <strong>-2</strong></div>
-    <div style="color:#FF6B7A; padding:3px 10px; background:#111; margin-bottom:2px; border-radius:3px;">NZD &nbsp; <strong>-3</strong></div>
-    <div style="color:#FF6B7A; padding:3px 10px; background:#111; margin-bottom:2px; border-radius:3px;">CAD &nbsp; <strong>-4</strong></div>
-    <div style="color:#FF6B7A; padding:3px 10px; background:#111; margin-bottom:2px; border-radius:3px;">JPY &nbsp; <strong>-5</strong></div>
+  <div style="background:#0D0D0D; border-radius:8px; padding:12px 16px; font-family:'JetBrains Mono',monospace; font-size:12px; margin:20px 0; overflow-x:auto;">
+    <div style="background:#555; color:white; padding:4px 10px; border-radius:3px; font-size:11px; text-align:center; margin-bottom:6px; display:inline-block;">CURRENCY STRENGTH</div>
+    <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:6px;">
+      <span style="color:#5CDB5C; padding:3px 8px; background:#111; border-radius:3px;">USD 0.8</span>
+      <span style="color:#5CDB5C; padding:3px 8px; background:#111; border-radius:3px;">GBP 0.6</span>
+      <span style="color:#888; padding:3px 8px; background:#111; border-radius:3px;">EUR 0.1</span>
+      <span style="color:#888; padding:3px 8px; background:#111; border-radius:3px;">CHF 0.0</span>
+      <span style="color:#FF6B7A; padding:3px 8px; background:#111; border-radius:3px;">AUD 0.4</span>
+      <span style="color:#FF6B7A; padding:3px 8px; background:#111; border-radius:3px;">NZD 0.5</span>
+      <span style="color:#FF6B7A; padding:3px 8px; background:#111; border-radius:3px;">CAD 0.7</span>
+      <span style="color:#FF6B7A; padding:3px 8px; background:#111; border-radius:3px;">JPY 0.9</span>
+    </div>
+    <div style="font-size:10px; color:rgba(255,255,255,0.45); margin-top:8px;">Left → right: strongest to weakest &nbsp;|&nbsp; Number = strength 0–1 &nbsp;|&nbsp; Colour = direction</div>
   </div>
 
   <h3>How It Works</h3>
-  <p>The panel scores each of the 8 major currencies using the scanner's direction data from all 28 pairs:</p>
+  <p>Each pair in the scanner "votes" for its two currencies based on the pair's current cycle direction:</p>
   <ul>
-    <li>For each bullish pair, the <strong>base currency</strong> gets +1 and the <strong>quote currency</strong> gets -1</li>
-    <li>For each bearish pair, the <strong>base currency</strong> gets -1 and the <strong>quote currency</strong> gets +1</li>
-    <li>Currencies are sorted strongest to weakest</li>
+    <li><strong>Buy cycle:</strong> base currency trends up, quote currency trends down</li>
+    <li><strong>Sell cycle:</strong> base currency trends down, quote currency trends up</li>
+    <li>Votes are averaged per currency, then sorted <strong>strongest → weakest</strong> left to right</li>
   </ul>
 
-  <h3>Colour Coding</h3>
+  <h3>Reading the Numbers &amp; Colours</h3>
   <table>
-    <thead><tr><th>Colour</th><th>Meaning</th></tr></thead>
+    <thead><tr><th>Display</th><th>Meaning</th></tr></thead>
     <tbody>
-      <tr><td><span style="color:#5CDB5C; font-weight:700;">Green</span></td><td>Strong currency (positive score) — look for BUY signals on pairs where this is the base</td></tr>
-      <tr><td><span style="color:#FF6B7A; font-weight:700;">Red</span></td><td>Weak currency (negative score) — look for SELL signals on pairs where this is the base</td></tr>
-      <tr><td><span style="color:#888; font-weight:700;">Grey</span></td><td>Flat / neutral (zero score) — no clear directional bias</td></tr>
+      <tr><td><strong>Number (0–1)</strong></td><td>How strong that currency's vote is — <em>not</em> a pip count or win rate. Higher = more pairs agree this currency is trending that way.</td></tr>
+      <tr><td><span style="color:#5CDB5C; font-weight:700;">Green</span></td><td>Strong / bullish bias — look for BUY signals where this is the base currency</td></tr>
+      <tr><td><span style="color:#FF6B7A; font-weight:700;">Red</span></td><td>Weak / bearish bias — look for SELL signals where this is the base currency</td></tr>
+      <tr><td><span style="color:#888; font-weight:700;">Grey</span></td><td>Flat / neutral — no clear directional vote</td></tr>
     </tbody>
   </table>
 
@@ -2014,7 +2025,7 @@
   </div>
 
   <h3>Scoring System</h3>
-  <p>Each pair earns points for every factor that supports a trade:</p>
+  <p>Each pair earns <strong>checklist points</strong> for every factor that supports a trade. The gold number is <em>not</em> a win percentage — it is a confluence tally. Pairs with an active signal are always listed before pairs that only have structural alignment.</p>
   <table>
     <thead><tr><th>Factor</th><th>Points</th><th>Why It Matters</th></tr></thead>
     <tbody>
@@ -2118,7 +2129,15 @@
   <h2><span class="part-num">Part 11</span>ADR, Status Bar &amp; Alerts</h2>
 
   <h3>Average Daily Range (ADR)</h3>
+  <p>The <strong>[ADR]</strong> toggle controls both the status-bar range readout and how entry TP lines are projected on chart. Targets recompute live when you flip the button — they always match the current mode.</p>
   <table>
+    <thead><tr><th>[ADR] state</th><th>TP1 / TP2 logic</th><th>Best for</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Grey — OFF</strong></td><td>From entry: TP1 = 1× live Asian range, TP2 = 2× live Asian range (uses today's built Asian high/low)</td><td>Intraday room-to-room targets inside the current cycle</td></tr>
+      <tr><td><strong>Blue — ON</strong></td><td>Buy: TP1 = today's low + 1 ADR, TP2 = TP1 + 0.5 ADR. Sell: TP1 = today's high − 1 ADR, TP2 = TP1 − 0.5 ADR</td><td>Full-day extension targets using the 10-day ADR average</td></tr>
+    </tbody>
+  </table>
+  <table style="margin-top:14px;">
     <thead><tr><th>DR vs ADR</th><th>Status</th><th>Action</th></tr></thead>
     <tbody>
       <tr><td>&lt; 60%</td><td>Fresh</td><td>Trade with confidence — plenty of range</td></tr>
@@ -2130,9 +2149,9 @@
 
   <h3>Status Bar</h3>
   <div style="background:#0D0D0D; border-radius:8px; padding:10px 16px; font-family:'JetBrains Mono',monospace; font-size:13px; color:#60A5FA; margin:15px 0;">
-    L2 UP PFL&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Today 65 / Avg 120 pips (54%)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Local 14:32&nbsp; Broker 16:32
+    L2 UP PFL&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Today 65 / Avg 120 pips (54%)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Loc 14:32&nbsp; Brk 16:32
   </div>
-  <p>Plain-English line under the toggles: cycle level + direction + the peak formation that started the cycle (<code>PFL</code> on buy cycles, <code>PFH</code> on sell cycles), today's range vs 10-day average ADR with a percent, and your local clock alongside the broker server clock. A trailing <code>?</code> appears when an unconfirmed peak has just been spotted (e.g. <code>L3 UP PFL?</code>).</p>
+  <p>Plain-English line under the toggles: cycle level + direction + the peak formation that started the cycle (<code>PFL</code> on buy cycles, <code>PFH</code> on sell cycles), today's range vs 10-day average ADR with a percent, and two clocks side by side — <strong>Loc</strong> = your PC local time, <strong>Brk</strong> = broker server time (use these to verify killzone alignment). Refreshes on a steady timer so the clocks never cut off mid-string. A trailing <code>?</code> appears when an unconfirmed peak has just been spotted (e.g. <code>L3 UP PFL?</code>).</p>
 
   <h3>Alert System</h3>
   <p>Alerts fire across <strong>three channels simultaneously</strong>: MT popup, phone push notification, and on-chart toast. Every alert is tagged with the cycle context (e.g. <code>[L3 PFH]</code>) so you can read the message and know exactly where in the cycle the signal fired.</p>
@@ -2293,21 +2312,24 @@
 
     <p>Most settings work well out of the box. The tables below explain each group so you can adjust deliberately when needed.</p>
 
-    <h3 style="color:var(--gold);">Session &amp; Time Settings</h3>
+    <h3 style="color:var(--gold);">Session &amp; Time Settings <span style="color:var(--cyan); font-size:11px; font-weight:700;">v1.64</span></h3>
     <table style="color:var(--text);">
       <thead><tr><th>Input</th><th>Default</th><th>What It Does</th></tr></thead>
       <tbody>
-        <tr><td><code>InpAsianStartHour</code></td><td>0 (Auto)</td><td>Asian session start in broker time. <strong>0 = auto-detect from GMT</strong>. Only change if auto-detect is wrong.</td></tr>
-        <tr><td><code>InpAsianEndHour</code></td><td>8 (Auto)</td><td>Asian session end in broker time. Auto-calculated as start + 8 hours.</td></tr>
-        <tr><td><code>InpLondonStartHour</code></td><td>0 (Auto)</td><td>London Killzone start. 0 = auto-calculate from GMT offset. Override for unusual brokers.</td></tr>
-        <tr><td><code>InpNYStartHour</code></td><td>0 (Auto)</td><td>New York Killzone start. Same auto-detect logic as London.</td></tr>
+        <tr><td><code>InpAutoSessionTimes</code></td><td>true</td><td><strong>ON (recommended):</strong> Asian + London + NY sessions auto-detected from broker GMT, <strong>DST-aware</strong>. <strong>OFF:</strong> the hour inputs below are used exactly as entered in broker server time — including defaults like 10/13 and 15/18.</td></tr>
+        <tr><td><code>InpAsianStartHour</code></td><td>1</td><td>Asian session start in <strong>broker server hours</strong> — used only when Auto = OFF.</td></tr>
+        <tr><td><code>InpAsianEndHour</code></td><td>8</td><td>Asian session end in broker server hours — used only when Auto = OFF.</td></tr>
+        <tr><td><code>InpLondonStartHour</code></td><td>10</td><td>London Killzone start in broker server hours — used only when Auto = OFF.</td></tr>
+        <tr><td><code>InpLondonEndHour</code></td><td>13</td><td>London Killzone end in broker server hours — used only when Auto = OFF.</td></tr>
+        <tr><td><code>InpNYStartHour</code></td><td>15</td><td>NY Killzone start in broker server hours — used only when Auto = OFF.</td></tr>
+        <tr><td><code>InpNYEndHour</code></td><td>18</td><td>NY Killzone end in broker server hours — used only when Auto = OFF.</td></tr>
       </tbody>
     </table>
 
     <div style="border:1px solid rgba(255,215,0,0.3); border-radius:10px; padding:18px; margin:20px 0; background:rgba(255,215,0,0.05);">
-      <div style="font-weight:700; color:var(--gold); margin-bottom:8px;">How Auto-Detection Works</div>
+      <div style="font-weight:700; color:var(--gold); margin-bottom:8px;">How Auto-Detection Works (v1.64)</div>
       <div style="font-size:13px; color:rgba(255,255,255,0.7);">
-        The indicator compares <code style="background:rgba(255,255,255,0.1);color:var(--cyan);">TimeGMT()</code> with broker server time to calculate the GMT offset. It then shifts all session boundaries accordingly. For example, if your broker is GMT+2, the Asian session (normally 00:00 GMT) starts at 02:00 broker time. <strong style="color:white;">This happens automatically every time you attach the indicator.</strong>
+        The indicator compares <code style="background:rgba(255,255,255,0.1);color:var(--cyan);">TimeGMT()</code> with broker server time to calculate the GMT offset, then maps session anchors to broker time. Killzones are anchored to <strong style="color:white;">GMT</strong> (not your PC location) and now shift for London BST and US EDT so the London / NY windows stay aligned with the real session open year-round. On attach, the Experts log prints one line — e.g. <code style="font-size:11px;">Sessions AUTO | EU-DST Y US-DST Y | Asian 01:00-08:00 | London KZ 10:00-13:00</code> — so you can verify instantly. Cross-check with <strong>Loc</strong> and <strong>Brk</strong> on the status bar.
       </div>
     </div>
 
@@ -2537,18 +2559,19 @@
       <div style="background:var(--orange); color:white; border-radius:8px; width:36px; height:36px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px; flex-shrink:0;">⏰</div>
       <h3 style="margin:0; font-size:18px;">Asian Range boxes appear at the wrong time</h3>
     </div>
-    <p>The indicator auto-detects your broker's GMT offset by comparing <code>TimeGMT()</code> with server time. This works on 99% of brokers. If the boxes look wrong:</p>
+    <p>The indicator auto-detects your broker's GMT offset by comparing <code>TimeGMT()</code> with server time when <code>InpAutoSessionTimes = true</code> (default). This works on 99% of brokers. If the boxes or killzone shading look wrong:</p>
     <table>
       <thead><tr><th>Possible Cause</th><th>Fix</th></tr></thead>
       <tbody>
         <tr><td>Weekend / market closed</td><td><code>TimeGMT()</code> needs a live connection. Restart MT5 during market hours (Sunday evening onwards).</td></tr>
-        <tr><td>Broker uses unusual offset</td><td>Manually set <code>InpAsianStartHour</code> and <code>InpAsianEndHour</code> in broker time. Check your broker's server clock against <a href="https://time.is/GMT" style="color:var(--blue);">time.is/GMT</a>.</td></tr>
-        <tr><td>DST changeover</td><td>During Daylight Saving transitions, the offset may be off by 1 hour for a session. The indicator recalculates on every load, so restarting MT5 after the transition fixes it.</td></tr>
+        <tr><td>Broker uses unusual offset</td><td>Set <code>InpAutoSessionTimes = false</code>, then enter <code>InpAsianStartHour</code> / <code>InpAsianEndHour</code> manually in broker time. Check your broker's server clock against <a href="https://time.is/GMT" style="color:var(--blue);">time.is/GMT</a>.</td></tr>
+        <tr><td>DST changeover (summer / winter)</td><td>Killzones are GMT-anchored and DST-aware in Auto mode. After a DST switch, <strong>reload the indicator</strong> (or restart the terminal) so the new offset is picked up. Cross-check <strong>Loc</strong> vs <strong>Brk</strong> on the status bar.</td></tr>
+        <tr><td>Killzone 1 hour late in summer</td><td>Fixed in v1.64 — update to the latest build. London/NY anchors now shift for BST/EDT while winter behaviour stays the same.</td></tr>
       </tbody>
     </table>
     <div class="callout info">
       <strong>How to verify</strong>
-      Check the status bar — it shows both <strong>LC</strong> (local clock) and <strong>SRV</strong> (server time). If SRV matches your broker's chart time, auto-detection is working correctly.
+      Check the status bar — it shows <strong>Loc</strong> (your PC clock) and <strong>Brk</strong> (broker server time). If Brk matches your broker's chart time, auto-detection is working. Also read the one-line startup message in the <strong>Experts</strong> tab after attach.
     </div>
   </div>
 
@@ -2696,15 +2719,19 @@
         </ul>
         <h4 style="margin-top:15px;">Currency Strength</h4>
         <ul>
-          <li><strong style="color:#5CDB5C;">Green</strong> = Strong (positive score)</li>
-          <li><strong style="color:#FF6B7A;">Red</strong> = Weak (negative score)</li>
-          <li><strong style="color:#888;">Grey</strong> = Flat (zero)</li>
+          <li><strong>0–1 number</strong> = vote strength (not pips)</li>
+          <li><strong style="color:#5CDB5C;">Green</strong> = Strong / bullish bias</li>
+          <li><strong style="color:#FF6B7A;">Red</strong> = Weak / bearish bias</li>
+          <li><strong style="color:#888;">Grey</strong> = Flat / neutral</li>
+          <li>Left → right: strongest to weakest</li>
           <li>Trade <strong>strong vs weak</strong> pairs</li>
         </ul>
         <h4 style="margin-top:15px;">Top Confluence</h4>
         <ul>
-          <li>Top 3 pairs ranked by score</li>
+          <li>Top 3 pairs ranked by checklist score</li>
+          <li>Score = points, <strong>not</strong> a win %</li>
           <li>HTF + Peak + KZ + Signal</li>
+          <li>Active signals listed first</li>
           <li><strong>3.0+</strong> = High probability</li>
           <li>E draws from scanner (unified)</li>
         </ul>
