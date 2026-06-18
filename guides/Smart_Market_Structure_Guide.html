@@ -154,9 +154,9 @@
     margin-bottom: 20px;
   }
   .dash-panel-stage {
-    max-width: 360px;
+    max-width: 380px;
     margin: 0 auto 24px;
-    padding: 0 14px;
+    padding: 0 8px;
   }
   .dash-panel-mock {
     width: 100%;
@@ -176,17 +176,18 @@
     display: flex;
     justify-content: space-between;
     align-items: stretch;
-    gap: 6px;
+    gap: 8px;
     border-radius: 5px 5px 0 0;
     font-size: 10px;
   }
-  .dash-panel-mock .d-hdr .d-zone { background: rgba(0,0,0,0.12); border-color: rgba(0,0,0,0.35); }
-  .dash-panel-mock .d-hdr .zone-num { background: #111; color: #ffc107; border-color: #ffc107; }
+  .dash-panel-mock .d-hdr .d-zone-wrap { flex: 1; margin-bottom: 0; }
+  .dash-panel-mock .d-hdr .d-zone-wrap:last-child { flex: 0 0 auto; }
+  .dash-panel-mock .d-hdr .d-zone { background: rgba(0,0,0,0.12); border-color: rgba(0,0,0,0.35); margin-bottom: 0; }
+  .dash-panel-mock .d-hdr .zone-num { background: #111; color: #ffc107; border-color: #ffc107; box-shadow: 0 0 0 1px #ffc107; }
   .dash-panel-mock .d-timer { color: #222; font-family: Consolas, monospace; font-weight: bold; }
   .dash-panel-mock .d-body { padding: 8px; color: #ccc; }
-  .dash-panel-mock .d-row { margin-bottom: 5px; }
-  .dash-panel-mock .d-trends { display: flex; gap: 6px; margin-bottom: 6px; }
-  .dash-panel-mock .d-trends .d-zone { flex: 1; margin-bottom: 0; }
+  .dash-panel-mock .d-trends { display: flex; gap: 8px; margin-bottom: 6px; }
+  .dash-panel-mock .d-trends .d-zone-wrap { flex: 1; margin-bottom: 0; }
   .dash-panel-mock .d-trend { color: #26a69a; font-weight: bold; }
   .dash-panel-mock .d-int { color: #0bb; font-weight: bold; }
   .dash-panel-mock .d-muted { color: #888; font-size: 9px; }
@@ -217,29 +218,30 @@
     border: 1px solid #444;
   }
   .dash-panel-mock .d-pair.active { background: #26a69a; color: #fff; border-color: #26a69a; }
+  .dash-panel-mock .d-zone-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .dash-panel-mock .d-zone-wrap-tall { align-items: flex-start; }
+  .dash-panel-mock .d-zone-wrap-tall .zone-num { margin-top: 22px; }
+  .dash-panel-mock .d-zone-wrap-alert { width: 42%; margin-bottom: 6px; }
   .dash-panel-mock .d-zone {
-    position: relative;
+    flex: 1;
+    min-width: 0;
     border: 2px solid rgba(255, 193, 7, 0.65);
     border-radius: 4px;
-    padding: 5px 8px 5px 30px;
-    margin-bottom: 6px;
+    padding: 5px 8px;
     background: rgba(255, 193, 7, 0.04);
   }
-  .dash-panel-mock .d-zone-tight { padding: 4px 6px 4px 28px; margin-bottom: 4px; }
-  .dash-panel-mock .d-zone-grid { padding: 6px 6px 6px 30px; margin-bottom: 6px; }
-  .dash-panel-mock .d-zone-alert { display: inline-block; width: calc(25% - 2px); padding: 4px 2px 4px 22px; margin: 3px 0 0; vertical-align: top; }
-  .dash-panel-mock .d-zone-alert .zone-num { left: -10px; width: 20px; height: 20px; font-size: 10px; }
-  .dash-panel-mock .d-zone-footer { margin-bottom: 0; }
   .dash-panel-mock .zone-num {
-    position: absolute;
-    left: -12px;
-    top: 50%;
-    transform: translateY(-50%);
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 24px;
-    height: 24px;
+    width: 26px;
+    height: 26px;
     border-radius: 50%;
     background: #ffc107;
     color: #111;
@@ -247,30 +249,7 @@
     font-size: 12px;
     border: 2px solid #111;
     box-shadow: 0 0 0 1px #ffc107;
-    z-index: 2;
   }
-  .dash-panel-mock .d-zone-sub {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 6px;
-    padding-left: 4px;
-  }
-  .dash-panel-mock .d-zone-sub .sub-num {
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: #ffc107;
-    color: #111;
-    font-weight: bold;
-    font-size: 10px;
-    border: 1px solid #111;
-  }
-  .dash-panel-mock .d-zone-sub .sub-label { font-size: 8px; color: #aaa; }
   .dash-legend {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -412,68 +391,74 @@
 
   <div class="dash-diagram-wrap">
     <p class="diagram-caption"><strong>SMC Pro Dashboard</strong> &mdash; labeled overview (single-chart edition)</p>
-    <p class="diagram-hint">Each number sits on the exact panel region it describes (gold ring + badge).</p>
+    <p class="diagram-hint">Gold numbers sit to the <strong>left</strong> of each ringed region &mdash; they never overlap the panel text.</p>
 
     <div class="dash-panel-stage">
       <div class="dash-panel-mock">
         <div class="d-hdr">
-          <div class="d-zone d-zone-tight" style="flex:1;margin-bottom:0;">
+          <div class="d-zone-wrap">
             <span class="zone-num">1</span>
-            SMC Pro v2.82 | EURUSD
+            <div class="d-zone">SMC Pro v2.82 | EURUSD</div>
           </div>
-          <div class="d-zone d-zone-tight" style="margin-bottom:0;min-width:58px;">
+          <div class="d-zone-wrap">
             <span class="zone-num">2</span>
-            <span class="d-timer">04:32</span>
+            <div class="d-zone"><span class="d-timer">04:32</span></div>
           </div>
         </div>
         <div class="d-body">
           <div class="d-trends">
-            <div class="d-zone d-zone-tight">
+            <div class="d-zone-wrap">
               <span class="zone-num">3</span>
-              <span class="d-trend">Ext: BULLISH</span>
+              <div class="d-zone"><span class="d-trend">Ext: BULLISH</span></div>
             </div>
-            <div class="d-zone d-zone-tight">
+            <div class="d-zone-wrap">
               <span class="zone-num">4</span>
-              <span class="d-int">Int: BULLISH</span>
+              <div class="d-zone"><span class="d-int">Int: BULLISH</span></div>
             </div>
           </div>
-          <div class="d-zone d-zone-tight">
+          <div class="d-zone-wrap">
             <span class="zone-num">5</span>
-            <div class="d-muted">14:32 (Loc) &nbsp; 16:32 (Srv)</div>
-            <div class="d-muted">Session: London Killzone</div>
+            <div class="d-zone">
+              <div class="d-muted">14:32 (Loc) &nbsp; 16:32 (Srv)</div>
+              <div class="d-muted">Session: London Killzone</div>
+            </div>
           </div>
-          <div class="d-zone d-zone-tight">
+          <div class="d-zone-wrap">
             <span class="zone-num">6</span>
-            <div class="d-conf">Confluence: [||||||....] 6/10</div>
+            <div class="d-zone"><div class="d-conf">Confluence: [||||||....] 6/10</div></div>
           </div>
-          <div class="d-zone d-zone-grid">
+          <div class="d-zone-wrap d-zone-wrap-tall">
             <span class="zone-num">7</span>
-            <div class="d-btns">
-              <div class="d-btn on">Struct</div><div class="d-btn on">Int.S</div><div class="d-btn on">FVG</div><div class="d-btn off">IFVG</div>
-              <div class="d-btn on">OB</div><div class="d-btn off">Breaker</div><div class="d-btn off">Mitig</div><div class="d-btn off">Reject</div>
-              <div class="d-btn on">P/D</div><div class="d-btn on">EQH/L</div><div class="d-btn on">Sweeps</div><div class="d-btn on">Labels</div>
-              <div class="d-btn off">Sessions</div><div class="d-btn off">SB</div><div class="d-btn off">Macros</div><div class="d-btn off">CBDR</div>
-              <div class="d-btn off">Prev HL</div><div class="d-btn off">M/W Op</div><div class="d-btn off">Vol</div><div class="d-btn off">MTF</div>
-              <div class="d-btn off">NY Open</div><div class="d-btn off">ATR</div><div class="d-btn off">NDOG</div><div class="d-btn off">NWOG</div>
-              <div class="d-btn off">Patterns</div><div class="d-btn off">Wicks</div><div class="d-btn off">Voids</div><div class="d-btn off">SMT</div>
+            <div class="d-zone">
+              <div class="d-btns">
+                <div class="d-btn on">Struct</div><div class="d-btn on">Int.S</div><div class="d-btn on">FVG</div><div class="d-btn off">IFVG</div>
+                <div class="d-btn on">OB</div><div class="d-btn off">Breaker</div><div class="d-btn off">Mitig</div><div class="d-btn off">Reject</div>
+                <div class="d-btn on">P/D</div><div class="d-btn on">EQH/L</div><div class="d-btn on">Sweeps</div><div class="d-btn on">Labels</div>
+                <div class="d-btn off">Sessions</div><div class="d-btn off">SB</div><div class="d-btn off">Macros</div><div class="d-btn off">CBDR</div>
+                <div class="d-btn off">Prev HL</div><div class="d-btn off">M/W Op</div><div class="d-btn off">Vol</div><div class="d-btn off">MTF</div>
+                <div class="d-btn off">NY Open</div><div class="d-btn off">ATR</div><div class="d-btn off">NDOG</div><div class="d-btn off">NWOG</div>
+                <div class="d-btn off">Patterns</div><div class="d-btn off">Wicks</div><div class="d-btn off">Voids</div><div class="d-btn off">SMT</div>
+              </div>
             </div>
           </div>
-          <div class="d-zone d-zone-alert">
+          <div class="d-zone-wrap d-zone-wrap-alert">
             <span class="zone-num">8</span>
-            <div class="d-btn off">+Alert</div>
+            <div class="d-zone"><div class="d-btn off">+Alert</div></div>
           </div>
-          <div class="d-zone d-zone-footer">
+          <div class="d-zone-wrap">
             <span class="zone-num">9</span>
-            <div class="d-special">
-              <div class="d-btn gold">AI Trade Idea</div>
-              <div class="d-btn blue">User Guide</div>
-            </div>
-            <div class="d-strip-label">Quick Switch:</div>
-            <div class="d-strip">
-              <span class="d-pair active">EURUSD</span>
-              <span class="d-pair">GBPUSD</span>
-              <span class="d-pair">USDJPY</span>
-              <span class="d-pair">XAUUSD</span>
+            <div class="d-zone">
+              <div class="d-special">
+                <div class="d-btn gold">AI Trade Idea</div>
+                <div class="d-btn blue">User Guide</div>
+              </div>
+              <div class="d-strip-label">Quick Switch:</div>
+              <div class="d-strip">
+                <span class="d-pair active">EURUSD</span>
+                <span class="d-pair">GBPUSD</span>
+                <span class="d-pair">USDJPY</span>
+                <span class="d-pair">XAUUSD</span>
+              </div>
             </div>
           </div>
         </div>
