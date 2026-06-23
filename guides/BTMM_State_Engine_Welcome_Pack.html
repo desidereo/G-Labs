@@ -2076,6 +2076,11 @@
     </div>
   </div>
 
+  <div class="callout info">
+    <strong>Signals "against the peak" are normal</strong>
+    A signal that opposes the current peak (e.g. a BUY while a <code>PFH</code> is forming) is <strong>not a bug</strong> — it's a <em>continuation</em> play. Before a peak confirms, the trend is often still running, so the engine keeps showing those entries. A signal that <em>agrees</em> with the peak (BUY with <code>PFL</code>, SELL with <code>PFH</code>) earns <strong>+1</strong> to its score, so it ranks higher. If you only want peak-reversal entries, set <code>InpScannerSigFilterToPeak = true</code> and the scanner will hide the against-peak signals.
+  </div>
+
   <div class="callout success">
     <strong>The "Sniper" Workflow</strong>
     Wait for a pair to appear in the Top Confluence panel with a score of 3.0+, an active signal, and an HTF ✓ in the scanner. Click it to switch charts, confirm the EMA cross on M15, and take the trade. This is the highest-probability setup the indicator can offer.
@@ -2419,7 +2424,7 @@
       <tbody>
         <tr><td><code>InpShowCurrencyStrength</code></td><td>true</td><td>Show or hide the Currency Strength strip below the scanner.</td></tr>
         <tr><td><code>InpShowTopConfluence</code></td><td>true</td><td>Show or hide the Top Confluence panel — independent toggle from Currency Strength.</td></tr>
-        <tr><td><code>InpScannerSigFilterToPeak</code></td><td>false</td><td>When enabled, scanner signals only appear when they align with the peak formation direction — reduces noise but may hide valid setups.</td></tr>
+        <tr><td><code>InpScannerSigFilterToPeak</code></td><td>false</td><td>When enabled, scanner shows only peak-aligned signals (BUY with PFL, SELL with PFH). Off by default so you keep continuation entries that fire before a peak confirms — turn on for peak-reversal trades only.</td></tr>
         <tr><td><code>InpMaxBoxesPerLevel</code></td><td>5</td><td>Maximum boxes allowed at the same level before the cycle is flagged <strong>STALE</strong> and resets. Lower values detect ranging markets sooner.</td></tr>
       </tbody>
     </table>
