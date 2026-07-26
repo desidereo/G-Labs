@@ -611,10 +611,10 @@
 <!-- ========== COVER PAGE ========== -->
 <div class="page cover">
 <div class="hero">
-  <div class="hero-badge">MetaTrader 5 &amp; MetaTrader 4 &nbsp;·&nbsp; v1.64</div>
+  <div class="hero-badge">MetaTrader 5 &amp; MetaTrader 4 &nbsp;·&nbsp; v1.65</div>
   <h1>BTMM STATE ENGINE PRO</h1>
   <div class="subtitle">The Professional Market Maker Cycle Tracker</div>
-  <div class="version">Powered by the Beat The Market Maker Methodology — Automated by G-Labs<br>Available on MetaTrader 4 &amp; MetaTrader 5 &nbsp;·&nbsp; <strong style="color:var(--gold);">v1.64 — DST-aware killzones, live ADR targets, clearer scores &amp; help</strong></div>
+  <div class="version">Powered by the Beat The Market Maker Methodology — Automated by G-Labs<br>Available on MetaTrader 4 &amp; MetaTrader 5 &nbsp;·&nbsp; <strong style="color:var(--gold);">v1.65 — correct ADR targets, trade levels on every timeframe, peak-alignment tag</strong></div>
 
   <div class="hero-features">
     <div class="hero-feature">
@@ -646,10 +646,38 @@
 </div>
 </div><!-- /page cover -->
 
+<!-- ========== WHAT'S NEW IN v1.65 ========== -->
+<div class="page accent">
+<section>
+  <h2><span class="part-num" style="color:var(--gold);">v1.65</span>What's New in This Release</h2>
+  <p style="font-size:13px; color:var(--text-light);">Three targeted fixes and additions around the trade levels: correct take-profit projection, trade lines on every timeframe, and peak alignment shown right at the entry.</p>
+
+  <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; margin-top:18px;">
+    <div style="background:white; border:1px solid var(--border); border-radius:10px; padding:16px;">
+      <div style="font-weight:700; color:var(--blue); margin-bottom:6px;">🎯 Correct ADR targets</div>
+      <div style="font-size:12px; color:var(--text-light);">With <strong>[ADR]</strong> on, take-profit lines could land on the wrong side of the entry on strong trend days. Targets now always project so the order is <strong>SL → ENTRY → TP1 → TP2</strong>.</div>
+    </div>
+    <div style="background:white; border:1px solid var(--border); border-radius:10px; padding:16px;">
+      <div style="font-weight:700; color:var(--blue); margin-bottom:6px;">🕒 Trade levels on any timeframe</div>
+      <div style="font-size:12px; color:var(--text-light);">Entry / SL / TP are horizontal price levels and now display on <strong>M15, M30, H1, H4</strong> — not just M15. Signals are still computed on M15 under the hood.</div>
+    </div>
+    <div style="background:white; border:1px solid var(--border); border-radius:10px; padding:16px;">
+      <div style="font-weight:700; color:var(--blue); margin-bottom:6px;">🏷️ Peak-alignment tag</div>
+      <div style="font-size:12px; color:var(--text-light);">Under the entry label: <strong style="color:#28A745;">with peak</strong> (agrees) or <strong style="color:var(--orange);">vs peak</strong> (continuation). Scanner SIG shows a compact <code>+pk</code> / <code>xpk</code> cue. Hidden when no peak has formed.</div>
+    </div>
+  </div>
+
+  <div class="callout success" style="margin-top:18px;">
+    <strong>Safe upgrade</strong>
+    Behaviour is unchanged apart from the corrected TP projection. Recompile <code>.ex5</code> / <code>.ex4</code> and reload the chart.
+  </div>
+</section>
+</div><!-- /page -->
+
 <!-- ========== WHAT'S NEW IN v1.64 ========== -->
 <div class="page accent">
 <section>
-  <h2><span class="part-num" style="color:var(--gold);">v1.64</span>What's New in This Release</h2>
+  <h2><span class="part-num" style="color:var(--gold);">v1.64</span>What's New in v1.64</h2>
   <p style="font-size:13px; color:var(--text-light);">Six headline upgrades focused on correct session timing year-round, live trade targets, and clearer on-chart guidance. Defaults match prior out-of-box behaviour — reload after DST changeovers to pick up new offsets.</p>
 
   <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:14px; margin-top:18px;">
@@ -1672,7 +1700,7 @@
       <tr><td><strong>P</strong></td><td>Psychological</td><td>Round-number levels (00, 25, 50, 75 pip increments)</td></tr>
       <tr><td><strong>Z</strong></td><td>Killzones</td><td>Coloured strips marking London (green) and NY (orange) windows — DST-aware in Auto mode</td></tr>
       <tr><td><strong>ZN</strong></td><td>Level Zones</td><td>Cycles: Off → ZN1 (AR union) → ZN2 (true candle range)</td></tr>
-      <tr><td><strong>E</strong></td><td>Entry Signals</td><td>Draws entry/SL/TP lines from the scanner's unified engine. TP1/TP2 recompute live when you toggle ADR</td></tr>
+      <tr><td><strong>E</strong></td><td>Entry Signals</td><td>Draws entry/SL/TP lines from the scanner's unified engine. TP1/TP2 recompute live when you toggle ADR. A <strong style="color:#28A745;">with peak</strong> / <strong style="color:#FF8C00;">vs peak</strong> tag under the entry shows if it aligns with the peak. Lines display on any timeframe</td></tr>
       <tr><td><strong>EH</strong></td><td>Entry History</td><td>Historical entry signals across all visible sessions</td></tr>
       <tr><td><strong>ADR</strong></td><td>Daily Range</td><td><strong>Grey (off):</strong> TP from live Asian range (1× / 2×). <strong>Blue (on):</strong> TP from today's low/high ± ADR. Also shows DR/ADR in status bar</td></tr>
       <tr><td><strong>LVL</strong></td><td>Level Filter</td><td>Filter scanner: ALL → L1-2 → L2-3 → L1-3</td></tr>
@@ -2078,7 +2106,7 @@
 
   <div class="callout info">
     <strong>Signals "against the peak" are normal</strong>
-    A signal that opposes the current peak (e.g. a BUY while a <code>PFH</code> is forming) is <strong>not a bug</strong> — it's a <em>continuation</em> play. Before a peak confirms, the trend is often still running, so the engine keeps showing those entries. A signal that <em>agrees</em> with the peak (BUY with <code>PFL</code>, SELL with <code>PFH</code>) earns <strong>+1</strong> to its score, so it ranks higher. If you only want peak-reversal entries, set <code>InpScannerSigFilterToPeak = true</code> and the scanner will hide the against-peak signals.
+    A signal that opposes the current peak (e.g. a BUY while a <code>PFH</code> is forming) is <strong>not a bug</strong> — it's a <em>continuation</em> play. Before a peak confirms, the trend is often still running, so the engine keeps showing those entries. A signal that <em>agrees</em> with the peak (BUY with <code>PFL</code>, SELL with <code>PFH</code>) earns <strong>+1</strong> to its score, so it ranks higher. The chart entry now also carries a <strong style="color:#28A745;">with peak</strong> / <strong style="color:#FF8C00;">vs peak</strong> tag, and the scanner SIG cell a compact <code>+pk</code> / <code>xpk</code> cue, so you can see alignment at a glance. If you only want peak-reversal entries, set <code>InpScannerSigFilterToPeak = true</code> and the scanner will hide the against-peak signals.
   </div>
 
   <div class="callout success">
