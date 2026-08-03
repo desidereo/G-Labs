@@ -611,10 +611,10 @@
 <!-- ========== COVER PAGE ========== -->
 <div class="page cover">
 <div class="hero">
-  <div class="hero-badge">MetaTrader 5 &amp; MetaTrader 4 &nbsp;·&nbsp; v1.65</div>
+  <div class="hero-badge">MetaTrader 5 &amp; MetaTrader 4 &nbsp;·&nbsp; v1.66</div>
   <h1>BTMM STATE ENGINE PRO</h1>
   <div class="subtitle">The Professional Market Maker Cycle Tracker</div>
-  <div class="version">Powered by the Beat The Market Maker Methodology — Automated by G-Labs<br>Available on MetaTrader 4 &amp; MetaTrader 5 &nbsp;·&nbsp; <strong style="color:var(--gold);">v1.65 — correct ADR targets, trade levels on every timeframe, peak-alignment tag</strong></div>
+  <div class="version">Powered by the Beat The Market Maker Methodology — Automated by G-Labs<br>Available on MetaTrader 4 &amp; MetaTrader 5 &nbsp;·&nbsp; <strong style="color:var(--gold);">v1.66 — automatic screen-fit (DPI) &amp; scanner layout fixes</strong></div>
 
   <div class="hero-features">
     <div class="hero-feature">
@@ -646,10 +646,38 @@
 </div>
 </div><!-- /page cover -->
 
+<!-- ========== WHAT'S NEW IN v1.66 ========== -->
+<div class="page accent">
+<section>
+  <h2><span class="part-num" style="color:var(--gold);">v1.66</span>What's New in This Release</h2>
+  <p style="font-size:13px; color:var(--text-light);">The dashboard now fits itself to your screen automatically, and the scanner panel layout was tightened so columns and rows can't clip or overlap on other machines.</p>
+
+  <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; margin-top:18px;">
+    <div style="background:white; border:1px solid var(--border); border-radius:10px; padding:16px;">
+      <div style="font-weight:700; color:var(--blue); margin-bottom:6px;">🖥️ Automatic screen-fit</div>
+      <div style="font-size:12px; color:var(--text-light);">New <code>InpUIAutoDPI</code> (default <strong>on</strong>) reads your monitor's DPI and sizes the dashboard to match — 125% Windows, 4K and Mac Retina fit out of the box. A normal 1080p desktop is unchanged.</div>
+    </div>
+    <div style="background:white; border:1px solid var(--border); border-radius:10px; padding:16px;">
+      <div style="font-weight:700; color:var(--blue); margin-bottom:6px;">📐 Scanner panel sizing fixed</div>
+      <div style="font-size:12px; color:var(--text-light);">The scanner background now reserves the correct number of rows (title + header + every symbol), so the last row no longer spills out and the panels below it stop overlapping.</div>
+    </div>
+    <div style="background:white; border:1px solid var(--border); border-radius:10px; padding:16px;">
+      <div style="font-weight:700; color:var(--blue); margin-bottom:6px;">🔤 No more clipped columns</div>
+      <div style="font-size:12px; color:var(--text-light);">Scanner cells pin the chosen font (so macOS can't substitute a wider one), row height follows the font, and the PEAK "Pot Rev" split scales — fixing the "EURUSD → URUS" style clipping.</div>
+    </div>
+  </div>
+
+  <div class="callout success" style="margin-top:18px;">
+    <strong>Safe upgrade</strong>
+    Recompile <code>.ex5</code> / <code>.ex4</code> and reload — no input changes needed. If you had raised <code>InpUIGlobalScalePct</code> for a HiDPI screen, you can set it back to <strong>100</strong> and let auto-DPI handle it (or turn <code>InpUIAutoDPI</code> off for pure manual control).
+  </div>
+</section>
+</div><!-- /page -->
+
 <!-- ========== WHAT'S NEW IN v1.65 ========== -->
 <div class="page accent">
 <section>
-  <h2><span class="part-num" style="color:var(--gold);">v1.65</span>What's New in This Release</h2>
+  <h2><span class="part-num" style="color:var(--gold);">v1.65</span>What's New in v1.65</h2>
   <p style="font-size:13px; color:var(--text-light);">Three targeted fixes and additions around the trade levels: correct take-profit projection, trade lines on every timeframe, and peak alignment shown right at the entry.</p>
 
   <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; margin-top:18px;">
@@ -1447,8 +1475,8 @@
     </div>
     <div style="background:white; border:1px solid var(--border); border-radius:10px; padding:18px;">
       <div style="font-weight:700; color:var(--blue); margin-bottom:8px;">2. Screen size / Mac / 4K / Parallels</div>
-      <p style="font-size:12px; color:var(--text-light); margin-bottom:10px;">If the dashboard text looks too small (HiDPI / 4K / Mac Retina) or too big (small laptop), change one input.</p>
-      <p style="font-size:12px; color:var(--text-light);">In the indicator inputs, set <strong><code>InpUIGlobalScalePct</code></strong>. Defaults to <strong>100</strong>. Try <strong>115–130</strong> on Mac / Retina / 4K, <strong>80–90</strong> on small laptops, <strong>100</strong> on a typical Windows VPS or Parallels guest. It scales every layout pixel and default font in lockstep, so proportions stay correct everywhere.</p>
+      <p style="font-size:12px; color:var(--text-light); margin-bottom:10px;">As of v1.66 the dashboard fits your screen automatically via <strong><code>InpUIAutoDPI</code></strong> (default <strong>on</strong>) — HiDPI, 4K and Mac Retina should look right with no changes. Only touch the scale if you want to fine-tune.</p>
+      <p style="font-size:12px; color:var(--text-light);">To fine-tune, set <strong><code>InpUIGlobalScalePct</code></strong> (default <strong>100</strong>) — it multiplies on top of auto-DPI. Nudge up if text still feels small, down on very small laptops. For pure manual control, turn <code>InpUIAutoDPI</code> off and drive scale entirely with <code>InpUIGlobalScalePct</code>. Either way, every layout pixel and default font scales in lockstep.</p>
     </div>
   </div>
 </section>
@@ -2424,12 +2452,13 @@
       </tbody>
     </table>
 
-    <h3 style="color:var(--gold);">UI Scale &amp; Fonts (Mac / HiDPI / 4K) <span style="color:var(--cyan); font-size:11px; font-weight:700;">v1.63</span></h3>
-    <p style="color:rgba(255,255,255,0.75); font-size:13px;">One global knob plus per-area font-point overrides means the dashboard always fits on any screen. If anything looks cramped or oversized after attaching the indicator, change <code>InpUIGlobalScalePct</code> first — it's almost always the only setting you need.</p>
+    <h3 style="color:var(--gold);">UI Scale &amp; Fonts (Mac / HiDPI / 4K) <span style="color:var(--cyan); font-size:11px; font-weight:700;">v1.66</span></h3>
+    <p style="color:rgba(255,255,255,0.75); font-size:13px;">Auto-DPI (default on) fits the dashboard to your screen automatically; a global knob plus per-area font-point overrides let you fine-tune. If anything looks cramped or oversized, leave auto-DPI on and adjust <code>InpUIGlobalScalePct</code> — it's almost always the only setting you need.</p>
     <table style="color:var(--text);">
       <thead><tr><th>Input</th><th>Default</th><th>What It Controls</th></tr></thead>
       <tbody>
-        <tr><td><code>InpUIGlobalScalePct</code></td><td>100</td><td>One global knob (50–200). Scales every layout pixel <strong>and</strong> default font in lockstep. HiDPI / Mac: try <strong>115–130</strong>. Tiny laptops: <strong>80–90</strong>.</td></tr>
+        <tr><td><code>InpUIAutoDPI</code></td><td>true</td><td><strong>New in v1.66.</strong> Reads the monitor DPI and scales the whole dashboard to fit (96 DPI = 100%, 125% Windows → 125%, Mac Retina / 4K ≈ 150%). Applies on top of the knob below, so a 1080p desktop is unchanged. Turn off for pure manual control.</td></tr>
+        <tr><td><code>InpUIGlobalScalePct</code></td><td>100</td><td>Manual knob (50–200). Multiplies on top of auto-DPI and scales every layout pixel <strong>and</strong> default font in lockstep. With auto-DPI on, leave at <strong>100</strong> and only nudge to taste.</td></tr>
         <tr><td><code>InpUIFontProp</code></td><td>"Arial"</td><td>Proportional font family for buttons / labels / titles. Mac users who prefer native: <code>"Helvetica"</code>.</td></tr>
         <tr><td><code>InpUIFontMono</code></td><td>"Courier New"</td><td>Monospace family for the status line, HTF rows, F1 help, room labels. Mac native alternatives: <code>"Menlo"</code> or <code>"Monaco"</code>.</td></tr>
       </tbody>
