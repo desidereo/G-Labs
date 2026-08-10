@@ -334,7 +334,7 @@
     <span class="badge green">News Calendar</span>
     <span class="badge teal">Currency Strength</span>
     <span class="badge red">Grid Orders</span>
-    <span class="badge blue">8 Tabs (MT5)</span>
+    <span class="badge blue">8 Tabs MT5 / 7 MT4</span>
     <span class="badge amber">15+ Hotkeys</span>
     <span class="badge green">CSV Export</span>
     <span class="badge teal">Close at Time</span>
@@ -395,7 +395,7 @@
   <h3>MetaTrader 4</h3>
   <div class="card highlight">
     <ol>
-      <li>Copy <strong>G-Labs Trade Manager v4.0.mq4</strong> into your <code>MQL4/Experts/</code> folder inside the MetaTrader 4 data directory.</li>
+      <li>Copy <strong>G-Labs Trade Manager v4.1.mq4</strong> into your <code>MQL4/Experts/</code> folder inside the MetaTrader 4 data directory. If you build from source, also copy the <code>Insights/</code> subfolder (it contains the Edge-tab include files) into <code>MQL4/Experts/Insights/</code>.</li>
       <li>Restart MetaTrader 4 or press <kbd>Ctrl</kbd>+<kbd>N</kbd> to refresh the Navigator.</li>
       <li>Drag the Expert Advisor onto any chart.</li>
       <li>In the Inputs tab, configure your preferred settings (Magic Number, risk %, hotkeys, etc.).</li>
@@ -410,7 +410,7 @@
 <!-- ============ 2. OVERVIEW ============ -->
 <section id="overview">
   <h2><span class="num">2</span>Panel Overview</h2>
-  <p>The panel is divided into a <strong>header bar</strong>, a <strong>tab bar</strong>, and a <strong>status bar</strong>. The MT5 version has <strong>8 tabs</strong> (Trade, Pos, Tools, News, Alerts, Stats, Config, Edge). The MT4 version has <strong>6 tabs</strong> (the News and Edge/Insights tabs are not available on MT4).</p>
+  <p>The panel is divided into a <strong>header bar</strong>, a <strong>tab bar</strong>, and a <strong>status bar</strong>. The MT5 version has <strong>8 tabs</strong> (Trade, Pos, Tools, News, Alerts, Stats, Config, Edge). The MT4 version has <strong>7 tabs</strong> &mdash; the same set minus <strong>News</strong>, which is not available on MT4.</p>
 
   <h3>Header Bar</h3>
   <ul>
@@ -424,7 +424,7 @@
 
   <h3>Tab Bar</h3>
   <p><strong>MT5:</strong> Eight tabs &mdash; <strong>Trade</strong>, <strong>Pos</strong>, <strong>Tools</strong>, <strong>News</strong>, <strong>Alerts</strong>, <strong>Stats</strong>, <strong>Config</strong>, <strong>Edge</strong>. Click to switch, or press <kbd>1</kbd>&ndash;<kbd>8</kbd>.</p>
-  <p><strong>MT4:</strong> Six tabs &mdash; <strong>Trade</strong>, <strong>Pos</strong>, <strong>Tools</strong>, <strong>Alerts</strong>, <strong>Stats</strong>, <strong>Config</strong>. Press <kbd>1</kbd>&ndash;<kbd>6</kbd>.</p>
+  <p><strong>MT4:</strong> Seven tabs &mdash; <strong>Trade</strong>, <strong>Pos</strong>, <strong>Tools</strong>, <strong>Alerts</strong>, <strong>Stats</strong>, <strong>Config</strong>, <strong>Edge</strong>. Press <kbd>1</kbd>&ndash;<kbd>7</kbd>.</p>
 
   <h3>Status Bar</h3>
   <p>The bottom bar shows live data at a glance:</p>
@@ -859,7 +859,7 @@
 
 <!-- ============ 14. INSIGHTS (EDGE) ============ -->
 <section id="insights-tab">
-  <h2><span class="num">14</span>Insights (Edge) Tab <span class="badge green" style="font-size:0.7rem; vertical-align:middle;">New in v4.1</span> <span class="badge amber" style="font-size:0.7rem; vertical-align:middle;">MT5 Only</span></h2>
+  <h2><span class="num">14</span>Insights (Edge) Tab <span class="badge green" style="font-size:0.7rem; vertical-align:middle;">New in v4.1</span> <span class="badge blue" style="font-size:0.7rem; vertical-align:middle;">MT4 &amp; MT5</span></h2>
   <p>The <strong>Edge</strong> tab is a behavioural analytics engine that goes beyond the Stats dashboard. Where <em>Stats</em> answers <em>"how did I perform?"</em>, <strong>Insights answers "which of my behaviours are hurting my performance?"</strong> It automatically studies your closed trades, surfaces the most damaging patterns, and lets you run a historical "what-if" on each one.</p>
 
   <div class="card highlight">
@@ -914,8 +914,9 @@
     <p>This metadata is stored locally in the MetaTrader common files sandbox &mdash; no DLLs, no external servers &mdash; and survives EA reloads, chart changes, and terminal restarts. The <strong>Trade-management effectiveness</strong> insight and reliable R-multiples only appear once enough enhanced trades have accumulated.</p>
   </div>
 
-  <div class="tip">Open the Edge tab by clicking it or pressing <kbd>8</kbd>. Use the Scope button to switch between EA-only and account-wide analysis.</div>
+  <div class="tip">Open the Edge tab by clicking it or pressing <kbd>8</kbd> on MT5 (<kbd>7</kbd> on MT4). Use the Scope button to switch between EA-only and account-wide analysis.</div>
   <div class="warn">Insights describe your <strong>historical</strong> behaviour and simulate past outcomes only. They are educational and are not financial advice or a guarantee of future results.</div>
+  <div class="tip"><strong>MT4 note:</strong> because MetaTrader 4 records a partial close as a separate order (with its own ticket), each partial fragment is analysed as its own logical trade. MT5 groups a position's partial closes into one logical trade. Results are therefore near-identical for trades you close in one go, and differ slightly only when you routinely scale out.</div>
 </section>
 
 <!-- ============ 15. OCO ============ -->
@@ -997,7 +998,7 @@
   <p>Hotkeys are enabled via the <code>InpHotkeys</code> input. Press keys when the chart is focused:</p>
   <table>
     <tr><th>Key</th><th>Action</th></tr>
-    <tr><td><kbd>1</kbd> &ndash; <kbd>8</kbd></td><td>Switch to tab 1&ndash;8 (Trade, Pos, Tools, News, Alerts, Stats, Config, Edge) &mdash; MT4: <kbd>1</kbd>&ndash;<kbd>6</kbd></td></tr>
+    <tr><td><kbd>1</kbd> &ndash; <kbd>8</kbd></td><td>Switch to tab 1&ndash;8 (Trade, Pos, Tools, News, Alerts, Stats, Config, Edge) &mdash; MT4: <kbd>1</kbd>&ndash;<kbd>7</kbd> (no News tab)</td></tr>
     <tr><td><kbd>B</kbd></td><td>Market Buy</td></tr>
     <tr><td><kbd>S</kbd></td><td>Market Sell</td></tr>
     <tr><td><kbd>C</kbd></td><td>Close All Positions</td></tr>
@@ -1170,7 +1171,7 @@
     <tr><td>InpProfitTarget</td><td>3.0</td><td>Daily profit target (%)</td></tr>
   </table>
 
-  <h3>Insights (Edge Tab) <span class="badge amber" style="font-size:0.65rem; vertical-align:middle;">MT5 Only</span></h3>
+  <h3>Insights (Edge Tab) <span class="badge blue" style="font-size:0.65rem; vertical-align:middle;">MT4 &amp; MT5</span></h3>
   <table>
     <tr><th>Parameter</th><th>Default</th><th>Description</th></tr>
     <tr><td>InpInsightsMagicOnly</td><td>true</td><td>Analyse only this EA's trades (by Magic number). Toggle live with the Scope button on the Edge tab.</td></tr>
@@ -1194,7 +1195,7 @@
     <tr><td><strong>Alerts &amp; Scheduler Tab</strong> &mdash; Price alerts, task scheduler, over-trading monitor</td><td style="color:var(--green)">&#10003; Full</td><td style="color:var(--green)">&#10003; Full</td></tr>
     <tr><td><strong>Stats Dashboard</strong> &mdash; Performance metrics, equity curve, CSV export</td><td style="color:var(--green)">&#10003; Full</td><td style="color:var(--green)">&#10003; Full</td></tr>
     <tr><td><strong>Settings Tab</strong> &mdash; DD protection, profit target, spread/slippage filters, save/load</td><td style="color:var(--green)">&#10003; Full</td><td style="color:var(--green)">&#10003; Full</td></tr>
-    <tr><td><strong>Insights (Edge) Tab</strong> &mdash; Behavioural leak finder, what-if simulation, prospective metadata</td><td style="color:var(--green)">&#10003; Full</td><td style="color:var(--red)">&#10007; Not available</td></tr>
+    <tr><td><strong>Insights (Edge) Tab</strong> &mdash; Behavioural leak finder, what-if simulation, prospective metadata</td><td style="color:var(--green)">&#10003; Full</td><td style="color:var(--green)">&#10003; Full <span style="color:var(--muted); font-size:0.85em;">(partial closes counted individually)</span></td></tr>
     <tr><td><strong>Currency Strength Meter</strong> &mdash; Forex, crypto, metals, proportional bars</td><td style="color:var(--green)">&#10003; Full</td><td style="color:var(--green)">&#10003; Full</td></tr>
     <tr><td><strong>OCO Breakout</strong> &mdash; Hedge box, paired orders</td><td style="color:var(--green)">&#10003; Full</td><td style="color:var(--green)">&#10003; Full</td></tr>
     <tr><td><strong>Hotkeys</strong></td><td style="color:var(--green)">&#10003; Full</td><td style="color:var(--green)">&#10003; Full</td></tr>
@@ -1204,7 +1205,7 @@
 
   <h3>Tab Layout</h3>
   <table>
-    <tr><th>MT5 (8 tabs)</th><th>MT4 (6 tabs)</th></tr>
+    <tr><th>MT5 (8 tabs)</th><th>MT4 (7 tabs)</th></tr>
     <tr><td>Trade</td><td>Trade</td></tr>
     <tr><td>Pos</td><td>Pos</td></tr>
     <tr><td>Tools</td><td>Tools</td></tr>
@@ -1212,13 +1213,13 @@
     <tr><td>Alerts</td><td>Alerts</td></tr>
     <tr><td>Stats</td><td>Stats</td></tr>
     <tr><td>Config</td><td>Config</td></tr>
-    <tr><td>Edge (Insights)</td><td>&mdash;</td></tr>
+    <tr><td>Edge (Insights)</td><td>Edge (Insights)</td></tr>
   </table>
-  <p>The MT4 version has 6 tabs. The News tab is removed because MetaTrader 4 does not provide a built-in economic calendar API, and the Edge/Insights tab is currently MT5-only (it relies on the MT5 deal-history and file-sandbox APIs for trade reconstruction and prospective metadata).</p>
+  <p>The MT4 version has 7 tabs &mdash; the full MT5 set except <strong>News</strong>. As of v4.1 the <strong>Edge/Insights</strong> tab is available on both platforms; the MT4 build reconstructs logical trades from the classic order history and stores prospective metadata in the shared file sandbox. Only the News tab remains MT5-only, because MetaTrader 4 has no built-in economic calendar API.</p>
 
   <h3>Why No News Calendar on MT4?</h3>
   <div class="card blue-hl">
-    <p>MetaTrader 5 includes a native <code>CalendarValueHistory</code> function that provides real-time economic event data directly from MetaQuotes servers. MetaTrader 4 has no equivalent API. Rather than displaying an empty or non-functional tab, the MT4 build removes the News tab entirely and gives you a clean 6-tab layout.</p>
+    <p>MetaTrader 5 includes a native <code>CalendarValueHistory</code> function that provides real-time economic event data directly from MetaQuotes servers. MetaTrader 4 has no equivalent API. Rather than displaying an empty or non-functional tab, the MT4 build removes the News tab entirely and gives you a clean 7-tab layout.</p>
   </div>
 
   <h3>Other Technical Differences</h3>
@@ -1236,7 +1237,7 @@
   <table>
     <tr><th>Version</th><th>File</th><th>Install Location</th></tr>
     <tr><td><strong>MT5</strong></td><td><code>G-Labs Trade Manager v4.1.mq5</code></td><td><code>MQL5/Experts/</code></td></tr>
-    <tr><td><strong>MT4</strong></td><td><code>G-Labs Trade Manager v4.0.mq4</code></td><td><code>MQL4/Experts/</code></td></tr>
+    <tr><td><strong>MT4</strong></td><td><code>G-Labs Trade Manager v4.1.mq4</code></td><td><code>MQL4/Experts/</code></td></tr>
   </table>
 
   <div class="tip">Apart from the News Calendar, the MT4 and MT5 versions are functionally identical. All trading features, risk management, visual tools, currency strength, and panel controls work the same way on both platforms.</div>
