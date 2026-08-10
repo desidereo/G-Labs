@@ -334,11 +334,13 @@
     <span class="badge green">News Calendar</span>
     <span class="badge teal">Currency Strength</span>
     <span class="badge red">Grid Orders</span>
-    <span class="badge blue">7 Tabs</span>
+    <span class="badge blue">8 Tabs (MT5)</span>
     <span class="badge amber">15+ Hotkeys</span>
     <span class="badge green">CSV Export</span>
     <span class="badge teal">Close at Time</span>
     <span class="badge blue">Daily P/L Tracker</span>
+    <span class="badge amber">Behavioural Insights</span>
+    <span class="badge green">What-If Simulation</span>
   </div>
 </div>
 
@@ -361,6 +363,7 @@
     <li><a href="#alerts-tab">Alerts &amp; Scheduler Tab</a></li>
     <li><a href="#stats-tab">Stats Dashboard Tab</a></li>
     <li><a href="#settings-tab">Settings Tab</a></li>
+    <li><a href="#insights-tab">Insights (Edge) Tab</a></li>
     <li><a href="#oco">OCO Breakout System</a></li>
     <li><a href="#grid">Grid Orders</a></li>
     <li><a href="#basket">Basket Management</a></li>
@@ -380,7 +383,7 @@
   <h3>MetaTrader 5</h3>
   <div class="card highlight">
     <ol>
-      <li>Copy <strong>G-Labs Trade Manager v3.0.mq5</strong> into your <code>MQL5/Experts/</code> folder inside the MetaTrader 5 data directory.</li>
+      <li>Copy <strong>G-Labs Trade Manager v4.0.mq5</strong> into your <code>MQL5/Experts/</code> folder inside the MetaTrader 5 data directory.</li>
       <li>Restart MetaTrader 5 or press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>N</kbd> to refresh the Navigator.</li>
       <li>Drag the Expert Advisor onto any chart.</li>
       <li>In the Inputs tab, configure your preferred settings (Magic Number, risk %, hotkeys, etc.).</li>
@@ -400,14 +403,14 @@
       <li>Make sure <strong>AutoTrading</strong> is enabled (green play button on the toolbar).</li>
     </ol>
   </div>
-  <div class="tip">See <a href="#mt4-vs-mt5">Section 23: MT4 vs MT5 Differences</a> for a full comparison between the two versions.</div>
+  <div class="tip">See <a href="#mt4-vs-mt5">Section 24: MT4 vs MT5 Differences</a> for a full comparison between the two versions.</div>
   <div class="tip">The panel position is saved automatically. Drag the header bar to reposition it anywhere on your chart.</div>
 </section>
 
 <!-- ============ 2. OVERVIEW ============ -->
 <section id="overview">
   <h2><span class="num">2</span>Panel Overview</h2>
-  <p>The panel is divided into a <strong>header bar</strong>, a <strong>tab bar</strong>, and a <strong>status bar</strong>. The MT5 version has <strong>7 tabs</strong> (Trade, Pos, Tools, News, Alerts, Stats, Config). The MT4 version has <strong>6 tabs</strong> (the News tab is not available on MT4).</p>
+  <p>The panel is divided into a <strong>header bar</strong>, a <strong>tab bar</strong>, and a <strong>status bar</strong>. The MT5 version has <strong>8 tabs</strong> (Trade, Pos, Tools, News, Alerts, Stats, Config, Edge). The MT4 version has <strong>6 tabs</strong> (the News and Edge/Insights tabs are not available on MT4).</p>
 
   <h3>Header Bar</h3>
   <ul>
@@ -420,7 +423,7 @@
   </ul>
 
   <h3>Tab Bar</h3>
-  <p><strong>MT5:</strong> Seven tabs &mdash; <strong>Trade</strong>, <strong>Pos</strong>, <strong>Tools</strong>, <strong>News</strong>, <strong>Alerts</strong>, <strong>Stats</strong>, <strong>Config</strong>. Click to switch, or press <kbd>1</kbd>&ndash;<kbd>7</kbd>.</p>
+  <p><strong>MT5:</strong> Eight tabs &mdash; <strong>Trade</strong>, <strong>Pos</strong>, <strong>Tools</strong>, <strong>News</strong>, <strong>Alerts</strong>, <strong>Stats</strong>, <strong>Config</strong>, <strong>Edge</strong>. Click to switch, or press <kbd>1</kbd>&ndash;<kbd>8</kbd>.</p>
   <p><strong>MT4:</strong> Six tabs &mdash; <strong>Trade</strong>, <strong>Pos</strong>, <strong>Tools</strong>, <strong>Alerts</strong>, <strong>Stats</strong>, <strong>Config</strong>. Press <kbd>1</kbd>&ndash;<kbd>6</kbd>.</p>
 
   <h3>Status Bar</h3>
@@ -854,9 +857,70 @@
   <p>Save all current panel settings to a file, or load them back. Settings persist across restarts automatically.</p>
 </section>
 
-<!-- ============ 14. OCO ============ -->
+<!-- ============ 14. INSIGHTS (EDGE) ============ -->
+<section id="insights-tab">
+  <h2><span class="num">14</span>Insights (Edge) Tab <span class="badge amber" style="font-size:0.7rem; vertical-align:middle;">MT5 Only</span></h2>
+  <p>The <strong>Edge</strong> tab is a behavioural analytics engine that goes beyond the Stats dashboard. Where <em>Stats</em> answers <em>"how did I perform?"</em>, <strong>Insights answers "which of my behaviours are hurting my performance?"</strong> It automatically studies your closed trades, surfaces the most damaging patterns, and lets you run a historical "what-if" on each one.</p>
+
+  <div class="card highlight">
+    <h4>The concept: Analyse &rarr; Discover &rarr; Simulate</h4>
+    <p>The engine reconstructs your real trade history into logical trades, ranks the patterns that cost you the most, and then shows what your history <em>would</em> have looked like if you had followed a suggested rule. Every simulation is clearly labelled <strong>HISTORICAL SIMULATION</strong> &mdash; it is never a prediction of future profit.</p>
+  </div>
+
+  <h3>What it detects</h3>
+  <table>
+    <tr><th>Leak</th><th>What it looks for</th></tr>
+    <tr><td><strong>Overtrading</strong></td><td>Groups trades by their chronological number within each day and finds the daily trade limit that would have avoided the most losses.</td></tr>
+    <tr><td><strong>Loss-streak behaviour</strong></td><td>Performance of trades taken after 1, 2, or 3+ consecutive losses &mdash; revenge-trading detection.</td></tr>
+    <tr><td><strong>Position-size escalation</strong></td><td>Whether your lot size increases after losses, and the historical result of those larger post-loss trades. Reported as lot/volume behaviour (not fabricated per-symbol risk).</td></tr>
+    <tr><td><strong>Time / session leak</strong></td><td>Finds a cut-off hour after which your entries lose money (broker server clock).</td></tr>
+    <tr><td><strong>Weak day / symbol / direction</strong></td><td>Worst-performing weekday, worst symbol, and whether your BUYs or SELLs materially underperform.</td></tr>
+    <tr><td><strong>Trade-management effectiveness</strong></td><td>Whether break-even, trailing, or partial-close usage is associated with worse expectancy. <em>Uses only trades opened through the EA after this feature was installed</em> (see Enhanced data below).</td></tr>
+  </table>
+
+  <h3>Reading the tab</h3>
+  <ul>
+    <li><strong>Header</strong> &mdash; <em>"N trades analysed"</em> with the history window (days) and account currency. If you have prospective data, it also shows how many trades are <em>enhanced</em>.</li>
+    <li><strong>Scope</strong> button &mdash; toggle between analysing only this EA's trades (by Magic number) and <em>all</em> account trades.</li>
+    <li><strong>Refresh</strong> button &mdash; rebuild the analysis on demand. The engine also rebuilds automatically when new trades close, and caches results so it never scans history on every tick.</li>
+  </ul>
+
+  <h3>Top Performance Leaks</h3>
+  <p>Findings are ranked by a <strong>relative impact</strong> measure (not just the raw cash figure) and shown as cards, each with:</p>
+  <table>
+    <tr><th>Element</th><th>Meaning</th></tr>
+    <tr><td><strong>Impact badge</strong></td><td><span class="label sell">HIGH</span> / <span class="label warn">MEDIUM</span> / <span class="label off">LOW</span> &mdash; severity relative to your overall activity, not the dollar size alone.</td></tr>
+    <tr><td><strong>Summary</strong></td><td>One-line headline, e.g. <em>"After 2+ losses: -8.40"</em>. A "(low sample)" tag appears when data is thin.</td></tr>
+    <tr><td><kbd>Details</kbd></td><td>Expands supporting statistics (win rate, trade counts, expectancy) for the finding.</td></tr>
+    <tr><td><kbd>Simulate</kbd></td><td>Runs a HISTORICAL SIMULATION of the suggested rule.</td></tr>
+  </table>
+
+  <h3>Historical Simulation (What-If)</h3>
+  <p>Clicking <strong>Simulate</strong> hypothetically removes the trades a rule would have excluded and recomputes your history side by side:</p>
+  <table>
+    <tr><th>Column</th><th>Shows</th></tr>
+    <tr><td><strong>Actual</strong></td><td>Your real trades, net P/L, win rate.</td></tr>
+    <tr><td><strong>Simulated</strong></td><td>The same metrics with the rule applied.</td></tr>
+    <tr><td><strong>Difference</strong></td><td>Trades avoided and the net P/L change.</td></tr>
+  </table>
+  <p>Rules that can be simulated include: max trades per day, stop after N consecutive losses, allowed trading hours, avoid a weekday, and exclude a symbol or direction.</p>
+
+  <h3>Confidence &amp; sample gating</h3>
+  <p>The engine will not shout "insight" on noise. Findings below a minimum sample are suppressed or flagged. Confidence tiers are <strong>Insufficient</strong> (under ~10 trades), <strong>Low</strong> (~10&ndash;29), and <strong>Usable</strong> (30+). This keeps conclusions honest and deterministic &mdash; there is no black-box "AI signal".</p>
+
+  <h3>Enhanced (prospective) data</h3>
+  <div class="card blue-hl">
+    <p>Some questions &mdash; like whether your break-even or trailing settings actually helped &mdash; can't be answered reliably from raw MetaTrader history, because the original stop, target, and intended risk may have changed. From the moment this feature is installed, the Trade Manager records that context for every trade you open <em>through the panel</em> (original SL/TP, intended risk, R:R, and BE/trail/partial-close configuration).</p>
+    <p>This metadata is stored locally in the MetaTrader common files sandbox &mdash; no DLLs, no external servers &mdash; and survives EA reloads, chart changes, and terminal restarts. The <strong>Trade-management effectiveness</strong> insight and reliable R-multiples only appear once enough enhanced trades have accumulated.</p>
+  </div>
+
+  <div class="tip">Open the Edge tab by clicking it or pressing <kbd>8</kbd>. Use the Scope button to switch between EA-only and account-wide analysis.</div>
+  <div class="warn">Insights describe your <strong>historical</strong> behaviour and simulate past outcomes only. They are educational and are not financial advice or a guarantee of future results.</div>
+</section>
+
+<!-- ============ 15. OCO ============ -->
 <section id="oco">
-  <h2><span class="num">14</span>OCO Breakout System</h2>
+  <h2><span class="num">15</span>OCO Breakout System</h2>
   <div class="card highlight">
     <p>OCO (One-Cancels-Other) lets you place a breakout setup where you anticipate a move in either direction but don't know which way.</p>
     <ol>
@@ -872,7 +936,7 @@
 
 <!-- ============ 15. GRID ============ -->
 <section id="grid">
-  <h2><span class="num">15</span>Grid Orders</h2>
+  <h2><span class="num">16</span>Grid Orders</h2>
   <p>Place a ladder of limit or stop orders with configurable parameters:</p>
   <table>
     <tr><th>Parameter</th><th>Description</th></tr>
@@ -885,7 +949,7 @@
 
 <!-- ============ 16. BASKET ============ -->
 <section id="basket">
-  <h2><span class="num">16</span>Basket Management</h2>
+  <h2><span class="num">17</span>Basket Management</h2>
   <ul>
     <li><strong>Basket BE</strong> &mdash; Shows a line on the chart at the weighted average entry of all open positions. Useful for hedging strategies.</li>
     <li><strong>Close-By</strong> &mdash; Closes opposing buy and sell positions against each other, netting the result. Reduces the number of open trades.</li>
@@ -896,7 +960,7 @@
 
 <!-- ============ 17. CSM ============ -->
 <section id="csm">
-  <h2><span class="num">17</span>Currency Strength Meter</h2>
+  <h2><span class="num">18</span>Currency Strength Meter</h2>
   <div class="card blue-hl">
     <p>Click <strong>CS</strong> on the header to open the Currency Strength Meter heatmap.</p>
     <ul>
@@ -929,11 +993,11 @@
 
 <!-- ============ 18. HOTKEYS ============ -->
 <section id="hotkeys">
-  <h2><span class="num">18</span>Hotkeys</h2>
+  <h2><span class="num">19</span>Hotkeys</h2>
   <p>Hotkeys are enabled via the <code>InpHotkeys</code> input. Press keys when the chart is focused:</p>
   <table>
     <tr><th>Key</th><th>Action</th></tr>
-    <tr><td><kbd>1</kbd> &ndash; <kbd>7</kbd></td><td>Switch to tab 1&ndash;7 (Trade, Pos, Tools, News, Alerts, Stats, Config)</td></tr>
+    <tr><td><kbd>1</kbd> &ndash; <kbd>8</kbd></td><td>Switch to tab 1&ndash;8 (Trade, Pos, Tools, News, Alerts, Stats, Config, Edge) &mdash; MT4: <kbd>1</kbd>&ndash;<kbd>6</kbd></td></tr>
     <tr><td><kbd>B</kbd></td><td>Market Buy</td></tr>
     <tr><td><kbd>S</kbd></td><td>Market Sell</td></tr>
     <tr><td><kbd>C</kbd></td><td>Close All Positions</td></tr>
@@ -952,7 +1016,7 @@
 
 <!-- ============ 19. SAFETY ============ -->
 <section id="safety">
-  <h2><span class="num">19</span>Safety Features</h2>
+  <h2><span class="num">20</span>Safety Features</h2>
   <p>Multiple layers of protection prevent accidental losses:</p>
 
   <div class="feature-grid">
@@ -1001,7 +1065,7 @@
 
 <!-- ============ 20. NOTIFICATIONS ============ -->
 <section id="notifications">
-  <h2><span class="num">20</span>Notifications</h2>
+  <h2><span class="num">21</span>Notifications</h2>
   <table>
     <tr><th>Type</th><th>Input</th><th>Description</th></tr>
     <tr><td><strong>Push</strong></td><td>InpPushNotify</td><td>Send push notifications to the MetaTrader mobile app.</td></tr>
@@ -1014,7 +1078,7 @@
 
 <!-- ============ 21. PROFILES ============ -->
 <section id="profiles">
-  <h2><span class="num">21</span>Profiles &amp; Persistence</h2>
+  <h2><span class="num">22</span>Profiles &amp; Persistence</h2>
   <h3>Quick Profiles (Trade Tab)</h3>
   <p>Three profile slots are available on the Trade tab:</p>
   <ul>
@@ -1032,7 +1096,7 @@
 
 <!-- ============ 22. INPUTS ============ -->
 <section id="inputs">
-  <h2><span class="num">22</span>Input Parameters Reference</h2>
+  <h2><span class="num">23</span>Input Parameters Reference</h2>
 
   <h3>Panel</h3>
   <table>
@@ -1105,11 +1169,18 @@
     <tr><td>InpUseProfitTarget</td><td>false</td><td>Enable profit target</td></tr>
     <tr><td>InpProfitTarget</td><td>3.0</td><td>Daily profit target (%)</td></tr>
   </table>
+
+  <h3>Insights (Edge Tab) <span class="badge amber" style="font-size:0.65rem; vertical-align:middle;">MT5 Only</span></h3>
+  <table>
+    <tr><th>Parameter</th><th>Default</th><th>Description</th></tr>
+    <tr><td>InpInsightsMagicOnly</td><td>true</td><td>Analyse only this EA's trades (by Magic number). Toggle live with the Scope button on the Edge tab.</td></tr>
+    <tr><td>InpInsightsDays</td><td>180</td><td>History window in days used for reconstruction and analysis.</td></tr>
+  </table>
 </section>
 
 <!-- ============ 23. MT4 vs MT5 ============ -->
 <section id="mt4-vs-mt5">
-  <h2><span class="num">23</span>MT4 vs MT5 Differences</h2>
+  <h2><span class="num">24</span>MT4 vs MT5 Differences</h2>
   <p>G-Labs Trade Manager is available for both MetaTrader 4 and MetaTrader 5. The two versions share the same design, layout, and feature set wherever the platform allows. The differences below are caused by API and architectural differences between MetaTrader 4 and MetaTrader 5.</p>
 
   <h3>Feature Comparison</h3>
@@ -1123,6 +1194,7 @@
     <tr><td><strong>Alerts &amp; Scheduler Tab</strong> &mdash; Price alerts, task scheduler, over-trading monitor</td><td style="color:var(--green)">&#10003; Full</td><td style="color:var(--green)">&#10003; Full</td></tr>
     <tr><td><strong>Stats Dashboard</strong> &mdash; Performance metrics, equity curve, CSV export</td><td style="color:var(--green)">&#10003; Full</td><td style="color:var(--green)">&#10003; Full</td></tr>
     <tr><td><strong>Settings Tab</strong> &mdash; DD protection, profit target, spread/slippage filters, save/load</td><td style="color:var(--green)">&#10003; Full</td><td style="color:var(--green)">&#10003; Full</td></tr>
+    <tr><td><strong>Insights (Edge) Tab</strong> &mdash; Behavioural leak finder, what-if simulation, prospective metadata</td><td style="color:var(--green)">&#10003; Full</td><td style="color:var(--red)">&#10007; Not available</td></tr>
     <tr><td><strong>Currency Strength Meter</strong> &mdash; Forex, crypto, metals, proportional bars</td><td style="color:var(--green)">&#10003; Full</td><td style="color:var(--green)">&#10003; Full</td></tr>
     <tr><td><strong>OCO Breakout</strong> &mdash; Hedge box, paired orders</td><td style="color:var(--green)">&#10003; Full</td><td style="color:var(--green)">&#10003; Full</td></tr>
     <tr><td><strong>Hotkeys</strong></td><td style="color:var(--green)">&#10003; Full</td><td style="color:var(--green)">&#10003; Full</td></tr>
@@ -1132,7 +1204,7 @@
 
   <h3>Tab Layout</h3>
   <table>
-    <tr><th>MT5 (7 tabs)</th><th>MT4 (6 tabs)</th></tr>
+    <tr><th>MT5 (8 tabs)</th><th>MT4 (6 tabs)</th></tr>
     <tr><td>Trade</td><td>Trade</td></tr>
     <tr><td>Pos</td><td>Pos</td></tr>
     <tr><td>Tools</td><td>Tools</td></tr>
@@ -1140,8 +1212,9 @@
     <tr><td>Alerts</td><td>Alerts</td></tr>
     <tr><td>Stats</td><td>Stats</td></tr>
     <tr><td>Config</td><td>Config</td></tr>
+    <tr><td>Edge (Insights)</td><td>&mdash;</td></tr>
   </table>
-  <p>The MT4 version has 6 tabs. The News tab is removed because MetaTrader 4 does not provide a built-in economic calendar API.</p>
+  <p>The MT4 version has 6 tabs. The News tab is removed because MetaTrader 4 does not provide a built-in economic calendar API, and the Edge/Insights tab is currently MT5-only (it relies on the MT5 deal-history and file-sandbox APIs for trade reconstruction and prospective metadata).</p>
 
   <h3>Why No News Calendar on MT4?</h3>
   <div class="card blue-hl">
@@ -1162,7 +1235,7 @@
   <h3>Installation Paths</h3>
   <table>
     <tr><th>Version</th><th>File</th><th>Install Location</th></tr>
-    <tr><td><strong>MT5</strong></td><td><code>G-Labs Trade Manager v3.0.mq5</code></td><td><code>MQL5/Experts/</code></td></tr>
+    <tr><td><strong>MT5</strong></td><td><code>G-Labs Trade Manager v4.0.mq5</code></td><td><code>MQL5/Experts/</code></td></tr>
     <tr><td><strong>MT4</strong></td><td><code>G-Labs Trade Manager v4.0.mq4</code></td><td><code>MQL4/Experts/</code></td></tr>
   </table>
 
