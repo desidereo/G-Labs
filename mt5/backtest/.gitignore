@@ -1,3 +1,9 @@
 # Downloaded market-data caches (re-fetch with fetch_duka.py / validate_dukascopy.py)
 duka_cache/
 *_cache/
+__pycache__/
+
+# The repo root ignores *.py/*.csv/*.txt globally (website repo); the research
+# scripts here ARE the deliverable, so re-include them. Generated trade CSVs
+# stay ignored (reproducible from the scripts).
+!*.py
