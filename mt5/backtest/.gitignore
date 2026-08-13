@@ -1,0 +1,3 @@
+# Downloaded market-data caches (re-fetch with fetch_duka.py / validate_dukascopy.py)
+duka_cache/
+*_cache/

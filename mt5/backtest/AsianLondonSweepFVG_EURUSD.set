@@ -1,0 +1,9 @@
+InpSessionTZ=0
+InpBrokerScheme=0
+InpBrokerGMTFixed=3
+InpRR=2.0
+InpSLBufferPts=20
+InpMinFVGPts=10
+InpMaxTradesDay=1
+InpRiskPercent=1.0
+InpMagic=990011
