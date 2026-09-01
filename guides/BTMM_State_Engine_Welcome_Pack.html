@@ -611,10 +611,10 @@
 <!-- ========== COVER PAGE ========== -->
 <div class="page cover">
 <div class="hero">
-  <div class="hero-badge">MetaTrader 5 &amp; MetaTrader 4 &nbsp;·&nbsp; v1.66</div>
+  <div class="hero-badge">MetaTrader 5 &amp; MetaTrader 4 &nbsp;·&nbsp; v1.69</div>
   <h1>BTMM STATE ENGINE PRO</h1>
   <div class="subtitle">The Professional Market Maker Cycle Tracker</div>
-  <div class="version">Powered by the Beat The Market Maker Methodology — Automated by G-Labs<br>Available on MetaTrader 4 &amp; MetaTrader 5 &nbsp;·&nbsp; <strong style="color:var(--gold);">v1.66 — automatic screen-fit (DPI) &amp; scanner layout fixes</strong></div>
+  <div class="version">Powered by the Beat The Market Maker Methodology — Automated by G-Labs<br>Available on MetaTrader 4 &amp; MetaTrader 5 &nbsp;·&nbsp; <strong style="color:var(--gold);">v1.69 — L3+ reversal warning: "expect the turn"</strong></div>
 
   <div class="hero-features">
     <div class="hero-feature">
@@ -646,10 +646,66 @@
 </div>
 </div><!-- /page cover -->
 
+<!-- ========== WHAT'S NEW IN v1.69 ========== -->
+<div class="page accent">
+<section>
+  <h2><span class="part-num" style="color:var(--gold);">v1.69</span>What's New in This Release</h2>
+  <p style="font-size:13px; color:var(--text-light);">The scanner and on-chart status now flag an <strong>L3+ reversal warning</strong> — an early "expect the turn" heads-up for over-extended cycles. It fires when the <strong>H1 5/13 EMA rolls against the cycle</strong> <em>and</em> price <strong>breaks the current room the opposite way</strong> (the classic "broke the wireframe box + MAs crossed" picture). The confirmed <strong>DIR</strong> arrow still only flips on a closed H1 break, so the reading stays stable — this warning simply tells you the flip is likely coming.</p>
+
+  <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; margin-top:18px;">
+    <div style="background:white; border:1px solid var(--border); border-radius:10px; padding:16px;">
+      <div style="font-weight:700; color:var(--blue); margin-bottom:6px;">🟠 Amber DIR = reversal pending</div>
+      <div style="font-size:12px; color:var(--text-light);">On the scanner the <strong>LVL</strong> and <strong>DIR</strong> cells turn <strong style="color:var(--orange);">amber</strong> (arrow keeps pointing the confirmed direction), and the <strong>L3!</strong> column shows the expected turn direction. On the chart the status line adds <code>REV?</code> and turns amber.</div>
+    </div>
+    <div style="background:white; border:1px solid var(--border); border-radius:10px; padding:16px;">
+      <div style="font-weight:700; color:var(--blue); margin-bottom:6px;">📐 H1 structure, not M15 noise</div>
+      <div style="font-size:12px; color:var(--text-light);">Driven off the <strong>H1</strong> timeframe to match the chart you trade — the 5/13 EMA cross <em>and</em> a room break are both required, so it only lights up on genuine turns from L3 upward.</div>
+    </div>
+    <div style="background:white; border:1px solid var(--border); border-radius:10px; padding:16px;">
+      <div style="font-weight:700; color:var(--blue); margin-bottom:6px;">🔔 One alert per warning</div>
+      <div style="font-size:12px; color:var(--text-light);">Optional push/alert/toast fires <strong>once</strong> when a warning first appears (deduped by direction + level), then re-arms after the cycle resets. Controlled by <code>InpAlertRevWarn</code>.</div>
+    </div>
+  </div>
+
+  <div class="callout success" style="margin-top:18px;">
+    <strong>Safe upgrade</strong>
+    Recompile <code>.ex5</code> / <code>.ex4</code> and reload — defaults are on (<code>InpShowRevWarn = true</code>, <code>InpRevWarnMinLevel = 3</code>, <code>InpAlertRevWarn = true</code>). Set <code>InpShowRevWarn = false</code> to hide the warning entirely, or raise <code>InpRevWarnMinLevel</code> to only warn deeper in the cycle.
+  </div>
+</section>
+</div><!-- /page -->
+
+<!-- ========== WHAT'S NEW IN v1.68 ========== -->
+<div class="page accent">
+<section>
+  <h2><span class="part-num" style="color:var(--gold);">v1.68</span>What's New in This Release</h2>
+  <p style="font-size:13px; color:var(--text-light);">Every signal showing on the scanner dashboard now pushes at least one alert + phone notification + on-chart toast — including setups that formed while your terminal was closed and were restored on the next load. Each setup still fires only once; reloads and VPS reconnects never spam old signals.</p>
+
+  <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; margin-top:18px;">
+    <div style="background:white; border:1px solid var(--border); border-radius:10px; padding:16px;">
+      <div style="font-weight:700; color:var(--blue); margin-bottom:6px;">🔔 Dashboard = notification</div>
+      <div style="font-size:12px; color:var(--text-light);">If <strong>Safety / Type 1 / Type 2 / Type 3 / ID50</strong> is on the SIG column, it will notify — even if the crossover happened offline and the signal was restored from disk on reload.</div>
+    </div>
+    <div style="background:white; border:1px solid var(--border); border-radius:10px; padding:16px;">
+      <div style="font-weight:700; color:var(--blue); margin-bottom:6px;">✓ Fires once per setup</div>
+      <div style="font-size:12px; color:var(--text-light);">Each alert is keyed to the <strong>signal string + its M15 bar</strong>, not a wall-clock cooldown. A new Safety on a new bar always alerts; a stale timer from an earlier signal can't swallow it.</div>
+    </div>
+    <div style="background:white; border:1px solid var(--border); border-radius:10px; padding:16px;">
+      <div style="font-weight:700; color:var(--blue); margin-bottom:6px;">💾 Stamp saved to disk</div>
+      <div style="font-size:12px; color:var(--text-light);">The "already notified" stamp is stored in <code>BTMM_CS_signals.txt</code> alongside entry data — so a restart / reload won't re-fire something you already got.</div>
+    </div>
+  </div>
+
+  <div class="callout success" style="margin-top:18px;">
+    <strong>Safe upgrade</strong>
+    Recompile <code>.ex5</code> / <code>.ex4</code> and reload — no input changes. On the <strong>first</strong> load after updating, any signals already on the board may each push one catch-up notification (a brief one-time burst); after that they stay quiet.
+  </div>
+</section>
+</div><!-- /page -->
+
 <!-- ========== WHAT'S NEW IN v1.66 ========== -->
 <div class="page accent">
 <section>
-  <h2><span class="part-num" style="color:var(--gold);">v1.66</span>What's New in This Release</h2>
+  <h2><span class="part-num" style="color:var(--gold);">v1.66</span>What's New in v1.66</h2>
   <p style="font-size:13px; color:var(--text-light);">The dashboard now fits itself to your screen automatically, and the scanner panel layout was tightened so columns and rows can't clip or overlap on other machines.</p>
 
   <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; margin-top:18px;">
@@ -1475,7 +1531,7 @@
     </div>
     <div style="background:white; border:1px solid var(--border); border-radius:10px; padding:18px;">
       <div style="font-weight:700; color:var(--blue); margin-bottom:8px;">2. Screen size / Mac / 4K / Parallels</div>
-      <p style="font-size:12px; color:var(--text-light); margin-bottom:10px;">As of v1.66 the dashboard fits your screen automatically via <strong><code>InpUIAutoDPI</code></strong> (default <strong>on</strong>) — HiDPI, 4K and Mac Retina should look right with no changes. Only touch the scale if you want to fine-tune.</p>
+      <p style="font-size:12px; color:var(--text-light); margin-bottom:10px;">As of v1.66 the dashboard fits your screen automatically via <strong><code>InpUIAutoDPI</code></strong> (default <strong>on</strong>) — HiDPI, 4K and Mac Retina should look right with no changes. Only touch the scale if you want to fine-tune. v1.68 also ensures every scanner SIG on the board pushes at least one phone notification.</p>
       <p style="font-size:12px; color:var(--text-light);">To fine-tune, set <strong><code>InpUIGlobalScalePct</code></strong> (default <strong>100</strong>) — it multiplies on top of auto-DPI. Nudge up if text still feels small, down on very small laptops. For pure manual control, turn <code>InpUIAutoDPI</code> off and drive scale entirely with <code>InpUIGlobalScalePct</code>. Either way, every layout pixel and default font scales in lockstep.</p>
     </div>
   </div>
@@ -1836,11 +1892,11 @@
         <tr><td><strong>PAIR / SYM</strong></td><td>Symbol name</td><td>Click to switch the main chart to this pair.</td></tr>
         <tr><td><strong>LVL</strong></td><td>Current cycle level</td><td><strong>L1</strong> = starting level, <strong>L2</strong> = trend confirmed, <strong>L3+</strong> = deep in cycle, peak zone.</td></tr>
         <tr><td><strong>PEAK</strong></td><td>Peak Formation status</td><td><strong>PFH?/PFL?</strong> = pending (watch closely), <strong>PFH ✓/PFL ✓</strong> = confirmed (act now), <strong>—</strong> = no peak detected.</td></tr>
-        <tr><td><strong>DIR</strong></td><td>Cycle direction</td><td><span style="color:var(--blue);">▲</span> = bullish, <span style="color:var(--red);">▼</span> = bearish, <strong>—</strong> = neutral (L1 with no direction yet).</td></tr>
+        <tr><td><strong>DIR</strong></td><td>Cycle direction</td><td><span style="color:var(--blue);">▲</span> = bullish, <span style="color:var(--red);">▼</span> = bearish, <strong>—</strong> = neutral (L1 with no direction yet). <span style="color:var(--orange); font-weight:700;">Amber ▲/▼</span> = <strong>L3+ reversal pending</strong> — the arrow still points the confirmed direction but the H1 EMAs have rolled and price has broken the room the other way, so a flip is likely on the next H1 close.</td></tr>
         <tr><td><strong>SIGNAL / SIG</strong></td><td>Current entry signal</td><td>Shows the active signal type (BUY T1, SELL Safety, etc.) with an age timer (e.g. 45m). Signals expire after <code>InpSigPersistMins</code> (default 3h) or on direction reversal. Blank when no signal.</td></tr>
         <tr><td><strong>HTF</strong></td><td>Higher TF alignment</td><td><span style="color:#5CDB5C; font-weight:700;">✓</span> = H4 + D1 agree with signal direction. <span style="color:#FF6B7A; font-weight:700;">✗</span> = Higher TFs oppose. <span style="color:#FF8C00; font-weight:700;">~</span> = Mixed / one agrees, one doesn't. A green ✓ here is the highest-probability filter.</td></tr>
         <tr><td><strong>KZ</strong></td><td>Kill Zone status</td><td><span style="color:var(--gold); font-weight:700;">Active</span> = London or NY session is open. <strong>Wait</strong> = outside Kill Zone hours.</td></tr>
-        <tr><td><strong>L3!</strong></td><td>EMA shift warning</td><td>Flags when price is at Level 3+ — the EMAs may be lagging due to the extended move. Extra caution warranted.</td></tr>
+        <tr><td><strong>L3!</strong></td><td>Reversal warning</td><td><strong>v1.69:</strong> lights up at Level 3+ when the <strong>H1 5/13 EMA rolls against the cycle</strong> <em>and</em> price <strong>breaks the current room</strong> the opposite way. Shows the <em>expected turn</em> direction (<span style="color:var(--blue);">▲</span> = watch for up-turn, <span style="color:var(--red);">▼</span> = watch for down-turn). Pairs with the amber DIR arrow — "expect the turn."</td></tr>
         <tr><td><strong>PHASE</strong></td><td>Cycle phase</td><td><strong>Init</strong> = first level, <strong>Trend</strong> = directional, <strong>Peak</strong> = reversal forming, <strong>Rev</strong> = post-peak reversal, <strong>STALE</strong> = range-bound reset.</td></tr>
         <tr><td><strong>ADR</strong></td><td>Average Daily Range</td><td>The pair's normal daily pip range (e.g. 120 pips for EURUSD). Used as the TP reference.</td></tr>
         <tr><td><strong>RNG</strong></td><td>Today's range</td><td>How many pips price has moved so far today. Compare against ADR to gauge remaining potential.</td></tr>
@@ -2216,13 +2272,27 @@
 
   <h3>Alert System</h3>
   <p>Alerts fire across <strong>three channels simultaneously</strong>: MT popup, phone push notification, and on-chart toast. Every alert is tagged with the cycle context (e.g. <code>[L3 PFH]</code>) so you can read the message and know exactly where in the cycle the signal fired.</p>
+
+  <h3 style="margin-top:18px;">Reliable scanner notifications <span style="font-size:11px; color:var(--cyan); font-weight:600;">v1.68</span></h3>
+  <p>Scanner SIG alerts now guarantee that <strong>every signal on the dashboard pushes at least one notification</strong>:</p>
+  <ul style="font-size:13px; color:var(--text-light); margin:10px 0 14px 22px;">
+    <li><strong>Live crosses</strong> — Safety, Type 1, Type 2, Type 3, and ID50 alert the moment they first form on the closed M15 bar.</li>
+    <li><strong>Offline / restored signals</strong> — if a setup formed while your PC or VPS was off, the catch-up path fires one notification the first time the engine sees that signal on the board after reload.</li>
+    <li><strong>Once per setup</strong> — each unique signal on its M15 bar fires exactly once. The notified stamp is saved in <code>BTMM_CS_signals.txt</code> (Common folder) so reloads and reconnects never repeat old alerts.</li>
+    <li><strong>Same gates as before</strong> — <code>InpAlertScannerSignal</code>, <code>InpAlertSafety</code>, <code>InpAlertID50</code>, per-signal level filter, peak filter (<code>InpScannerSigFilterToPeak</code>), and kill-zone-only mode (<code>InpAlertScannerKZOnly</code>) still apply.</li>
+  </ul>
+  <div class="callout info" style="margin-bottom:14px;">
+    <strong>First load after upgrading to v1.68</strong>
+    Signals already on the scanner when you update may each push one catch-up notification — expected, one-time only. After that, only new setups notify.
+  </div>
+
   <table>
     <thead><tr><th>Alert</th><th>Trigger</th><th>Toggle</th></tr></thead>
     <tbody>
       <tr><td>PFH/PFL Confirmed</td><td>Peak Formation confirmed</td><td><code>InpAlertPFConfirmed</code></td></tr>
       <tr><td>London KZ Start</td><td>London Killzone opens</td><td><code>InpAlertLondonKZStart</code></td></tr>
       <tr><td>NY KZ Start</td><td>NY Killzone opens</td><td><code>InpAlertNYKZStart</code></td></tr>
-      <tr><td>Scanner Signal</td><td>Any pair fires a crossover</td><td><code>InpAlertScannerSignal</code></td></tr>
+      <tr><td>Scanner Signal</td><td>Any pair fires Safety / T1 / T2 / T3 / ID50 (live or catch-up for board signals)</td><td><code>InpAlertScannerSignal</code></td></tr>
       <tr><td>Scanner PF</td><td>Any pair confirms PFH/PFL</td><td><code>InpAlertScannerPF</code></td></tr>
       <tr><td>Chart Entry Signal</td><td>Active chart fires Type 1 / 2 / Safety / ID50</td><td><code>InpAlertEntrySignal</code></td></tr>
     </tbody>
@@ -2249,7 +2319,7 @@
 
   <div class="callout info">
     <strong>Alert Intelligence</strong>
-    Weekend suppression, per-symbol cooldown, KZ-only filter, per-signal level range — no noise, no spam.
+    Weekend suppression, per-setup dedupe (v1.68), PF cooldown, KZ-only filter, per-signal level range — no noise, no spam.
   </div>
 </section>
 
@@ -2432,9 +2502,12 @@
         <tr><td><code>InpAlertSafety</code></td><td>true</td><td>Include Safety in scanner / entry alerts (needs the master toggle on).</td></tr>
         <tr><td><code>InpShowHTFInAlerts</code></td><td>true</td><td>Append <code>[H4:… D1:…]</code> trend status to alert messages.</td></tr>
         <tr><td><code>InpAlertIncludeLevels</code> <span style="color:var(--cyan); font-size:11px; font-weight:600;">v1.63</span></td><td>true</td><td>Append <code>E:price SL:price TP1:price TP2:price</code> to scanner SIG and chart entry alerts at each symbol's correct digit precision (FX, JPY, XAU, BTC).</td></tr>
-        <tr><td><code>InpAlertCooldownMins</code></td><td>15</td><td>Minimum minutes between repeated alerts for the same symbol.</td></tr>
+        <tr><td><code>InpAlertCooldownMins</code></td><td>15</td><td>Minimum minutes between repeated <strong>Peak Formation (PFH/PFL)</strong> alerts for the same symbol. Scanner SIG trade alerts use per-setup dedupe (signal + M15 bar) instead of this timer — see v1.68 notes above.</td></tr>
         <tr><td><code>InpAlertPopup</code></td><td>true</td><td>Show the on-chart popup toast.</td></tr>
         <tr><td><code>InpAlertPopupSeconds</code></td><td>10</td><td>How long the popup toast stays visible.</td></tr>
+        <tr><td><code>InpShowRevWarn</code> <span style="color:var(--cyan); font-size:11px; font-weight:600;">v1.69</span></td><td>true</td><td><strong>L3+ reversal warning.</strong> Shows the amber DIR / L3! "expect the turn" flag on the scanner and the <code>REV?</code> tag on the chart status line. Turn off to hide it entirely.</td></tr>
+        <tr><td><code>InpRevWarnMinLevel</code> <span style="color:var(--cyan); font-size:11px; font-weight:600;">v1.69</span></td><td>3</td><td>Only warn once the cycle reaches this level or deeper (BTMM: expect the turn from L3 up). Raise it to warn only on very extended cycles.</td></tr>
+        <tr><td><code>InpAlertRevWarn</code> <span style="color:var(--cyan); font-size:11px; font-weight:600;">v1.69</span></td><td>true</td><td>Fire one alert + push + toast when a reversal warning first appears (deduped by direction + level; re-arms after the cycle resets).</td></tr>
       </tbody>
     </table>
 
@@ -2496,7 +2569,7 @@
     <div style="border:1px solid rgba(255,215,0,0.3); border-radius:10px; padding:18px; margin:20px 0; background:rgba(255,215,0,0.05);">
       <div style="font-weight:700; color:var(--gold); margin-bottom:8px;">Unified Entry Engine</div>
       <div style="font-size:13px; color:rgba(255,255,255,0.7);">
-        The E button and the scanner now share the <strong style="color:white;">same entry computation</strong>. When a signal appears in the scanner for the chart symbol, the E button draws entry/SL/TP lines from the scanner's stored data — they always match. If the scanner signal expires, E falls back to its own M15 scan so setups can still appear independently. Entry data is saved to the persistence file and survives MT restarts.
+        The E button and the scanner now share the <strong style="color:white;">same entry computation</strong>. When a signal appears in the scanner for the chart symbol, the E button draws entry/SL/TP lines from the scanner's stored data — they always match. If the scanner signal expires, E falls back to its own M15 scan so setups can still appear independently. Entry data and the <strong style="color:white;">already-notified stamp</strong> are saved to <code>BTMM_CS_signals.txt</code> in the terminal Common folder and survive MT restarts (v1.68 adds the alert stamp so reloads don't re-notify old board signals).
       </div>
     </div>
 
@@ -2650,6 +2723,18 @@
       <div class="step"><div class="step-content"><h4>Enter it in Desktop Terminal</h4><p>On your PC: <strong>Tools → Options → Notifications</strong>. Tick <strong>"Enable Push Notifications"</strong> and paste your MetaQuotes ID. Click <strong>Test</strong> to verify.</p></div></div>
       <div class="step"><div class="step-content"><h4>Keep Terminal running</h4><p>Push notifications only work while the desktop terminal is running and connected. Consider running it on a VPS for 24/5 alerts.</p></div></div>
     </div>
+    <h4 style="margin-top:18px;">Scanner shows a signal but no alert arrived</h4>
+    <table>
+      <thead><tr><th>Cause</th><th>Fix</th></tr></thead>
+      <tbody>
+        <tr><td>Running an older build (pre-v1.68)</td><td>Update to <strong>v1.68</strong> and recompile. Older builds only alerted live crosses and could miss restored board signals after reload.</td></tr>
+        <tr><td>Alert toggles off</td><td>Check <code>InpAlertScannerSignal</code> is on. For Safety / ID50 also check <code>InpAlertSafety</code> / <code>InpAlertID50</code>.</td></tr>
+        <tr><td>Level filter blocking</td><td>Per-signal min/max level inputs may suppress the alert even though the SIG column still shows the signal.</td></tr>
+        <tr><td>KZ-only mode</td><td>If <code>InpAlertScannerKZOnly = true</code>, trade alerts only fire during killzones — turn off for all-session alerts.</td></tr>
+        <tr><td>Already notified</td><td>v1.68 fires once per setup. If you already got the alert for that signal on that M15 bar, it won't repeat until a <em>new</em> setup forms.</td></tr>
+        <tr><td>First load after upgrade</td><td>Signals already on the board each push one catch-up notification — check your phone; they won't repeat on the next reload.</td></tr>
+      </tbody>
+    </table>
   </div>
 
   <!-- ISSUE 4: WRONG TIMEFRAME -->
@@ -2702,10 +2787,10 @@
     <table>
       <thead><tr><th>Setup</th><th>Notes</th></tr></thead>
       <tbody>
-        <tr><td><strong>Mac (native MT5 / MT4)</strong></td><td>Works fine. The indicator uses <strong>Arial</strong> + <strong>Courier New</strong> by default — both fonts ship on macOS. If you prefer native fonts, set <code>InpUIFontProp = "Helvetica"</code> and <code>InpUIFontMono = "Menlo"</code>. For Retina screens, set <code>InpUIGlobalScalePct = 115–130</code>.</td></tr>
-        <tr><td><strong>Mac via Parallels / VMware</strong></td><td>Behaves like a Windows PC inside the VM. If Parallels is set to "Best for Retina", the guest sees a HiDPI screen — set <code>InpUIGlobalScalePct = 115–125</code>. Otherwise leave at 100.</td></tr>
-        <tr><td><strong>Windows VPS / RDP</strong></td><td>Recommended for 24/5 alerts and push notifications. Most VPS providers run 1080p — keep the scaler at 100. Push only fires while the desktop terminal is connected — VPS keeps it online.</td></tr>
-        <tr><td><strong>4K / Ultrawide</strong></td><td>Either turn Windows display scaling up to 125%/150% (then keep <code>InpUIGlobalScalePct = 100</code>), or leave Windows at 100% and set <code>InpUIGlobalScalePct = 115–130</code>. Both work — pick whichever looks cleaner.</td></tr>
+        <tr><td><strong>Mac (native MT5 / MT4)</strong></td><td>Works fine. <code>InpUIAutoDPI</code> (default <strong>on</strong>, v1.66) handles Retina scaling automatically — you can leave <code>InpUIGlobalScalePct = 100</code>. For fonts: default <strong>Arial</strong> + <strong>Courier New</strong> ship on macOS; optional <code>InpUIFontProp = "Helvetica"</code> and <code>InpUIFontMono = "Menlo"</code>.</td></tr>
+        <tr><td><strong>Mac via Parallels / VMware</strong></td><td>Behaves like a Windows PC inside the VM. <code>InpUIAutoDPI</code> reads the guest DPI — if Parallels uses "Best for Retina", auto-fit usually handles it. Otherwise set <code>InpUIGlobalScalePct = 115–125</code>.</td></tr>
+        <tr><td><strong>Windows VPS / RDP</strong></td><td>Recommended for 24/5 alerts and push notifications. Most VPS providers run 1080p — auto-DPI keeps scaler at 100. Push only fires while the desktop terminal is connected — VPS keeps it online.</td></tr>
+        <tr><td><strong>4K / Ultrawide</strong></td><td><code>InpUIAutoDPI</code> scales to 125–150% on HiDPI displays automatically. Or turn auto-DPI off and set <code>InpUIGlobalScalePct</code> manually.</td></tr>
         <tr><td><strong>Tester mode</strong></td><td>The indicator auto-detects Strategy Tester and skips dashboards, scanner, and HTF panels. No setup needed.</td></tr>
       </tbody>
     </table>
@@ -2871,7 +2956,7 @@
 <!-- ========== FOOTER ========== -->
 <div class="page dark" style="display:flex; flex-direction:column; justify-content:flex-end;">
 <div class="footer">
-    <p><strong style="color:white;">BTMM State Engine Pro</strong></p>
+    <p><strong style="color:white;">BTMM State Engine Pro</strong> <span style="color:var(--gold);">v1.69</span></p>
   <p style="margin-top:5px;">The Professional Market Maker Cycle Tracker — MT4 · MT5</p>
   <p style="margin-top:15px;">
     <a href="https://g-labs.software">g-labs.software</a> &nbsp;|&nbsp;
