@@ -1,0 +1,42 @@
+{
+  "strategyVersion": "0.1.0",
+  "benchmarkSymbol": "VWRL.L",
+  "generatedAt": "2026-09-19T21:30:00.000Z",
+  "mode": "demo",
+  "synthetic": true,
+  "recommendations": [
+    {
+      "symbol": "MSFT",
+      "rank": 1,
+      "overallScore": 78.5,
+      "action": "buy",
+      "rationale": "[SYNTHETIC DEMO] Fixture narrative for MSFT.",
+      "horizon": "6-12 months",
+      "risks": ["[SYNTHETIC DEMO] Concentration in tech"],
+      "invalidation": "[SYNTHETIC DEMO] Break of 6m momentum",
+      "price": 420.0
+    },
+    {
+      "symbol": "VWRL.L",
+      "rank": 2,
+      "overallScore": 62.0,
+      "action": "hold",
+      "rationale": "[SYNTHETIC DEMO] Core all-world holding.",
+      "horizon": "long",
+      "risks": ["[SYNTHETIC DEMO] Market beta"],
+      "invalidation": "[SYNTHETIC DEMO] Sustained global drawdown",
+      "price": 110.0
+    },
+    {
+      "symbol": "AGGU.L",
+      "rank": 3,
+      "overallScore": 45.0,
+      "action": "watch",
+      "rationale": "[SYNTHETIC DEMO] Bond ballast watchlist.",
+      "horizon": "3-6 months",
+      "risks": ["[SYNTHETIC DEMO] Rate volatility"],
+      "invalidation": "[SYNTHETIC DEMO] Credit stress spike",
+      "price": 5.2
+    }
+  ]
+}

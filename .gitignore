@@ -37,3 +37,10 @@ stripe_grants.json
 
 # Stripe keys (never commit)
 .env
+
+# Investment Lab (Next.js) — local deps, build, secrets, SQLite
+investment-lab/node_modules/
+investment-lab/.next/
+investment-lab/data/
+investment-lab/.env
+investment-lab/.env.local
