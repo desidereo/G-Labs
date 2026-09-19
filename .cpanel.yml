@@ -1,5 +1,17 @@
 ---
 deployment:
   tasks:
+    # Marketing site only — do NOT recursively copy investment-lab (node_modules, .next, data).
+    # The Next.js app deploys separately (e.g. Vercel); ship a README pointer on cPanel.
     - export DEPLOYPATH=/home/elexzpxz/g-labs.software
-    - /bin/cp -R * $DEPLOYPATH
+    - /bin/cp -R assets $DEPLOYPATH/ 2>/dev/null || true
+    - /bin/cp -R guides $DEPLOYPATH/ 2>/dev/null || true
+    - /bin/cp -R api $DEPLOYPATH/ 2>/dev/null || true
+    - /bin/cp *.html $DEPLOYPATH/ 2>/dev/null || true
+    - /bin/cp *.svg $DEPLOYPATH/ 2>/dev/null || true
+    - /bin/cp *.xml $DEPLOYPATH/ 2>/dev/null || true
+    - /bin/cp *.txt $DEPLOYPATH/ 2>/dev/null || true
+    - /bin/cp *.php $DEPLOYPATH/ 2>/dev/null || true
+    - /bin/cp robots.txt sitemap.xml favicon.svg .htaccess $DEPLOYPATH/ 2>/dev/null || true
+    - /bin/mkdir -p $DEPLOYPATH/investment-lab
+    - /bin/cp investment-lab/README.md $DEPLOYPATH/investment-lab/ 2>/dev/null || true
